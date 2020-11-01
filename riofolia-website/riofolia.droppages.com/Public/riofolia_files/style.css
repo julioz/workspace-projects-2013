@@ -1,0 +1,40 @@
+@import url(http://fonts.googleapis.com/css?family=Gudea:400,700);
+html { background-image: url(./img/background.jpg); background-size: cover; background-position: left center; font-family: "Gudea", "Helvetica Neue", sans-serif; font-size: 14px; color: white; line-height: 24px; text-align: justify; -webkit-font-smoothing: antialiased; }
+
+a { color: inherit; }
+
+b { font-size: 16px; }
+
+.hack { margin-top: 120px; }
+
+p.first { margin-bottom: 0px; }
+
+.small { display: block; font-size: 12px; margin-bottom: 20px; }
+
+.badge { border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -o-border-radius: 3px; width: 142px; height: 47px; position: relative; display: inline-block; }
+
+.badge:hover { opacity: 1; }
+
+.badge .fadeover::before { content: ''; display: block; width: 0px; height: 0px; background: transparent; position: absolute; top: -10px; left: 50%; margin-left: -5px; border-top: 5px solid transparent; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 5px solid #1d1d1d; }
+
+.badge .fadeover { background: #1d1d1d; border-radius: 4px; font-size: 11px; top: 40px; opacity: 0.0; display: none; text-align: center; line-height: 15px; width: 120px; padding: 5px; margin: 0px 11px; position: absolute; -webkit-transition: all .3s linear; -moz-transition: opacity .3s linear, top .3s linear; -o-transition: all .3s linear; transition: all .3s linear; }
+
+.badge:hover .fadeover { opacity: 1; display: block; top: 60px; }
+
+.appstore { background: url(./img/appstore.jpg) center center; }
+
+.googleplay { background: url(./img/googleplay.jpg) center center; }
+
+nav { position: absolute; bottom: 20px; text-align: center; }
+
+nav a { display: inline-block; background: rgba(255, 255, 255, 0.25); border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -o-border-radius: 15px; font-size: 11px; font-weight: bold; line-height: 25px; padding: 0px 10px; -webkit-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15); -moz-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15); -o-box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15); box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15); text-decoration: none; }
+
+nav a:hover { text-decoration: underline; }
+
+#slider-wrapper { height: 310px; width: 207px; padding: 85px 17px 82px 116px; background-image: url(./img/iphone.png); }
+
+#slider { height: 310px; width: 207px; }
+
+.social { height: 20px; margin-top: 30px; }
+
+.facebook, .twitter { display: inline-block; }
