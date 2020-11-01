@@ -1,0 +1,223 @@
+package edu.mst.kmnrradio;
+
+import java.util.ArrayList;
+
+import org.holoeverywhere.app.ListActivity;
+import org.holoeverywhere.widget.SeekBar;
+import org.holoeverywhere.widget.TextView;
+import org.holoeverywhere.widget.Toast;
+
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import edu.mst.kmnrradio.MediaPlayerService.MediaPlayerBinder;
+import edu.mst.kmnrradio.adapters.PostsListAdapter;
+import edu.mst.kmnrradio.asyncs.AsyncTaskListener;
+import edu.mst.kmnrradio.asyncs.GetRadioInfoTask;
+import edu.mst.kmnrradio.asyncs.GetTumblrPostsTask;
+import edu.mst.kmnrradio.model.Post;
+import edu.mst.kmnrradio.model.Station;
+import edu.mst.kmnrradio.util.ConnectionHelper;
+import edu.mst.kmnrradio.util.StatefulMediaPlayer;
+
+public class MainActivity extends ListActivity implements AsyncTaskListener {
+
+	private static final String RADIOURL = "http://marconi.kmnr.org:7000/webstream.mp3";
+
+	public static String TAG = "kmnrradio";
+	
+	private long lastPress;
+	
+	private StatefulMediaPlayer mMediaPlayer;
+	private Station mSelectedStream;
+	private ServiceConnection mConnection;
+	private MediaPlayerService mService;
+	private boolean mBound;
+
+	private OnClickListener oclPlay, oclStop;
+
+	private ImageButton play;
+	private SeekBar seekbar;
+	private TextView radioname, dj, nointernet;
+
+	@Override
+	public void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
+		setContentView(R.layout.mainactivity);
+		mSelectedStream = new Station(getString(R.string.kmnr).toUpperCase(), RADIOURL);
+		mService = new MediaPlayerService();
+		mMediaPlayer = mService.getMediaPlayer();
+		
+		mConnection = new ServiceConnection() {
+			@Override
+			public void onServiceConnected(ComponentName className, IBinder serviceBinder) {
+				Log.d(TAG, "service connected");
+
+				//bound with Service. get Service instance
+				MediaPlayerBinder binder = (MediaPlayerBinder) serviceBinder;
+				mService = binder.getService();
+				mBound = true;
+			}
+
+			@Override
+			public void onServiceDisconnected(ComponentName cName) {
+				mBound = false;
+			}
+		};
+		bindToService();
+		
+		loadViews();
+
+		new GetTumblrPostsTask(this).execute();
+	}
+
+	private void loadViews() {
+		play = (ImageButton) findViewById(R.mainactivity.ib_play);
+		seekbar = (SeekBar) findViewById(R.mainactivity.seekbar);
+		radioname = (TextView) findViewById(R.mainactivity.tv_radioname);
+		dj = (TextView) findViewById(R.mainactivity.tv_dj);
+		nointernet = (TextView) findViewById(R.mainactivity.tv_nointernet);
+
+		oclPlay = new View.OnClickListener() {
+			public void onClick(View view) {
+				if(ConnectionHelper.isConnected(view.getContext())){					
+					setButtonState(true);
+					play();
+				}else{
+					Toast.makeText(view.getContext(),
+							getString(R.string.mainactivity_warning_nointernet), Toast.LENGTH_SHORT).show();
+				}
+			}
+		};
+
+		oclStop = new View.OnClickListener() {
+			public void onClick(View view) {
+				setButtonState(false);
+				stop();
+			}
+		};
+
+		setButtonState(!isMediaPlayerServiceRunning());
+	}
+	
+	@Override
+	protected void onDestroy() {
+		stop();
+		super.onDestroy();
+	}
+	
+	private void setButtonState(boolean isPlaying) {
+		if(!isPlaying){
+			seekbar.setVisibility(View.INVISIBLE);
+			play.setImageResource(R.drawable.ic_play);
+			setRadioInfo(getString(R.string.kmnr), getString(R.string.mainactivity_musicnotplaying));
+			play.setOnClickListener(oclPlay);
+		}else{
+			seekbar.setVisibility(View.VISIBLE);
+			new GetRadioInfoTask(RADIOURL, MainActivity.this).execute();
+			play.setImageResource(R.drawable.ic_stop);
+			play.setOnClickListener(oclStop);
+		}
+	}
+
+	/**
+	 * Binds to the instance of MediaPlayerService. If no instance of MediaPlayerService exists, it first starts
+	 * a new instance of the service.
+	 */
+	public void bindToService() {
+		Intent intent = new Intent(this, MediaPlayerService.class);
+
+		if (!isMediaPlayerServiceRunning()) startService(intent);
+		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+	}
+	
+	/** Determines if the MediaPlayerService is already running.
+	 * @return true if the service is running, false otherwise.
+	 */
+	private boolean isMediaPlayerServiceRunning() {
+		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if ("edu.mst.kmnrradio.MediaPlayerService".equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void setRadioInfo(String radio, String dj) {
+		this.radioname.setText(radio);
+		this.dj.setText(dj);
+	}
+
+	private void play() { 
+		// STOPPED, CREATED, EMPTY, -> initialize
+		if (mMediaPlayer.isStopped()
+				|| mMediaPlayer.isCreated()
+				|| mMediaPlayer.isEmpty()) {
+			mService.initializePlayer(mSelectedStream.getStationUrl());
+		}
+
+		//prepared, paused -> resume play
+		else if (mMediaPlayer.isPrepared()
+				|| mMediaPlayer.isPaused()) {
+			mService.startMediaPlayer();
+		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+	    long currentTime = System.currentTimeMillis();
+	    if(currentTime - lastPress > 2000){
+	    	String s = "Are you sure?";
+	    	if(mService.getMediaPlayer().isStarted()) s += " Music will stop.";
+	        Toast.makeText(this, s + "\nPress back again to exit.", Toast.LENGTH_SHORT).show();
+	        lastPress = currentTime;
+	    }else{
+	    	stop();
+	        super.onBackPressed();
+	    }
+	}
+
+	private void stop() {
+		if (mBound) {
+			mService.stopMediaPlayer();
+			// Detach existing connection.
+			unbindService(mConnection);
+			mBound = false;
+		}
+
+		Intent intent = new Intent(this, MediaPlayerService.class);
+		stopService(intent);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		if(result instanceof String){			
+			String radioAndDJ = result.toString();
+			String radio = radioAndDJ.substring(0, radioAndDJ.indexOf(" "));
+			String djName = radioAndDJ.substring(radioAndDJ.indexOf("-")+1).trim();
+			setRadioInfo(radio, djName);
+		}else{
+			ArrayList<Post> posts = (ArrayList<Post>) result;
+			setListAdapter(new PostsListAdapter(this, posts));
+			getListView().setVisibility(View.VISIBLE);
+			nointernet.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
+	public void onFail() {
+		nointernet.setVisibility(View.VISIBLE);
+		getListView().setVisibility(View.GONE);
+	}
+}

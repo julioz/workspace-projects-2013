@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/preferences_category_internet">
+		<CheckBoxPreference
+		    android:key="cb_updatecheck"
+		    android:title="@string/preferences_title_updateatstart"
+		    android:summary="@string/preferences_summary_updateatstart"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_imgsdownload"
+		    android:title="@string/preferences_title_showinternetimages"
+		    android:summary="@string/preferences_summary_showinternetimages"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_actsupdates"
+		    android:title="@string/preferences_title_alwaysupdate"
+		    android:summary="@string/preferences_summary_alwaysupdate"
+		    android:defaultValue="false"/>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/preferences_category_realtime">
+		<ListPreference
+		    android:key="list_realtimeinterval"
+		    android:title="@string/preferences_title_updateinterval"
+		    android:entries="@array/preferenceRealTimeIntervalEntries"
+  			android:entryValues="@array/preferenceRealTimeIntervalValues"/>
+  		<CheckBoxPreference
+		    android:key="cb_realtimevibrate"
+		    android:title="@string/preferences_title_vibrate"
+		    android:summary="@string/preferences_summary_vibrate"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_realtimeaudio"
+		    android:title="@string/preferences_title_audio"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_realtimeranking"
+		    android:title="@string/preferences_title_showclubsranking"
+		    android:defaultValue="false"/>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/preferences_category_updates">
+		<Preference
+		    android:key="pref_lastupdateall"
+		    android:title="@string/preferences_title_lastglobalupdate"
+		    android:summary="@string/preferences_summary_lastglobalupdate"/>
+	</PreferenceCategory>
+</PreferenceScreen>

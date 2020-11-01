@@ -1,0 +1,249 @@
+package br.com.zynger.influ;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import android.app.ProgressDialog;
+import android.app.TabActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageButton;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.influ.model.FutureGame;
+import br.com.zynger.influ.model.Theme;
+import br.com.zynger.influ.util.FileHandler;
+import br.com.zynger.influ.web.HTMLManager;
+
+@SuppressWarnings("deprecation")
+public class RankingCariocaTabActivity extends TabActivity {
+	
+	public static final int CARIOCA_GRUPO_A = 11;
+	public static final int CARIOCA_GRUPO_B = 12;
+	
+	private Theme theme;
+	
+	private TextView actionbar_tv;
+	private ImageButton plus, update;
+	private RotateAnimation rot;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.ranking_tabs);
+
+		loadViews();
+		updateTheme();
+		
+		/** TabHost will have Tabs */
+		TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
+		tabHost.getTabWidget().setDividerDrawable(theme.getTabsDivider());
+
+		/** TabSpec used to create a new tab.
+		 * By using TabSpec only we can able to setContent to the tab.
+		 * By using TabSpec setIndicator() we can set name to tab. */
+
+		/** tid1 is firstTabSpec Id. Its used to access outside. */
+		TabSpec firstTab = tabHost.newTabSpec("tid1");
+		TabSpec secondTab = tabHost.newTabSpec("tid2");
+		
+		
+		/** TabSpec setIndicator() is used to set name for the tab. */
+		/** TabSpec setContent() is used to set content for a particular tab. */
+		firstTab.setIndicator(createTabView("Grupo A")).setContent(getIntent(CARIOCA_GRUPO_A));
+		secondTab.setIndicator(createTabView("Grupo B")).setContent(getIntent(CARIOCA_GRUPO_B));
+		
+
+		/** Add tabSpec to the TabHost to display. */
+		tabHost.addTab(firstTab);
+		tabHost.addTab(secondTab);
+	}
+	
+	//TODO remover quando for necessario visualizar novamente esta activity
+	/*@Override
+	protected void onResume() {
+		if(!getIntent().getBooleanExtra("SHOW_ACT", false)){			
+			finish();
+			plus.performClick();
+		}
+		super.onResume();
+	}*/
+
+	private void loadViews() {
+		actionbar_tv = (TextView) findViewById(R.ranking_tabs.tv_actionbar);
+		plus = (ImageButton) findViewById(R.ranking_tabs.ib_actionbar_plus);
+		update = (ImageButton) findViewById(R.ranking_tabs.ib_actionbar_update);
+		
+		actionbar_tv.setText("Carioca");
+		
+		rot = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rot.setInterpolator(new LinearInterpolator());
+		rot.setDuration(900L);
+		rot.setStartTime(200L);
+
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				v.startAnimation(rot);
+				new DownloadFilesTask(v.getContext()).execute();
+			}
+		});
+		
+		plus.setVisibility(View.GONE); //TODO remover quando puder visualizar as finais
+		/*plus.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				new GetFinalsTask(v.getContext()).execute();
+			}
+		});*/
+	}
+
+	private void updateTheme() {
+		theme = (Theme) FileHandler.openBackup(this, ThemeChooserActivity.ARQUIVO);
+		
+		findViewById(R.ranking_tabs.ll_actbg).setBackgroundColor(theme.getContent_background());
+		
+		int colors[] = { theme.getAbgradstart() , theme.getAbgradend() };
+		findViewById(R.ranking_tabs.actionbar).setBackgroundDrawable(new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, colors));
+		
+		findViewById(R.ranking_tabs.ll_actbg).invalidate();
+	}
+	
+	private View createTabView(String text) {
+		View view = LayoutInflater.from(this).inflate(theme.getTabsBG(), null);
+		TextView tv = (TextView) view.findViewById(R.id.tabsText);
+		tv.setText(text);
+		return view;
+	}
+	
+	private Intent getIntent(int group){
+		Intent it = new Intent(this, RankingTableActivity.class);
+		it.putExtra("championship", group);
+	    
+	    return it;
+	}
+	
+	private class GetFinalsTask extends AsyncTask<Void, Void, Void> {
+		private Context c;
+		private ProgressDialog pd;
+		boolean hasDownload = false, success = false;
+		
+		public GetFinalsTask(Context c){
+			this.c = c;
+			this.hasDownload = false;
+			this.success = false;
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		protected void onPreExecute() {
+			if((ArrayList<ArrayList<FutureGame>>) FileHandler.openBackup(c, RankingFinalsActivity.ARQUIVO_CARIOCA) == null){
+				hasDownload = true;
+			}
+			
+			if(hasDownload){
+				pd = new ProgressDialog(c);
+				pd.setIndeterminate(true);
+				pd.setCancelable(false);
+				pd.setTitle("Download");
+				pd.setMessage("Atualizando...");
+				pd.show();
+			}
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			if(hasDownload){				
+				ArrayList<ArrayList<FutureGame>> al;
+				try {
+					al = HTMLManager.getFinals(false);
+				} catch (IOException e) {
+					al = null;
+				}
+				if(al != null){
+					FileHandler.saveBackup(c, RankingFinalsActivity.ARQUIVO_CARIOCA, al);
+					success = true;
+				}
+			}else success = true;
+			return null;
+		}
+		
+		protected void onPostExecute(Void result) {
+			if(hasDownload) pd.dismiss();
+			if(success){
+				//TODO remover quando for necessario visualizar novamente esta activity
+				//if(getIntent().getBooleanExtra("SHOW_ACT", false)) finish();
+				Intent it = new Intent(c, RankingFinalsActivity.class);
+				it.putExtra("CHAMPIONSHIP", 1);
+				startActivity(it);
+				finish();
+			}else{
+				Toast.makeText(c, "Não foi possível atualizar os dados. Tente mais tarde.", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+	
+	private class DownloadFilesTask extends AsyncTask<Void, Void, Void> {
+		Context c;
+		ProgressDialog pd;
+		boolean success = false;
+		
+		public DownloadFilesTask(Context c){
+			this.c = c;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			pd = new ProgressDialog(c);
+			pd.setIndeterminate(true);
+			pd.setCancelable(false);
+			pd.setTitle("Download");
+			pd.setMessage("Atualizando...");
+			pd.show();
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			try{
+				FileHandler.saveBackup(c, RankingTableActivity.ARQUIVO_CARIOCA_A, HTMLManager.getRankingCarioca(RankingCariocaTabActivity.CARIOCA_GRUPO_A));
+				Log.i("inFLU", "O arquivo " + RankingTableActivity.ARQUIVO_CARIOCA_A + " foi salvo.");
+				FileHandler.saveBackup(c, RankingTableActivity.ARQUIVO_CARIOCA_B, HTMLManager.getRankingCarioca(RankingCariocaTabActivity.CARIOCA_GRUPO_B));
+				Log.i("inFLU", "O arquivo " + RankingTableActivity.ARQUIVO_CARIOCA_B + " foi salvo.");
+				success = true;
+			}catch (IOException io) {
+				runOnUiThread(new Runnable() {
+				     public void run() {			
+				    	 Toast.makeText(c, "Conecte-se à internet para atualizar os dados ou tente mais tarde.", Toast.LENGTH_SHORT).show();
+				    	 pd.dismiss();
+				    }
+				});
+			}	
+			return null;
+		}
+		
+		protected void onPostExecute(Void result) {
+			if(success){				
+				runOnUiThread(new Runnable() {
+					public void run() {			
+						Toast.makeText(c, "Dados atualizados", Toast.LENGTH_SHORT).show();
+						pd.dismiss();
+					}
+				});
+			}
+		}
+	}
+}

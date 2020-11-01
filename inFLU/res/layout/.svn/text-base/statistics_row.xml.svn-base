@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+	xmlns:android="http://schemas.android.com/apk/res/android"  
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:background="#0b4300"
+	android:paddingTop="2dp"
+	android:paddingBottom="2dp"
+	android:weightSum="8.5">
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:text="Leandro Euzébio"
+		android:layout_weight="4.1"
+		android:textStyle="bold"
+		android:textSize="15dp"
+		android:textColor="#FFFFFF"
+		android:paddingLeft="3dp"
+		android:layout_gravity="center_vertical"
+		android:id="@+statisticsrow/name"/>
+		
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:text="Jogos"
+		android:layout_weight="1.1"
+		android:textSize="15dp"
+		android:layout_gravity="center"
+		android:gravity="center"
+		android:textColor="#FFFFFF"
+		android:id="@+statisticsrow/played"/>
+		
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:text="Gols"
+		android:layout_weight="1.1"
+		android:textSize="15dp"
+		android:textColor="#FFFFFF"
+		android:layout_gravity="center"
+		android:gravity="center"
+		android:id="@+statisticsrow/goals"/>
+		
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:text="Amarelos"
+		android:layout_weight="1.1"
+		android:textSize="15dp"
+		android:layout_gravity="center"
+		android:gravity="center"
+		android:textColor="#FFFFFF"
+		android:id="@+statisticsrow/yellow"/>
+		
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:text="Vermelhos"
+		android:layout_weight="1.1"
+		android:textSize="15dp"
+		android:layout_gravity="center"
+		android:gravity="center"
+		android:textColor="#FFFFFF"
+		android:id="@+statisticsrow/red"/>
+</TableRow>

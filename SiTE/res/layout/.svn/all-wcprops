@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/3/trunk/SiTE/res/layout
+END
+textviewmodelo.xml
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/3/trunk/SiTE/res/layout/textviewmodelo.xml
+END
+balloonlayout.xml
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/3/trunk/SiTE/res/layout/balloonlayout.xml
+END
+main.xml
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/3/trunk/SiTE/res/layout/main.xml
+END
+novo_perigo.xml
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/20/trunk/SiTE/res/layout/novo_perigo.xml
+END
+novo_equipe.xml
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/19/trunk/SiTE/res/layout/novo_equipe.xml
+END
+novo_equipamento.xml
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/19/trunk/SiTE/res/layout/novo_equipamento.xml
+END
+action_item.xml
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/3/trunk/SiTE/res/layout/action_item.xml
+END
+balloon_overlay.xml
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/21/trunk/SiTE/res/layout/balloon_overlay.xml
+END
+novo_vitima.xml
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/20/trunk/SiTE/res/layout/novo_vitima.xml
+END
+tablerow_pdi_relacionado.xml
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/17/trunk/SiTE/res/layout/tablerow_pdi_relacionado.xml
+END
+server.xml
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/3/trunk/SiTE/res/layout/server.xml
+END
+ambilwarna_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/23/trunk/SiTE/res/layout/ambilwarna_dialog.xml
+END
+mapa.xml
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/21/trunk/SiTE/res/layout/mapa.xml
+END
+serverconfig.xml
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/14/trunk/SiTE/res/layout/serverconfig.xml
+END
+novo_instituicao.xml
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/3/trunk/SiTE/res/layout/novo_instituicao.xml
+END
+novo_unidade.xml
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/3/trunk/SiTE/res/layout/novo_unidade.xml
+END
+novo_veiculo.xml
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/17/trunk/SiTE/res/layout/novo_veiculo.xml
+END
+client.xml
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/13/trunk/SiTE/res/layout/client.xml
+END
+popup.xml
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/3/trunk/SiTE/res/layout/popup.xml
+END
+expansao_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/3/trunk/SiTE/res/layout/expansao_dialog.xml
+END
+serverconfiglistviewrow.xml
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/14/trunk/SiTE/res/layout/serverconfiglistviewrow.xml
+END
+exibicao.xml
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/3/trunk/SiTE/res/layout/exibicao.xml
+END
+novo_estrutura.xml
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/19/trunk/SiTE/res/layout/novo_estrutura.xml
+END
+custom_dialog.xml
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/19/trunk/SiTE/res/layout/custom_dialog.xml
+END
+custom_row_listview.xml
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/13/trunk/SiTE/res/layout/custom_row_listview.xml
+END

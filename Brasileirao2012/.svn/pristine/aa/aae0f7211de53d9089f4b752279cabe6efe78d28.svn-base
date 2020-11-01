@@ -1,0 +1,67 @@
+package br.com.zynger.brasileirao2012;
+
+import android.os.Bundle;
+import android.widget.LinearLayout;
+import br.com.zynger.brasileirao2012.base.SimpleActivity;
+import br.com.zynger.brasileirao2012.model.Partner;
+import br.com.zynger.brasileirao2012.view.PartnerLayout;
+
+public class PartnersActivity extends SimpleActivity {
+
+	private LinearLayout ll_partners;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.partnersactivity);
+
+		loadViews();
+		addPartners();
+	}
+	
+	private void loadViews() {
+		ll_partners = (LinearLayout) findViewById(R.partnersactivity.ll_partners);
+	}
+
+	private void addPartners() {
+		addPartnerLayout("Legítimo Chopp & Bar", "http://bit.ly/JG5cSR",
+				R.drawable.partner_legitimo, "Cruzeiro Torcedor",
+				"http://on.fb.me/Jf0fRr", R.drawable.partner_cruzeirotorcedor);
+		addPartnerLayout("Palmeiras Todo Dia", "http://bit.ly/LytcTZ",
+				R.drawable.partner_palmeirastododia, "EasyAula",
+				"http://bit.ly/K4Ymrv", R.drawable.partner_easyaula);
+		addPartnerLayout("NetFLU", "http://bit.ly/JUNqsv",
+				R.drawable.partner_netflu, "Turma do Limão",
+				"http://bit.ly/NNSwvs", R.drawable.partner_turmadolimao);
+		addPartnerLayout("Arquibancada Tricolor", "http://bit.ly/M7NV6a",
+				R.drawable.partner_arquibancadatricolor, "Cassibox",
+				"http://bit.ly/OyTmfx", R.drawable.partner_cassibox);
+		addSinglePartnerLayout("Paranautas", "http://bit.ly/Sv4wTB",
+				R.drawable.partner_paranautas);
+	}
+
+	private Partner createPartner(String name, String url, int icon) {
+		return new Partner(name, url, getResources().getDrawable(icon));
+	}
+
+	private void addPartnerLayout(String name1, String url1, int icon1,
+			String name2, String url2, int icon2) {
+		ll_partners.addView(new PartnerLayout(this, createPartner(name1, url1,
+				icon1), createPartner(name2, url2, icon2)));
+	}
+
+	private void addSinglePartnerLayout(String name, String url, int icon) {
+		ll_partners.addView(new PartnerLayout(this, createPartner(name, url,
+				icon), null));
+	}
+
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_partners;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.partnersactivity_title;
+	}
+}

@@ -1,0 +1,44 @@
+package br.com.zynger.brasileirao2012.adapters.pager;
+
+import java.util.TreeMap;
+
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.MatchesDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.fragment.TableFragment;
+import br.com.zynger.brasileirao2012.model.Fixture;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+public class TablePagerAdapter extends FragmentStatePagerAdapter {
+	private TreeMap<Integer, Fixture> matches;
+	private SparseArray<TableFragment> cache;
+	
+	public TablePagerAdapter(SherlockFragmentActivity activity, Division division) {
+        super(activity.getSupportFragmentManager());
+        ClubsDB clubsDB = ClubsDB.getInstance(activity);
+        cache = new SparseArray<TableFragment>();
+        matches = MatchesDB.getInstance(activity, clubsDB.getClubs()).getMatches(division);
+    }
+
+    @Override
+    public SherlockFragment getItem(int position) {
+    	int fixtureNumber = position + 1;
+    	if(cache.get(fixtureNumber) != null){
+    		return cache.get(fixtureNumber);
+    	}else{
+    		TableFragment fragment = TableFragment.create(position);
+    		fragment.setMatches(matches.get(fixtureNumber).getMatches());
+    		cache.put(fixtureNumber, fragment);
+    		return fragment;
+    	}
+    }
+
+    @Override
+    public int getCount() {
+        return matches.size();
+    }
+}

@@ -1,0 +1,122 @@
+<clubs>
+	<club>
+		<nm_bdg>bv_borussia</nm_bdg>
+		<nm_club>Borussia Dortmund</nm_club>
+	</club>
+	<club>
+		<nm_bdg>ca_mineiro</nm_bdg>
+		<nm_club>Atlético Mineiro</nm_club>
+	</club>
+	<club>
+		<nm_bdg>celtic_fc</nm_bdg>
+		<nm_club>Celtic</nm_club>
+	</club>
+	<club>
+		<nm_bdg>club_americamexico</nm_bdg>
+		<nm_club>América de México</nm_club>
+	</club>
+	<club>
+		<nm_bdg>club_olimpia</nm_bdg>
+		<nm_club>Olimpia</nm_club>
+	</club>
+	<club>
+		<nm_bdg>dep_quito</nm_bdg>
+		<nm_club>Deportivo Quito</nm_club>
+	</club>
+	<club>
+		<nm_bdg>emelec</nm_bdg>
+		<nm_club>Emelec</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fc_dynamokyiv</nm_bdg>
+		<nm_club>Dínamo Kiev</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fc_schalke04</nm_bdg>
+		<nm_club>Schalke 04</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fc_twente</nm_bdg>
+		<nm_club>Twente</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fenerbahce_sk</nm_bdg>
+		<nm_club>Fenerbahçe</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fk_zenit</nm_bdg>
+		<nm_club>Zenit</nm_club>
+	</club>
+	<club>
+		<nm_bdg>galatasaray_sc</nm_bdg>
+		<nm_club>Galatasaray</nm_club>
+	</club>
+	<club>
+		<nm_bdg>girondins_bordeaux</nm_bdg>
+		<nm_club>Girondins de Bordeaux</nm_club>
+	</club>
+	<club>
+		<nm_bdg>gremio_fpga</nm_bdg>
+		<nm_club>Grêmio</nm_club>
+	</club>
+	<club>
+		<nm_bdg>hamburger_sv</nm_bdg>
+		<nm_club>Hamburger</nm_club>
+	</club>
+	<club>
+		<nm_bdg>ldu_quito</nm_bdg>
+		<nm_club>LDU</nm_club>
+	</club>
+	<club>
+		<nm_bdg>lille_osc</nm_bdg>
+		<nm_club>Lille</nm_club>
+	</club>
+	<club>
+		<nm_bdg>nk_dinamozagreb</nm_bdg>
+		<nm_club>Dínamo Zagreb</nm_club>
+	</club>
+	<club>
+		<nm_bdg>panathinaikos_fc</nm_bdg>
+		<nm_club>Panathinaikos</nm_club>
+	</club>
+	<club>
+		<nm_bdg>psv_eindhoven</nm_bdg>
+		<nm_club>PSV</nm_club>
+	</club>
+	<club>
+		<nm_bdg>rsc_anderlecht</nm_bdg>
+		<nm_club>Anderlecht</nm_club>
+	</club>
+	<club>
+		<nm_bdg>sc_braga</nm_bdg>
+		<nm_club>Braga</nm_club>
+	</club>
+	<club>
+		<nm_bdg>sparta_praha</nm_bdg>
+		<nm_club>Sparta Praha</nm_club>
+	</club>
+	<club>
+		<nm_bdg>ss_lazio</nm_bdg>
+		<nm_club>Lazio</nm_club>
+	</club>
+	<club>
+		<nm_bdg>ssc_napoli</nm_bdg>
+		<nm_club>Napoli</nm_club>
+	</club>
+	<club>
+		<nm_bdg>sv_werderbremen</nm_bdg>
+		<nm_club>Werder Bremen</nm_club>
+	</club>
+	<club>
+		<nm_bdg>udinese_calcio</nm_bdg>
+		<nm_club>Udinese</nm_club>
+	</club>
+	<club>
+		<nm_bdg>universidad_de_chile</nm_bdg>
+		<nm_club>Universidad de Chile</nm_club>
+	</club>
+	<club>
+		<nm_bdg>vfb_stuttgart</nm_bdg>
+		<nm_club>Stuttgart</nm_club>
+	</club>
+</clubs>

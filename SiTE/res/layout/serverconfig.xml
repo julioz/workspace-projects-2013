@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:background="#FFFFFFFF" android:orientation="vertical"
+	android:stretchColumns="1" android:shrinkColumns="0,2">
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:orientation="vertical">
+
+		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:shrinkColumns="0,1" android:stretchColumns="2"
+			android:id="@+server_config/tlTituloBarraServerConfig">
+
+			<TableRow android:layout_width="fill_parent"
+				android:layout_height="fill_parent" android:paddingTop="3sp"
+				android:paddingBottom="3sp" android:background="#FF068ED4">
+
+				<ImageView android:src="@drawable/bt_edit"
+					android:layout_gravity="left" android:layout_height="fill_parent"
+					android:layout_width="fill_parent" android:layout_marginLeft="5dip" />
+
+				<TextView android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:gravity="center_vertical|right" android:paddingRight="20sp"
+					android:text="Configurações" android:textColor="#FFFFFFFF"
+					android:textStyle="bold" android:textSize="17sp" />
+
+				<!-- <ImageButton android:src="@drawable/bt_add" android:id="@+server_config/configSalvar"
+					android:background="@null" android:layout_gravity="right"
+					android:paddingRight="10sp" android:layout_width="wrap_content"
+					android:layout_height="wrap_content" /> -->
+
+			</TableRow>
+		</TableLayout>
+
+		<ScrollView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:scrollbars="horizontal|vertical"
+			android:id="@+server_config/svServerConfig">
+
+
+			<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:shrinkColumns="0" android:stretchColumns="1"
+				android:paddingTop="6px" android:paddingLeft="3px" android:gravity="center"
+				android:paddingRight="3px" android:paddingBottom="3px">
+
+				<TableRow android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="fill_parent"
+						android:textColor="#000000" android:text="Servidor:"
+						android:gravity="center" />
+
+					<CheckBox android:id="@+server_config/cbServer"
+						android:layout_height="fill_parent"
+						android:layout_width="fill_parent" android:layout_gravity="right"/>
+				</TableRow>
+			</TableLayout>
+		</ScrollView>
+		
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:id="@+server_config/llIp"
+			android:gravity="center"
+			android:visibility="gone"
+			android:weightSum="3">
+		
+			<TextView
+				android:text="IP do dispositivo:"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
+				android:textColor="#000000"
+				android:layout_weight="1"/>
+				
+			<TextView
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
+				android:id="@+server_config/tvIp"
+				android:textSize="16dp"
+				android:layout_marginLeft="16dp"
+				android:textColor="#000000"
+				android:layout_weight="2"/>			
+		
+		</LinearLayout>
+		
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:gravity="center"
+			android:paddingTop="3dp"
+			android:weightSum="3">
+			
+			<ImageView
+				android:src="#000000"
+				android:layout_width="fill_parent"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:layout_height="1dp" />
+				
+			<TextView
+				android:text="Conexões"
+				android:gravity="center"
+				android:textColor="#000000"
+				android:layout_weight="1"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent" />
+				
+			<ImageView
+				android:src="#000000"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:layout_width="fill_parent"
+				android:layout_height="1dp" />
+		</LinearLayout>
+		
+		<ListView
+			android:smoothScrollbar="true"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:cacheColorHint="#00000000"
+			android:id="@+server_config/lvConexoes"/>
+
+	</LinearLayout>
+</TableLayout>

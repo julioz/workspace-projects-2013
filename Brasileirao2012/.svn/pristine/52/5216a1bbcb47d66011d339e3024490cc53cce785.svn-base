@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/backrepeat">
+    
+    <RelativeLayout
+        android:background="@drawable/actionbar_gradient2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:id="@+trophies_selector/iv_badge"
+            android:src="@drawable/ic_trophies"
+            android:layout_centerVertical="true" />
+        
+        <TextView
+            android:textColor="@color/text_actionbar"
+            android:id="@+trophies_selector/tv_name"
+            android:text="SALA DE TROFÉUS"
+            android:layout_marginLeft="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_toRightOf="@+trophies_selector/iv_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="30dp"
+            android:textStyle="bold" />        
+        
+    </RelativeLayout>
+    
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:weightSum="3" >
+        
+	    <LinearLayout
+	        android:layout_weight="0.7"
+	        android:id="@+trophies_selector/ll_myteam"
+	        android:layout_height="0dp"
+	        android:layout_width="fill_parent"
+	        android:orientation="horizontal"
+	        android:weightSum="4">
+	        
+	        <ImageButton
+	            android:background="@null"
+	            android:padding="3dp"
+		        android:scaleType="fitCenter"
+		        android:adjustViewBounds="true"
+	            android:layout_height="fill_parent"
+	            android:layout_width="0dp"
+	            android:id="@+trophies_selector/iv_myteam"
+	            android:layout_margin="5dp"
+	            android:layout_weight="1.5"/>
+	        
+	        <LinearLayout
+	            android:layout_weight="2.5"
+	            android:layout_height="fill_parent"
+	            android:layout_width="0dp"
+	            android:weightSum="2"
+	            android:orientation="vertical">
+	            
+	            <TextView
+	                android:text="Meu time"
+	                android:textColor="@android:color/white"
+	                android:textSize="18dp"
+	                android:padding="8dp"
+	                android:layout_weight="1"
+	                android:layout_marginLeft="3dp"
+	                android:layout_marginTop="3dp"
+	                android:layout_height="0dp"
+	                android:layout_width="fill_parent"/>
+	            
+	            <TextView
+	                android:textColor="@android:color/white"
+	                android:textSize="22dp"
+	                android:paddingRight="6dp"
+	                android:paddingTop="4dp"
+	                android:gravity="right"
+	                android:id="@+trophies_selector/tv_myteam"
+	                android:layout_marginRight="3dp"
+	                android:layout_weight="1"
+	                android:layout_height="0dp"
+	                android:layout_width="fill_parent"/>
+	            
+	        </LinearLayout>
+	        
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:layout_weight="0.3"
+	        android:layout_height="0dp"
+	        android:layout_width="fill_parent"
+	        android:orientation="horizontal"
+	        android:background="#48000000"
+	        android:id="@+trophies_selector/ll_tv_select"
+	        android:gravity="center">
+	        
+	        <TextView
+	            android:textColor="#FFFFFFFF"
+	            android:text="Selecione a equipe"
+	            android:textSize="18dp"
+	            android:gravity="center"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"/>
+	        
+	    </LinearLayout>
+	    
+	    <FrameLayout
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="vertical"
+			android:layout_below="@+trophies_selector/ll_tv_select"
+			android:layout_width="fill_parent"
+			android:layout_height="0dp"
+			android:layout_weight="2">
+		
+			<org.taptwo.android.widget.CircleFlowIndicator
+				android:padding="10dip"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:id="@+trophies_selector/viewflowindic"
+				android:layout_gravity="center_horizontal"/>
+			<org.taptwo.android.widget.ViewFlow
+				android:id="@+trophies_selector/viewflow"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"/>
+		
+		</FrameLayout>
+	</LinearLayout>
+</LinearLayout>

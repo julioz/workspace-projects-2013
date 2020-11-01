@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+       
+    <TableRow
+        android:layout_width="fill_parent"
+        android:weightSum="4">
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_abc"
+            android:layout_margin="13dp"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_abc"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_asa"
+            android:layout_margin="13dp"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_asa"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_americamg"
+            android:layout_margin="13dp"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_americamg"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_americarn"
+            android:layout_margin="13dp"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_americarn"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+    </TableRow>
+    
+    <TableRow
+        android:layout_width="fill_parent"
+        android:weightSum="4">
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_atleticopr"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_atleticopr"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_avai"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_avai"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_barueri"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_barueri"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_boaesporte"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_boaesporte"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+    </TableRow>
+    
+    <TableRow
+        android:layout_width="fill_parent"
+        android:weightSum="4">
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_bragantino"
+            android:layout_height="48dp"
+            android:layout_margin="13dp"
+            android:id="@+trophies_selector/iv_bragantino"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_crb"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_crb"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_ceara"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_ceara"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_criciuma"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_criciuma"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+    </TableRow>
+    
+    <TableRow
+        android:layout_width="fill_parent"
+        android:weightSum="4">
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_goias"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_goias"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_guarani"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_guarani"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_guaratingueta"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_guaratingueta"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_ipatinga"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_ipatinga"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+    </TableRow>
+        
+    <TableRow
+        android:layout_width="fill_parent"
+        android:weightSum="4">
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_joinville"
+            android:layout_height="48dp"
+            android:id="@+trophies_selector/iv_joinville"
+            android:layout_margin="13dp"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_parana"
+            android:layout_height="48dp"
+            android:layout_margin="13dp"
+            android:id="@+trophies_selector/iv_parana"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_saocaetano"
+            android:layout_height="48dp"
+            android:layout_margin="13dp"
+            android:id="@+trophies_selector/iv_saocaetano"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+        <ImageButton
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/escudo_vitoria"
+            android:layout_height="48dp"
+            android:layout_margin="13dp"
+            android:id="@+trophies_selector/iv_vitoria"
+            android:layout_width="48dp"
+            android:layout_weight="1"/>
+        
+    </TableRow>
+    
+</TableLayout>

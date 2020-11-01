@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+home/home_root"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.17">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FF0FFFF0"/>
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:id="@+home/ll_header"
+        android:layout_weight="0.65">
+        <br.com.zynger.libertadores.view.ResizableImageView
+			android:id="@+home/iv_header"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+    </LinearLayout>
+	<RelativeLayout
+  	    android:layout_weight="0.15"
+  	    android:layout_width="fill_parent"
+  	    android:layout_height="0dp"
+  	    android:background="@drawable/pattern_scanline">
+	    
+        <br.com.zynger.libertadores.view.HelveticaTextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:textColor="#FF3B3B3B"
+	        android:layout_centerVertical="true"
+	        android:layout_margin="5dp"
+	        android:layout_toLeftOf="@+home/iv_centerbar_badge"
+	        android:gravity="left"
+	        android:layout_marginLeft="10dp"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+	        android:textSize="26dp"
+	        android:text="FLUMINENSE"/>
+	    
+        <ImageView
+            android:src="@drawable/badge_fluminense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:scaleType="fitCenter"
+            android:id="@+home/iv_centerbar_badge"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="1dp"
+            android:adjustViewBounds="true"/>
+  	</RelativeLayout>
+	<include layout="@layout/homedashboard_layout"
+	    android:layout_height="0dp"
+	    android:layout_width="fill_parent"
+		android:layout_weight="1.2"/>
+</LinearLayout>

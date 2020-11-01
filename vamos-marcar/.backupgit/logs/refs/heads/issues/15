@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 3d1a23d6ebf02df3984ff268036fdbbdca624500 Júlio Zynger <julioz92@gmail.com> 1380770485 -0300	branch: Created from HEAD
+3d1a23d6ebf02df3984ff268036fdbbdca624500 8f3a4cb646374c8d9a4ba6eba7f0e8a09971be63 Júlio Zynger <julioz92@gmail.com> 1380772445 -0300	commit: Adds an IndexScroller to the FriendsChooserActivity so the user can search for the first letter of each friends' name

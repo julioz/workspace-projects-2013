@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="1dp">
+    
+    <TextView
+        android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_position"
+		android:textColor="#FF3B3B3B"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:textSize="16dp"/>
+    
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_margin="3dp"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:id="@+standingsrow/iv_badge"/>
+    
+    <TextView
+        android:layout_marginLeft="8dp"
+        android:layout_weight="4"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_name"
+		android:ellipsize="end"
+        android:scrollHorizontally="true"
+        android:maxLines="1"
+        android:singleLine="true"
+		android:textColor="#FF3B3B3B"
+		android:gravity="left|center_vertical"
+		android:layout_gravity="center"
+		android:textSize="16dp"/>
+    
+    <TextView
+        android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_points"
+		android:textColor="#FF3B3B3B"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:textSize="16dp"/>
+    
+    <!--  <TextView
+        android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_played"
+		android:textColor="#FF3B3B3B"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:textSize="16dp"/> -->
+    
+    <TextView
+        android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_victories"
+		android:textColor="#FF3B3B3B"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:textSize="16dp"/>
+    
+    <TextView
+        android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_draws"
+		android:textColor="#FF3B3B3B"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:textSize="16dp"/>
+    
+    <TextView
+        android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_losses"
+		android:textColor="#FF3B3B3B"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:textSize="16dp"/>
+    
+    <TextView
+        android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_goalsfor"
+		android:textColor="#FF3B3B3B"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:textSize="16dp"/>
+    
+    <TextView
+        android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_goalsagainst"
+		android:textColor="#FF3B3B3B"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:textSize="16dp"/>
+    
+    <!-- <TextView
+        android:layout_weight="1"
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:id="@+standingsrow/tv_balance"
+		android:textColor="#FF3B3B3B"
+		android:gravity="center"
+		android:layout_gravity="center"
+		android:textSize="16dp"/> -->
+    
+</LinearLayout>

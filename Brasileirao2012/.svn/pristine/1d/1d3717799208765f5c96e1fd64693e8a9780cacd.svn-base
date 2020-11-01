@@ -1,0 +1,500 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.ListActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.view.ActionItem;
+import br.com.zynger.brasileirao2012.view.MoveToMoveLayout;
+import br.com.zynger.brasileirao2012.view.QuickAction;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class MoveToMoveActivity extends ListActivity {
+
+	public static final String INTENT_MATCH = "MATCH";
+	public static final String INTENT_REALTIME = "REALTIME";
+	
+	private final int UPDATE_INTERVAL = 90 * 1000;
+	
+	private Timer timer;
+	
+	private Match match;
+	private boolean fromRealTime, highPerformance;
+	
+	private TreeMap<String, Club> clubs;
+	
+	private QuickAction quickaction;
+	private ActionItem actionItem_followMatch, actionItem_showSquad, actionItem_videoCentral;
+	
+	private RelativeLayout rl_loading;
+	private LinearLayout ll_actionbar_loading;
+	private ProgressBar pb_actionbar_progressbar, pb_progressbar;
+	private TextView actionbar_tt, tv_progressbar;
+	private TextView scrH, scrA;
+	private ImageView home, away, iv_more;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.movetomove);
+		
+		loadViews();
+		
+		fromRealTime = getIntent().getBooleanExtra(INTENT_REALTIME, false);
+		clubs = ClubsDB.getInstance(this).getClubs();
+		highPerformance = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_highperformance", true);
+		
+		String jsonMatch = getIntent().getStringExtra(INTENT_MATCH);			
+		if(jsonMatch != null){
+			try{				
+				this.match = new Match(new JSONArray(jsonMatch), clubs);
+			}catch(JSONException je){
+				je.printStackTrace();
+				Toast.makeText(this, "Um erro ocorreu.\nNão foi possível abrir o lance a lance para esta partida",
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
+		}else{
+			Toast.makeText(this, "Um erro ocorreu.\nNão foi possível abrir o lance a lance para esta partida",
+					Toast.LENGTH_SHORT).show();
+			finish();
+		}
+		
+		setData();
+		
+		new MoveToMoveOpenTask(this).execute();
+					
+		iv_more.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				quickaction = new QuickAction(v);
+				quickaction.setAnimStyle(QuickAction.ANIM_REFLECT);
+				
+				if(fromRealTime) setRealTimeQuickAction(((RealTimeMatch) match));
+				else setQuickActionVideoCentralButton(quickaction);
+				
+				quickaction.show();
+			}
+		});
+	}
+
+	private void loadViews() {
+		actionbar_tt = (TextView) findViewById(R.movetomove.tv_name);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		rl_loading = (RelativeLayout) findViewById(R.movetomove.rl_loading);
+		ll_actionbar_loading = (LinearLayout) findViewById(R.movetomove.ll_actionbar_loading);
+		pb_actionbar_progressbar = (ProgressBar) findViewById(R.movetomove.pb_actionbar_progressbar);
+		pb_progressbar = (ProgressBar) findViewById(R.movetomove.pb_progressbar);
+		tv_progressbar = (TextView) findViewById(R.movetomove.tv_progressbar);
+		scrH = (TextView) findViewById(R.movetomove.tv_scr_h);
+		scrA = (TextView) findViewById(R.movetomove.tv_scr_a);
+		home = (ImageView) findViewById(R.movetomove.iv_home);
+		away = (ImageView) findViewById(R.movetomove.iv_away);
+		iv_more = (ImageView) findViewById(R.movetomove.iv_more);
+	}
+		
+	private void setData() {
+		if(!fromRealTime){			
+			home.setImageResource(match.getHome().getBadgeResource(this));
+			away.setImageResource(match.getAway().getBadgeResource(this));
+		}else{
+			Club cHome = match.getHome();
+			Club cAway = match.getAway();
+			home.setImageResource(cHome.getBadgeResource(this));
+			away.setImageResource(cAway.getBadgeResource(this));
+		}
+		
+		int scoreHome = match.getScoreHome();
+		int scoreAway = match.getScoreAway();
+		scrH.setText(scoreHome != Match.SCORE_NULL ? String.valueOf(scoreHome) : new String());
+		scrA.setText(scoreAway != Match.SCORE_NULL ? String.valueOf(scoreAway) : new String());
+	}
+	
+	@Override
+	protected void onResume() {
+		if(fromRealTime){
+			if(timer != null) timer.cancel();
+			startRecorrentTask();
+		}
+		super.onResume();
+	}
+	
+	private void startRecorrentTask() {
+		TimerTask doAsynchronousTask;
+		final Handler handler = new Handler();
+		timer = new Timer();
+
+		doAsynchronousTask = new TimerTask() {
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					public void run() {
+						MoveToMoveAdapter adapter = ((MoveToMoveAdapter) getListAdapter());
+						if(adapter != null && rl_loading.getVisibility() == View.GONE){
+							String lastId = adapter.getLastIdEntered();
+							MoveToMoveUpdateTask backTask = new MoveToMoveUpdateTask(MoveToMoveActivity.this, lastId, match);
+							backTask.execute();
+						}
+					}
+				});
+			}
+		};
+		
+		timer.schedule(doAsynchronousTask, 0, UPDATE_INTERVAL);
+	}
+	
+	@Override
+	protected void onStop() {
+		if(timer != null) timer.cancel();
+		super.onStop();
+	}
+	
+	private void setRealTimeQuickAction(final RealTimeMatch rtm) {
+		if(rtm.getUrlDetails() != null && rtm.getDivision() == Division.FIRSTDIVISION &&
+				(rtm.getStateConstant() == RealTimeMatch.EM_ANDAMENTO
+				|| rtm.getStateConstant() == RealTimeMatch.FINALIZADO)){
+			actionItem_showSquad = new ActionItem();
+			actionItem_showSquad.setIcon(getResources().getDrawable(R.drawable.ic_squad_quickaction));
+			actionItem_showSquad.setTitle("Escalação");
+			actionItem_showSquad.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(v.getContext(), RealTimeMatchSquadActivity.class);
+					it.putExtra(RealTimeMatchSquadActivity.INTENT_REALTIMEMATCH, rtm.toJson().toString());
+					quickaction.dismiss();
+					v.getContext().startActivity(it);
+				}
+			});
+			
+			quickaction.addActionItem(actionItem_showSquad);
+		}
+		
+		setQuickActionVideoCentralButton(quickaction);
+		
+		if(rtm.getStateConstant() == RealTimeMatch.A_INICIAR || rtm.getStateConstant() == RealTimeMatch.EM_ANDAMENTO){
+			actionItem_followMatch = new ActionItem();
+			actionItem_followMatch.setIcon(getResources().getDrawable(R.drawable.ic_alert_quickaction));
+			
+			RealTimeMatch bkp = (RealTimeMatch) FileHandler.openBackup(this, FileHandler.FOLLOWEDREALTIMEMATCH);
+			if(bkp != null && bkp.toString().equals(rtm.toString())){
+				actionItem_followMatch.setTitle("Não acompanhar");
+				actionItem_followMatch.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent it = new Intent(v.getContext(), RealTimeMatchService.class);
+						v.getContext().stopService(it);
+						FileHandler.saveBackup(v.getContext(), FileHandler.FOLLOWEDREALTIMEMATCH, new RealTimeMatch());
+						quickaction.dismiss();
+						Toast.makeText(v.getContext(), "Você não está mais acompanhando a partida.", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}else{
+				actionItem_followMatch.setTitle("Acompanhar");
+				actionItem_followMatch.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent it = new Intent(v.getContext(), RealTimeMatchService.class);
+						if(RealTimeMatchesActivity.isMyServiceRunning(v.getContext())) v.getContext().stopService(it);
+						FileHandler.saveBackup(v.getContext(), FileHandler.FOLLOWEDREALTIMEMATCH, rtm);
+						v.getContext().startService(it);
+						quickaction.dismiss();
+					}
+				});
+			}
+			
+			quickaction.addActionItem(actionItem_followMatch);
+		}
+	}
+	
+	private void setQuickActionVideoCentralButton(QuickAction qa){
+		actionItem_videoCentral = new ActionItem();
+		actionItem_videoCentral.setIcon(getResources().getDrawable(R.drawable.ic_video_quickaction));
+		actionItem_videoCentral.setTitle("Vídeos");
+		actionItem_videoCentral.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MoveToMoveAdapter mtmadapter = ((MoveToMoveAdapter) getListAdapter());
+				if(mtmadapter != null && mtmadapter.getCount() > 0){
+					ArrayList<Move> al_moves = mtmadapter.getMovesWithVideos();
+					if(al_moves.size() > 0){						
+						Intent it = new Intent(v.getContext(), MoveToMoveVideoCentralActivity.class);
+						it.putExtra(MoveToMoveVideoCentralActivity.INTENT_MOVES, al_moves);
+						v.getContext().startActivity(it);
+					}else{						
+						Toast.makeText(v.getContext(), "Não há vídeos para exibição no momento.", Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		});
+		
+		qa.addActionItem(actionItem_videoCentral);
+	}
+
+	@SuppressWarnings("unused")
+	private void addToAdapterStart(Move move){
+		LinkedHashMap<String, Move> newMap = new LinkedHashMap<String, Move>();
+		newMap.put(String.valueOf(move.getId()), move);
+		newMap.putAll(((MoveToMoveAdapter) getListAdapter()).getMoves());
+		setListAdapter(new MoveToMoveAdapter(this, newMap));
+	}
+	
+	private void addToAdapterStart(ArrayList<Move> moves){
+		LinkedHashMap<String, Move> newMap = new LinkedHashMap<String, Move>();
+		for (Move mv : moves) {
+			newMap.put(String.valueOf(mv.getId()), mv);
+		}
+		newMap.putAll(((MoveToMoveAdapter) getListAdapter()).getMoves());
+		setListAdapter(new MoveToMoveAdapter(this, newMap));
+	}
+	
+	private void checkForGoals(ArrayList<Move> moves) {
+		for (Move move : moves) {
+			if(move.getTipo() == Move.TIPO_LANCEGOL){
+				if(move.getNome_time().equals(match.getHome().getName())){
+					int score = Integer.valueOf(scrH.getText().toString());
+					score++;
+					scrH.setText(String.valueOf(score));
+				}else if(move.getNome_time().equals(match.getAway().getName())){
+					int score = Integer.valueOf(scrA.getText().toString());
+					score++;
+					scrA.setText(String.valueOf(score));
+				}
+			}
+		}
+	}
+	
+	private class MoveToMoveOpenTask extends AsyncTask<Void, Void, LinkedHashMap<String, Move>> {
+		private Context context;
+		
+		public MoveToMoveOpenTask(Context context) {
+			setContext(context);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			tv_progressbar.setText("Atualizando...");
+			pb_progressbar.setVisibility(View.VISIBLE);
+			pb_actionbar_progressbar.setVisibility(View.VISIBLE);
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected LinkedHashMap<String, Move> doInBackground(Void... params) {
+			try {
+				return HTMLManager.getRealTimeMatchMoveToMove(getContext(), clubs, match);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(LinkedHashMap<String, Move> result) {
+			pb_progressbar.setVisibility(View.GONE);
+			pb_actionbar_progressbar.setVisibility(View.GONE);
+			if(result == null){
+				tv_progressbar.setText("Não foi possível ler o lance a lance da partida.");
+			}else{
+				if(result.size() > 0){					
+					rl_loading.setVisibility(View.GONE);
+					setListAdapter(new MoveToMoveAdapter(getContext(), result));
+				}else{
+					tv_progressbar.setText("A partida ainda não tem lances registrados.");
+				}
+			}
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return context;
+		}
+
+		public void setContext(Context context) {
+			this.context = context;
+		}
+	}
+	
+	private class MoveToMoveUpdateTask extends AsyncTask<Void, Void, ArrayList<Move>> {
+		private Context context;
+		private String lastId;
+		private Match match;
+		
+		public MoveToMoveUpdateTask(Context context, String lastId, Match match) {
+			setContext(context);
+			setLastId(lastId);
+			setMatch(match);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			ll_actionbar_loading.setVisibility(View.VISIBLE);
+			pb_actionbar_progressbar.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected ArrayList<Move> doInBackground(Void... params) {
+			try {
+				return HTMLManager.getUpdatedMoves(getContext(), clubs, getLastId(), getMatch());
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<Move> result) {
+			if(result != null){
+				if(result.size() > 0){					
+					if(scrH.getText().toString().equals("") && scrA.getText().toString().equals("")){
+						scrH.setText("0");
+						scrA.setText("0");
+					}
+					addToAdapterStart(result);
+					checkForGoals(result);
+				}
+			}
+			ll_actionbar_loading.setVisibility(View.GONE);
+			pb_actionbar_progressbar.setVisibility(View.GONE);
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return context;
+		}
+
+		public void setContext(Context context) {
+			this.context = context;
+		}
+
+		public String getLastId() {
+			return lastId;
+		}
+
+		public void setLastId(String lastId) {
+			this.lastId = lastId;
+		}
+		
+		public Match getMatch() {
+			return match;
+		}
+
+		public void setMatch(Match m) {
+			this.match = m;
+		}
+	}
+	
+	private class MoveToMoveAdapter extends BaseAdapter {
+		private Context context;
+		private TreeMap<String, MoveToMoveLayout> cache;
+		private LayoutInflater layoutInflater;
+		private LinkedHashMap<String, Move> moves;
+		
+		public MoveToMoveAdapter(Context context, LinkedHashMap<String, Move> moves) {
+			this.context = context;
+			this.moves = moves;
+			layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			cache = new TreeMap<String, MoveToMoveLayout>();
+		}
+		
+		@Override
+		public int getCount() {
+			return moves.size();
+		}
+		
+		public LinkedHashMap<String, Move> getMoves() {
+			return moves;
+		}
+		
+		public String getLastIdEntered(){
+			Move move = (Move) getItem(0);
+			if(move != null) return String.valueOf(move.getId());
+			else return null;
+		}
+
+		@SuppressWarnings("unused")
+		public void updateMove(Move move){
+			cache.put(String.valueOf(move.getId()), new MoveToMoveLayout(context, layoutInflater, move));
+			moves.put(String.valueOf(move.getId()), move);
+			notifyDataSetChanged();
+		}
+		
+		public ArrayList<Move> getMovesWithVideos(){
+			ArrayList<Move> al_moves = new ArrayList<Move>();
+			for (Iterator<Move> iter = moves.values().iterator(); iter.hasNext();) {
+				Move move = (Move) iter.next();
+				String video = move.getVideo_url();
+				if(video != null){
+					al_moves.add(move);
+				}
+			}
+			
+			return al_moves;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			int i = 0;
+			for (Iterator<Move> it = moves.values().iterator(); it.hasNext();) {
+				Move move = (Move) it.next();
+				if(position == i) return move;
+				else i++;
+			}
+			return null;
+		}
+		
+		@SuppressWarnings("unused")
+		public Move getMove(int id){
+			return moves.get(String.valueOf(id));
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return 0;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			Move move = (Move) getItem(position);
+			MoveToMoveLayout mtmlt = cache.get(String.valueOf(move.getId()));
+			if(mtmlt == null){
+				mtmlt = new MoveToMoveLayout(context, layoutInflater, move);
+				cache.put(String.valueOf(move.getId()), mtmlt);
+			}
+			return mtmlt;
+		}
+	}
+}

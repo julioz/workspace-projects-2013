@@ -1,0 +1,6 @@
+0000000000000000000000000000000000000000 3b12219f8c8d0bf4974e359a2dca4ba7bb87197b Júlio Zynger <julioz92@gmail.com> 1380586552 -0300	branch: Created from HEAD
+3b12219f8c8d0bf4974e359a2dca4ba7bb87197b b8fe5d769464be1bf422d867272e017c73922358 Júlio Zynger <julioz92@gmail.com> 1380603539 -0300	commit: It is already possible to pick locations from adresses. For a single result, it is also possible to return it on the Intent's extras.
+b8fe5d769464be1bf422d867272e017c73922358 66da23a0814978e3630782485215ebd15b3c373c Júlio Zynger <julioz92@gmail.com> 1380688882 -0300	commit: Handling of multiple results in LocationPicker
+66da23a0814978e3630782485215ebd15b3c373c e9d1bec74d97fce6555fdeb2ccc2cea66abfb472 Júlio Zynger <julioz92@gmail.com> 1380693679 -0300	commit: Adds animations to search bar; Treats the click on the map case. Still needs to treat no finding the geocoding result.
+e9d1bec74d97fce6555fdeb2ccc2cea66abfb472 f3c7c78171eb32d5102355800716e997b853c79e Júlio Zynger <julioz92@gmail.com> 1380752527 -0300	commit (merge): Merging with issues/15
+f3c7c78171eb32d5102355800716e997b853c79e c4072112a3e0aec76e99b80c924743c40d5f22f6 Júlio Zynger <julioz92@gmail.com> 1380753527 -0300	commit: Shows a toast when there is a geocoding error

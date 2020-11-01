@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="6">
+    
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:id="@+rtplayout/iv_subst"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
+    
+    <TextView
+        android:layout_width="0dp"
+        android:textIsSelectable="false"
+        android:id="@+rtplayout/tv_name"
+        android:layout_weight="2"
+        android:lines="1"
+        android:ellipsize="end"
+        android:scrollHorizontally="true"
+        android:textColor="#FFFFFFFF"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
+    
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:id="@+rtplayout/iv_cards"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
+    
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:id="@+rtplayout/fl_gpro"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+        
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/img_squad_goal_pro"/>
+        
+        <TextView
+	        android:layout_width="wrap_content"
+	        android:textIsSelectable="false"
+	        android:id="@+rtplayout/tv_gpro"
+	        android:textStyle="bold"
+	        android:textColor="#FFFFFFFF"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"/>
+        
+    </FrameLayout>
+    
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:id="@+rtplayout/fl_gagainst"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+        
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/img_squad_goal_against"/>
+        
+        <TextView
+	        android:layout_width="wrap_content"
+	        android:id="@+rtplayout/tv_gagainst"
+	        android:textIsSelectable="false"
+	        android:textStyle="bold"
+	        android:textColor="#FFFFFFFF"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"/>
+        
+    </FrameLayout>
+</LinearLayout>

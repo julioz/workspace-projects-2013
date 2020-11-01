@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:background="#FF00372A"
+    android:id="@+futuregame_dialog/ll_actbg"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:orientation="vertical" >
+    
+    <br.com.zynger.influ.view.ViewFlinger
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:id="@+futuregame_dialog/flinger">
+		
+        <LinearLayout
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:orientation="vertical">
+        	
+            <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingTop="2dp"
+		        android:paddingBottom="2dp"
+		        android:orientation="horizontal">
+		        
+		        <TextView
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:gravity="center_horizontal"
+		            android:id="@+futuregame_dialog/tv_stadium1"
+		            android:textColor="#FFFFFFFF"
+		            android:textSize="16dp"
+		            android:text="STADIUM"/>
+		        
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:weightSum="1">
+		        
+		        <TextView
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:gravity="center_horizontal"
+		            android:id="@+futuregame_dialog/tv_teams1"
+		            android:layout_weight="1"
+		            android:textColor="#FFFFFFFF"
+		            android:textSize="24dp"
+		            android:text="Fluminense
+X
+Internacional"/>
+		        
+		        
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:padding="2dp">
+		        
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:gravity="left"
+		            android:layout_gravity="left"
+		            android:id="@+futuregame_dialog/tv_date1"
+		            android:textColor="#FFFFFFFF"
+		            android:layout_marginRight="2dp"
+		            android:textSize="14dp"
+		            android:text="29/4"/>
+		        
+		        <TextView
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:gravity="right"
+		            android:layout_marginLeft="2dp"
+		            android:layout_gravity="right"
+		            android:id="@+futuregame_dialog/tv_time1"
+		            android:textColor="#FFFFFFFF"
+		            android:textSize="14dp"
+		            android:text="16:0"/>
+		        
+		    </LinearLayout>
+            
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:orientation="vertical">
+		    
+            <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingTop="2dp"
+		        android:paddingBottom="2dp"
+		        android:orientation="horizontal">
+		        
+		        <TextView
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:gravity="center_horizontal"
+		            android:id="@+futuregame_dialog/tv_stadium2"
+		            android:textColor="#FFFFFFFF"
+		            android:textSize="16dp"
+		            android:text="STADIUM"/>
+		        
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:weightSum="1">
+		        
+		        <TextView
+		            android:layout_width="0dp"
+		            android:layout_height="wrap_content"
+		            android:gravity="center_horizontal"
+		            android:id="@+futuregame_dialog/tv_teams2"
+		            android:layout_weight="1"
+		            android:textColor="#FFFFFFFF"
+		            android:textSize="24dp"
+		            android:text="Fluminense
+		X
+		Internacional"/>
+		        
+		        
+		    </LinearLayout>
+		    
+		    <LinearLayout 
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal"
+		        android:padding="2dp">
+		        
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:gravity="left"
+		            android:layout_gravity="left"
+		            android:id="@+futuregame_dialog/tv_date2"
+		            android:textColor="#FFFFFFFF"
+		            android:layout_marginRight="2dp"
+		            android:textSize="14dp"
+		            android:text="29/4"/>
+		        
+		        <TextView
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:gravity="right"
+		            android:layout_marginLeft="2dp"
+		            android:layout_gravity="right"
+		            android:id="@+futuregame_dialog/tv_time2"
+		            android:textColor="#FFFFFFFF"
+		            android:textSize="14dp"
+		            android:text="16:0"/>
+		        
+		    </LinearLayout>
+            
+        </LinearLayout>
+        
+    </br.com.zynger.influ.view.ViewFlinger>
+
+</LinearLayout>

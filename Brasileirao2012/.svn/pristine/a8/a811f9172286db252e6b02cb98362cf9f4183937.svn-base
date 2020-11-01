@@ -1,0 +1,244 @@
+package br.com.zynger.brasileirao2012;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.RSSParser;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+import br.com.zynger.brasileirao2012.view.ActionItem;
+import br.com.zynger.brasileirao2012.view.EllipsizingTextView;
+import br.com.zynger.brasileirao2012.view.QuickAction;
+
+public class NewsActivity extends ListActivity {
+	
+	private List<Article> articles;
+	
+	private String clubname;
+	
+	private QuickAction quickaction;
+	private ActionItem actionItem_read, actionItem_webpage, actionItem_share;
+	
+	private ProgressBar pb_empty;
+	private TextView tv_empty;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.news);
+		
+		loadViews();
+		setActionItem();
+		
+		String url = getIntent().getStringExtra("url");
+		clubname = getIntent().getStringExtra("CLUB_NAME");
+		String encoding = getIntent().getStringExtra("encoding");
+		int domain = getIntent().getIntExtra("domain", 0);
+		new UpdateNewsTask(this, url, encoding, domain).execute();	
+	}
+
+	private void loadViews() {
+		pb_empty = (ProgressBar) findViewById(R.id.pb_rss_empty);
+		tv_empty = (TextView) findViewById(R.id.tv_rss_empty);
+	}
+	
+	private void setActionItem() {
+		actionItem_read = new ActionItem();
+		actionItem_read.setIcon(getResources().getDrawable(R.drawable.ic_webpage_quickaction));
+		actionItem_read.setTitle("Ler");
+		
+		actionItem_webpage = new ActionItem();
+		actionItem_webpage.setIcon(getResources().getDrawable(R.drawable.ic_liveview_quickaction));
+		actionItem_webpage.setTitle("Abrir página");
+
+		actionItem_share = new ActionItem();
+		actionItem_share.setIcon(getResources().getDrawable(R.drawable.ic_share_quickaction));
+		actionItem_share.setTitle("Compartilhar");
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int pos, long id) {
+		super.onListItemClick(l, v, pos, id);
+		final int position = pos;
+		
+		quickaction = new QuickAction(v);
+		quickaction.setAnimStyle(QuickAction.ANIM_REFLECT);
+
+		actionItem_read.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), NewsDetailsActivity.class);
+				it.putExtra("CLUB_NAME", clubname);
+				Article art = articles.get(position);
+				it.putExtra("ARTICLE_URL", art.getUrl().toString());
+				it.putExtra("ARTICLE_TT", art.getTitle());
+				it.putExtra("ARTICLE_IMGURL", art.getImgUrl());
+				it.putExtra("DOMAIN", art.getDomain());
+				quickaction.dismiss();
+				startActivity(it);
+			}
+		});
+		
+		actionItem_webpage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {				
+				Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse(articles.get(position).getUrl().toString()));
+				quickaction.dismiss();
+				startActivity(it);
+			}
+		});
+
+		actionItem_share.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				quickaction.dismiss();
+				
+				String message = articles.get(position).getUrl().toString();
+				new ShareHelper((Activity) v.getContext(), message).share();
+			}
+		});
+
+		if(articles.get(position).getDomain() != Article.GOOGLE) quickaction.addActionItem(actionItem_read);
+		quickaction.addActionItem(actionItem_webpage);
+		quickaction.addActionItem(actionItem_share);
+		quickaction.show();
+	}
+	
+	@Override
+	protected void onPause() {
+		System.gc();
+		super.onPause();
+	}
+	
+	private class UpdateNewsTask extends AsyncTask<Void, Void, List<Article>> {
+		private Context c;
+		private String url, encoding;
+		private int domain;
+
+		public UpdateNewsTask(Context context, String url, String encoding, int domain){
+			this.c = context;
+			this.url = url;
+			this.encoding = encoding;
+			this.domain = domain;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			if(ConnectionHelper.isConnected(c)){
+				pb_empty.setVisibility(View.VISIBLE);
+				tv_empty.setText("Atualizando...");
+			}else{
+				pb_empty.setVisibility(View.GONE);
+				tv_empty.setText(getResources().getString(R.string.loading_articles));
+			}
+			super.onPreExecute();
+		}
+
+		@Override
+		protected ArrayList<Article> doInBackground(Void... arg0) {
+			try {
+				RSSParser rssP = new RSSParser(domain, url, encoding);
+				return rssP.parse();
+			} catch (XmlPullParserException e) {
+				Log.e("bras2012", "XMLPULLPARSEREXC=" + e.toString());
+				e.printStackTrace();
+			} catch (IOException e) {
+				Log.e("bras2012", "IOEXC=" + e.toString());
+				e.printStackTrace();
+			} catch (StringIndexOutOfBoundsException e) {
+				Log.e("bras2012", "SIOBEXC=" + e.toString());
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(List<Article> result) {
+			if(result != null){
+				articles = result;
+				MyArrayAdapter adapter = new MyArrayAdapter(c, R.layout.news_row, result);
+				
+				setListAdapter(adapter);
+			}else{
+				pb_empty.setVisibility(View.GONE);
+				tv_empty.setText(getResources().getString(R.string.loading_articles));
+			}
+			super.onPostExecute(result);
+		}
+	}
+	
+	private class MyArrayAdapter extends ArrayAdapter<Article>{
+
+		@SuppressWarnings("unused")
+		private Context mContext;
+		private final LayoutInflater mInflater;
+		private int layoutResourceId;
+		private List<Article> objects;
+		
+		public MyArrayAdapter(Context context, int layoutResourceId, List<Article> objects) {
+			super(context, layoutResourceId, objects);
+			this.mInflater = LayoutInflater.from(context);
+			this.layoutResourceId = layoutResourceId;
+			this.objects = objects;
+			this.mContext = context;
+		}
+		
+		@Override
+		public int getCount() {
+			return objects.size();
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			View row = convertView;
+	        ArticleHolder holder = null;
+	        
+	        if(row == null){
+	            row = mInflater.inflate(layoutResourceId, parent, false);
+	            
+	            holder = new ArticleHolder();
+	            holder.txtTitle = (EllipsizingTextView) row.findViewById(R.news_row.tv_title);
+	            holder.txtPubdate = (TextView) row.findViewById(R.news_row.tv_pubdate);
+	            
+	            row.setTag(holder);
+	        }else{
+	            holder = (ArticleHolder) row.getTag();
+	        }
+	        
+	        Article art = objects.get(position);
+	        
+	        holder.txtTitle.setText(art.getTitle());
+	        holder.txtTitle.setMaxLines(2);
+	        holder.txtPubdate.setText(art.getPubCalendar());
+
+	        return row;
+		}
+	}
+	
+	static class ArticleHolder
+    {
+        EllipsizingTextView txtTitle;
+        TextView txtPubdate;
+    }
+}

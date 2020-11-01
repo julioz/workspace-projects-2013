@@ -1,0 +1,169 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.enums.Phase;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Group;
+import br.com.zynger.libertadores.util.BitmapOptimisator;
+import br.com.zynger.libertadores.util.GroupEnum;
+
+public class MatchesAdapter extends ArrayAdapter<String> {
+
+	private final String[] names = { getContext().getString(R.string.groupsactivity_firststage),
+			getContext().getString(R.string.groupsactivity_group, 1),
+			getContext().getString(R.string.groupsactivity_group, 2),
+			getContext().getString(R.string.groupsactivity_group, 3),
+			getContext().getString(R.string.groupsactivity_group, 4),
+			getContext().getString(R.string.groupsactivity_group, 5),
+			getContext().getString(R.string.groupsactivity_group, 6),
+			getContext().getString(R.string.groupsactivity_group, 7),
+			getContext().getString(R.string.groupsactivity_group, 8),
+			getContext().getString(R.string.groupsactivity_roundofsixteen),
+			getContext().getString(R.string.groupsactivity_quarterfinal),
+			getContext().getString(R.string.groupsactivity_semifinal),
+			getContext().getString(R.string.groupsactivity_final) };
+	
+	private final LayoutInflater mInflater;
+	private static final int LAYOUTRESOURCEID = R.layout.matchesrow;
+	private TreeMap<GroupEnum, Group> groups;
+	private ArrayList<String> objects;
+	
+	public MatchesAdapter(Context context, TreeMap<GroupEnum, Group> groups) {
+		super(context, LAYOUTRESOURCEID);
+		this.mInflater = LayoutInflater.from(context);
+		this.groups = groups;
+		objects = new ArrayList<String>();
+		for (String name : names) {
+			objects.add(name);
+		}
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public String getItem(int position) {
+		return objects.get(position);
+	}
+	
+	public GroupEnum getGroupClicked(int position){
+		String clicked = getItem(position);
+		return getEnumByRowName(clicked);
+	}
+	
+	public Phase getPhaseClicked(int position){
+		switch (position) {
+		case 0:
+			return Phase.PRELIB;
+		case 9:
+			return Phase.ROUNDOF16;
+		case 10:
+			return Phase.QUARTERFINAL;
+		case 11:
+			return Phase.SEMIFINAL;
+		case 12:
+			return Phase.FINAL;
+		default:
+			return null;
+		}
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+		MatchesHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+            
+            holder = new MatchesHolder();
+            holder.llClubs1 = (LinearLayout) row.findViewById(R.matchesrow.ll_clubs1);
+            holder.llClubs2 = (LinearLayout) row.findViewById(R.matchesrow.ll_clubs2);
+            holder.tvName = (TextView) row.findViewById(R.matchesrow.tv_name);
+            holder.ivClub1 = (ImageView) row.findViewById(R.matchesrow.iv_club1);
+            holder.ivClub2 = (ImageView) row.findViewById(R.matchesrow.iv_club2);
+            holder.ivClub3 = (ImageView) row.findViewById(R.matchesrow.iv_club3);
+            holder.ivClub4 = (ImageView) row.findViewById(R.matchesrow.iv_club4);
+            
+            row.setTag(holder);
+        }else{
+            holder = (MatchesHolder) row.getTag();
+            holder.llClubs1.setVisibility(View.GONE);
+            holder.llClubs2.setVisibility(View.GONE);
+        }
+
+        String rowName = getItem(position);
+        holder.tvName.setText(rowName);
+        
+        setClubsBadges(row, rowName);
+        
+        return row;
+	}
+
+	private void setClubsBadges(View row, String rowName) {
+		GroupEnum gEnum = getEnumByRowName(rowName);
+		
+		if(null != gEnum) setGroupBadges(row, gEnum);
+	}
+	
+	private GroupEnum getEnumByRowName(String rowName){
+		GroupEnum gEnum = null;
+		
+		if(rowName.equals(getItem(1))) gEnum = GroupEnum.GROUP_1;
+		else if(rowName.equals(getItem(2))) gEnum = GroupEnum.GROUP_2;
+		else if(rowName.equals(getItem(3))) gEnum = GroupEnum.GROUP_3;
+		else if(rowName.equals(getItem(4))) gEnum = GroupEnum.GROUP_4;
+		else if(rowName.equals(getItem(5))) gEnum = GroupEnum.GROUP_5;
+		else if(rowName.equals(getItem(6))) gEnum = GroupEnum.GROUP_6;
+		else if(rowName.equals(getItem(7))) gEnum = GroupEnum.GROUP_7;
+		else if(rowName.equals(getItem(8))) gEnum = GroupEnum.GROUP_8;
+		
+		return gEnum;
+	}
+	
+	private void setGroupBadges(View row, GroupEnum gEnum){
+		MatchesHolder holder = (MatchesHolder) row.getTag();
+		ArrayList<Club> clubs = groups.get(gEnum).getClubs();
+		boolean settedOne = setBadge(holder.ivClub1, clubs.get(0));
+		boolean settedTwo = setBadge(holder.ivClub2, clubs.get(1));
+		boolean settedThree = setBadge(holder.ivClub3, clubs.get(2));
+		boolean settedFour = setBadge(holder.ivClub4, clubs.get(3));
+		
+		if(settedOne || settedTwo) holder.llClubs1.setVisibility(View.VISIBLE);
+		if(settedThree || settedFour) holder.llClubs2.setVisibility(View.VISIBLE);
+	}
+	
+	private boolean setBadge(ImageView iv, Club club){
+		if(null != club){
+			iv.setImageBitmap(
+				    BitmapOptimisator.decodeSampledBitmapFromResource(getContext().getResources(),
+				    		club.getBadgeResource(getContext()), 100, 100));
+			return true;
+		}else iv.setVisibility(View.GONE);
+		return false;
+	}
+	
+}
+
+class MatchesHolder {
+    TextView tvName;
+    LinearLayout llClubs1;
+    LinearLayout llClubs2;
+    ImageView ivClub1;
+    ImageView ivClub2;
+    ImageView ivClub3;
+    ImageView ivClub4;   
+}

@@ -1,0 +1,29 @@
+package br.com.zynger.brasileirao2012;
+
+import org.taptwo.android.widget.TitleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.app.Activity;
+import android.os.Bundle;
+import br.com.zynger.brasileirao2012.adapters.AboutViewFlowAdapter;
+import br.com.zynger.brasileirao2012.util.AppHelper;
+
+public class AboutActivity extends Activity {
+	
+	private ViewFlow viewFlow;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aboutactivity);
+		
+		viewFlow = (ViewFlow) findViewById(R.aboutactivity.viewflow);
+		TitleFlowIndicator indicator = (TitleFlowIndicator) findViewById(R.aboutactivity.viewflowindic);
+		
+		AboutViewFlowAdapter adapter = new AboutViewFlowAdapter(this, AppHelper.getAppVersion(this));
+		viewFlow.setAdapter(adapter);
+
+		indicator.setTitleProvider(adapter);
+		viewFlow.setFlowIndicator(indicator);
+	}
+}

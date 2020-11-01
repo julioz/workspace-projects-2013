@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#FFFFFFFF"
+  android:orientation="vertical"
+  android:stretchColumns="1"
+  android:shrinkColumns="0,2">
+  
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:shrinkColumns="0,1"
+  		android:stretchColumns="2"
+  		android:id="@+novo_veiculo/tlTituloBarraVeiculo">
+  		
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="fill_parent"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#FF068ED4">
+  		
+  		<ImageView
+  		android:src="@drawable/car_icon"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:id="@+novo_veiculo/tvVeiTit"
+        android:gravity="center_vertical|right" android:paddingRight="20sp"
+        android:text="Novo Veículo" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		
+			
+		<ImageButton
+			android:src="@drawable/bt_add"
+			android:id="@+novo_veiculo/veiSalvar"
+			android:background="@null"
+			android:layout_gravity="right"
+			android:paddingRight="10sp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  		
+  		</TableRow>
+</TableLayout>
+
+<ScrollView
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:scrollbars="horizontal|vertical"
+    android:layout_below="@novo_veiculo/tlTituloBarraVeiculo"
+    android:layout_above="@+novo_veiculo/tlVeiDelete">
+
+
+    <TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="fill_parent"
+  		android:shrinkColumns="0"
+  		android:stretchColumns="1"
+  		android:paddingTop="6px"
+  		android:paddingLeft="3px"
+  		android:paddingRight="3px"
+  		android:paddingBottom="3px">
+  		
+  		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:text="Identificação:"
+              android:gravity="center_vertical" />
+              
+            <EditText android:id="@+novo_veiculo/etVeiIdentificacao"
+              android:layout_height="fill_parent"
+              android:singleLine="true"
+              android:scrollHorizontally="true"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:text="" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:text="Tipo de veículo:"
+              android:gravity="center_vertical" />
+              
+            <Spinner android:id="@+novo_veiculo/spVeiTipoDeVeiculo"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:id="@+novo_veiculo/trSubTipoVeiculo">
+			<TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:text="Subtipo:"
+              android:gravity="center_vertical" />
+              
+            <Spinner android:id="@+novo_veiculo/spVeiSubtipo"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:text="Instituição:"
+              android:gravity="center_vertical" />
+              
+            <Spinner android:id="@+novo_veiculo/spVeiInst"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent" />
+		</TableRow>
+		
+		<TableLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+novo_veiculo/tlEquipamento">
+		
+			<TableRow
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+novo_veiculo/trInicialEquipamento">
+				<TextView android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent"
+	              android:textColor="#000000"
+	              android:text="Equipamento:"
+	              android:gravity="center_vertical" />
+	             
+	            <LinearLayout android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent">
+	            
+		            <Spinner android:id="@+novo_veiculo/spVeiEquipamento"
+		           	 android:layout_width="0dp"
+		           	 android:layout_weight="2"
+		           	 android:layout_height="fill_parent" />
+		           	 
+		           	<ImageButton android:id="@+novo_veiculo/spVeiEquipamentoMais"
+		           	 android:layout_width="wrap_content"
+		           	 android:src="@drawable/bt_mais"
+		           	 android:background="@null"
+		           	 android:layout_height="fill_parent"/>
+	          	 
+				</LinearLayout>
+			</TableRow>
+		</TableLayout>
+		
+		<TableLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+novo_veiculo/tlEquipe">
+		
+			<TableRow
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+novo_veiculo/trInicialEquipe">
+				<TextView android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent"
+	              android:textColor="#000000"
+	              android:gravity="center_vertical"
+	              android:text="Equipe:"/>
+
+				<LinearLayout android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent">
+	            
+		            <Spinner android:id="@+novo_veiculo/spVeiEquipe"
+	           	 		android:layout_width="0dp"
+	           	 		android:layout_weight="1"
+	           	 		android:layout_height="fill_parent" />
+		           	 
+		           	<ImageButton android:id="@+novo_veiculo/spVeiEquipeMais"
+		           	 android:layout_width="wrap_content"
+		           	 android:src="@drawable/bt_mais"
+		           	 android:background="@null"
+		           	 android:layout_height="fill_parent"/>
+	          	 
+				</LinearLayout>
+			</TableRow>
+		</TableLayout>
+	</TableLayout>
+</ScrollView>
+	
+	<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:gravity="bottom"
+  		android:id="@+novo_veiculo/tlVeiDelete"
+  		android:shrinkColumns="0"
+  		android:stretchColumns="1"
+  		android:layout_alignParentBottom="true"
+  		android:orientation="horizontal">
+  		
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="fill_parent"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#FF668E54">
+  		
+  		<ImageView
+  		android:src="@drawable/bt_delete"
+  		android:layout_gravity="left" android:id="@+novo_veiculo/ivDelVei"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:gravity="center_vertical" android:paddingRight="20sp" android:id="@+novo_veiculo/tvDelVei"
+        android:text="Excluir Veículo" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		</TableRow>
+</TableLayout>
+
+</RelativeLayout>
+</TableLayout>

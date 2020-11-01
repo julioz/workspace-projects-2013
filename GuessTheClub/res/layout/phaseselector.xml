@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/pattern_scanline">
+    
+    <RelativeLayout
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:id="@+phaseselector/actionbar"
+        android:layout_height="40dp"
+        android:background="#ffeeeeee">
+        
+        <br.com.zynger.guesstheclub.view.CoolveticaTextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textColor="@color/greendroid_br"
+            android:id="@+phaseselector/tv_actionbar_percent"
+            android:shadowColor="@color/gray_shadow"
+            android:shadowRadius="0.5"
+            android:shadowDx="0.5"
+            android:shadowDy="0.5"
+            android:paddingRight="1dp"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:textSize="18dp"/>
+        
+        <br.com.zynger.guesstheclub.view.CoolveticaTextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/bluedroid_br"
+            android:id="@+phaseselector/tv_actionbar_numhints"
+            android:shadowColor="@color/gray_shadow"
+            android:shadowRadius="0.5"
+            android:shadowDx="0.5"
+            android:shadowDy="0.5"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:textSize="18dp"/>
+        
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/gray_line_actionbar"/>
+    </RelativeLayout>
+    
+    <FrameLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_below="@+phaseselector/actionbar"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+	
+		<org.taptwo.android.widget.CircleFlowIndicator
+			android:padding="10dip"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:id="@+phaseselector/viewflowindic"
+			android:layout_gravity="center_horizontal"/>
+		<org.taptwo.android.widget.ViewFlow
+			android:id="@+phaseselector/viewflow"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"/>
+	
+	</FrameLayout>
+</RelativeLayout>

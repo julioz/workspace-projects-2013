@@ -1,0 +1,122 @@
+package br.com.zynger.brasileirao2012.model;
+
+import java.io.Serializable;
+import java.util.GregorianCalendar;
+
+public class RealTimeMatch implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
+	public static final int A_INICIAR = 0;
+	public static final int EM_ANDAMENTO = 1;
+	public static final int FINALIZADO = 2;
+
+	private String home, away, resultHome, resultAway, datetime, urlDetails;
+	private GregorianCalendar calendarDate;
+	private boolean serieA;
+	private int state = 0;
+	
+	public RealTimeMatch(){}
+
+	public RealTimeMatch(String home, String away, String resultHome, String resultAway, String datetime, String urlDetails, int state, boolean isSerieA) {
+		setHome(home);
+		setAway(away);
+		setResultHome(resultHome);
+		setResultAway(resultAway);
+		setDatetime(datetime);
+		setUrlDetails(urlDetails);
+		setState(state);
+		setSerieA(isSerieA);
+		setCalendarDate(null);
+		
+		if(getStateConstant() == A_INICIAR){
+			setResultHome("");
+			setResultAway("");
+		}
+	}
+	
+	public String getHome() {
+		return home;
+	}
+	
+	public void setHome(String home) {
+		this.home = home;
+	}
+	
+	public String getAway() {
+		return away;
+	}
+	
+	public void setAway(String away) {
+		this.away = away;
+	}
+	
+	public String getResultHome() {
+		return resultHome;
+	}
+	
+	public void setResultHome(String resultHome) {
+		this.resultHome = resultHome;
+	}
+	
+	public String getResultAway() {
+		return resultAway;
+	}
+	
+	public void setResultAway(String resultAway) {
+		this.resultAway = resultAway;
+	}
+	
+	public String getDatetime() {
+		return datetime;
+	}
+	
+	public void setDatetime(String datetime) {
+		this.datetime = datetime;
+	}
+	
+	public int getStateConstant(){
+		return state;
+	}
+	
+	public String getState() {
+		if(state == EM_ANDAMENTO) return "Em andamento";
+		else if(state == FINALIZADO) return "Finalizado";
+		else return "A iniciar";
+	}
+	
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	@Override
+	public String toString() {
+		return getHome() + " " + getResultHome() + " x " + getResultAway() + " " + getAway() + " - " + getDatetime() + " - " + getState();
+	}
+
+	public boolean isSerieA() {
+		return serieA;
+	}
+
+	public void setSerieA(boolean serieA) {
+		this.serieA = serieA;
+	}
+
+	public String getUrlDetails() {
+		return urlDetails;
+	}
+
+	public void setUrlDetails(String urlDetails) {
+		this.urlDetails = urlDetails;
+	}
+
+	public GregorianCalendar getCalendarDate() {
+		return calendarDate;
+	}
+
+	public void setCalendarDate(GregorianCalendar calendarDate) {
+		this.calendarDate = calendarDate;
+	}
+
+	
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<br.com.zynger.libertadores.view.DashboardLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f8f9fe" >
+ 
+    <!--  Twitter Button -->
+    <Button
+        android:id="@+home/btn_twitter"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_twitter"
+        android:text="@string/homedashboard_twittercentral" />
+    
+    <!--  Map Button -->
+    <Button
+        android:id="@+home/btn_map"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_map"
+        android:text="@string/homedashboard_map" />
+    
+    <!--  History Button -->
+    <Button
+        android:id="@+home/btn_history"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_history"
+        android:text="@string/homedashboard_history" />
+
+    <!--  About Button -->
+    <Button
+        android:id="@+home/btn_about"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_about"
+        android:text="@string/homedashboard_about" />
+ 
+</br.com.zynger.libertadores.view.DashboardLayout>

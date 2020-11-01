@@ -1,0 +1,163 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.ReadNewsFromDomain;
+import br.com.zynger.brasileirao2012.asynctasks.ReadNewsTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.DownloadImageTask;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+
+public class NewsDetailsActivity extends Activity implements AsyncTaskListener {
+	
+	public final static String INTENT_CLUBNAME = "CLUBNAME";
+	public final static String INTENT_ARTICLEURL = "ARTICLEURL";
+	public final static String INTENT_ARTICLETITLE = "ARTICLETITLE";
+	public final static String INTENT_ARTICLEIMGURL = "ARTICLEIMGURL";
+	public final static String INTENT_ARTICLEDOMAIN = "ARTICLEDOMAIN";
+	
+	private ClubsDB clubsDB;
+	
+	private SharedPreferences prefs;
+	private boolean showImgs;
+	
+	private String clubname, newsurl, title, imgurl;
+	private float[] textSizes = { 8, 12, 15, 19, 24 };
+	private int currentTextSize = 2;
+	private int domain;
+	
+	private TextView tv_actionbar, tv_title, articletext;
+	private ImageView iv_actionbar, img;
+	private ImageButton ib_zoomtext;
+	private DataUpdateLayout dul_loading;
+	private ScrollView sv_tv_text;
+	private TreeMap<String, Club> clubs;
+	private Club club;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.newsdetailsactivity);
+		clubsDB = ClubsDB.getInstance(this);
+		
+		clubname = getIntent().getStringExtra(INTENT_CLUBNAME);
+		newsurl = getIntent().getStringExtra(INTENT_ARTICLEURL);
+		title = getIntent().getStringExtra(INTENT_ARTICLETITLE);
+		imgurl = getIntent().getStringExtra(INTENT_ARTICLEIMGURL);
+		domain = getIntent().getIntExtra(INTENT_ARTICLEDOMAIN, 0);
+		setActionbar(clubname);
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		loadViews();
+		
+		showImgs = prefs.getBoolean("cb_imgsdownload", true);
+		
+		if(domain == Article.UOL || domain == Article.NETFLU) new ReadNewsFromDomain(newsurl, domain, this).execute();
+		else{			
+			if(showImgs) new DownloadImageTask(imgurl, img).execute();
+			new ReadNewsTask(newsurl, domain, this).execute();
+		}
+	}
+	
+	private void loadViews() {
+		articletext = (TextView) findViewById(R.newsdetailsactivity.tv_articletext);
+		ib_zoomtext = (ImageButton) findViewById(R.newsdetailsactivity.ib_zoomtext);
+		img = (ImageView) findViewById(R.newsdetailsactivity.iv_image);
+		
+		ib_zoomtext.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(currentTextSize == textSizes.length - 1) currentTextSize = 0;
+				else currentTextSize++;
+				
+				float newSize = textSizes[currentTextSize];
+				articletext.setTextSize(TypedValue.COMPLEX_UNIT_SP, newSize);
+			}
+		});
+		
+		img.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Dialog d = new Dialog(v.getContext()); 
+				d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				d.setContentView(R.layout.dialog_image);
+				ImageView iv = (ImageView) d.findViewById(R.dialog_image.iv);
+				iv.setImageDrawable(((ImageView) v).getDrawable());
+				d.setCanceledOnTouchOutside(true);
+				d.show();
+			}
+		});
+		
+		sv_tv_text = (ScrollView) findViewById(R.newsdetailsactivity.sv_tv_text);
+		dul_loading = (DataUpdateLayout) findViewById(R.newsdetailsactivity.dul_loading);
+		dul_loading.setText("Lendo..."); //TODO mover para strings.xml
+		dul_loading.addViewToToggle(sv_tv_text);
+		
+		tv_title = (TextView) findViewById(R.newsdetailsactivity.tv_title);
+		tv_title.setText(title);
+	}
+	
+	@Override
+	protected void onResume() {
+		if(img.getVisibility() == View.GONE && prefs.getBoolean("cb_imgsdownload", true)){
+			new DownloadImageTask(imgurl, img).execute();
+		}
+		super.onResume();
+	}
+	
+	private void setActionbar(String clubname){
+		tv_actionbar = (TextView) findViewById(R.newsdetailsactivity.tv_name);
+		iv_actionbar = (ImageView) findViewById(R.newsdetailsactivity.iv_badge);
+		
+		clubs = clubsDB.getClubs();
+		club = clubs.get(clubname);
+		
+		tv_actionbar.setText(club.getName().toUpperCase());
+		iv_actionbar.setImageDrawable(getResources().getDrawable(club.getBadgeResource(this)));
+	}
+
+	@Override
+	public void preExecution() {
+		dul_loading.showFullLayout();
+	}
+
+	@Override
+	public void onComplete(Object result) {
+		String news = new String();
+		if(result instanceof String){
+			news = (String) result;
+		}else if(result instanceof String[]){
+			String[] newsArray = (String[]) result;
+			
+			String imgsrcServer = newsArray[0];
+			news = newsArray[1];
+			if(showImgs && imgsrcServer != null) new DownloadImageTask(imgsrcServer, img).execute();
+		}
+
+		articletext.setText(Html.fromHtml(news));
+		articletext.setMovementMethod(LinkMovementMethod.getInstance());
+		dul_loading.hide();
+	}
+
+	@Override
+	public void onFail(String message) { }
+}

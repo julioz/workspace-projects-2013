@@ -1,0 +1,75 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import org.taptwo.android.widget.TitleProvider;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.ClubFullNameComparator;
+
+public class ClubSelectorAdapter extends BaseAdapter implements TitleProvider {
+
+	private static final int LAYOUT_RESOURCE = R.layout.clubselectorlistviewlayout;
+	
+	private Context context;
+	private LayoutInflater mInflater;
+	private ListView[] lists;
+
+	public ClubSelectorAdapter(Context context, ArrayList<Club> clubsA, ArrayList<Club> clubsB) {
+		this.context = context;
+		this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		
+		ClubFullNameComparator comparator = new ClubFullNameComparator();
+		Collections.sort(clubsA, comparator);
+		Collections.sort(clubsB, comparator);
+		
+		ListView listViewA = (ListView) mInflater.inflate(LAYOUT_RESOURCE, null);
+		listViewA.setAdapter(new ClubSelectorListArrayAdapter(context, clubsA));
+		
+		ListView listViewB = (ListView) mInflater.inflate(LAYOUT_RESOURCE, null);
+		listViewB.setAdapter(new ClubSelectorListArrayAdapter(context, clubsB));
+		
+		lists = new ListView[2];
+		lists[0] = listViewA;
+		lists[1] = listViewB;
+	}
+	
+	public ListView[] getLists(){
+		return lists;
+	}
+
+	@Override
+	public int getCount() {
+		return Division.values().length;
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return LAYOUT_RESOURCE;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {			
+		return lists[position];
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@Override
+	public String getTitle(int position) {
+		Division division = position == 0 ? Division.FIRSTDIVISION : Division.SECONDDIVISION;
+		return context.getString(R.string.clubselectoradapter_division) + " " + division.getStringNotation();
+	}
+}

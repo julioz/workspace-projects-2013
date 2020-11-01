@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 Júlio Zynger <julioz92@gmail.com> 1379108984 -0300	branch: Created from HEAD
+e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 6f34a038cd722f25bb84891734ba62424ef8e23d Júlio Zynger <julioz92@gmail.com> 1379120615 -0300	commit: Adds FadingActionBar and Sherlock dependencies. Adds EventActivity with special actionbar.

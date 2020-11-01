@@ -1,0 +1,123 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.view.StrikerRow;
+
+public class StrikersDivision1Activity extends StrikersActivity {
+	
+	private ArrayList<Striker> strikers;
+	private TreeMap<String, Club> clubs;
+	
+	private TextView tv_selected;
+	
+	private String club_limited = null;
+	private ArrayList<StrikerRow> al;
+	private int clickCounter = 1;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.strikers);
+		
+		this.clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		this.strikers = (ArrayList<Striker>) FileHandler.openBackup(this, FileHandler.STRIKERS_A);
+		club_limited = getIntent().getStringExtra("CLUB_NAME");
+		al = new ArrayList<StrikerRow>();
+		
+		loadViews();
+		
+		if(club_limited == null){
+			((TextView) findViewById(R.strikers.tv_actionbar_division)).setText("A");
+			findViewById(R.strikers.actionbar_ll).setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					finish();
+					Intent it = new Intent(v.getContext(), StrikersDivision2Activity.class);
+					startActivity(it);
+				}
+			});
+		}else findViewById(R.strikers.actionbar_ll).setVisibility(View.GONE);
+		
+		clickCounter = 1;
+	
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_actsupdates", false)) new UpdateStrikersTask(this, getDivision()).execute();
+		else new ShowStrikerListTask(this).execute();
+	}
+	
+	@Override
+	public int getClickCounter() {
+		return clickCounter;
+	}
+	
+	@Override
+	public void setClickCounter(int clickCounter) {
+		this.clickCounter = clickCounter;
+	}
+	
+	@Override
+	public String getClubLimited() {
+		return club_limited;
+	}
+	
+	@Override
+	public void setClubLimited(String clublimited) {
+		this.club_limited = clublimited;
+	}
+	
+	@Override
+	public ArrayList<StrikerRow> getStrikerRowArray() {
+		return al;
+	}
+	
+	@Override
+	public void setStrikerRowArray(ArrayList<StrikerRow> al) {
+		this.al = al;
+	}
+	
+	@Override
+	public ArrayList<Striker> getStrikers() {
+		return strikers;
+	}
+	
+	@Override
+	public void setStrikers(ArrayList<Striker> strikers) {
+		this.strikers = strikers;
+	}
+	
+	@Override
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	@Override
+	public void setClubs(TreeMap<String, Club> clubs) {
+		this.clubs = clubs;
+	}
+	
+	@Override
+	public TextView getTV_selected() {
+		return tv_selected;
+	}
+	
+	@Override
+	public void setTV_selected(TextView tv_selected) {
+		this.tv_selected = tv_selected;
+	}
+	
+	@Override
+	protected int getDivision(){
+		return Club.PRIMEIRADIVISAO;
+	}
+}

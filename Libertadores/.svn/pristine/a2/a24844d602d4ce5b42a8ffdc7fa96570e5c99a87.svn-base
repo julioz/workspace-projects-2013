@@ -1,0 +1,149 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.StrikersAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetStrikersTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Striker;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.util.JsonUtil;
+import br.com.zynger.libertadores.web.StrikersParser;
+
+public class StrikersActivity extends ListActivity implements AsyncTaskListener {
+	
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	private InternalStorageHandler internalStorage;
+	
+	private StrikersParser strikersParser;
+	
+	private RelativeLayout rl_loading;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.strikersactivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		internalStorage = new InternalStorageHandler(this);
+		
+		strikersParser = new StrikersParser(this, clubs);
+		
+		loadViews();
+		
+		Button bt_execute = (Button) findViewById(R.strikersactivity.bt_execute);
+		bt_execute.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {				
+				new GetStrikersTask(strikersParser, StrikersActivity.this).execute();
+			}
+		});
+
+		ArrayList<Striker> strikers = restoreBackup();
+		if(null != strikers){
+			Collections.sort(strikers);
+			setListAdapter(new StrikersAdapter(this, strikers));
+		}else{
+			bt_execute.performClick(); //TODO remove			
+		}
+	}
+
+	private void loadViews() {
+		rl_loading = (RelativeLayout) findViewById(R.strikersactivity.rl_loading);
+	}
+	
+	private ArrayList<Striker> restoreBackup() {
+		String strikersJsonString = (String) internalStorage.openBackup(this, InternalStorageHandler.STRIKERS_JSON);
+		if(null != strikersJsonString){
+			try{
+				ArrayList<Striker> strikers = new ArrayList<Striker>();
+				JSONArray jsonStrikers = new JSONArray(strikersJsonString);
+				
+				for (int i = 0; i < jsonStrikers.length(); i++) {
+					JSONArray data = jsonStrikers.getJSONArray(i);
+					String name = data.getString(Striker.JSON_NAME);
+					String clubAcronym = data.getString(Striker.JSON_CLUB);
+					Integer move = data.getInt(Striker.JSON_MOVE);
+					Integer header = data.getInt(Striker.JSON_HEADER);
+					Integer foul = data.getInt(Striker.JSON_FOUL);
+					Integer penalty = data.getInt(Striker.JSON_PENALTY);
+					
+					Striker striker = new Striker(name, clubs.get(clubAcronym));
+					striker.setMove(move);
+					striker.setHeader(header);
+					striker.setFoul(foul);
+					striker.setPenalty(penalty);
+					strikers.add(striker);
+				}
+				
+				return strikers;
+			}catch(JSONException e){
+				e.printStackTrace();
+				return null;
+			}
+		} else return null;
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		ArrayList<Striker> strikers = (ArrayList<Striker>) result;
+		
+		JSONArray json = JsonUtil.createStrikersJson(strikers); //TODO
+		internalStorage.saveBackup(this, InternalStorageHandler.STRIKERS_JSON, json.toString());
+		
+		// Collections.sort(strikers); TODO
+		Collections.sort(strikers, new ClubComparator());
+		
+		setListAdapter(new StrikersAdapter(this, strikers));
+		hideUpdatingLayout();
+	}
+
+	@Override
+	public void onFail(String message) {
+		//TODO load the old definitions
+		hideUpdatingLayout();
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+	
+	class ClubComparator implements Comparator<Striker> {
+
+		@Override
+		public int compare(Striker lhs, Striker rhs) {
+			return lhs.getClub().getName().compareTo(rhs.getClub().getName());
+		}	
+	}
+
+}

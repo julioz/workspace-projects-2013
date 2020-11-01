@@ -1,0 +1,244 @@
+package br.com.zynger.brasileirao2012;
+
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.StrikersListAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.GetStrikersTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.StrikersDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+import br.com.zynger.brasileirao2012.view.CustomActionBar;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+
+public class StrikersListActivity extends ListActivity implements AsyncTaskListener {
+	
+	public static final String INTENT_DIVISION = "DIVISION";
+	public static final String INTENT_CLUBACRONYM = "CLUBACRONYM";
+	
+	private static final int ORDER_GOALS = 0;
+	private static final int ORDER_NAME = 1;
+	private static final int ORDER_TEAM = 2;
+	
+	private TreeMap<String, Club> clubs;
+	
+	private Division division;
+	private String clubLimited = null;
+	
+	private int headersClickCounter;
+	private TextView headerMarked;
+	
+	private CustomActionBar actionbar;
+	private DataUpdateLayout dul_loading;
+	private RelativeLayout rl_content;
+	private TextView tv_header_goals, tv_header_name, tv_header_team;
+	private ArrayList<TextView> headers;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.strikerslistactivity);
+		
+		division = (Division) getIntent().getSerializableExtra(INTENT_DIVISION);
+		clubLimited = getIntent().getStringExtra(INTENT_CLUBACRONYM);
+		clubs = ClubsDB.getInstance(this).getClubs();
+		
+		headersClickCounter = 1;
+		
+		loadViews();
+		
+		if(clubLimited != null) actionbar.getDivisionLayoutVisibility(View.GONE);
+	
+		Toast.makeText(this, R.string.strikerslistactivity_showingolddata, Toast.LENGTH_LONG).show();
+		
+		if(PreferenceEditor.shouldAutoUpdate(this)){
+			new GetStrikersTask(this, division, clubs, this).execute();
+		}else setAdapter(orderAdapterList(ORDER_GOALS), tv_header_goals, getResources().getColor(R.color.rankingrow_blue));
+	}
+
+	private void loadViews() {
+		actionbar = (CustomActionBar) findViewById(R.strikerslistactivity.actionbar);
+		rl_content = (RelativeLayout) findViewById(R.strikerslistactivity.rl_content);
+		dul_loading = (DataUpdateLayout) findViewById(R.strikerslistactivity.dul_loading);
+		dul_loading.addViewToToggle(rl_content);
+		
+		tv_header_goals = (TextView) findViewById(R.strikerslistactivity.tv_goals);
+		tv_header_name = (TextView) findViewById(R.strikerslistactivity.tv_name);
+		tv_header_team = (TextView) findViewById(R.strikerslistactivity.tv_team);
+		
+		headers = new ArrayList<TextView>();
+		headers.add(tv_header_goals);
+		headers.add(tv_header_name);
+		headers.add(tv_header_team);
+		
+		actionbar.setDivisionText(division.getStringNotation());
+		actionbar.setDivisionOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+				Intent it = new Intent(v.getContext(), StrikersListActivity.class);
+				it.putExtra(INTENT_DIVISION, division.getOppositeDivision());
+				it.putExtra(INTENT_CLUBACRONYM, clubLimited);
+				startActivity(it);
+			}
+		});
+		
+		OnClickListener headerOCL = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				TextView header = (TextView) v;
+				if(header == headerMarked) headersClickCounter *= -1;
+				else{
+					headersClickCounter = 1;
+					headerMarked = header;
+				}
+				
+				int color = getResources().getColor(R.color.rankingrow_blue);
+				if(headersClickCounter == -1) color = getResources().getColor(R.color.rankingrow_red);
+				else if(headersClickCounter == 1) color = getResources().getColor(R.color.rankingrow_blue);
+				setAdapter(orderAdapterList(headers.indexOf(header)), header, color);
+			}
+		};
+		
+		for (TextView header : headers) {
+			header.setOnClickListener(headerOCL);
+		}
+		
+		actionbar.setUpdateOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(ConnectionHelper.isConnected(v.getContext())){					
+					new GetStrikersTask(v.getContext(), division, clubs, StrikersListActivity.this).execute();
+				}else{
+					Toast.makeText(v.getContext(), R.string.message_verifyconnection, Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+	}
+	
+	private void setAdapter(ArrayList<Striker> strikers, TextView toFocus, int color) {
+		for (TextView header : headers) {
+			header.setBackgroundResource(0); //clear BG
+		}
+		toFocus.setBackgroundColor(color);
+		
+		if(clubLimited != null){
+			ArrayList<Striker> duplicate = new ArrayList<Striker>();
+			for (Striker striker : strikers) {
+				if(striker.getClub().getAcronym().equals(clubLimited)){
+					duplicate.add(striker);
+				}
+			}
+			setListAdapter(new StrikersListAdapter(this, duplicate));
+		}else{
+			setListAdapter(new StrikersListAdapter(this, strikers));
+		}
+	}
+	
+	private ArrayList<Striker> orderAdapterList(int orderType) {
+		StrikersListAdapter adapter = ((StrikersListAdapter) getListAdapter());
+		ArrayList<Striker> list;
+		if(adapter == null) list = StrikersDB.getInstance().getStrikers(division);
+		else list = adapter.getList();
+		
+		if(orderType == ORDER_GOALS) Collections.sort(list, new ByGoalsComparator(headersClickCounter));
+		else if(orderType == ORDER_NAME) Collections.sort(list, new ByNameComparator(headersClickCounter));
+		else if(orderType == ORDER_TEAM) Collections.sort(list, new ByTeamComparator(headersClickCounter));
+		
+		return list;
+	}
+
+	@Override
+	public void preExecution() {
+		dul_loading.showFullLayout();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		ArrayList<Striker> strikers = (ArrayList<Striker>) result;
+		TreeMap<Division, ArrayList<Striker>> tmStrikers = new TreeMap<Division, ArrayList<Striker>>();
+		tmStrikers.put(division.getOppositeDivision(), StrikersDB.getInstance().getStrikers(division.getOppositeDivision()));
+		tmStrikers.put(division, strikers);
+		FileHandler.saveBackup(this, FileHandler.JSON_STRIKERS, JsonUtil.createStrikersJson(tmStrikers));
+		StrikersDB.getInstance().setStrikers(division, strikers);
+		
+		Toast.makeText(this, R.string.message_dataupdated, Toast.LENGTH_SHORT).show();
+		dul_loading.hide();
+		setAdapter(strikers, tv_header_goals, getResources().getColor(R.color.rankingrow_blue));
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		dul_loading.hide();
+	}
+	
+	private static class ByGoalsComparator implements Comparator<Striker> {
+		private int clickCounter;
+		
+		public ByGoalsComparator(int clickCounter) {
+			this.clickCounter = clickCounter;
+		}
+		
+		@Override
+		public int compare(Striker s1, Striker s2) {
+			if(s1.getGoals() < s2.getGoals()) return clickCounter * 1;
+			else if(s1.getGoals() > s2.getGoals()) return clickCounter * -1;
+			else if(s1.getGoals() == s2.getGoals()){
+				return clickCounter * s1.getName().compareTo(s2.getName());
+			}
+			return 1;
+		}
+	}
+	
+	private static class ByNameComparator implements Comparator<Striker> {
+		private Collator collator;
+		private int clickCounter;
+		
+		public ByNameComparator(int clickCounter) {
+			this.clickCounter = clickCounter;
+			collator = Collator.getInstance(Locale.US);
+	        collator.setStrength(Collator.PRIMARY);
+	        collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+		}
+		
+		@Override
+		public int compare(Striker s1, Striker s2) {
+			return clickCounter * collator.compare(s1.getName(), s2.getName());
+		}
+	}
+	
+	private static class ByTeamComparator implements Comparator<Striker> {
+		private int clickCounter;
+		
+		public ByTeamComparator(int clickCounter) {
+			this.clickCounter = clickCounter;
+		}
+		
+		@Override
+		public int compare(Striker s1, Striker s2) {
+			return clickCounter * s1.getClub().getName().compareTo(s2.getClub().getName());
+		}
+	}
+
+}

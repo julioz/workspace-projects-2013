@@ -1,0 +1,136 @@
+package br.com.zynger.libertadores.util;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+import br.com.zynger.libertadores.HomeActivity;
+
+public class InternalStorageHandler {
+	
+	//public static final String HEADERS = "libertadores_headers";
+	public static final String LAST_HEADERS_UPDATE = "libertadores_lastheadersupdate";
+	public static final String MYCLUB = "libertadores_myclub";
+	public static final String STANDINGS_JSON = "libertadores_standings_json";
+	private static final String MATCHES_JSON = "libertadores_matches_json";
+	public static final String LAST_MATCHES_UPDATE = "libertadores_lastmatchesupdate";
+	public static final String STRIKERS_JSON = "libertadores_strikers_json";
+	public static final String ROSTERS_JSON = "libertadores_rosters_json";
+	public static final String FANS_JSON = "libertadores_fans_json";
+	
+	private Context context;
+	
+	public InternalStorageHandler(Context context) {
+		setContext(context);
+	}
+	
+	public void saveBackup(Context c, String fileName, Object obj){
+		FileOutputStream out;
+		try {
+			out = c.openFileOutput(fileName, Context.MODE_PRIVATE);
+			ObjectOutputStream os = new ObjectOutputStream(out);
+			os.writeObject(obj);
+			os.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (OutOfMemoryError e) {
+			e.printStackTrace();
+		} catch (StackOverflowError e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Object openBackup(String fileName){
+		try {
+			FileInputStream fis = getContext().openFileInput(fileName);
+			ObjectInputStream is = new ObjectInputStream(fis);
+			Object obj = is.readObject();
+			is.close();
+			return obj;
+		} catch (FileNotFoundException e) {
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch (StreamCorruptedException e) {
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch (IOException e) {
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch (ClassNotFoundException e) {
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch(OutOfMemoryError e) {
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch(ClassCastException e) {
+			/* deserializacao de uma classe serializada numa versao antiga e que foi modificada causa esta exception - inconsistencia das estruturas */
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch(StackOverflowError e) {
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch(NullPointerException e){
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch(NegativeArraySizeException e) {
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch(ArrayIndexOutOfBoundsException e) {
+			/* se ocorrer falta de memoria, o indice do array a ser desserializado pode ver como lixo de memoria e causar esta exception */
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		} catch(Exception e) {
+			Log.i(HomeActivity.TAG, e.toString());
+			return null;
+		}
+	}
+	
+	public void saveMatchesArray(String id, Object obj) {
+		saveBackup(getContext(), MATCHES_JSON + "_" + id, obj);
+	}
+	
+	public Object openMatchesArray(String id){
+		return openBackup(MATCHES_JSON + "_" + id);
+	}
+
+	public Bitmap getBitmapFromInternalStorage(String fileName) {
+		File filePath = getContext().getFileStreamPath(fileName);
+		return BitmapFactory.decodeFile(filePath.toString());
+	}
+
+	public Boolean writeBitmapToInternalStorage(Bitmap b, String fileName){
+		try{
+			File file = new File(getContext().getFilesDir() + File.separator + fileName);
+			FileOutputStream fileStream = new FileOutputStream(file);
+			fileStream.flush();
+			b.compress(CompressFormat.JPEG, 100, fileStream);
+			fileStream.close();
+			return true;
+		}catch(IOException e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Context getContext() {
+		return context;
+	}
+	
+	public void setContext(Context context) {
+		this.context = context;
+	}
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ActivatedRow"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+torcidometerrow/iv_badge"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="4dp" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_margin="4dp" >
+
+        <LinearLayout
+            android:id="@+torcidometerrow/ll_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dp"
+            android:layout_toLeftOf="@+torcidometerrow/tv_number" >
+
+            <View
+                android:id="@+torcidometerrow/v_bar"
+                android:layout_width="fill_parent"
+                android:layout_height="24dp"
+                android:background="@drawable/fansbackrepeat" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+torcidometerrow/tv_number"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dp"
+            android:gravity="center_vertical|right"
+            android:textColor="@android:color/white"
+            android:textIsSelectable="false" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,54 @@
+8
+
+dir
+3
+https://site2011.googlecode.com/svn/trunk/SiTE/res/layout-land
+https://site2011.googlecode.com/svn
+
+
+
+2011-08-24T02:07:34.922830Z
+3
+julioz92@gmail.com
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+4fe35f77-095b-c7dd-7cf2-0090eea904e5
+
+ambilwarna_dialog.xml
+file
+
+
+
+
+2011-08-19T01:29:20.890000Z
+2d1ef1ae7114251f76a751fd4e5782db
+2011-08-24T02:07:34.922830Z
+3
+julioz92@gmail.com
+has-props
+
+main.xml
+file
+
+
+
+
+2011-09-25T00:57:08.949000Z
+0382f27fd46d066a8b343efd83f7a454
+2011-08-24T02:07:34.922830Z
+3
+julioz92@gmail.com
+has-props
+

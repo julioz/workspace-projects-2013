@@ -1,0 +1,182 @@
+package br.com.zynger.brasileirao2012.fragment;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import br.com.zynger.brasileirao2012.NewsDetailsActivity;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.adapters.NewsArrayAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.GetNewsTask;
+import br.com.zynger.brasileirao2012.enums.NewsDomain;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.model.NewsSource;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.Constants;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+import br.com.zynger.brasileirao2012.view.ActionItem;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+import br.com.zynger.brasileirao2012.view.QuickAction;
+
+import com.actionbarsherlock.app.SherlockFragment;
+
+public class NewsFragment extends SherlockFragment implements
+		AsyncTaskListener<ArrayList<Article>> {
+
+	private static final String PAGER_NEWSSOURCE = "PAGER_NEWSSOURCE";
+
+	private static final int LAYOUT_RESOURCE = R.layout.newsviewflowadapteritem;
+
+	private ShareHelper shareHelper;
+	private QuickAction quickaction;
+	private ActionItem actionItem_read, actionItem_webpage, actionItem_share;
+
+	private NewsSource newsSource;
+	private String clubAcronym;
+	private ListView listView;
+	private DataUpdateLayout dulLoading;
+
+	public static NewsFragment create(NewsSource newsSource, String clubAcronym) {
+		NewsFragment fragment = new NewsFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(PAGER_NEWSSOURCE, newsSource);
+		args.putString(Constants.INTENT_CLUBACRONYM, clubAcronym);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+	public NewsFragment() {
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		newsSource = (NewsSource) getArguments().getSerializable(
+				PAGER_NEWSSOURCE);
+		clubAcronym = getArguments().getString(Constants.INTENT_CLUBACRONYM);
+		shareHelper = new ShareHelper(getContext());
+
+		actionItem_read = new ActionItem();
+		actionItem_read.setIcon(getResources().getDrawable(
+				R.drawable.ic_webpage_quickaction));
+		actionItem_read.setTitle(getString(R.string.newsviewflowadapter_read));
+
+		actionItem_webpage = new ActionItem();
+		actionItem_webpage.setIcon(getResources().getDrawable(
+				R.drawable.ic_liveview_quickaction));
+		actionItem_webpage
+				.setTitle(getString(R.string.newsviewflowadapter_openpage));
+
+		actionItem_share = new ActionItem();
+		actionItem_share.setIcon(getResources().getDrawable(
+				R.drawable.ic_share_quickaction));
+		actionItem_share
+				.setTitle(getString(R.string.newsviewflowadapter_share));
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(LAYOUT_RESOURCE, null);
+
+		listView = (ListView) view
+				.findViewById(R.newsviewflowadapteritem.listview);
+		dulLoading = (DataUpdateLayout) view
+				.findViewById(R.newsviewflowadapteritem.dul_loading);
+		dulLoading.addViewToToggle(listView);
+
+		if (ConnectionHelper.isConnected(getSherlockActivity())) {
+			new GetNewsTask(this, newsSource).execute();
+		} else {
+			dulLoading
+					.setErrorMessage(getString(R.string.newsviewflowadapter_interneterrorreading));
+		}
+
+		return view;
+	}
+
+	@Override
+	public Context getContext() {
+		return getSherlockActivity();
+	}
+
+	@Override
+	public void preExecution() {
+		dulLoading.setMessage(R.string.newsdetailsactivity_reading);
+		dulLoading.show();
+	}
+
+	@Override
+	public void onComplete(ArrayList<Article> articles) {
+		dulLoading.hide();
+		listView.setAdapter(new NewsArrayAdapter(getContext(), articles));
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> listView, View v,
+					int position, long id) {
+				final Article article = (Article) listView.getAdapter()
+						.getItem(position);
+
+				quickaction = new QuickAction(v);
+				quickaction.setAnimStyle(QuickAction.ANIM_REFLECT);
+
+				actionItem_read.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent it = new Intent(v.getContext(),
+								NewsDetailsActivity.class);
+						it.putExtra(Constants.INTENT_CLUBACRONYM, clubAcronym);
+						it.putExtra(NewsDetailsActivity.INTENT_ARTICLE, article);
+						quickaction.dismiss();
+						startActivity(it);
+					}
+				});
+
+				actionItem_webpage.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent it = new Intent(Intent.ACTION_VIEW, Uri
+								.parse(article.getUrl().toString()));
+						quickaction.dismiss();
+						startActivity(it);
+					}
+				});
+
+				actionItem_share.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						quickaction.dismiss();
+
+						String message = article.getUrl().toString();
+						shareHelper.share(message);
+					}
+				});
+
+				NewsDomain domain = article.getDomain();
+				if (domain == NewsDomain.GLOBOESPORTE
+						|| domain == NewsDomain.UOL) {
+					quickaction.addActionItem(actionItem_read);
+				}
+				quickaction.addActionItem(actionItem_webpage);
+				quickaction.addActionItem(actionItem_share);
+				quickaction.show();
+			}
+		});
+	}
+
+	@Override
+	public void onFail(String message) {
+		dulLoading.show();
+		dulLoading.setErrorMessage(getString(R.string.message_errortryagain));
+	}
+}

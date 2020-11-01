@@ -1,0 +1,131 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.asynctasks.DownloadImageTask;
+import br.com.zynger.libertadores.model.Article;
+
+public class NewsAdapter extends ArrayAdapter<Article> {
+
+	private final int COLOR_LIGHTGRAY = 0xFFF4F4F4;
+	private final int COLOR_DARGGRAY = 0xFFDFDFDF;
+	
+	private final LayoutInflater mInflater;
+	private static final int LAYOUTRESOURCEID = R.layout.newsrow;
+	private HashMap<String, Bitmap> cache;
+	private ArrayList<Article> objects;
+	private boolean downloadImages;
+	
+	public NewsAdapter(Context context, ArrayList<Article> articles, boolean downloadImages) {
+		super(context, LAYOUTRESOURCEID);
+		this.mInflater = LayoutInflater.from(context);
+		cache = new HashMap<String, Bitmap>();
+		objects = articles;
+		this.downloadImages = downloadImages;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public Article getItem(int position) {
+		return objects.get(position);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+		NewsHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+            
+            holder = new NewsHolder();
+            holder.tv_title = (TextView) row.findViewById(R.newsrow.tv_title);
+            holder.tv_subtitle = (TextView) row.findViewById(R.newsrow.tv_subtitle);
+            holder.tv_pubdate = (TextView) row.findViewById(R.newsrow.tv_pubdate);
+            holder.ll_thumbnail = (LinearLayout) row.findViewById(R.newsrow.ll_thumbnail);
+            holder.iv_thumbnail = (ImageView) row.findViewById(R.newsrow.iv_thumbnail);
+            holder.rl_datethumb = (RelativeLayout) row.findViewById(R.newsrow.rl_datethumb);
+            
+            row.setTag(holder);
+        }else{
+            holder = (NewsHolder) row.getTag();
+            holder.tv_pubdate.setVisibility(View.VISIBLE);
+            holder.ll_thumbnail.setVisibility(View.VISIBLE);
+            holder.iv_thumbnail.setImageBitmap(null);
+            holder.rl_datethumb.setVisibility(View.VISIBLE);
+        }
+        
+        int bgColor = position % 2 == 0 ? COLOR_LIGHTGRAY : COLOR_DARGGRAY;
+        row.setBackgroundColor(bgColor);
+
+        final Article article = getItem(position);
+        
+        holder.tv_title.setText(article.getTitle());
+        holder.tv_subtitle.setText(article.getSubTitle());
+        
+        if(null != article.getDate()) holder.tv_pubdate.setText(getFormattedDateString(article.getDate()));
+        else holder.tv_pubdate.setVisibility(View.GONE);
+        
+        if(null != article.getThumbnailUrl() && downloadImages){
+        	new DownloadImageTask(article.getThumbnailUrl(), holder.iv_thumbnail, cache).execute();
+        }else holder.ll_thumbnail.setVisibility(View.GONE);
+        
+        if(holder.tv_pubdate.getVisibility() == View.GONE
+        		&& holder.ll_thumbnail.getVisibility() == View.GONE){
+        	holder.rl_datethumb.setVisibility(View.GONE);
+        }
+        
+        return row;
+	}
+
+	private String getFormattedDateString(GregorianCalendar date) {
+		Calendar localTime = Calendar.getInstance();
+		localTime.setTimeInMillis(date.getTimeInMillis());
+		
+		String str = new String();
+		int day_of_month = localTime.get(Calendar.DAY_OF_MONTH);
+		int month = localTime.get(Calendar.MONTH) + 1;
+		int hour = localTime.get(Calendar.HOUR_OF_DAY);
+		int minute = localTime.get(Calendar.MINUTE);
+		
+		str = str.concat((day_of_month < 10 ? '0' + String.valueOf(day_of_month) : String.valueOf(day_of_month)));
+		str = str.concat("/");
+		str = str.concat((month < 10 ? '0' + String.valueOf(month) : String.valueOf(month)));
+		if(hour != 0 && minute != 0){			
+			str = str.concat(" - ");
+			str = str.concat((hour < 10 ? '0' + String.valueOf(hour) : String.valueOf(hour)));
+			str = str.concat(":");
+			str = str.concat((minute < 10 ? '0' + String.valueOf(minute) : String.valueOf(minute)));
+		}
+		
+		return str;
+	}
+	
+}
+
+class NewsHolder {
+	TextView tv_title;
+	TextView tv_subtitle;
+	LinearLayout ll_thumbnail;
+	ImageView iv_thumbnail;
+	RelativeLayout rl_datethumb;
+	TextView tv_pubdate;
+}

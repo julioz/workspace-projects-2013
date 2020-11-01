@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<properties>
+	<debug>true</debug>
+	<app_name>GuessTheClub</app_name>
+	<app_fullname>Guess The Club</app_fullname>
+	<app_id>NNNN</app_id>
+	<consumer_key>XXXXXXXXXXXX</consumer_key>
+	<consumer_secret>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</consumer_secret>
+	<!-- Choose your server from here -->
+	<gree_environment>sandbox</gree_environment>
+</properties>

@@ -1,0 +1,171 @@
+package br.com.zynger.libertadores.web;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.util.Log;
+import br.com.zynger.libertadores.HomeActivity;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Match;
+import br.com.zynger.libertadores.model.Move;
+import br.com.zynger.libertadores.util.JsonUtil;
+import br.com.zynger.libertadores.util.WebDatabaseMapper;
+
+public class MoveToMoveParser {
+	
+	private final String PREFIX_GLOBO_URL = "http://globoesporte.globo.com/temporeal/futebol/";
+	private final String SUFFIX_GLOBO_URL = "/mensagens.json";
+	private final String PREFIX_GLOBO_VIDEOS_URL = "http://api.globovideos.com/videos/";
+	private final String SUFFIX_GLOBO_VIDEOS_URL = "/playlist";
+	private static final String TIMEZONE_BRAZIL = "GMT+03:00";
+	
+	private Context context;
+	private Match match;
+	private TreeMap<String, Club> clubs;
+	private WebDatabaseMapper webDatabaseMapper;
+	
+	public MoveToMoveParser(Context context, Match match, TreeMap<String, Club> clubs) {
+		setContext(context);
+		setMatch(match);
+		setClubs(clubs);
+		this.webDatabaseMapper = new WebDatabaseMapper(clubs, WebDatabaseMapper.SOURCE_MOVETOMOVE);
+	}
+	
+	public ArrayList<Move> getMoves() throws JSONException{
+		String url = getMatchUrl();
+		
+		JSONArray arr = new JSONArray(JsonUtil.readJsonFeed(url));
+		ArrayList<Move> moves = new ArrayList<Move>();
+		for (int i = 0; i < arr.length(); i++) {
+			JSONObject obj = arr.getJSONObject(i);
+			try{
+				Move move = parseMove(obj);
+				moves.add(move);
+			}catch(RuntimeException e){
+				Log.e(HomeActivity.TAG, obj.toString());
+				e.printStackTrace();
+				continue;
+			}
+		}
+		
+		Collections.reverse(moves);
+		return moves;
+	}
+
+	private String getMatchUrl() {
+		Club home = getMatch().getHome();
+		Club away = getMatch().getAway();
+		
+		String hName = webDatabaseMapper.getMoveToMoveName(home);
+		String aName = webDatabaseMapper.getMoveToMoveName(away);
+		
+		GregorianCalendar date = getMatch().getDate();
+		
+		DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+		date.setTimeZone(TimeZone.getTimeZone(TIMEZONE_BRAZIL));
+		
+		return PREFIX_GLOBO_URL + format.format(date.getTime()) + "/" + hName + "-" + aName + SUFFIX_GLOBO_URL;
+	}
+	
+	private Move parseMove(JSONObject obj) throws RuntimeException {
+		try{
+			String operacao = obj.getString("operacao");
+			
+			String str_tipo = obj.getString("tipo").toUpperCase();
+			int tipo = Move.TYPE_MOVE;
+			str_tipo = str_tipo.toUpperCase();
+			if(str_tipo.equals("LANCE_IMPORTANTE")) tipo = Move.TYPE_IMPORTANTMOVE;
+			else if(str_tipo.equals("LANCE_CARTAO")) tipo = Move.TYPE_CARD;
+			else if(str_tipo.equals("LANCE_GOL")) tipo = Move.TYPE_GOAL;
+			else if(str_tipo.equals("LANCE_SUBSTITUICAO")) tipo = Move.TYPE_SUBSTITUTION;		
+			
+			String nome_time = obj.getString("nome_time");
+			String periodo = obj.getString("periodo");
+			String video_id = obj.getString("video_id");
+			String url_thumb = obj.getString("url_thumb_playlist");
+			int periodo_id = obj.getInt("periodo_id");
+			String texto = obj.getString("texto");
+			String momento = obj.getString("momento");
+			int id = obj.getInt("id");
+			
+			String video_url = null;
+			if(!video_id.trim().equals("")) video_url = getMoveVideoUrl(video_id);
+			
+			int cartao = Move.CARD_NULL;
+			try{					
+				JSONObject objCard = obj.getJSONObject("cartao");
+				if(objCard.getString("tipo").toUpperCase().equals("A")) cartao = Move.CARD_YELLOW;
+				else if(objCard.getString("tipo").toUpperCase().equals("V")) cartao = Move.CARD_RED;
+			}catch(JSONException e){
+				cartao = Move.CARD_NULL;
+			}
+			
+			texto = texto.replaceAll("<p>", "");
+			texto = texto.replaceAll("</p>", "");
+			
+			return new Move(id, operacao, nome_time,
+					periodo, video_id, texto, momento, video_url,
+					url_thumb, tipo, periodo_id, cartao);
+		}catch(JSONException e){
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private String getMoveVideoUrl(String video_id) {
+		String url = PREFIX_GLOBO_VIDEOS_URL + video_id + SUFFIX_GLOBO_VIDEOS_URL;
+		try {
+			JSONObject json = new JSONObject(JsonUtil.readJsonFeed(url));
+			JSONArray tmp = json.getJSONArray("videos");
+			JSONObject videos = tmp.getJSONObject(0);
+			JSONArray resources = videos.getJSONArray("resources");
+			for (int i = 0; i < resources.length(); i++) {
+				try{
+					JSONObject videoObj = resources.getJSONObject(i);
+					
+					if(videoObj.getString("kind").equals("M4")) return videoObj.getString("url");
+					else continue;
+				}catch(JSONException e){
+					continue;
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+	
+	public Context getContext() {
+		return context;
+	}
+	
+	public void setContext(Context context) {
+		this.context = context;
+	}
+	
+	public Match getMatch() {
+		return match;
+	}
+	
+	public void setMatch(Match match) {
+		this.match = match;
+	}
+	
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	public void setClubs(TreeMap<String, Club> clubs) {
+		this.clubs = clubs;
+	}
+}

@@ -1,0 +1,69 @@
+package br.com.zynger.libertadores.model;
+
+public class Striker {
+	
+	private String name;
+	private Club club;
+	private Integer move = 0;
+	private Integer header = 0;
+	private Integer foul = 0;
+	private Integer penalty = 0;
+	
+	public Striker(String name, Club club) {
+		this.name = name;
+		this.club = club;
+	}
+	
+	public Integer getTotalGoals(){
+		return Integer.valueOf(getMove() + getHeader() + getFoul() + getPenalty());
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public Club getClub() {
+		return club;
+	}
+	
+	public void setClub(Club club) {
+		this.club = club;
+	}
+	
+	public Integer getMove() {
+		return move;
+	}
+	
+	public void setMove(Integer move) {
+		this.move = move;
+	}
+	
+	public Integer getHeader() {
+		return header;
+	}
+	
+	public void setHeader(Integer header) {
+		this.header = header;
+	}
+	
+	public Integer getFoul() {
+		return foul;
+	}
+	
+	public void setFoul(Integer foul) {
+		this.foul = foul;
+	}
+	
+	public Integer getPenalty() {
+		return penalty;
+	}
+	
+	public void setPenalty(Integer penalty) {
+		this.penalty = penalty;
+	}
+
+}

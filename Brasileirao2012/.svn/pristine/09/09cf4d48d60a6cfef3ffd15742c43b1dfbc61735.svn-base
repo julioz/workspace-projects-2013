@@ -1,0 +1,15 @@
+package br.com.zynger.brasileirao2012.enums;
+
+public enum Division {
+	FIRSTDIVISION, SECONDDIVISION;
+	
+	public String getStringNotation() {
+		if(this == FIRSTDIVISION) return "A";
+		else return "B";
+	}
+	
+	public Division getOppositeDivision(){
+		if(this == FIRSTDIVISION) return SECONDDIVISION;
+		else return FIRSTDIVISION;
+	}
+}

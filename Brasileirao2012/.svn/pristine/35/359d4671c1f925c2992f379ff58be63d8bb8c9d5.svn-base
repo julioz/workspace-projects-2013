@@ -1,0 +1,241 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.TreeMap;
+
+import org.json.JSONObject;
+import org.taptwo.android.widget.ViewFlow;
+import org.taptwo.android.widget.ViewFlow.ViewSwitchListener;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.TableViewFlowAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.GetTableTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.MatchesDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+import br.com.zynger.brasileirao2012.view.MatchViewLayout;
+import br.com.zynger.brasileirao2012.view.UpdateImageView;
+
+import com.michaelnovakjr.numberpicker.NumberPickerDialog;
+import com.michaelnovakjr.numberpicker.NumberPickerDialog.OnNumberSetListener;
+
+public class TableFlowActivity extends Activity implements AsyncTaskListener {
+
+	public static final String INTENT_DIVISION = "DIVISION";
+	
+	private Division division;
+	private ClubsDB clubsDB;
+	private MatchesDB matchesDB;
+	private TreeMap<Integer, Fixture> matches;
+	
+	private Integer fixtureBasedOnCalendar;
+	
+	private Boolean usingViewFlow;
+
+	private NumberPickerDialog rod_dialog;
+	
+	private TextView tv_actionbar_div;
+	private LinearLayout actionbar_ll_div;
+	private TextView rod_number;
+	private DataUpdateLayout dul_loading;
+	private ViewFlow viewFlow;
+	private ScrollView sv_ll_table;
+	private LinearLayout ll_table;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.tableflowactivity);
+		
+		division = (Division) getIntent().getSerializableExtra(INTENT_DIVISION);
+		clubsDB = ClubsDB.getInstance(this);
+		matchesDB = MatchesDB.getInstance(this, clubsDB.getClubs());
+		
+		matches = matchesDB.getMatches(division);
+		
+		usingViewFlow = PreferenceEditor.isHighPerformance(this);
+		
+		loadViews();
+		
+		tv_actionbar_div.setText(division.getStringNotation());
+		actionbar_ll_div.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+				Intent it = new Intent(v.getContext(), TableFlowActivity.class);
+				it.putExtra(INTENT_DIVISION, division.getOppositeDivision());
+				startActivity(it);
+			}
+		});
+		
+		HashMap<Integer, GregorianCalendar> map = matchesDB.getDates(division);
+		GregorianCalendar today = new GregorianCalendar();
+		for (Integer fixture : map.keySet()) {
+			fixtureBasedOnCalendar = fixture;
+			GregorianCalendar calendar = map.get(fixture);
+			if(!today.after(calendar)) break;
+		}
+		
+		if(PreferenceEditor.shouldAutoUpdate(this)){
+			new GetTableTask(this, matchesDB, clubsDB, division, TableFlowActivity.this).execute();
+		}else{
+			if(usingViewFlow) new SetTableAdapterTask(this, matches).execute();
+			else setTable(fixtureBasedOnCalendar);
+		}
+	}
+
+	private void loadViews() {
+		tv_actionbar_div = (TextView) findViewById(R.tableflowactivity.tv_actionbar_div);
+		actionbar_ll_div = (LinearLayout) findViewById(R.tableflowactivity.actionbar_ll_div);
+		rod_number = (TextView) findViewById(R.tableflowactivity.tv_actionbar_number);
+		viewFlow = (ViewFlow) findViewById(R.tableflowactivity.viewflow);
+		sv_ll_table = (ScrollView) findViewById(R.tableflowactivity.sv_linearlayout_table_lowperformance);
+		ll_table = (LinearLayout) sv_ll_table.findViewById(R.tablesupport.ll);
+		dul_loading = (DataUpdateLayout) findViewById(R.tableflowactivity.dul_loading);
+		if(usingViewFlow){			
+			dul_loading.addViewToToggle(viewFlow);
+			sv_ll_table.setVisibility(View.GONE);
+			
+			viewFlow.setOnViewSwitchListener(new ViewSwitchListener() {
+				@Override
+				public void onSwitched(View v, int position) {
+					int fixture = position + 1;
+					rod_number.setText(String.valueOf(fixture));
+				}
+			});
+		}else{			
+			dul_loading.addViewToToggle(sv_ll_table);
+			viewFlow.setVisibility(View.GONE);
+		}
+		
+		rod_dialog = new NumberPickerDialog(this, getString(R.string.tableflowactivity_selectfixture),
+				1, 38, getString(R.string.tableflowactivity_ok), getString(R.string.tableflowactivity_cancel));
+		rod_dialog.setOnNumberSetListener(new OnNumberSetListener() {
+			@Override
+			public void onNumberSet(int selectedNumber) {
+				setTable(selectedNumber);
+			}
+		});
+		
+		UpdateImageView update = (UpdateImageView) findViewById(R.tableflowactivity.uiv_update);
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(ConnectionHelper.isConnected(v.getContext())){					
+					new GetTableTask(v.getContext(), matchesDB, clubsDB, division, TableFlowActivity.this).execute();
+				}else{
+					Toast.makeText(v.getContext(),
+							R.string.message_verifyconnection, Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+	}
+	
+	private void setTable(int fixture) {
+		if(usingViewFlow) viewFlow.setSelection(fixture - 1);
+		else{
+			ll_table.removeAllViews();
+            ArrayList<Match> al = matches.get(fixture).getMatches();
+            Collections.sort(al);
+            
+            for (Match match : al) {
+            	ll_table.addView(new MatchViewLayout(this, match, null));
+            }
+            ll_table.invalidate();
+            dul_loading.hide();
+            
+            rod_number.setText(String.valueOf(fixture));
+		}
+		
+		rod_number.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				rod_dialog.show(Integer.valueOf(rod_number.getText().toString()));
+			}
+		});
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		if(usingViewFlow) viewFlow.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public void preExecution() {		
+		dul_loading.showFullLayout();
+	}
+
+	@Override
+	public void onComplete(Object result) {
+		JSONObject matches = (JSONObject) result;
+		
+		FileHandler.saveBackup(this, FileHandler.JSON_MATCHES, matches.toString(), division);
+		FileHandler.saveBackup(this, FileHandler.VERSION_MATCHES, HomeActivity.getAppVersion(this), division);
+		Toast.makeText(this, R.string.message_dataupdated, Toast.LENGTH_SHORT).show(); 
+		
+		dul_loading.hide();
+		if(usingViewFlow) new SetTableAdapterTask(this, matchesDB.getMatches(division)).execute();
+		else setTable(fixtureBasedOnCalendar);
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		dul_loading.hide();
+		
+		if(usingViewFlow) new SetTableAdapterTask(this, matches).execute();
+		else setTable(fixtureBasedOnCalendar);
+	}
+	
+	class SetTableAdapterTask extends AsyncTask<Void, Void, TableViewFlowAdapter> {
+		private Context context;
+		private TreeMap<Integer, Fixture> matches;
+
+		public SetTableAdapterTask(Context context, TreeMap<Integer, Fixture> matches){
+			this.context = context;
+			this.matches = matches;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			dul_loading.setText(getString(R.string.tableflowactivity_generatingtable));
+			dul_loading.show();
+			super.onPreExecute();
+		}
+
+		@Override
+		protected TableViewFlowAdapter doInBackground(Void... arg0) {
+			return new TableViewFlowAdapter(context, matches);
+		}
+		
+		@Override
+		protected void onPostExecute(TableViewFlowAdapter result) {
+			dul_loading.hide();
+			viewFlow.setAdapter(result);
+			setTable(fixtureBasedOnCalendar);
+			super.onPostExecute(result);
+		}
+	}
+}

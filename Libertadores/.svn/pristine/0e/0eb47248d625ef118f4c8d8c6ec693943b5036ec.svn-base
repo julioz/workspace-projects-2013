@@ -1,0 +1,111 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.model.Club;
+
+public class StandingsAdapter extends ArrayAdapter<Club> {
+
+	private final LayoutInflater mInflater;
+	private static final int LAYOUTRESOURCEID = R.layout.standingsrow;
+	private static final Comparator<Club> pointsComparator = new PointsComparator();
+	private List<Club> objects;
+	
+	public StandingsAdapter(Context context, List<Club> objects) {
+		super(context, LAYOUTRESOURCEID, objects);
+		this.mInflater = LayoutInflater.from(context);
+		this.objects = objects;
+		
+		Collections.sort(objects, pointsComparator);
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public Club getItem(int position) {
+		return objects.get(position);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+        StandingsHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+            
+            holder = new StandingsHolder();
+            holder.tvPosition = (TextView) row.findViewById(R.standingsrow.tv_position);
+            holder.ivBadge = (ImageView) row.findViewById(R.standingsrow.iv_badge);
+            holder.tvName = (TextView) row.findViewById(R.standingsrow.tv_name);
+            holder.tvPoints = (TextView) row.findViewById(R.standingsrow.tv_points);
+            //holder.tvPlayed = (TextView) row.findViewById(R.standingsrow.tv_played);
+            holder.tvVictories = (TextView) row.findViewById(R.standingsrow.tv_victories);
+            holder.tvDraws = (TextView) row.findViewById(R.standingsrow.tv_draws);
+            holder.tvLosses = (TextView) row.findViewById(R.standingsrow.tv_losses);
+            holder.tvGoalsFor = (TextView) row.findViewById(R.standingsrow.tv_goalsfor);
+            holder.tvGoalsAgainst = (TextView) row.findViewById(R.standingsrow.tv_goalsagainst);
+            //holder.tvBalance = (TextView) row.findViewById(R.standingsrow.tv_balance);
+            
+            row.setTag(holder);
+        }else{
+            holder = (StandingsHolder) row.getTag();
+        }
+
+        Club club = getItem(position);
+
+        holder.tvPosition.setText(String.valueOf(position+1));
+        int badgeRes = club.getBadgeResource(getContext());
+        holder.ivBadge.setImageResource(badgeRes);
+        holder.tvName.setText(club.getName());
+        holder.tvPoints.setText(String.valueOf(club.getPoints()));
+        //holder.tvPlayed.setText(String.valueOf(club.getGamesPlayed()));
+        holder.tvVictories.setText(String.valueOf(club.getVictories()));
+        holder.tvDraws.setText(String.valueOf(club.getDraws()));
+        holder.tvLosses.setText(String.valueOf(club.getLosses()));
+        holder.tvGoalsFor.setText(String.valueOf(club.getGoalsPro()));
+        holder.tvGoalsAgainst.setText(String.valueOf(club.getGoalsAgainst()));
+        //holder.tvBalance.setText(String.valueOf(club.getBalance()));
+
+        return row;
+	}
+	
+}
+
+class StandingsHolder {
+	TextView tvPosition;
+    ImageView ivBadge;
+    TextView tvName;
+    TextView tvPoints;
+    //TextView tvPlayed;
+    TextView tvVictories;
+    TextView tvDraws;
+    TextView tvLosses;
+    TextView tvGoalsFor;
+    TextView tvGoalsAgainst;
+    //TextView tvBalance;
+}
+
+class PointsComparator implements Comparator<Club> {
+
+	@Override
+	public int compare(Club lhs, Club rhs) {
+		int comparison = lhs.getPoints() - rhs.getPoints();
+		if(comparison == 0) comparison = lhs.getBalance() - rhs.getBalance();
+		return -1*comparison;
+	}
+	
+}

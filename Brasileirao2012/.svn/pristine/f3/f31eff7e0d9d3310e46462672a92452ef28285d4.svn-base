@@ -1,0 +1,54 @@
+package br.com.zynger.brasileirao2012.model;
+
+import java.io.Serializable;
+import java.net.URL;
+import java.util.GregorianCalendar;
+
+import br.com.zynger.brasileirao2012.enums.NewsDomain;
+
+public class Article implements Serializable {	
+	private static final long serialVersionUID = 1L;
+	
+	private NewsDomain domain;
+	private String title;
+	private URL url;
+	private GregorianCalendar pubDate;
+	private String imgUrl;
+	
+	public Article(String title, NewsDomain domain, URL url, GregorianCalendar pubDate) {
+		this.title = title.replaceAll("&quot;", "\"").replaceAll("&apos;", "\'").replaceAll("&amp;", "&");
+		this.domain = domain;
+		this.url = url;
+		this.pubDate = pubDate;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	
+	public URL getUrl() {
+		return url;
+	}
+	
+	public boolean isReadable() {
+		NewsDomain domain = getDomain();
+		return domain == NewsDomain.GLOBOESPORTE
+				|| domain == NewsDomain.UOL;
+	}
+	
+	public GregorianCalendar getPubDate() {
+		return pubDate;
+	}
+	
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+	
+	public NewsDomain getDomain() {
+		return domain;
+	}
+}

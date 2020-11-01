@@ -1,0 +1,114 @@
+package br.com.zynger.brasileirao2012;
+
+import org.taptwo.android.widget.CircleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.adapters.ClubSelectorAdapter;
+import br.com.zynger.brasileirao2012.adapters.ClubSelectorListArrayAdapter;
+import br.com.zynger.brasileirao2012.base.SimpleActivity;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.Constants;
+
+public class TrophiesSelectorActivity extends SimpleActivity {
+
+	private ClubSelectorAdapter clubSelectorAdapter;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.trophiesselectoractivity);
+
+		setViewFlow();
+		setMyTeamLayout();
+		setOnItemClickListeners();
+	}
+
+	private void setOnItemClickListeners() {
+		OnItemClickListener oicl = new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> list, View v, int position,
+					long id) {
+				ClubSelectorListArrayAdapter adapter = (ClubSelectorListArrayAdapter) list
+						.getAdapter();
+				startTrophiesActivity(adapter.getItem(position).getAcronym());
+			}
+		};
+
+		for (ListView lv : clubSelectorAdapter.getLists()) {
+			lv.setOnItemClickListener(oicl);
+		}
+	}
+
+	private void setMyTeamLayout() {
+		TextView tvMyTeamTitle = (TextView) findViewById(R.trophiesselectoractivity.tv_myteam);
+		ImageButton ibMyTeamBadge = (ImageButton) findViewById(R.trophiesselectoractivity.iv_myteam);
+
+		final Club myClub = ClubsDB.getInstance(this).getMyClub();
+		tvMyTeamTitle.setText(myClub.getName());
+		ibMyTeamBadge.setImageDrawable(getResources().getDrawable(
+				myClub.getBadgeResource(this)));
+
+		ibMyTeamBadge.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent me) {
+				if (me.getAction() == MotionEvent.ACTION_DOWN
+						|| me.getAction() == MotionEvent.ACTION_MOVE) {
+					((ImageButton) v).setColorFilter(
+							Color.argb(150, 50, 50, 50),
+							PorterDuff.Mode.SRC_ATOP);
+				} else {
+					((ImageButton) v).setColorFilter(null);
+				}
+				return false;
+			}
+
+		});
+
+		OnClickListener myTeamOCL = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startTrophiesActivity(myClub.getAcronym());
+			}
+		};
+		ibMyTeamBadge.setOnClickListener(myTeamOCL);
+		findViewById(R.trophiesselectoractivity.ll_myteam).setOnClickListener(
+				myTeamOCL);
+	}
+
+	private void setViewFlow() {
+		ViewFlow viewFlow = (ViewFlow) findViewById(R.trophiesselectoractivity.viewflow);
+		clubSelectorAdapter = new ClubSelectorAdapter(this);
+		viewFlow.setAdapter(clubSelectorAdapter);
+		viewFlow.setFlowIndicator((CircleFlowIndicator) findViewById(R.trophiesselectoractivity.viewflowindic));
+	}
+
+	private void startTrophiesActivity(String clubAcronym) {
+		Intent it = new Intent(this, TrophiesActivity.class);
+		it.putExtra(Constants.INTENT_CLUBACRONYM, clubAcronym);
+		startActivity(it);
+	}
+
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_trophies;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.trophiesselectoractivity_title;
+	}
+}

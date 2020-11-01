@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:background="#FFFFFFFF"
+		android:gravity="center_vertical">
+	
+	<LinearLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:orientation="vertical"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:gravity="center_horizontal"
+	  android:id="@+id/ll1">
+	  
+	<TextView android:text="Data da aula:"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="20sp" android:textColor="#FF000000"/>
+	
+	<DatePicker
+	android:id="@+id/DatePicker"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"/>
+	
+	<TextView android:text="Duração da aula"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="20sp" android:textColor="#FF000000"/>
+	
+		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:stretchColumns="0,2">
+	    
+	    <TableRow
+	  		android:layout_width="fill_parent"
+			android:layout_height="wrap_content" >
+		  
+			<EditText
+			android:id="@+id/etDuracaoHora"
+			android:layout_height="fill_parent"
+			android:singleLine="true"
+			android:scrollHorizontally="true"
+			android:inputType="numberDecimal"
+			android:layout_width="wrap_content"	/>
+			
+			<TextView android:text=":"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:textSize="40sp"  android:textColor="#FF000000"/>
+			
+			<EditText
+			android:id="@+id/etDuracaoMinutos"
+			android:layout_height="fill_parent"
+			android:singleLine="true"
+			android:inputType="numberDecimal"
+			android:scrollHorizontally="true"
+			android:layout_width="wrap_content" />
+		</TableRow>
+		</TableLayout>
+	</LinearLayout>
+	
+	<Button
+	android:text="Adicionar Aula"
+	android:id="@+id/btSalvarNova"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/ll1"/>
+</RelativeLayout>

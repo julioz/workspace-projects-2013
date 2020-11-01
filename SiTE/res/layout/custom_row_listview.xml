@@ -1,0 +1,38 @@
+<TableLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:clickable="true"
+	android:focusable="true"
+	android:layout_margin="12dp"
+	android:gravity="center_vertical"
+	android:id="@+id/rlcustomrowlistview"
+	android:background="@drawable/action_item_btn">
+	
+	<TableRow
+		android:gravity="left"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent">
+		<TextView
+			android:id="@+id/fieldName"
+			android:textColor="#fff"
+			android:textSize="15dp"
+			android:layout_gravity="left"
+			android:textStyle="bold"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+	</TableRow>
+	
+	
+	<TableRow
+		android:gravity="right"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent">
+		<TextView
+			android:id="@+id/fieldSub"
+			android:layout_gravity="right"
+			android:textColor="#fff"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+	</TableRow>
+</TableLayout>

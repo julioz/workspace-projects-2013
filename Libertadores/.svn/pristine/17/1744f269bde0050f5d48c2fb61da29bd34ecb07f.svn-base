@@ -1,0 +1,39 @@
+package br.com.zynger.libertadores;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.widget.TextView;
+
+public class SettingsActivity extends PreferenceActivity {
+	
+	private String[] ids = { "cb_imgsdownload", "cb_actsupdates" };
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.xml.preferences);
+		setContentView(R.layout.settingsactivity);
+		
+		TextView actionbar_tt = (TextView) findViewById(R.settingsactivity.titlebar_tvtitle);
+		actionbar_tt.setText(getString(R.string.homedashboard_settings).toUpperCase());
+		
+		for (String id : ids) {			
+			setBlackText(id);
+		}
+	}
+	
+	private void setBlackText(String id) {
+		Preference pref = findPreference(id);
+		Spannable title = new SpannableString(pref.getTitle());
+		Spannable summary = new SpannableString(pref.getSummary());
+		title.setSpan(new ForegroundColorSpan(Color.BLACK), 0, title.length(), 0);
+		summary.setSpan(new ForegroundColorSpan(Color.BLACK), 0, summary.length(), 0);
+		pref.setTitle(title);
+		pref.setSummary(summary);
+	}
+}

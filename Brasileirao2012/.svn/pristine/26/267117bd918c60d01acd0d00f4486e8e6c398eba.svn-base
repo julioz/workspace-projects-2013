@@ -1,0 +1,214 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.TreeMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import android.annotation.SuppressLint;
+import br.com.zynger.brasileirao2012.data.MatchesDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.util.WebDatabaseMapper;
+import br.com.zynger.brasileirao2012.web.WebServiceClient;
+
+public class MatchesREST {
+
+	private static final String MATCHES_REST_URL = "http://aqueous-oasis-8080.herokuapp.com/services/";
+	
+	private static final String MATCHES_REST_DIVISION = "matches/Gdivision=";
+	private static final String MATCHES_REST_FIXTURESTATE_SUFFIX = "/fixturestate";
+	private static final String MATCHES_REST_DATES_SUFFIX = "/dates";
+	
+	private static String MATCHES_DIVISION_A_URL = 
+			"http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2013/serie-a/tabela-de-jogos/fase-unica/tabela-de-jogos-";
+	private static String MATCHES_DIVISION_B_URL =
+			"http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2013/serie-b/tabela-de-jogos/fase-unica/tabela-de-jogos-";
+	private static String MATCHES_URL_SUFFIX = "a-rodada.htm";
+
+	private WebDatabaseMapper webDatabaseMapper;
+	
+	public MatchesREST(TreeMap<String, Club> clubs) {
+		this.webDatabaseMapper = new WebDatabaseMapper(clubs, WebDatabaseMapper.SOURCE_MATCHES);
+	}
+	
+	public TreeMap<Integer, Fixture> getMatches(MatchesDB matchesDB, Division division) throws Exception {
+		return matchesDB.getMatches(division);
+		
+		/*String[] resposta = new WebServiceClient().get(MATCHES_REST_URL + "matches/Gdivision=" + division + "/");
+		
+		if (resposta[0].equals("200")) {
+			JSONObject object = new JSONObject(resposta[1]);
+			TreeMap<Integer, Fixture> tm = new TreeMap<Integer, Fixture>();
+			
+			for (int rodada = 1; rodada <= 38; rodada++) {				
+				JSONObject fixture = object.getJSONObject(String.valueOf(rodada));
+				JSONArray jsonArray = fixture.getJSONArray("matches");
+				ArrayList<Match> al = new ArrayList<Match>();
+				for (int j = 0; j < jsonArray.length(); j++) {
+					JSONObject obj = jsonArray.getJSONObject(j);
+					Match m = parseMatchFromJSON(clubs, rodada, obj);
+					al.add(m);
+				}
+				tm.put(rodada, al);
+			}
+			
+			return tm;
+		} else {
+			throw new Exception(resposta[1]);
+		}*/
+	}
+	
+	public TreeMap<Integer, Boolean> getFixtureState(int division) throws Exception {
+		String[] resposta = new WebServiceClient().get(MATCHES_REST_URL + MATCHES_REST_DIVISION + division
+				+ MATCHES_REST_FIXTURESTATE_SUFFIX);
+		
+		if (resposta[0].equals("200")) {
+			JSONObject object = new JSONObject(resposta[1]);
+			TreeMap<Integer, Boolean> tm = new TreeMap<Integer, Boolean>();
+			
+			for (int i = 1; i <= 38; i++) {
+				tm.put(i, object.getBoolean(String.valueOf(i)));
+			}
+			
+			return tm;
+		} else {
+			throw new Exception(resposta[1]);
+		}
+	}
+	
+	@SuppressLint("UseSparseArrays")
+	public HashMap<Integer, GregorianCalendar> getFixtureDates(int division) throws Exception{
+		String[] resposta = new WebServiceClient().get(MATCHES_REST_URL + MATCHES_REST_DIVISION + division
+				+ MATCHES_REST_DATES_SUFFIX);
+		
+		if(resposta[0].equals("200")){
+			HashMap<Integer, GregorianCalendar> map = new HashMap<Integer, GregorianCalendar>();
+			
+			JSONObject object = new JSONObject(resposta[1]);
+			for (int i = 1; i <= 38; i++) {
+				JSONObject jsonCal = object.getJSONObject(String.valueOf(i));
+				GregorianCalendar cal = parseGregorianCalendar(jsonCal);
+				map.put(i, cal);
+			}
+			
+			return map;
+		}else{
+			throw new Exception(resposta[1]);
+		}
+	}
+	
+	public ArrayList<Match> getMatches(TreeMap<Integer, Fixture> matches, Division division, int rodada) throws IOException {
+		Document doc;
+		if(division == Division.SECONDDIVISION) doc = Jsoup.connect(MATCHES_DIVISION_B_URL +
+				rodada + MATCHES_URL_SUFFIX).timeout(30*1000).get();
+		else doc = Jsoup.connect(MATCHES_DIVISION_A_URL + rodada + MATCHES_URL_SUFFIX).timeout(30*1000).get();
+
+		Element div  = doc.getElementsByClass("tabelajogo").get(0);
+		Elements tr_full = div.getElementsByTag("tr");
+		Elements tr = new Elements();
+		for (Element el : tr_full) {
+			if(!el.className().equals("rodada") && !el.className().equals("dados")) tr.add(el);
+		}
+		
+		ArrayList<Match> al = new ArrayList<Match>();
+		for (int i = 0; i < 10; i++) {
+			Element newMatch = tr.get(i);
+			String time = newMatch.getElementsByClass("hora").get(0).text();
+			String team_home = newMatch.getElementsByClass("time1").get(0).text();
+			String resultado = newMatch.getElementsByClass("resultado").get(0).text();
+			String stadium = newMatch.getElementsByClass("estadio").get(0).text();
+			
+			Club clubHome = webDatabaseMapper.getClubByName(team_home);
+			
+			Match oldM = null;
+			for (Match m : matches.get(rodada).getMatches()) {
+				if(m.getHome().getAcronym().equals(clubHome.getAcronym())){
+					oldM = m;
+					break;
+				}
+			}
+			
+			try{
+				try{					
+					int scr_h = Integer.parseInt(resultado.substring(0, resultado.toLowerCase().indexOf("x")-1));
+					int scr_a = Integer.parseInt(resultado.substring(resultado.toLowerCase().indexOf("x")+2));
+					oldM.setScoreHome(scr_h);
+					oldM.setScoreAway(scr_a);
+				}catch (StringIndexOutOfBoundsException e) {} //se o placar ainda nao estiver preenchido
+				
+				try{					
+					oldM.setStadium(stadium);
+				}catch(NullPointerException e){
+					System.out.println(team_home);
+				}
+				try{
+					oldM.setDate(new GregorianCalendar(oldM.getDate().get(Calendar.YEAR),
+							oldM.getDate().get(Calendar.MONTH), oldM.getDate().get(Calendar.DAY_OF_MONTH),
+							Integer.parseInt(time.substring(0, time.indexOf("h"))),
+							Integer.parseInt(time.substring(time.indexOf("h")+1))));
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				
+				al.add(oldM);
+			}catch(NullPointerException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return al;
+	}
+	
+	/*public ArrayList<Match> getMatches(int division, int rodada, TreeMap<String, Club> clubs) throws Exception {
+		String[] resposta = new WebServiceClient().get(URL_WS + "matches/Gdivision=" + division + "/rodada=" + rodada);
+		
+		if(resposta[0].equals("200")){
+			ArrayList<Match> al = new ArrayList<Match>();
+			
+			JSONArray array = new JSONArray(resposta[1]);
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				Match m = parseMatchFromJSON(clubs, rodada, obj);
+				al.add(m);
+			}
+
+			return al;
+		}else{
+			throw new Exception(resposta[1]);
+		}
+	}*/
+	
+	@SuppressWarnings("unused")
+	private Match parseMatchFromJSON(TreeMap<String, Club> clubs, int rodada, JSONObject obj) throws JSONException{
+		Match m = new Match();
+		m.setHome(clubs.get(obj.getString("home")));
+		m.setAway(clubs.get(obj.getString("away")));
+		m.setStadium(obj.getString("stadium"));
+		m.setScore(obj.getInt("scoreHome"), obj.getInt("scoreAway"));				
+		m.setDate(parseGregorianCalendar(obj.getJSONObject("date")));
+		return m;
+	}
+	
+	private GregorianCalendar parseGregorianCalendar(JSONObject jsonCal) throws JSONException{
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.set(Calendar.YEAR, jsonCal.getInt("year"));
+		cal.set(Calendar.MONTH, jsonCal.getInt("month"));
+		cal.set(Calendar.DAY_OF_MONTH, jsonCal.getInt("dayOfMonth"));
+		cal.set(Calendar.HOUR_OF_DAY, jsonCal.getInt("hourOfDay"));
+		cal.set(Calendar.MINUTE, jsonCal.getInt("minute"));
+		
+		return cal;
+	}	
+}

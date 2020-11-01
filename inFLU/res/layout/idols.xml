@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:id="@+idols/ll_actbg"
+	android:background="#FF00372a"
+	android:orientation="vertical">
+	<LinearLayout
+		android:layout_margin="5dp"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:background="#FF024234"
+		android:id="@+idols/ll_idolname">
+		      
+	      <TextView
+	          android:textSize="26dp"
+	          android:textColor="#FFFFFFFF"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:id="@+idols/tv_name"
+	          android:padding="3dp"/>
+	</LinearLayout>
+
+	<ScrollView
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent">
+		<LinearLayout
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:background="#FF00372a"
+			android:id="@+idols/ll_actbg2"
+			android:orientation="vertical">
+			
+		    <LinearLayout
+				android:layout_margin="5dp"
+				android:gravity="center"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+idols/ll_image"
+				android:background="#FF024234">
+		        
+		        <ImageView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:scaleType="fitCenter"
+		            android:adjustViewBounds="true"
+		            android:id="@+idols/iv_image"
+		            android:padding="3dp"/>
+		    </LinearLayout>
+		    
+			<LinearLayout
+				android:layout_margin="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+idols/ll_idoltext"
+				android:background="#FF024234">
+		        
+		        <TextView
+		            android:textSize="16dp"
+		            android:textColor="#FFFFFFFF"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:id="@+idols/tv_text"
+		            android:padding="3dp"/>
+		    </LinearLayout>
+		    
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

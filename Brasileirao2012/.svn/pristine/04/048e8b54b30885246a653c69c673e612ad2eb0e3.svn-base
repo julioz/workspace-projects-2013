@@ -1,0 +1,47 @@
+package br.com.zynger.brasileirao2012.adapters.pager;
+
+import java.util.ArrayList;
+
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.fragment.ClubSelectorFragment;
+import br.com.zynger.brasileirao2012.model.Club;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+public class ClubSelectorPagerAdapter extends FragmentStatePagerAdapter {
+	private SparseArray<ClubSelectorFragment> cache;
+
+	private ArrayList<ArrayList<Club>> divisionsClubs;
+	
+	public ClubSelectorPagerAdapter(SherlockFragmentActivity activity) {
+		super(activity.getSupportFragmentManager());
+		cache = new SparseArray<ClubSelectorFragment>();
+		
+		ClubsDB clubsDB = ClubsDB.getInstance(activity);
+		divisionsClubs = new ArrayList<ArrayList<Club>>();
+		for (Division division : Division.values()) {
+			divisionsClubs.add(clubsDB.getClubsList(division));
+		}
+	}
+
+	@Override
+	public SherlockFragment getItem(int position) {
+		if (cache.get(position) != null) {
+			return cache.get(position);
+		} else {
+			ClubSelectorFragment fragment = new ClubSelectorFragment();
+			fragment.setClubs(divisionsClubs.get(position));
+			cache.put(position, fragment);
+			return fragment;
+		}
+	}
+
+	@Override
+	public int getCount() {
+		return divisionsClubs.size();
+	}
+}

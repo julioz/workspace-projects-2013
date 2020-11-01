@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wood_background"
+    android:weightSum="3">
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:orientation="horizontal"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:gravity="center_vertical"
+    	android:paddingTop="20dp"
+    	android:layout_weight="1">
+    	
+    	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:stretchColumns="0,1">
+			
+			<TableRow
+	  			android:layout_width="fill_parent"
+	  			android:layout_height="wrap_content">
+			
+				<ImageButton
+			  		android:src="@drawable/nova_emergencia"
+			  		android:id="@+id/bt_nova_emergencia"
+			  		android:background="@null"
+			  		android:layout_width="wrap_content"
+			  		android:layout_height="wrap_content" />
+			  		
+			  	<ImageButton
+			  		android:src="@drawable/carregar_emergencia"
+			  		android:id="@+id/bt_carregar_emergencia"
+			  		android:background="@null"
+			  		android:layout_width="wrap_content"
+			  		android:layout_height="wrap_content"/>
+			
+			</TableRow>
+			
+			<TableRow
+	  			android:layout_width="fill_parent"
+	  			android:layout_height="wrap_content" >
+	  			
+	  			<TextView
+					android:id="@+id/novaemerg"
+					android:textSize="15dip"
+					android:gravity="center_horizontal"
+					android:paddingTop="2sp"
+					android:textStyle="bold"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:textColor="#FFEFEFEF"/>
+					<!-- android:textColor="#FF068ED4"/> -->
+					
+				<TextView
+					android:id="@+id/loademerg"
+					android:textSize="15dip"
+					android:gravity="center_horizontal"
+					android:paddingTop="2sp"
+					android:textStyle="bold"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:textColor="#FFEFEFEF"/>
+					<!-- android:textColor="#FF068ED4"/> -->
+	  			
+	  		</TableRow>
+			
+		</TableLayout>
+    	
+    </LinearLayout>
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:orientation="horizontal"
+    	android:layout_width="fill_parent"
+    	android:gravity="center_horizontal"
+    	android:layout_height="wrap_content"
+    	android:layout_weight="1">
+    	
+    	<ImageView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:src="@drawable/logo"/>
+    	
+    </LinearLayout>
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:orientation="horizontal"
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_weight="1"
+    	android:gravity="center_vertical">
+    	
+    	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:stretchColumns="0,1">
+			
+			<TableRow
+	  			android:layout_width="fill_parent"
+	  			android:layout_height="wrap_content">
+			
+				<ImageButton
+			  		android:src="@drawable/atualizar_app"
+			  		android:id="@+id/bt_atualizar"
+			  		android:background="@null"
+			  		android:layout_width="wrap_content"
+			  		android:layout_height="wrap_content"/>		
+			</TableRow>
+			
+			<TableRow
+	  			android:layout_width="fill_parent"
+	  			android:layout_height="wrap_content">
+	  			
+	  			<TextView
+					android:id="@+id/atualizar_app"
+					android:textSize="15dip"
+					android:gravity="center_horizontal"
+					android:paddingTop="2sp"
+					android:textStyle="bold"
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:textColor="#FFEFEFEF"/>
+					<!-- android:textColor="#FF068ED4"/> -->
+	  			
+	  		</TableRow>
+		</TableLayout>
+    </LinearLayout>
+</LinearLayout>

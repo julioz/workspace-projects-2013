@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="7"
+    android:background="@drawable/background_gradient_gray">
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:id="@+answer/rl_top"
+        android:background="@drawable/background_gradient_actionbar_red">
+        
+        <br.com.zynger.guesstheclub.view.CoolveticaTextView
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="20dp"
+            android:layout_marginLeft="5dp"
+            android:shadowColor="#FF751C30"
+            android:shadowDx="-1.5"
+            android:shadowDy="-1.5"
+            android:shadowRadius="0.5"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+answer/tv_numphasebadge" />
+        
+        <ImageButton
+	        android:id="@+answer/bt_tip"
+	        android:src="@drawable/ic_tip"
+	        android:scaleType="fitCenter"
+	        android:background="@null"
+	        android:layout_width="40dp"
+	        android:layout_height="40dp"
+	        android:padding="5dp"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="#FF99262d"
+        android:id="@+answer/view_line_top"
+        android:layout_below="@+answer/rl_top"/>
+    
+    <LinearLayout
+        android:layout_weight="5"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+answer/view_line_top"
+        android:layout_above="@+answer/view_line_bottom"
+        android:layout_marginTop="4dp"
+        android:weightSum="5"
+        android:orientation="vertical">
+        
+        <ImageView
+            android:id="@+answer/iv_badge"
+            android:layout_weight="3"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            />
+        
+        <LinearLayout
+	        android:layout_weight="2"
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	        android:layout_gravity="center"
+	        android:orientation="horizontal"
+	        android:weightSum="3">
+	        
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3" />
+            
+            <ScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+answer/sv_tips"
+                android:background="@drawable/roundborder_gray"
+                android:fillViewport="true"
+                android:layout_marginTop="3dp"
+                android:layout_weight="2.4">
+                
+                <LinearLayout
+	                android:id="@+answer/ll_tips"
+	                android:padding="7dp"
+	                android:orientation="vertical"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent" />
+                
+            </ScrollView>
+        </LinearLayout>
+        
+    </LinearLayout>
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="#FF9b9ca0"
+        android:id="@+answer/view_line_bottom"
+        android:layout_above="@+answer/rl_bottom"/>
+    
+    <RelativeLayout 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:orientation="horizontal"
+	    android:id="@+answer/rl_bottom"
+	    android:layout_width="fill_parent"
+	    android:background="@drawable/background_gradient_footer_gray"
+	    android:layout_alignParentBottom="true"
+	    android:layout_height="55dp">
+        <ImageButton 
+	        android:id="@+answer/bt_clear"
+	        android:src="@drawable/ic_cancel_selector"
+	        android:background="@null"
+	        android:padding="3dp"
+	        android:scaleType="fitCenter"
+	        android:layout_width="40dip" 
+	        android:layout_height="40dip"
+	        android:layout_centerVertical="true" />
+	    <EditText 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:lines="1"
+	        android:hint="@string/bt_answer_confirmhint"
+	        android:id="@+answer/et_answer"
+	        android:layout_toLeftOf="@+answer/bt_confirm"
+	        android:layout_toRightOf="@+answer/bt_clear"/>
+	    <ImageButton 
+	        android:id="@+answer/bt_confirm"
+	        android:src="@drawable/ic_confirm_selector"
+	        android:background="@null"
+	        android:padding="3dp"
+	        android:scaleType="fitCenter"
+	        android:layout_width="40dip" 
+	        android:layout_height="40dip"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentRight="true" />
+	</RelativeLayout>
+</RelativeLayout>

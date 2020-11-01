@@ -1,0 +1,171 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Group;
+import br.com.zynger.libertadores.util.BitmapOptimisator;
+import br.com.zynger.libertadores.util.ClubComparatorByPoints;
+
+public class StandingsExpandableListViewAdapter extends BaseExpandableListAdapter {
+
+	private final int LAYOUTRESOURCE_GROUP = R.layout.standingsexpandablelistview_grouprow;
+	private final int LAYOUTRESOURCE_CHILD = R.layout.standingsrow;
+
+	private Context context;
+	private final LayoutInflater mInflater;
+	private final ArrayList<Group> groups;
+	
+	private static final Comparator<Club> pointsComparator = new ClubComparatorByPoints();
+
+	public StandingsExpandableListViewAdapter(Context context, ArrayList<Group> groups) {
+		this.context = context;
+		this.groups = groups;
+		this.mInflater = LayoutInflater.from(context);
+		
+		for (Group group : groups) {
+			Collections.sort(group.getClubs(), pointsComparator);
+		}
+	}
+
+	@Override
+	public Object getChild(int groupPosition, int childPosition) {
+		return groups.get(groupPosition).getClubs().get(childPosition);
+	}
+
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return 0;
+	}
+
+	@Override
+	public View getChildView(int groupPosition, int childPosition,
+			boolean isLastChild, View convertView, ViewGroup parent) {
+		View row = convertView;
+
+		if (row == null) {
+			row = mInflater.inflate(LAYOUTRESOURCE_CHILD, parent, false);
+		}
+
+		TextView tvPosition = (TextView) row.findViewById(R.standingsrow.tv_position);
+		ImageView ivBadge = (ImageView) row.findViewById(R.standingsrow.iv_badge);
+		TextView tvPoints = (TextView) row.findViewById(R.standingsrow.tv_points);
+		TextView tvPlayed = (TextView) row.findViewById(R.standingsrow.tv_played);
+		TextView tvVictories = (TextView) row.findViewById(R.standingsrow.tv_victories);
+		TextView tvDraws = (TextView) row.findViewById(R.standingsrow.tv_draws);
+		TextView tvLosses = (TextView) row.findViewById(R.standingsrow.tv_losses);
+		TextView tvGoalsFor = (TextView) row.findViewById(R.standingsrow.tv_goalsfor);
+		TextView tvGoalsAgainst = (TextView) row.findViewById(R.standingsrow.tv_goalsagainst);
+		TextView tvBalance = (TextView) row.findViewById(R.standingsrow.tv_balance);
+		
+		tvPosition.setTextColor(getContext().getResources().getColor(android.R.color.black));
+
+		Club club = (Club) getChild(groupPosition, childPosition);
+
+		String strPosition = String.valueOf(childPosition+1);
+		strPosition = strPosition.length() < 2 ? "0" + strPosition : strPosition;
+
+		if(club.getGroupPosition() != null){        	
+			if(club.getGroupPosition() == 1) tvPosition.setTextColor(StandingsAdapter.COLOR_GREEN);
+			else if(club.getGroupPosition() == 2) tvPosition.setTextColor(StandingsAdapter.COLOR_BLUE);
+		}else tvPosition.setTextColor(getContext().getResources().getColor(android.R.color.black));
+
+		tvPosition.setText(strPosition);
+		int badgeRes = club.getBadgeResource(getContext());
+		ivBadge.setImageResource(badgeRes);
+		final String clubName = club.getName();
+		ivBadge.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), clubName, Toast.LENGTH_SHORT).show();
+			}
+		});
+		tvPoints.setText(String.valueOf(club.getPoints()));
+		tvPlayed.setText(String.valueOf(club.getGamesPlayed()));
+		tvVictories.setText(String.valueOf(club.getVictories()));
+		tvDraws.setText(String.valueOf(club.getDraws()));
+		tvLosses.setText(String.valueOf(club.getLosses()));
+		tvGoalsFor.setText(String.valueOf(club.getGoalsPro()));
+		tvGoalsAgainst.setText(String.valueOf(club.getGoalsAgainst()));
+		tvBalance.setText(String.valueOf(club.getBalance()));
+
+		return row;
+	}
+
+	@Override
+	public int getChildrenCount(int groupPosition) {
+		return groups.get(groupPosition).getClubs().size();
+	}
+
+	@Override
+	public Object getGroup(int groupPosition) {
+		return groups.get(groupPosition);
+	}
+
+	@Override
+	public int getGroupCount() {
+		return groups.size();
+	}
+
+	@Override
+	public long getGroupId(int groupPosition) {
+		return 0;
+	}
+
+	@Override
+	public View getGroupView(int groupPosition, boolean isExpanded,
+			View convertView, ViewGroup parent) {
+		View v = convertView;
+
+		if (v == null) {
+			v = mInflater.inflate(LAYOUTRESOURCE_GROUP, parent, false);
+		}
+
+		TextView groupName = (TextView) v.findViewById(R.standingsexpandablelistview_grouprow.tv_groupname);
+		ImageView iv_club1 = (ImageView) v.findViewById(R.standingsexpandablelistview_grouprow.iv_club1);
+		ImageView iv_club2 = (ImageView) v.findViewById(R.standingsexpandablelistview_grouprow.iv_club2);
+		ImageView iv_club3 = (ImageView) v.findViewById(R.standingsexpandablelistview_grouprow.iv_club3);
+		ImageView iv_club4 = (ImageView) v.findViewById(R.standingsexpandablelistview_grouprow.iv_club4);
+
+		int groupNum = groupPosition + 1;
+		groupName.setText(getContext().getString(R.string.groupsactivity_group, groupNum));
+		
+		setDecodedBitmap(iv_club1, groups.get(groupPosition).getClubs().get(0).getBadgeResource(getContext()));
+		setDecodedBitmap(iv_club2, groups.get(groupPosition).getClubs().get(1).getBadgeResource(getContext()));
+		setDecodedBitmap(iv_club3, groups.get(groupPosition).getClubs().get(2).getBadgeResource(getContext()));
+		setDecodedBitmap(iv_club4, groups.get(groupPosition).getClubs().get(3).getBadgeResource(getContext()));
+
+		return v;
+	}
+	
+	private void setDecodedBitmap(ImageView iv, int resourceId) {
+		iv.setImageBitmap(BitmapOptimisator.decodeSampledBitmapFromResource(
+				getContext().getResources(), resourceId, 100, 100));
+	}
+
+	@Override
+	public boolean hasStableIds() {
+		return false;
+	}
+
+	@Override
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return false;
+	}
+
+	public Context getContext() {
+		return context;
+	}
+}

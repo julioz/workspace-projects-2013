@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:background="#FF00372a"
+	android:id="@+ranking_finals_carioca/ll_actbg"
+	android:orientation="vertical">
+	
+    <RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="40dp"
+		android:id="@+ranking_finals_carioca/actionbar"
+		android:background="@drawable/actionbar_bg">
+		
+		<ImageView
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			android:src="@drawable/icon"
+			android:layout_centerVertical="true"
+			android:id="@+ranking_finals_carioca/action_badge"/>
+		
+		<TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Campeonato Carioca"
+		    android:layout_centerVertical="true"
+		    android:id="@+ranking_finals_carioca/tv_title"
+		    android:layout_toRightOf="@+ranking_finals_carioca/action_badge"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="10dp"
+		    android:textColor="#FFFFFF"
+		    android:textSize="18dp"
+		    android:textStyle="bold" />
+		
+		<LinearLayout
+		    android:layout_alignParentRight="true"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:orientation="horizontal">
+		
+			<ImageButton
+			    android:layout_width="36dp"
+			    android:layout_height="36dp"
+			    android:scaleType="fitCenter"
+			    android:adjustViewBounds="true"
+			    android:layout_alignParentLeft="true"
+			    android:layout_centerVertical="true"
+			    android:id="@+ranking_finals_carioca/ib_actionbar_plus"
+			    android:background="@null"
+			    android:src="@drawable/ic_actionbar_plus"/>
+			
+			<ImageButton
+			    android:layout_width="36dp"
+			    android:layout_height="36dp"
+			    android:scaleType="fitCenter"
+			    android:adjustViewBounds="true"
+			    android:layout_alignParentRight="true"
+			    android:layout_centerVertical="true"
+			    android:id="@+ranking_finals_carioca/ib_actionbar_update"
+			    android:layout_marginRight="4dp"
+			    android:background="@null"
+			    android:src="@drawable/ic_actionbar_update"/>
+		</LinearLayout>
+
+	</RelativeLayout>
+    
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true">
+		
+	    <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:fillViewport="true">	    
+		    <LinearLayout 
+		        android:orientation="horizontal"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:weightSum="3">
+		        
+		        <LinearLayout
+		            android:layout_width="0dp"
+		            android:layout_height="fill_parent"
+		            android:orientation="vertical"
+		            android:layout_weight="1"
+		            android:id="@+ranking_finals_carioca/ll_semi"
+		            android:weightSum="4" />
+		        
+		        <LinearLayout
+		            android:layout_width="0dp"
+		            android:layout_height="fill_parent"
+		            android:orientation="vertical"
+		            android:layout_weight="1"
+		            android:id="@+ranking_finals_carioca/ll_fin"
+		            android:weightSum="2" />
+		        
+		        <LinearLayout
+		            android:layout_width="0dp"
+		            android:layout_height="fill_parent"
+		            android:orientation="vertical"
+		            android:id="@+ranking_finals_carioca/ll_dec"
+		            android:layout_weight="1"
+		            android:weightSum="1"/>
+		        
+		    </LinearLayout>
+		</HorizontalScrollView>
+	</ScrollView>
+</LinearLayout>

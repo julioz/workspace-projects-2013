@@ -1,0 +1,145 @@
+package br.com.zynger.brasileirao2012.model;
+
+import java.io.Serializable;
+
+public class Move implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
+	public static final int TIPO_LANCE = 0;
+	public static final int TIPO_LANCEIMPORTANTE = 1;
+	public static final int TIPO_LANCEGOL = 2;
+	public static final int TIPO_LANCECARTAO = 3;
+	public static final int TIPO_LANCESUBSTITUICAO = 4;
+	
+	public static final int CARTAO_NULL = 5;
+	public static final int CARTAO_AMARELO = 6;
+	public static final int CARTAO_VERMELHO = 7;
+	
+	private String operacao, nome_time, periodo, video_id, texto, momento, video_url, url_thumb;
+	private int tipo, periodo_id, id, cartao;
+	
+	public Move(String operacao, int tipo, String nome_time,
+			String periodo, String video_id, String url_thumb, int periodo_id,
+			String texto, String momento,
+			int id, String video_url, int cartao) {
+		this.operacao = operacao;
+		this.tipo = tipo;
+		this.setNome_time(nome_time);
+		this.periodo = periodo;
+		this.video_id = video_id;
+		setUrl_thumb(url_thumb);
+		this.texto = texto;
+		this.momento = momento;
+		this.periodo_id = periodo_id;
+		this.id = id;
+		this.setVideo_url(video_url);
+		this.setCartao(cartao);
+	}
+	
+	public String getOperacao() {
+		return operacao;
+	}
+	
+	public void setOperacao(String operacao) {
+		this.operacao = operacao;
+	}
+	
+	public int getTipo() {
+		return tipo;
+	}
+	
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
+	
+	public String getPeriodo() {
+		return periodo;
+	}
+	
+	public void setPeriodo(String periodo) {
+		this.periodo = periodo;
+	}
+	
+	public String getVideo_id() {
+		return video_id;
+	}
+	
+	public void setVideo_id(String video_id) {
+		this.video_id = video_id;
+	}
+	
+	public String getTexto() {
+		return texto;
+	}
+	
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
+	
+	public String getMomento() {
+		return momento;
+	}
+	
+	public void setMomento(String momento) {
+		this.momento = momento;
+	}
+	
+	public int getPeriodo_id() {
+		return periodo_id;
+	}
+	
+	public void setPeriodo_id(int periodo_id) {
+		this.periodo_id = periodo_id;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getVideo_url() {
+		return video_url;
+	}
+
+	public void setVideo_url(String video_url) {
+		this.video_url = video_url;
+	}
+	
+	public int getCartao() {
+		return cartao;
+	}
+
+	public void setCartao(int cartao) {
+		this.cartao = cartao;
+	}
+
+	@Override
+	public String toString() {
+		return "Move [operacao=" + operacao + ", nome_time=" + nome_time
+				+ ", periodo=" + periodo + ", video_id=" + video_id
+				+ ", texto=" + texto + ", momento=" + momento + ", video_url="
+				+ video_url + ", url_thumb=" + url_thumb + ", tipo=" + tipo
+				+ ", periodo_id=" + periodo_id + ", id=" + id + ", cartao="
+				+ cartao + "]";
+	}
+
+	public String getUrl_thumb() {
+		return url_thumb;
+	}
+
+	public void setUrl_thumb(String url_thumb) {
+		this.url_thumb = url_thumb;
+	}
+
+	public String getNome_time() {
+		return nome_time;
+	}
+
+	public void setNome_time(String nome_time) {
+		this.nome_time = nome_time;
+	}
+}

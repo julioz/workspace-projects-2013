@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:actionbar="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat"
+    android:orientation="vertical">
+    
+    <br.com.zynger.brasileirao2012.view.CustomActionBar
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+rankingactivity/actionbar"
+	    actionbar:titleSize="13sp"
+	    actionbar:showDivision="false"
+	    actionbar:showUpdate="true"
+	    actionbar:titleText="@string/rankingactivity_title"
+	    actionbar:logosrc="@drawable/ic_ranking" />
+    
+    <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        android:id="@+rankingactivity/dul_loading" />
+    
+    <RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:id="@+rankingactivity/rl_data">
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:id="@+rankingactivity/ll_headers"
+			android:paddingTop="3dp"
+			android:paddingBottom="3dp">
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				android:textSize="18sp"
+				android:layout_weight="2.6" />
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_points"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				style="@style/ShadowedText"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+rankingactivity/tv_points"
+				android:layout_weight="1" />	
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_games"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				style="@style/ShadowedText"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+rankingactivity/tv_played"
+				android:layout_weight="1" />
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_win"
+				android:textColor="#ffffff"
+				style="@style/ShadowedText"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+rankingactivity/tv_win"
+				android:layout_weight="1" />
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_draw"
+				android:textColor="#ffffff"
+				style="@style/ShadowedText"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+rankingactivity/tv_draw"
+				android:layout_weight="1" />
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_lose"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+rankingactivity/tv_lose"
+				android:layout_weight="1" />
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_goalspro"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+rankingactivity/tv_goalspro"
+				android:layout_weight="1" />
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_goalsagainst"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+rankingactivity/tv_goalsagainst"
+				android:layout_weight="1" />
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_balance"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+rankingactivity/tv_balance"
+				android:layout_weight="1" />
+		</LinearLayout>
+		<ListView
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:layout_above="@+rankingactivity/ll_footer"
+			android:layout_below="@+rankingactivity/ll_headers"
+			android:id="@android:id/list"
+			android:divider="#45FFFFFF"
+			android:cacheColorHint="#00000000"
+			android:background="@null"/>
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:baselineAligned="false"
+			android:id="@+rankingactivity/ll_footer"
+			android:layout_alignParentBottom="true"
+			android:gravity="center"
+			android:paddingTop="3dp"
+			android:paddingBottom="3dp"
+			android:background="@null">
+		    <LinearLayout
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:gravity="center"
+		        android:orientation="horizontal"
+		        android:layout_weight="1">
+				<View
+					android:background="#6495ED"
+					android:id="@+rankingactivity/view_footer_left"
+					android:layout_width="30dp"
+					android:layout_height="9dp"/>
+				
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:paddingLeft="3dp"
+					android:id="@+rankingactivity/tv_footer_left"
+					android:textColor="#ffffff"
+					android:text="@string/rankingactivity_footer_libertadores" />
+			</LinearLayout>
+			<LinearLayout
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:gravity="center"
+		        android:visibility="gone"
+		        android:orientation="horizontal"
+		        android:layout_weight="1">
+				
+				<View
+					android:background="#FFFF00"
+					android:layout_marginLeft="3dp"
+					android:id="@+rankingactivity/view_footer_center"
+					android:layout_width="30dp"
+					android:layout_height="9dp"/>
+				
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:paddingLeft="3dp"
+					android:id="@+rankingactivity/tv_footer_center"
+					android:textColor="#ffffff"
+					android:text="@string/rankingactivity_footer_sulamericana" />
+			</LinearLayout>
+			<LinearLayout
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:gravity="center"
+		        android:orientation="horizontal"
+		        android:layout_weight="1">
+				<View
+					android:background="#FF0000"
+					android:layout_marginLeft="3dp"
+					android:id="@+rankingactivity/view_footer_right"
+					android:layout_width="30dp"
+					android:layout_height="9dp"/>
+				
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+rankingactivity/tv_footer_right"
+					android:paddingLeft="3dp"
+					android:textColor="#ffffff"
+					android:text="@string/rankingactivity_footer_punishment" />
+			</LinearLayout>
+		</LinearLayout>
+		
+		<FrameLayout
+	        android:layout_height="match_parent"
+	        android:layout_width="wrap_content">
+	        <com.darvds.ribbonmenu.RibbonMenuView
+		        android:id="@+rankingactivity/ribbonmenuview"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent" />
+	    </FrameLayout>
+	</RelativeLayout>
+</LinearLayout>

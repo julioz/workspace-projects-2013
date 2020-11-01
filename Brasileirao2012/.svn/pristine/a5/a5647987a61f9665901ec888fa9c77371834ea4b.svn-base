@@ -1,0 +1,195 @@
+package br.com.zynger.brasileirao2012.view;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+import br.com.zynger.brasileirao2012.web.ImageDownloader;
+
+public class MoveToMoveLayout extends LinearLayout {
+	private Move move;
+	
+	private TextView tv_text;
+	private TextView tv_moment, tv_time;
+	private LinearLayout ll_type, ll_videothumb;
+	private ImageView iv_type, iv_videothumb;
+	private View toolbar;
+	private ExpandAnimation expandAni;
+	private ImageButton ib_read, ib_share, ib_video;
+	
+	public MoveToMoveLayout(Context context, LayoutInflater layoutInflater, Move move) {
+		super(context);
+		setMove(move);
+		
+		layoutInflater.inflate(R.layout.movetomovelayout, this);
+		
+		loadViews();		
+        setData(null);
+	}
+	
+	public MoveToMoveLayout(Context context, LayoutInflater layoutInflater, Move move, ImageDownloader imgDownloader) {
+		super(context);
+		setMove(move);
+		
+		layoutInflater.inflate(R.layout.movetomovelayout, this);
+		
+		loadViews();		
+        setData(imgDownloader);
+	}
+
+	private void loadViews() {
+		tv_text = (TextView) findViewById(R.mtmlayout.tv_text);
+		tv_moment = (TextView) findViewById(R.mtmlayout.tv_moment);
+		tv_time = (TextView) findViewById(R.mtmlayout.tv_time);
+		ll_type = (LinearLayout) findViewById(R.mtmlayout.ll_type);
+		iv_type = (ImageView) findViewById(R.mtmlayout.iv_type);
+		/*ll_videothumb = (LinearLayout) findViewById(R.mtmlayout.ll_videothumb);
+		iv_videothumb = (ImageView) findViewById(R.mtmlayout.iv_videothumb); */
+		toolbar = findViewById(R.mtmlayout.toolbar);
+		ib_read = (ImageButton) findViewById(R.mtmlayout.ib_read);
+		ib_share = (ImageButton) findViewById(R.mtmlayout.ib_share);
+		ib_video = (ImageButton) findViewById(R.mtmlayout.ib_video);
+	}
+	
+	private void setData(ImageDownloader thumbDownloader) {
+		tv_text.setText(Html.fromHtml(getMove().getTexto()));
+		
+		String momento = getMove().getMomento();
+		if(!momento.equals("")) tv_moment.setText(momento + "'");
+		else tv_moment.setVisibility(View.GONE);
+		
+		setType(getMove().getTipo(), getMove().getCartao());
+		
+		tv_time.setText(getMove().getPeriodo());
+		
+		ib_read.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				performClick();
+				showLongTextDialog(tv_text.getText().toString().trim());
+			}
+		});
+		
+		ib_share.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				performClick();
+				new ShareHelper((Activity) getContext(), getMove().getPeriodo() + "\n" + tv_text.getText().toString()).share();
+			}
+		});
+		
+		final String video = getMove().getVideo_url();
+		if(video != null){
+			ib_video.setVisibility(View.VISIBLE);
+			tv_text.setTextColor(0xFF7171CF);
+			ib_video.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					performClick();
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(video));
+					getContext().startActivity(browserIntent);
+				}
+			});
+
+		}
+		
+		setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Criando a animacao de expansao para o item
+				expandAni = new ExpandAnimation(toolbar, 350);
+                toolbar.startAnimation(expandAni);
+			}
+		});
+	}
+
+	private void setType(int tipo, int cartao) {
+		ll_type.setVisibility(View.VISIBLE);
+		
+		switch (tipo) {
+		case Move.TIPO_LANCE:
+			ll_type.setVisibility(View.GONE);
+			break;
+		case Move.TIPO_LANCEIMPORTANTE:
+			iv_type.setImageResource(R.drawable.img_squad_important);
+			break;
+		case Move.TIPO_LANCEGOL:
+			iv_type.setImageResource(R.drawable.img_squad_goal_pro);
+			break;
+		case Move.TIPO_LANCECARTAO:
+			switch (cartao) {
+			case Move.CARTAO_AMARELO:
+				iv_type.setImageResource(R.drawable.img_squad_cards_yellow);
+				break;
+			case Move.CARTAO_VERMELHO:
+				iv_type.setImageResource(R.drawable.img_squad_cards_red);
+				break;
+			default:
+				ll_type.setVisibility(View.GONE);
+				break;
+			}
+			
+			break;
+		case Move.TIPO_LANCESUBSTITUICAO:
+			iv_type.setImageResource(R.drawable.img_squad_subst);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void showLongTextDialog(final String message) {
+		final Dialog d = new Dialog(this.getContext());
+		d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		d.setContentView(R.layout.dialogshare);
+		
+		TextView tv = (TextView) d.findViewById(R.dialogshare.tv);
+		final EditText et = (EditText) d.findViewById(R.dialogshare.et);
+		et.setVisibility(View.GONE);
+		Button bt1 = (Button) d.findViewById(R.dialogshare.btcancel);
+		bt1.setText("OK");
+		Button bt2 = (Button) d.findViewById(R.dialogshare.btsend);
+		bt2.setText("Compartilhar");
+		
+		tv.setText(message);
+		
+		bt1.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+			}
+		});
+		
+		bt2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+				new ShareHelper((Activity) getContext(), getMove().getPeriodo() + "\n" + message).share();
+			}
+		});
+		
+		d.show();
+	}
+	
+	public Move getMove() {
+		return move;
+	}
+
+	public void setMove(Move move) {
+		this.move = move;
+	}
+}

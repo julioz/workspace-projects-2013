@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest android:versionCode="44" android:versionName="0.5.80"
+    package="br.com.site" xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <uses-library android:name="com.google.android.maps"/>
+        <activity android:label="SiTE" android:name=".Home" android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:label="SiTE" android:name=".MainActivity"
+            android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:label="Novo Veículo"
+            android:name=".NovoVeiculo" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:label="Nova Estrutura"
+            android:name=".NovoEstrutura" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:label="Novo Equipamento"
+            android:name=".NovoEquipamento" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:label="Nova Equipe" android:name=".NovoEquipe" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:label="Novo Perigo" android:name=".NovoPerigo" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:label="Nova Vítima" android:name=".NovoVitima" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:label="Exibição de PDIs"
+            android:name=".Exibicao" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:label="Nova Instituição"
+            android:name=".NovoInstituicao" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name=".SocketTest"/>
+        <activity android:name="br.com.site.web.ServerActivity"/>
+        <activity android:name="br.com.site.web.ClientActivity"/>
+        <activity android:label="Configuração do Servidor"
+        	android:name=".ServerConfig" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <service android:name="br.com.site.web.MessageListener">
+            <intent-filter>
+                <action android:name="MESSAGELISTENER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
+        <receiver android:name=".WiFiBroadcastReceiver"/>
+    </application>
+    <uses-sdk android:minSdkVersion="7"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.DELETE_PACKAGES"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+</manifest>

@@ -1,0 +1,87 @@
+package br.com.zynger.brasileirao2012.view;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Partner;
+
+public class PartnerLayout extends LinearLayout{
+
+	Partner partner1, partner2;
+	
+	private Context context;
+	
+	private ImageButton ibp1, ibp2;
+	
+	public PartnerLayout(Context context, Partner p1, Partner p2) {
+		super(context);
+		setCtext(context);
+		setPartner1(p1);
+		setPartner2(p2);
+		
+		LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		layoutInflater.inflate(R.layout.partnerlayout, this);
+		
+		loadViews();
+		
+		setData(getPartner1(), ibp1);
+		setData(getPartner2(), ibp2);
+	}
+
+	private void setData(final Partner p, ImageButton ibp) {
+		if(p != null){			
+			ibp.setImageDrawable(p.getImg());
+			
+			ibp.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse(p.getUrl()));
+					getContext().startActivity(it);
+				}
+			});
+		}else{
+			ibp.setImageDrawable(getContext().getResources().getDrawable(R.drawable.partner_dummy));
+			ibp.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(v.getContext(), R.string.views_partnerlayout_contact, Toast.LENGTH_SHORT).show();
+				}
+			});
+		}
+	}
+
+	private void loadViews() {
+		ibp1 = (ImageButton) findViewById(R.partnerlayout.ib_p1);
+		ibp2 = (ImageButton) findViewById(R.partnerlayout.ib_p2);
+	}
+
+	public Context getCtext() {
+		return context;
+	}
+
+	public void setCtext(Context context) {
+		this.context = context;
+	}
+
+	public Partner getPartner1() {
+		return partner1;
+	}
+
+	public void setPartner1(Partner partner1) {
+		this.partner1 = partner1;
+	}
+
+	public Partner getPartner2() {
+		return partner2;
+	}
+
+	public void setPartner2(Partner partner2) {
+		this.partner2 = partner2;
+	}
+}

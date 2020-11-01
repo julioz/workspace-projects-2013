@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<br.com.zynger.libertadores.view.DashboardLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:background="#f8f9fe" >
+    <!--  Standings Button -->
+    <Button
+        android:id="@+home/btn_standings"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_standings"
+        android:text="@string/homedashboard_standings" />"
+ 
+    <!--  Groups Button -->
+    <Button
+        android:id="@+home/btn_groups"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_friends"
+        android:text="@string/homedashboard_groups" />
+ 
+    <!--  Strikers Button -->
+    <Button
+        android:id="@+home/btn_strikers"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_messages"
+        android:text="@string/homedashboard_strikers" />
+ 
+    <!--  Teams Button -->
+    <Button
+        android:id="@+home/btn_teams"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_places"
+        android:text="@string/homedashboard_teams" />
+ 
+    <!--  Map Button -->
+    <Button
+        android:id="@+home/btn_map"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_events"
+        android:text="@string/homedashboard_map" />
+ 
+    <!--  Fans Button -->
+    <Button
+        android:id="@+home/btn_fans"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_photos"
+        android:text="@string/homedashboard_fans" />
+ 
+</br.com.zynger.libertadores.view.DashboardLayout>

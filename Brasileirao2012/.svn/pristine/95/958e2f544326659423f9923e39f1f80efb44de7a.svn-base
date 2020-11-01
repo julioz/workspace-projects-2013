@@ -1,0 +1,238 @@
+package br.com.zynger.brasileirao2012;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.view.MatchViewLayout;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class RealTimeMatchesActivity extends Activity {
+	
+	private final static boolean PRIMEIRADIVISAO = true;
+	private final static boolean SEGUNDADIVISAO = false;
+	
+	private TreeMap<String, Club> clubs;
+	private boolean division;
+	private SharedPreferences prefs;
+	
+	private TextView actionbar_tt, actionbar_tv_division, tv_progressbar;
+	private LinearLayout ll_rtm, actionbar_ll;
+	private ScrollView sv_matches;
+	private RelativeLayout rl_loading;
+	
+	private Timer timer;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.realtimematches);
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		int division = getIntent().getIntExtra("DIVISION", 0);
+		clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		
+		loadViews();
+		
+		if(division == Club.SEGUNDADIVISAO){
+			setDivision(SEGUNDADIVISAO);
+			actionbar_tv_division.setText("B");
+		}else{
+			setDivision(PRIMEIRADIVISAO);
+			actionbar_tv_division.setText("A");
+		}
+		
+		actionbar_ll.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(getDivision() == SEGUNDADIVISAO){
+					setDivision(PRIMEIRADIVISAO);
+					actionbar_tv_division.setText("A");
+				}else{
+					setDivision(SEGUNDADIVISAO);
+					actionbar_tv_division.setText("B");
+				}
+				new ShowTableTask(v.getContext(), getDivision()).execute();
+			}
+		});
+	}
+	
+	private void loadViews() {
+		actionbar_tt = (TextView) findViewById(R.realtimematches.tv_name);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		actionbar_ll = (LinearLayout) findViewById(R.realtimematches.actionbar_ll);
+		actionbar_tv_division = (TextView)findViewById(R.realtimematches.actionbar_tv_division);
+		
+		ll_rtm = (LinearLayout) findViewById(R.realtimematches.ll_matches);
+		sv_matches = (ScrollView) findViewById(R.realtimematches.sv_matches);
+		rl_loading = (RelativeLayout) findViewById(R.realtimematches.rl_loading);
+		tv_progressbar = (TextView) findViewById(R.realtimematches.tv_progressbar);
+	}
+	
+	@Override
+	protected void onResume() {
+		if(timer != null) timer.cancel();
+		startRecorrentTask();
+		super.onResume();
+	}
+	
+	private void startRecorrentTask() {
+		TimerTask doAsynchronousTask;
+		final Handler handler = new Handler();
+		timer = new Timer();
+
+		doAsynchronousTask = new TimerTask() {
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					public void run() {
+						ShowTableTask backgroundTask = new ShowTableTask(RealTimeMatchesActivity.this, getDivision()); 
+						backgroundTask.execute();
+					}
+				});
+			}
+		};
+		
+		String strInterval = prefs.getString("list_realtimeinterval", "60000");
+		int interval = Integer.parseInt(strInterval);
+		
+		timer.schedule(doAsynchronousTask, 0, interval);
+	}
+	
+	@Override
+	protected void onStop() {
+		if(timer != null) timer.cancel();
+		super.onStop();
+	}
+	
+	public boolean getDivision() {
+		return division;
+	}
+
+	public void setDivision(boolean division) {
+		this.division = division;
+	}
+
+	private void populateLayout(ArrayList<RealTimeMatch> matches){
+		ll_rtm.removeAllViews();
+		boolean showRanking = prefs.getBoolean("cb_realtimeranking", true);
+		for (RealTimeMatch rtm : matches) {
+			ll_rtm.addView(new MatchViewLayout(this, clubs.get(rtm.getHome()), clubs.get(rtm.getAway()), rtm, showRanking));
+		}
+	}
+
+	protected class ShowTableTask extends AsyncTask<Void, Void, ArrayList<RealTimeMatch>> {
+		private Context c;
+		private boolean division = true;
+		
+		public ShowTableTask(Context c, boolean division){
+			this.setContext(c);
+			this.setDivision(division);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			sv_matches.setVisibility(View.GONE);
+			findViewById(R.realtimematches.pb_progressbar).setVisibility(View.VISIBLE);
+			tv_progressbar.setText("Atualizando...");
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected ArrayList<RealTimeMatch> doInBackground(Void... params) {
+			try{
+				return HTMLManager.getRealTimeMatches(getContext(), getDivision());
+			}catch(OutOfMemoryError e){
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<RealTimeMatch> result) {
+			if(result != null && clubs != null){
+				if(result.size() > 0){
+					Collections.sort(result, new Comparator<RealTimeMatch>() {
+						@Override
+						public int compare(RealTimeMatch lhs, RealTimeMatch rhs) {
+							try{								
+								return lhs.getCalendarDate().compareTo(rhs.getCalendarDate());
+							}catch(NullPointerException npe){ //se uma das partidas nao tiver calendario (null)
+								return 0;
+							}
+						}
+					});
+					
+					populateLayout(result);
+					sv_matches.setVisibility(View.VISIBLE);
+					rl_loading.setVisibility(View.GONE);
+				}else{
+					findViewById(R.realtimematches.pb_progressbar).setVisibility(View.GONE);
+					tv_progressbar.setText("Não há nenhum jogo a ser exibido no momento.");
+				}
+			}else{
+				findViewById(R.realtimematches.pb_progressbar).setVisibility(View.GONE);
+				tv_progressbar.setText("Um erro ocorreu. Tente novamente.");
+			}
+			
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+		
+		public boolean getDivision(){
+			return division;
+		}
+		
+		public void setDivision(boolean division){
+			this.division = division;
+		}
+	}
+	
+	public static boolean isMyServiceRunning(Context context) {
+	    ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	        if ("br.com.zynger.brasileirao2012.RealTimeMatchService".equals(service.service.getClassName())) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+}

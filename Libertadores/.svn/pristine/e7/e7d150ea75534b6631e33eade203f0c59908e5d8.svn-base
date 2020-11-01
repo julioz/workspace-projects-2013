@@ -1,0 +1,187 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.ListActivity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.StrikersAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetStrikersTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Striker;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.util.JsonUtil;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.view.LogoProgressBar;
+import br.com.zynger.libertadores.view.UpdateImageView;
+import br.com.zynger.libertadores.web.StrikersParser;
+
+public class StrikersActivity extends ListActivity implements AsyncTaskListener {
+	
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	private InternalStorageHandler internalStorage;
+	
+	private StrikersParser strikersParser;
+	
+	private ArrayList<Striker> strikers;
+	
+	private SharedPreferences sharedPrefs;
+	
+	private HelveticaTextView tv_title;
+	private RelativeLayout rl_loading;
+	private LogoProgressBar lpb_updating;
+	private UpdateImageView uiv_update;
+	private TextView tv_updating;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.strikersactivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		internalStorage = new InternalStorageHandler(this);
+		
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		strikersParser = new StrikersParser(this, clubs);
+		
+		loadViews();
+		
+		uiv_update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				uiv_update.rotateView();
+				new GetStrikersTask(strikersParser, StrikersActivity.this).execute();
+			}
+		});
+		
+		strikers = restoreBackup();
+		if(sharedPrefs.getBoolean("cb_actsupdates", false)) uiv_update.performClick();
+		else{			
+			if(null != strikers) setAdapterFromStrikers();
+			else new GetStrikersTask(strikersParser, this).execute();
+		}
+	}
+
+	private void loadViews() {
+		rl_loading = (RelativeLayout) findViewById(R.strikersactivity.rl_loading);
+		lpb_updating = (LogoProgressBar) rl_loading.findViewById(R.relativelayout_loading.lpb_updating);
+		tv_updating = (TextView) rl_loading.findViewById(R.relativelayout_loading.tv_updating);
+		tv_title = (HelveticaTextView) findViewById(R.strikersactivity.titlebar_tvtitle);
+		uiv_update = (UpdateImageView) findViewById(R.strikersactivity.titlebar_ivupdate);
+		
+		tv_title.setText(getString(R.string.homedashboard_strikers).toUpperCase());
+	}
+	
+	private void setAdapterFromStrikers() {
+		Collections.sort(strikers);
+		//Collections.sort(strikers, new ClubComparator()); TODO colocar a possibilidade de ordenar por time
+		
+		setListAdapter(new StrikersAdapter(this, strikers));
+	}
+	
+	private ArrayList<Striker> restoreBackup() {
+		String strikersJsonString = (String) internalStorage.openBackup(this, InternalStorageHandler.STRIKERS_JSON);
+		if(null != strikersJsonString){
+			try{
+				ArrayList<Striker> strikers = new ArrayList<Striker>();
+				JSONArray jsonStrikers = new JSONArray(strikersJsonString);
+				
+				for (int i = 0; i < jsonStrikers.length(); i++) {
+					JSONArray data = jsonStrikers.getJSONArray(i);
+					Striker striker = new Striker(data, clubs);
+					strikers.add(striker);
+				}
+				
+				return strikers;
+			}catch(JSONException e){
+				e.printStackTrace();
+				return null;
+			}
+		} else return null;
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		lpb_updating.setVisibility(View.VISIBLE);
+		tv_updating.setText(getString(R.string.updating));
+		RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		p.addRule(RelativeLayout.BELOW, R.relativelayout_loading.lpb_updating);
+		p.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		tv_updating.setLayoutParams(p);		
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		ArrayList<Striker> strikers = (ArrayList<Striker>) result;
+		this.strikers = strikers;
+		
+		if(strikers.size() > 0){
+			JSONArray json = JsonUtil.createStrikersJson(strikers);
+			internalStorage.saveBackup(this, InternalStorageHandler.STRIKERS_JSON, json.toString());
+			
+			setAdapterFromStrikers();
+			hideUpdatingLayout();
+		}else{
+			lpb_updating.setVisibility(View.GONE);
+			tv_updating.setText(getString(R.string.error_emptydatabase));
+			tv_updating.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
+					RelativeLayout.LayoutParams.FILL_PARENT));
+			tv_updating.setGravity(Gravity.CENTER);
+		}
+		
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		if(null != strikers && strikers.size() > 0){
+			setAdapterFromStrikers();
+			hideUpdatingLayout();
+		}else{
+			lpb_updating.setVisibility(View.GONE);
+			tv_updating.setText(getString(R.string.error_nodatabase));
+			tv_updating.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
+					RelativeLayout.LayoutParams.FILL_PARENT));
+			tv_updating.setGravity(Gravity.CENTER);
+		}
+	}
+	
+	class ClubComparator implements Comparator<Striker> {
+		@Override
+		public int compare(Striker lhs, Striker rhs) {
+			return lhs.getClub().getName().compareTo(rhs.getClub().getName());
+		}	
+	}
+
+}

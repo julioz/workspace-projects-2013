@@ -1,0 +1,151 @@
+package br.com.zynger.libertadores.xml;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import android.content.Context;
+import android.util.Log;
+import br.com.zynger.libertadores.HomeActivity;
+import br.com.zynger.libertadores.enums.Country;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Headquarters;
+import br.com.zynger.libertadores.util.GroupEnum;
+import br.com.zynger.libertadores.util.PreLibEnum;
+import br.com.zynger.libertadores.util.Raw;
+
+public class ClubsParser {
+	
+	private static final String BADGE_PREFIX = "badge_";
+	private static final String ICON_PREFIX = "ic_";
+
+	public ArrayList<Club> getClubs(Context context){
+		String xml = Raw.openRaw(context, "clubs");
+		ArrayList<Club> clubs = parseXML(xml);
+		return clubs;
+	}
+	
+	private static ArrayList<Club> parseXML(String xml){
+		ArrayList<Club> clubs = new ArrayList<Club>();
+		Element root = XMLUtils.getRoot(xml, "UTF-8");
+		List<Node> nodeStadiums = XMLUtils.getChildren(root, "club");
+		for (Node node : nodeStadiums) {
+			Club club = new Club();
+			String name = XMLUtils.getText(node, "name");
+			String acronym = XMLUtils.getText(node, "acronym");
+			String badge = XMLUtils.getText(node, "badge");
+			String country = XMLUtils.getText(node, "country");
+			String group = XMLUtils.getText(node, "group");
+			String prelib = XMLUtils.getText(node, "prelib");
+			
+			if(badge.equals("")) Log.e(HomeActivity.TAG, name);
+			
+			Node headquarters = XMLUtils.getChild(node, "headquarters");
+			Headquarters hq = parseHeadquarters(headquarters);
+			
+			club.setName(name);
+			club.setAcronym(acronym);
+			club.setCountry(getCountryConst(country));
+			if(!group.equals("")) club.setGroup(getGroup(group));
+			else club.setPreLibGroup(getPreLibGroup(prelib));
+			club.setBadge(BADGE_PREFIX + badge);
+			club.setIcon(ICON_PREFIX + badge);
+			club.setHeadquarters(hq);
+			clubs.add(club);
+		}
+		return clubs;
+	}
+	
+	private static Country getCountryConst(String country) {
+		if(country.equals("Argentina")) return Country.ARGENTINA;
+		else if(country.equals("Bolivia")) return Country.BOLIVIA;
+		else if(country.equals("Brasil")) return Country.BRAZIL;
+		else if(country.equals("Colombia")) return Country.COLOMBIA;
+		else if(country.equals("Chile")) return Country.CHILE;
+		else if(country.equals("Paraguay")) return Country.PARAGUAY;
+		else if(country.equals("Uruguay")) return Country.URUGUAY;
+		else if(country.equals("Ecuador")) return Country.ECUADOR;
+		else if(country.equals("Venezuela")) return Country.VENEZUELA;
+		else if(country.equals("México")) return Country.MEXICO;
+		else if(country.equals("Peru")) return Country.PERU;
+		else return null;
+	}
+
+	private static PreLibEnum getPreLibGroup(String strPrelib) {
+		Integer preLibGroup = Integer.valueOf(strPrelib);
+		switch (preLibGroup) {
+		case 1:
+			return PreLibEnum.PRELIB_1;
+		case 2:
+			return PreLibEnum.PRELIB_2;
+		case 3:
+			return PreLibEnum.PRELIB_3;
+		case 4:
+			return PreLibEnum.PRELIB_4;
+		case 5:
+			return PreLibEnum.PRELIB_5;
+		case 6:
+			return PreLibEnum.PRELIB_6;
+		default:
+			break;
+		}
+		return null;
+	}
+
+	private static GroupEnum getGroup(String strGroup){
+		Integer group = Integer.valueOf(strGroup);
+		switch (group) {
+		case 1:
+			return GroupEnum.GROUP_1;
+		case 2:
+			return GroupEnum.GROUP_2;
+		case 3:
+			return GroupEnum.GROUP_3;
+		case 4:
+			return GroupEnum.GROUP_4;
+		case 5:
+			return GroupEnum.GROUP_5;
+		case 6:
+			return GroupEnum.GROUP_6;
+		case 7:
+			return GroupEnum.GROUP_7;
+		case 8:
+			return GroupEnum.GROUP_8;
+		default:
+			break;
+		}
+		return null;
+	}
+
+	private static Headquarters parseHeadquarters(Node headquarters) {
+		Headquarters hq = new Headquarters();
+		
+		String name = XMLUtils.getText(headquarters, "name");
+		String city = XMLUtils.getText(headquarters, "city");
+		String latitude = XMLUtils.getText(headquarters, "latitude");
+		String longitude = XMLUtils.getText(headquarters, "longitude");
+
+		hq.setName(name);
+		
+		if(city.equals("")) hq.setCity(null);
+		else hq.setCity(city);
+		
+		try{			
+			Long lat = Long.valueOf(latitude);
+			hq.setLatitude(lat);
+		}catch(NumberFormatException e){
+			hq.setLatitude(null);
+		}
+		try{
+			Long lng = Long.valueOf(longitude);
+			hq.setLongitude(lng);			
+		}catch(NumberFormatException e){
+			hq.setLongitude(null);
+		}
+		
+		return hq;
+	}
+
+}

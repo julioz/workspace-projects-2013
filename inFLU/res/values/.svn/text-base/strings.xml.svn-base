@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="app_name">inFLU</string>
+    <string name="about">Agradecimentos:\n    Grupo AndroidBrasil\n    Ricardo Lecheta\n    stackoverflow\n    Diego Bachini Lima\n    João Marcelo Garcez</string>
+    <string name="donate">Obrigado por escolher este aplicativo!\nSe você gostou e quer me incentivar a fazer outros apps, por que não me paga um café? :D\nAceito doações via Paypal, de qualquer quantia, para o email abaixo (se for possível, identifique sua doação com alguma mensagem, para eu poder te agradecer!).</string>
+    <string name="loading_articles">Verifique sua conexão à internet.</string>
+    <string name="set_preferences">Configurações</string>
+    <string name="share_home">Estou usando o inFLU como meu agregador de informações sobre o Fluminense FC, e consigo encontrar informações em tempo real, notícias, dados sobre a equipe, ingressos e muito mais!\n\nProcure no Android Market por "inFLU", ou clique neste link a partir de seu telefone android: http://bit.ly/zh1Zom\n\nSaudações tricolores!</string>
+</resources>

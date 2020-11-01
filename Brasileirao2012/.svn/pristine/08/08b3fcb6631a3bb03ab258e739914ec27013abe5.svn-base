@@ -1,0 +1,43 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.util.TreeMap;
+
+import org.json.JSONObject;
+
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.web.WebServiceClient;
+
+public class AprovREST {
+	
+	private static final String URL_WS = "http://aqueous-oasis-8080.herokuapp.com/services/";
+
+	public TreeMap<String, Club> getAprov(int division, TreeMap<String, Club> clubs) throws Exception {
+		String[] resposta = new WebServiceClient().get(URL_WS + "aprov/Gdivision=" + division + "/");
+		
+		if (resposta[0].equals("200")) {			
+			JSONObject object = new JSONObject(resposta[1]);
+			for (Club club : clubs.values()) {
+				if(club.getDivision() == division){				
+					JSONObject jsonAprovObj = object.getJSONObject(club.getName());
+					AprovData ad = new AprovData();
+					ad.setHomePlayed(jsonAprovObj.getInt("homePlayed"));
+					ad.setHomeVictories(jsonAprovObj.getInt("homeVictories"));
+					ad.setHomeDrawn(jsonAprovObj.getInt("homeDrawn"));
+					ad.setHomePerc(Float.valueOf(jsonAprovObj.getString("homePerc")));
+					ad.setAwayPlayed(jsonAprovObj.getInt("awayPlayed"));
+					ad.setAwayVictories(jsonAprovObj.getInt("awayVictories"));
+					ad.setAwayDrawn(jsonAprovObj.getInt("awayDrawn"));
+					ad.setAwayPerc(Float.valueOf(jsonAprovObj.getString("awayPerc")));
+					
+					club.setAprov(ad);
+				}
+			}
+			
+			return clubs;
+		} else {
+			throw new Exception(resposta[1]);
+		}
+	}
+
+}

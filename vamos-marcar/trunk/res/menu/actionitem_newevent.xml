@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+actionitem_newevent/action_addpeople"
+        android:icon="@drawable/ic_action_add_person"
+        android:title="@string/actionitem_addperson"
+        android:showAsAction="always" />
+    
+    <item
+        android:id="@+actionitem_newevent/action_confirm"
+        android:icon="@drawable/ic_action_accept"
+        android:title="@string/actionitem_confirm"
+        android:showAsAction="always" />
+
+</menu>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:font="http://schemas.android.com/apk/res/br.com.zynger.vamosmarcar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="1dp"
+    android:gravity="center_vertical" >
+
+    <br.com.zynger.vamosmarcar.view.RobotoTextView
+        android:id="@+view_scheduletime/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:layout_toLeftOf="@+view_scheduletime/ib_delete"
+        android:textSize="14sp"
+        android:textColor="@color/darkgray"
+        font:typeface="roboto_light" />
+
+    <ImageButton
+        android:id="@+view_scheduletime/ib_delete"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_action_remove" />
+
+</RelativeLayout>

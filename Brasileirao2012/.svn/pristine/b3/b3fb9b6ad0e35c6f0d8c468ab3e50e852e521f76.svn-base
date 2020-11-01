@@ -1,0 +1,31 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.util.TreeMap;
+
+import org.json.JSONObject;
+
+import br.com.zynger.brasileirao2012.web.WebServiceClient;
+
+
+public class MatchesREST {
+
+	private static final String URL_WS = "http://aqueous-oasis-8080.herokuapp.com/services/";
+
+	public TreeMap<Integer, Boolean> getFixtureState(int division) throws Exception {
+		String[] resposta = new WebServiceClient().get(URL_WS + "matches/Gdivision=" + division + "/fixturestate");
+		
+		if (resposta[0].equals("200")) {
+			JSONObject object = new JSONObject(resposta[1]);
+			TreeMap<Integer, Boolean> tm = new TreeMap<Integer, Boolean>();
+			
+			for (int i = 1; i <= 38; i++) {
+				tm.put(i, object.getBoolean(String.valueOf(i)));
+			}
+			
+			return tm;
+		} else {
+			throw new Exception(resposta[1]);
+		}
+	}
+	
+}

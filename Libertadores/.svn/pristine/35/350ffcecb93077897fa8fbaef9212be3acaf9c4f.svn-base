@@ -1,0 +1,93 @@
+package br.com.zynger.libertadores;
+
+import java.util.TreeMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.InflateException;
+import android.widget.TextView;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.data.GroupsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+
+public class SplashScreenActivity extends Activity implements Runnable {
+	
+	//aqui é definido o delay do handler em milisegundos
+	private final static int SPLASH_TIME = 2000;
+	
+	private InternalStorageHandler internalStorage;
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		clubsDB = ClubsDB.getSingletonObject(this);
+		GroupsDB.getSingletonObject(clubsDB); //inicializar banco de grupos
+		internalStorage = new InternalStorageHandler(this);
+		clubs = clubsDB.getClubs();
+
+		try{			
+			setContentView(R.layout.splashscreenactivity);
+			
+			TextView tv_version = (TextView) findViewById(R.splashscreenactivity.tv_version);
+			tv_version.setText(getAppVersion(this));
+		}catch(OutOfMemoryError err){
+			this.run();
+		}catch(InflateException ex){
+			ex.printStackTrace();
+			this.run();
+		}
+		
+		updateDatabase();
+		
+		Handler h = new Handler();
+		h.postDelayed(this, SPLASH_TIME);
+	}
+	
+	public void run(){
+		Intent it = new Intent(this, HomeActivity.class);
+		startActivity(it);
+		finish();
+	}
+	
+	private void updateDatabase() {
+		String standings = (String) internalStorage.openBackup(this, InternalStorageHandler.STANDINGS_JSON);
+		if(null != standings){
+			try{				
+				JSONObject jsonStandings = new JSONObject(standings);
+				for (Club club : clubs.values()) {
+					club.setFromJson(jsonStandings);
+				}
+			}catch(JSONException e){
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static String getAppVersion(Context c){
+		PackageManager manager = c.getPackageManager();
+		try {
+			PackageInfo info = manager.getPackageInfo(c.getPackageName(), 0);
+			//String packageName = info.packageName;
+			//return info.versionCode;
+			return info.versionName;
+			//Log.d(HomeActivity.TAG, "Package Name: " + packageName);
+			//Log.d(HomeActivity.TAG, "Version Code: " + this.versionCode);
+			//Log.d(HomeActivity.TAG, "Version Name: " + this.versionName);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+}

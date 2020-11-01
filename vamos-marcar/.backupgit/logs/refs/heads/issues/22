@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 2cd40bb36e6e3e14ae722047f617af9ae239f68f Júlio Zynger <julioz92@gmail.com> 1381454782 -0300	branch: Created from HEAD
+2cd40bb36e6e3e14ae722047f617af9ae239f68f 870913b4e1e476a324b3b034fa6b9d59a84f9d6d Júlio Zynger <julioz92@gmail.com> 1381459018 -0300	commit: NewEventActivity sends the Event to the server.

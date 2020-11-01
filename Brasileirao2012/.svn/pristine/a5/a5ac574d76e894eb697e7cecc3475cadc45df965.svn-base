@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_below="@+home/llLogo"
+	android:id="@+home/tl_buttons"
+	android:weightSum="3">
+	
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:weightSum="3"
+		android:layout_weight="1">
+		
+	    <LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_stadiums_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibStadiums"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="Estádios" />
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_rate_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibRate"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="Avaliar"/>
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_share_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibShare"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="Compartilhar"/>
+
+		</LinearLayout>
+	</TableRow>
+	
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:weightSum="3"
+		android:layout_weight="1">
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_guide_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibGuide"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:text="Guia"
+				android:gravity="center_horizontal" />
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_partners_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibPartners"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="Parceiros"/>
+
+		</LinearLayout>
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_settings_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibSettings"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:text="Config."
+				android:gravity="center_horizontal" />
+
+		</LinearLayout>
+		
+	</TableRow>
+	
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:weightSum="3"
+		android:layout_weight="1">
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:visibility="invisible"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_aprov_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:text="Aproveit."
+				android:gravity="center_horizontal" />
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_fanpage_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibFanpage"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="Fanpage" />
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_about_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibAbout"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:text="Sobre"
+				android:gravity="center_horizontal" />
+
+		</LinearLayout>
+	</TableRow>
+	
+</TableLayout>

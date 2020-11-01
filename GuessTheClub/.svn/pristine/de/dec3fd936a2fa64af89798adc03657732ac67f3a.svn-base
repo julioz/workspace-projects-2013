@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:id="@+quiz/actionbar"
+        android:layout_height="40dp"
+        android:background="#ffeeeeee">
+        
+        <br.com.zynger.guesstheclub.view.CoolveticaTextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="1dp"
+            android:textColor="@color/greendroid_br"
+            android:id="@+quiz/tv_actionbar_title"
+            android:shadowColor="@color/gray_shadow"
+            android:shadowRadius="0.5"
+            android:shadowDx="0.5"
+            android:shadowDy="0.5"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:textSize="20dp"/>
+        
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/gray_line_actionbar"/>
+    </RelativeLayout>
+    
+    <ListView
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:id="@android:id/list"
+	    android:cacheColorHint="#00000000"
+	    android:divider="@color/gray_line_actionbar"
+	    android:dividerHeight="1dp"
+	    android:background="@drawable/pattern_scanline"/>
+    
+</LinearLayout>

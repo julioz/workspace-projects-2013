@@ -1,0 +1,18 @@
+package br.com.zynger.brasileirao2012;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.TextView;
+
+public class AboutActivity extends Activity {
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aboutactivity);
+		
+		TextView tv_version = (TextView) findViewById(R.aboutactivity.tv_version);
+		String version = HomeActivity.getAppVersion(this);
+		tv_version.setText(getString(R.string.aboutactivity_version) + " " + version);
+	}
+}

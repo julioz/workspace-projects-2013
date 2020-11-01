@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    xmlns:actionbar="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    android:background="@drawable/backrepeat"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+    <br.com.zynger.brasileirao2012.view.CustomActionBar
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+aboutactivity/actionbar"
+	    actionbar:logosrc="@drawable/ic_about"
+	    actionbar:titleText="@string/aboutactivity_title" />
+	
+	<LinearLayout
+	    android:layout_width="fill_parent"
+		android:gravity="center_horizontal"
+		android:id="@+aboutactivity/header_layout"
+		android:layout_below="@+aboutactivity/actionbar"
+		android:orientation="vertical"
+		android:layout_height="wrap_content">
+		
+		<org.taptwo.android.widget.TitleFlowIndicator
+			android:id="@+aboutactivity/viewflowindic"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			app:footerLineHeight="1dp"
+			app:footerTriangleHeight="7dp"
+			app:textColor="#FFFFFFFF"
+			app:selectedColor="#FFFFC445"
+			app:footerColor="#FFFFFFFF"
+			app:titlePadding="10dp"
+			app:textSize="12sp"
+			app:selectedSize="13sp"
+			android:layout_marginTop="10dip"
+			app:clipPadding="5dp" />
+	</LinearLayout>
+	
+	<org.taptwo.android.widget.ViewFlow
+		android:duplicateParentState="true"
+		android:id="@+aboutactivity/viewflow"
+		android:layout_below="@+aboutactivity/header_layout"
+		android:layout_alignParentBottom="true"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+</RelativeLayout>

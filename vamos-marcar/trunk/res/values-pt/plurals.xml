@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="friends">
+        <item quantity="one">Um amigo</item>
+        <item quantity="other">%1$d  amigos</item>
+    </plurals>
+</resources>

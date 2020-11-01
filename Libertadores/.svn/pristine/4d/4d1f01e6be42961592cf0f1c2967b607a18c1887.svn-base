@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white" >
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_above="@+standingsactivity/ll_ad">
+        
+        <LinearLayout
+	        xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.libertadores"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:layout_above="@+standingsactivity/ll_ad"
+		    android:orientation="vertical" >
+		    
+		    <RelativeLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="48dp"
+		        android:background="@drawable/gradient_titlebar">
+		        
+		        <ImageView
+		            android:layout_alignParentLeft="true"
+		            android:layout_marginLeft="2dp"
+		            android:src="@drawable/ic_standings"
+		            android:id="@+standingsactivity/titlebar_ivlogo"
+		            android:layout_centerVertical="true"
+		            android:padding="4dp"
+		            android:layout_width="wrap_content"
+		            android:layout_height="fill_parent"
+		            android:scaleType="fitCenter"
+		            android:adjustViewBounds="true" />
+		        
+		        <br.com.zynger.libertadores.view.HelveticaTextView
+			        android:layout_width="wrap_content"
+			        android:layout_height="fill_parent"
+			        android:id="@+standingsactivity/titlebar_tvtitle"
+			        android:textColor="#FF3B3B3B"
+			        android:layout_centerVertical="true"
+			        android:layout_margin="5dp"
+			        android:layout_toRightOf="@+standingsactivity/titlebar_ivlogo"
+			        android:gravity="left|center_vertical"
+			        android:layout_marginLeft="10dp"
+			        android:shadowColor="#FFFFFFFF"
+		            android:shadowRadius="0.5"
+		            android:shadowDx="1.5"
+		            android:shadowDy="1.5"
+			        android:textSize="30dp"/>
+		        
+		        <ImageView
+	                android:scaleType="fitCenter"
+	                android:adjustViewBounds="true"
+	                android:layout_toLeftOf="@+standingsactivity/titlebar_ivupdate"
+	                android:src="@drawable/ic_calculator"
+	                android:layout_centerVertical="true"
+	                android:padding="8dp"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:id="@+standingsactivity/titlebar_ivcalculator" />
+	
+	            <br.com.zynger.libertadores.view.UpdateImageView
+	                android:scaleType="fitCenter"
+	                android:adjustViewBounds="true"
+	                android:id="@+standingsactivity/titlebar_ivupdate"
+	                android:padding="8dp"
+	                android:layout_centerVertical="true"
+	                android:layout_alignParentRight="true"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content" />
+		    </RelativeLayout>
+		    
+		    <br.com.zynger.libertadores.view.DataUpdateLayout
+			    android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:id="@+standingsactivity/dul_update" />
+		    
+		    <org.taptwo.android.widget.CircleFlowIndicator
+				app:activeColor="#FF4D5B64"
+				app:inactiveColor="#FF9CA7AD"
+				android:background="#00000000"
+				android:layout_marginTop="3dp"
+				android:layout_marginBottom="3dp"
+				app:spacing="2dp"
+				app:radius="3dp"
+				app:centered="true"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:id="@+standingsactivity/viewflowindicator"
+				android:layout_gravity="center_horizontal|bottom"/>
+		    
+		    <TableRow
+				xmlns:android="http://schemas.android.com/apk/res/android"  
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:paddingTop="1dp"
+				android:paddingBottom="1dp">
+				
+				<View
+					android:layout_width="0dp"
+					android:layout_height="24dp"
+					android:layout_weight="2.6"/>
+					
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:textSize="17dp"
+					android:textColor="@android:color/black"
+					android:gravity="center"
+					android:layout_gravity="center"
+					android:text="@string/standingsactivity_header_points"/>
+					
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:textSize="17dp"
+					android:textColor="@android:color/black"
+					android:gravity="center"
+					android:layout_gravity="center"
+					android:text="@string/standingsactivity_header_played"/>
+				
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:textColor="@android:color/black"
+					android:textSize="17dp"
+					android:gravity="center"
+					android:layout_gravity="center"
+					android:text="@string/standingsactivity_header_victories"/>
+					
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:textSize="17dp"
+					android:textColor="@android:color/black"
+					android:gravity="center"
+					android:layout_gravity="center"
+					android:text="@string/standingsactivity_header_draws"/>
+					
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:textSize="17dp"
+					android:textColor="@android:color/black"
+					android:gravity="center"
+					android:layout_gravity="center"
+					android:text="@string/standingsactivity_header_losses"/>
+				
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:textSize="17dp"
+					android:textColor="@android:color/black"
+					android:gravity="center"
+					android:layout_gravity="center"
+					android:text="@string/standingsactivity_header_goalsfor"/>
+				
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:textSize="17dp"
+					android:textColor="@android:color/black"
+					android:gravity="center"
+					android:layout_gravity="center"
+					android:text="@string/standingsactivity_header_goalsagainst"/>
+				
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:textSize="17dp"
+					android:textColor="@android:color/black"
+					android:gravity="center"
+					android:layout_gravity="center"
+					android:text="@string/standingsactivity_header_balance"/>
+			</TableRow>
+				
+			<org.taptwo.android.widget.ViewFlow
+				android:id="@+standingsactivity/viewflow"
+				app:sidebuffer="1"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"/>
+		    
+		    <LinearLayout
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:gravity="center"
+		        android:orientation="horizontal">
+				
+		        <View
+					android:background="#FF088A08"
+					android:layout_width="20dp"
+					android:layout_height="9dp"/>
+				
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:paddingLeft="3dp"
+					android:id="@+standingsactivity/tv_footer_left"
+					android:textColor="@android:color/black"
+					android:text="@string/standingsactivity_footer_firstfromgroup" />
+				
+				<View
+					android:background="#00000000"
+					android:layout_width="30dp"
+					android:layout_height="9dp"/>
+					
+				<View
+					android:background="#FF045FB4"
+					android:layout_marginLeft="3dp"
+					android:layout_width="20dp"
+					android:layout_height="9dp"/>
+				
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:paddingLeft="3dp"
+					android:id="@+standingsactivity/tv_footer_center"
+					android:textColor="@android:color/black"
+					android:text="@string/standingsactivity_footer_secondfromgroup" />
+		    </LinearLayout>
+		</LinearLayout>
+		
+        <br.com.zynger.libertadores.view.SwipeHintLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+standingsactivity/ll_swipehint" />
+    </RelativeLayout>
+    
+    <include layout="@layout/admob_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+standingsactivity/ll_ad"
+        android:layout_alignParentBottom="true"
+		android:gravity="bottom|center_horizontal"/>
+</RelativeLayout>

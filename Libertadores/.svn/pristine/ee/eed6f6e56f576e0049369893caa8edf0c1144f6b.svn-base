@@ -1,0 +1,118 @@
+package br.com.zynger.libertadores;
+
+import java.util.TreeMap;
+
+import org.json.JSONObject;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.MatchesAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetStandingsStatsTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.data.GroupsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.util.GroupEnum;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.util.JsonUtil;
+import br.com.zynger.libertadores.web.StandingsParser;
+
+public class MatchesActivity extends ListActivity implements AsyncTaskListener {
+
+	private ClubsDB clubsDB;
+	private GroupsDB groupsDB;
+	private TreeMap<String, Club> clubs;
+	
+	private InternalStorageHandler internalStorage;
+	
+	private StandingsParser standingsParser;
+	
+	private RelativeLayout rl_loading;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.matchesactivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		groupsDB = GroupsDB.getSingletonObject(clubsDB);
+		clubs = clubsDB.getClubs();
+		internalStorage = new InternalStorageHandler(this);
+		
+		standingsParser = new StandingsParser(this, clubs);
+		
+		loadViews();
+		
+		Button bt_execute = (Button) findViewById(R.matchesactivity.bt_execute);
+		bt_execute.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {				
+				new GetStandingsStatsTask(standingsParser, MatchesActivity.this).execute();
+			}
+		});
+		
+		setListAdapter(new MatchesAdapter(this, groupsDB.getGroups()));
+	}
+	
+	private void loadViews() {
+		rl_loading = (RelativeLayout) findViewById(R.matchesactivity.rl_loading);
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		MatchesAdapter adapter = ((MatchesAdapter) getListAdapter());
+		String clicked = adapter.getItem(position);
+		GroupEnum gEnum = adapter.getEnumByRowName(clicked);
+		if(null != gEnum){
+			Intent intent = new Intent(this, GroupActivity.class);
+			intent.putExtra(GroupActivity.INTENT_GROUPNUM, gEnum);
+			startActivity(intent);
+		}else Toast.makeText(this, clicked, Toast.LENGTH_SHORT).show();
+		super.onListItemClick(l, v, position, id);
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+
+	@Override
+	public void onComplete(Object result) {
+		for (Club club : clubs.values()) {
+			Log.e(HomeActivity.TAG,
+					club.getName() + " -> " + " pg="+club.getVictories()+" pe="+club.getDraws()+" pp="+club.getLosses()+" gf="+club.getGoalsPro()+" gc="+club.getGoalsAgainst()+" bal="+club.getBalance()+" pts="+club.getPoints()
+					);
+		}
+		
+		JSONObject json = JsonUtil.createStandingsJson(clubs); //TODO
+		internalStorage.saveBackup(this, InternalStorageHandler.STANDINGS_JSON, json.toString());
+		
+		hideUpdatingLayout();
+	}
+
+	@Override
+	public void onFail(String message) {
+		//TODO load the old definitions
+		hideUpdatingLayout();
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+
+}

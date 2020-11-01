@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/news_row_background_selector_verde"
+    android:orientation="horizontal" >
+    
+    <ImageView 
+        android:id="@+news_row/imageview"
+        android:layout_width="90dp"
+        android:padding="3dp"
+        android:layout_height="68dp"/>
+    
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="68dp"
+        android:weightSum="3"
+        android:layout_width="fill_parent">
+            
+        <br.com.zynger.influ.view.EllipsizingTextView
+            android:textColor="@color/white"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:ellipsize="end"
+            android:id="@+news_row/tv_title"
+            android:text="Título da noticia"
+            android:maxLines="2"
+            android:textSize="16dp"
+            android:layout_weight="2"
+            android:textStyle="bold"
+            android:padding="2dp" />
+        
+        <TextView
+            android:textColor="@color/white"
+            android:layout_width="fill_parent"
+            android:id="@+news_row/tv_pubdate"
+            android:layout_height="0dp"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:text="Pubdate da noticia"
+            android:padding="2dp"/>
+        
+    </LinearLayout>
+</LinearLayout>

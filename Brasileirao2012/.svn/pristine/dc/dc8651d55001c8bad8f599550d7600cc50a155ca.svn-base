@@ -1,0 +1,50 @@
+package br.com.zynger.brasileirao2012.util;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+
+public class PreferenceEditor {
+	
+	private final static String PREFERENCE_AUTOUPDATE = "cb_actsupdates";
+	private final static String PREFERENCE_HIGHPERFORMANCE = "cb_highperformance";
+	private final static String PREFERENCE_DOWNLOADIMAGES = "cb_imgsdownload";
+	private static final String PREFERENCE_SHOWREALTIMERANKING = "cb_realtimeranking";
+	private static final String PREFERENCE_REALTIMEUPDATEINTERVAL = "list_realtimeinterval";
+	private static final String PREFERENCE_REALTIMEAUDIO = "cb_realtimeaudio";
+	private static final String PREFERENCE_REALTIMEVIBRATION = "cb_realtimevibrate";
+	
+	public static SharedPreferences getDefaultSharedPreferences(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context);
+	}
+	
+	public static boolean shouldAutoUpdate(Context context){
+		return getDefaultSharedPreferences(context).getBoolean(PREFERENCE_AUTOUPDATE, false);
+	}
+	
+	public static boolean shouldDownloadImages(Context context){
+		return getDefaultSharedPreferences(context).getBoolean(PREFERENCE_DOWNLOADIMAGES, true);
+	}
+	
+	public static boolean isHighPerformance(Context context){
+		return getDefaultSharedPreferences(context).getBoolean(PREFERENCE_HIGHPERFORMANCE, true);
+	}
+
+	public static boolean shouldShowRealTimeRanking(Context context) {
+		return getDefaultSharedPreferences(context).getBoolean(PREFERENCE_SHOWREALTIMERANKING, true);
+	}
+	
+	public static String getRealTimeUpdateInterval(Context context){
+		return getDefaultSharedPreferences(context).getString(PREFERENCE_REALTIMEUPDATEINTERVAL, "90000");
+	}
+
+	public static boolean shouldServicePlaySound(Context context) {
+		return getDefaultSharedPreferences(context).getBoolean(PREFERENCE_REALTIMEAUDIO, true);
+	}
+
+	public static boolean shouldServiceVibrate(Context context) {
+		return getDefaultSharedPreferences(context).getBoolean(PREFERENCE_REALTIMEVIBRATION, true);
+	}
+
+}

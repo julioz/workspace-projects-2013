@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 c7907b667baf3bd6ea964ea631882ae13abffadb Júlio Zynger <julioz92@gmail.com> 1380237360 -0300	branch: Created from HEAD
+c7907b667baf3bd6ea964ea631882ae13abffadb 585064755de0d85f62708efcc920342f25232064 Júlio Zynger <julioz92@gmail.com> 1380244790 -0300	commit: Using Picasso to cache images and transform facebook ids and ParseUsers to nice drawables.

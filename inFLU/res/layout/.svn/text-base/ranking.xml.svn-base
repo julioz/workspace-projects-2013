@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#FF00372a"
+    android:id="@+ranking_selector/ll_actbg">
+    <RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="40dp"
+		android:id="@+ranking_selector/actionbar"
+		android:background="@drawable/actionbar_bg">
+		
+		<ImageView
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			android:src="@drawable/icon"
+			android:scaleType="fitCenter"
+			android:adjustViewBounds="true"
+			android:layout_centerVertical="true"
+			android:id="@+ranking_selector/action_badge"/>
+		
+		<TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:layout_toRightOf="@+ranking_selector/action_badge"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="10dp"
+		    android:text="Classificação"
+		    android:textColor="#FFFFFF"
+		    android:textSize="18dp"
+		    android:textStyle="bold" />
+		
+		<ImageButton
+		    android:layout_width="36dp"
+		    android:layout_height="36dp"
+		    android:scaleType="fitCenter"
+			android:adjustViewBounds="true"
+		    android:layout_alignParentRight="true"
+		    android:layout_centerVertical="true"
+		    android:id="@+ranking_selector/ib_actionbar_update"
+		    android:layout_marginRight="4dp"
+		    android:background="@null"
+		    android:src="@drawable/ic_actionbar_update"/>
+
+	</RelativeLayout>
+	
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+ranking_selector/actionbar"
+        android:layout_above="@+ranking_selector/ll_ad">
+
+	    <LinearLayout
+	        android:weightSum="3"
+	        android:layout_gravity="center"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:orientation="vertical">
+			
+	        <LinearLayout
+	            android:layout_weight="0.8"
+	            android:layout_height="0dp"
+	            android:layout_width="fill_parent">
+	            <TextView
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                android:text="Selecione o campeonato"
+	                android:id="@+ranking_selector/tv_texttop"
+	                android:textStyle="bold"
+	                android:textSize="20dp"
+	                android:textColor="#FF008566"
+	                android:gravity="center_horizontal|bottom"
+	                android:paddingBottom="10dp"/>"
+	        </LinearLayout>
+	        
+	        <TableLayout
+	            android:layout_weight="2"
+	            android:layout_height="0dp"
+	            android:layout_width="fill_parent"
+	            android:stretchColumns="1">
+	            <TableRow
+	                android:background="@drawable/ranking_buttons_background_selector"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:id="@+ranking_selector/button1"
+	                android:padding="5dp"
+	                android:layout_marginBottom="1px">
+	                
+	                <ImageView 
+	                    android:src="@drawable/bt_carioca"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent"
+	                    android:scaleType="fitCenter"
+	                    android:adjustViewBounds="true"
+	                    android:layout_margin="5dp"/>
+	                
+	                <TextView
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent"
+	                    android:text="Campeonato Carioca"
+	                    android:textSize="20dp"
+	                    android:paddingLeft="8dp"
+	                    android:textColor="#FF343434"
+	                    android:gravity="center_vertical"/>
+	                
+	            </TableRow>
+	            <TableRow
+	                android:background="@drawable/ranking_buttons_background_selector"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:id="@+ranking_selector/button2"
+	                android:padding="5dp"
+	                android:layout_marginBottom="1px">
+	                
+	                <ImageView 
+	                    android:src="@drawable/bt_liberta"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent"
+	                    android:scaleType="fitCenter"
+	                    android:adjustViewBounds="true"
+	                    android:layout_margin="5dp"/>
+	                
+	                <TextView
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent"
+	                    android:text="Copa Libertadores"
+	                    android:textSize="20dp"
+	                    android:paddingLeft="8dp"
+	                    android:textColor="#FF343434"
+	                    android:gravity="center_vertical"/>
+	                
+	            </TableRow>
+	            <TableRow
+	                android:background="@drawable/ranking_buttons_background_selector"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:id="@+ranking_selector/button3"
+	                android:padding="5dp">
+	                
+	                <ImageView 
+	                    android:src="@drawable/bt_brasileiro"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent"
+	                    android:scaleType="fitCenter"
+	                    android:adjustViewBounds="true"
+	                    android:layout_margin="5dp"/>
+	                
+	                <TextView
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent"
+	                    android:text="Campeonato Brasileiro"
+	                    android:textSize="20dp"
+	                    android:paddingLeft="8dp"
+	                    android:textColor="#FF343434"
+	                    android:gravity="center_vertical"/>
+	                
+	            </TableRow>
+	        </TableLayout>	        
+	    </LinearLayout>
+    </ScrollView>
+    
+    <LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:id="@+ranking_selector/ll_ad"
+		android:layout_alignParentBottom="true"
+		android:gravity="bottom|center_horizontal">
+
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f107da2e8de1"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+	
+	</LinearLayout>
+    
+</RelativeLayout>

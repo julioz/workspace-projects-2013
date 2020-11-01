@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/actionbar_gradient2"
+    android:id="@+customactionbar/rl_content"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="3dp"
+        android:padding="3dp"
+        android:id="@+customactionbar/iv_logo"
+        android:src="@drawable/ic_launcher"
+        android:layout_centerVertical="true" />
+    
+    <ImageView 
+        android:layout_width="36dp"
+        android:layout_height="45dp"
+        android:src="@drawable/customactionbar_clickablelogo"
+        android:adjustViewBounds="true"
+        android:scaleType="fitStart"
+        android:visibility="gone"
+        android:id="@+customactionbar/iv_clickablelogo"
+        android:layout_alignParentLeft="true"/>
+    
+    <br.com.zynger.brasileirao2012.view.TertreTextView
+        android:layout_marginLeft="3dp"
+        android:layout_marginBottom="3dp"
+        android:id="@+customactionbar/tv_title"
+        android:layout_toRightOf="@+customactionbar/iv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textSize="30sp"/>
+    
+    <LinearLayout
+	    android:id="@+customactionbar/ll_division"
+	    android:layout_width="24dp"
+	    android:layout_height="24dp"
+	    android:visibility="gone"
+	    android:layout_toLeftOf="@+customactionbar/rl_update"
+	    android:layout_marginRight="3dp"
+	    android:background="@drawable/layout_roundborder"
+	    android:gravity="center"
+	    android:layout_centerVertical="true">
+	    <TextView
+	        android:id="@+customactionbar/tv_division"
+	        android:textIsSelectable="false"
+	        android:background="@null"
+	        android:gravity="center"
+	        android:textStyle="bold"
+	        android:textColor="#FFFFFFFF"
+	    	android:layout_width="20dp"
+	        android:layout_height="20dp"/>
+	</LinearLayout>
+	
+    <LinearLayout
+	    android:id="@+customactionbar/ll_image"
+	    android:layout_width="24dp"
+	    android:layout_height="24dp"
+	    android:visibility="gone"
+	    android:layout_alignParentRight="true"
+	    android:layout_marginRight="3dp"
+	    android:background="@drawable/layout_roundborder"
+	    android:gravity="center"
+	    android:layout_centerVertical="true">
+	    <ImageButton
+	        android:id="@+customactionbar/ib_image"
+	        android:scaleType="fitCenter"
+	        android:adjustViewBounds="true"
+	        android:background="@null"
+	        android:layout_width="20dp"
+	        android:layout_height="20dp"/>
+	</LinearLayout>
+	
+	<RelativeLayout
+	    android:layout_width="wrap_content"
+	    android:id="@+customactionbar/rl_update"
+	    android:visibility="gone"
+	    android:layout_height="45dp"
+	    android:layout_alignParentRight="true"
+	    android:orientation="horizontal" >
+	    
+	    <View
+	        android:layout_height="45dp"
+	        android:layout_width="1dp"
+	        android:layout_alignParentLeft="true"
+	        android:background="#88FFFFFF" />
+	
+	    <br.com.zynger.brasileirao2012.view.UpdateImageView
+	        android:layout_width="36dp"
+	        android:layout_height="36dp"
+	        android:layout_marginLeft="8dp"
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	        android:adjustViewBounds="true"
+	        android:id="@+customactionbar/uiv_update"
+	        android:background="@null"
+	        android:scaleType="fitCenter"/>
+	</RelativeLayout>
+	
+	<RelativeLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="45dp"
+	    android:id="@+customactionbar/rl_zoom"
+	    android:visibility="gone"
+	    android:layout_alignParentRight="true"
+	    android:orientation="horizontal" >
+	    
+	    <View
+	        android:layout_height="45dp"
+	        android:layout_width="1dp"
+	        android:layout_alignParentLeft="true"
+	        android:background="#88FFFFFF" />
+	
+	    <ImageButton
+	        android:layout_width="36dp"
+	        android:layout_height="36dp"
+	        android:layout_marginLeft="8dp"
+	        android:layout_centerHorizontal="true"
+	        android:layout_centerVertical="true"
+	        android:adjustViewBounds="true"
+	        android:id="@+customactionbar/ib_zoom"
+	        android:background="@null"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/ic_actionbar_zoom" />
+	</RelativeLayout>
+</RelativeLayout>

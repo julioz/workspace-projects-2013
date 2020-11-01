@@ -1,0 +1,49 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.util.Log;
+import br.com.zynger.libertadores.adapters.HistoryWinnersAndRunnerUpsAdapter;
+import br.com.zynger.libertadores.model.HistoricClub;
+import br.com.zynger.libertadores.xml.HistoryParser;
+
+public class HistoryWinnersAndRunnerUpsActivity extends ListActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.historywinnersandrunnerupsactivity);
+		
+		ArrayList<HistoricClub> historyArray = getHistoryDatabase();
+		
+		//calculatePerCountry(historyArray); //TODO
+		
+		setListAdapter(new HistoryWinnersAndRunnerUpsAdapter(this, historyArray));
+	}
+
+	private void calculatePerCountry(ArrayList<HistoricClub> historyArray) {
+		HashMap<String, Integer> winners = new HashMap<String, Integer>();
+		HashMap<String, Integer> runnerups = new HashMap<String, Integer>();
+		for (HistoricClub historicClub : historyArray) {
+			String country = historicClub.getCountry();
+			
+			if(null == winners.get(country)) winners.put(country, 0);
+			if(null == runnerups.get(country)) runnerups.put(country, 0);
+			
+			winners.put(country, winners.get(country) + historicClub.getWon().size());
+			runnerups.put(country, runnerups.get(country) + historicClub.getRunnerUp().size());
+		}
+		for (String country : winners.keySet()) {
+			Log.e(HomeActivity.TAG, country + " => " + winners.get(country) + ", " + runnerups.get(country));
+		}
+	}
+
+	private ArrayList<HistoricClub> getHistoryDatabase() {
+		ArrayList<HistoricClub> array = new HistoryParser().getWinnersAndRunnerUps(this);
+		return array;
+	}
+	
+}

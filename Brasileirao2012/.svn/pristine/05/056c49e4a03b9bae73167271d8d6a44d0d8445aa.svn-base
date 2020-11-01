@@ -1,0 +1,147 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Trophy;
+import br.com.zynger.brasileirao2012.view.ExpandAnimation;
+
+public class TrophiesArrayAdapter extends ArrayAdapter<Trophy>{
+
+	private final static int LAYOUT_RESOURCE = R.layout.trophies_row;
+	
+	private Context context;
+	private final LayoutInflater mInflater;
+	private ArrayList<Trophy> objects;
+	private Club club;
+	private Club myClub;
+	
+	public TrophiesArrayAdapter(Context context, Club club) {
+		super(context, LAYOUT_RESOURCE, club.getTrophies());
+		this.context = context;
+		this.mInflater = LayoutInflater.from(context);
+		this.objects = club.getTrophies();
+		this.club = club;
+		this.myClub = ClubsDB.getInstance(context).getMyClub();
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+        TrophyHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUT_RESOURCE, parent, false);
+            
+            holder = new TrophyHolder();
+            holder.imgIcon = (ImageView) row.findViewById(R.trophies_row.imageview);
+            holder.txtTitle = (TextView) row.findViewById(R.trophies_row.tv_title);
+            holder.txtTimes = (TextView) row.findViewById(R.trophies_row.tv_times);
+            holder.toolbar = (LinearLayout) row.findViewById(R.trophies_row.toolbar);
+            holder.txtTrophyYears = (TextView) row.findViewById(R.trophies_row.tv_years);
+            
+            row.setTag(holder);
+        }else{
+            holder = (TrophyHolder) row.getTag();
+        }
+        
+        Trophy trp = objects.get(position);
+        
+        int res = -1;
+        switch (trp.getRegion()) {
+		case STATE:
+			res = R.drawable.img_estaduais;
+			break;
+		case REGION:
+			res = R.drawable.img_regionais;
+			break;
+		case NATIONAL:
+			res = R.drawable.img_brasileiro;
+			break;
+		case INTERNATIONAL:
+			res = R.drawable.img_internacional;
+			break;
+		default:
+			break;
+		}
+        
+        if(res != -1) holder.imgIcon.setImageResource(res);
+        else holder.imgIcon.setVisibility(View.GONE);
+        
+        holder.txtTitle.setText(trp.getType());
+        ArrayList<Integer> times = trp.getTimes();
+        
+        row.setClickable(true);
+        row.setFocusable(true);
+        row.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				View toolbar = v.findViewById(R.trophies_row.toolbar);
+
+                // Criando a animacao de expansao para o item
+                ExpandAnimation expandAni = new ExpandAnimation(toolbar, 500);
+
+                // Iniciar a animacao
+                toolbar.startAnimation(expandAni);
+			}
+		});
+        
+        if(myClub != null && myClub.getAcronym().equals("FLA")){
+        	if(club.getAcronym().equals("FLA") && trp.getType().equals("Campeonato Brasileiro")){
+        		times = new ArrayList<Integer>();
+        		times.add(1980);
+        		times.add(1982);
+        		times.add(1983);
+        		times.add(1987);
+        		times.add(1992);
+        		times.add(2009);
+        	}
+        }
+        
+        int factor = 1;
+        if(times.size() > 12 && times.size() <= 24) factor = 2;
+        if(times.size() > 24 && times.size() <= 36) factor = 3;
+        if(times.size() > 36 && times.size() <= 60) factor = 4;
+        if(times.size() > 60) factor = 5;
+        
+        ((LinearLayout.LayoutParams) holder.toolbar.getLayoutParams()).bottomMargin = factor*-35;
+        holder.toolbar.getLayoutParams().height = factor*35;
+        holder.toolbar.setVisibility(View.GONE);
+        
+        if(times.size() == 1) holder.txtTimes.setText(times.size() + " " + context.getString(R.string.trophiesarrayadapter_time));
+        else holder.txtTimes.setText(times.size() + " " + context.getString(R.string.trophiesarrayadapter_times));
+        
+        String years = new String();
+        for (int i = 0; i < times.size(); i++) {
+			years += times.get(i).toString();
+			if(i < times.size() - 1) years += ", ";
+		}
+        holder.txtTrophyYears.setText(years);
+
+        return row;
+	}
+}
+
+class TrophyHolder {
+    ImageView imgIcon;
+    TextView txtTitle;
+    TextView txtTimes;
+    View toolbar;
+    TextView txtTrophyYears;
+}

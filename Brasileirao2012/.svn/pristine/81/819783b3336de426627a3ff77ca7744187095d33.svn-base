@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    xmlns:actionbar="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    android:orientation="vertical"
+    android:weightSum="3"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="@drawable/backrepeat">
+    
+    <br.com.zynger.brasileirao2012.view.CustomActionBar
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:id="@+tableflowactivity/actionbar"
+	    actionbar:showUpdate="true"
+	    actionbar:showTextBox="true"
+	    actionbar:titleText="@string/tableflowactivity_title"
+	    actionbar:logosrc="@drawable/ic_table" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:layout_below="@+tableflowactivity/actionbar"
+		android:layout_above="@+tableflowactivity/ll_ad"
+		android:orientation="horizontal">
+        <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+tableflowactivity/dul_loading"/>
+        
+		<org.taptwo.android.widget.ViewFlow
+			android:id="@+tableflowactivity/viewflow"
+			app:sidebuffer="37"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"/>
+			
+		<include
+		    layout="@layout/tablesupportviewrow"
+		    android:id="@+tableflowactivity/sv_linearlayout_table_lowperformance"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"/>
+    </LinearLayout>
+    
+    <FrameLayout
+        android:layout_below="@+tableflowactivity/actionbar"
+        android:layout_above="@+tableflowactivity/ll_ad"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content">
+        <com.darvds.ribbonmenu.RibbonMenuView
+	        android:id="@+tableflowactivity/ribbonmenuview"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" />
+    </FrameLayout>
+    
+    <LinearLayout
+		android:layout_width="fill_parent"
+		android:id="@+tableflowactivity/ll_ad"
+		android:layout_alignParentBottom="true"
+		android:layout_height="wrap_content"
+		android:gravity="bottom|center_horizontal">
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+	</LinearLayout>
+</RelativeLayout>

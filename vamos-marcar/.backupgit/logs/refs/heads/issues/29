@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 9b1a058a21b056ed4259751b5e62019661af77a8 Júlio Zynger <julioz92@gmail.com> 1382744707 -0200	branch: Created from HEAD
+9b1a058a21b056ed4259751b5e62019661af77a8 03571858b554d53f7a905f51c7cc0f112cceb1f4 Júlio Zynger <julioz92@gmail.com> 1382749214 -0200	commit: Adds BetterPickers library, and mechanism to select a date.

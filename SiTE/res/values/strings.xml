@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    
+    <string name="app_name">Sistema de Tratamento de Emergências</string>
+    
+    <string-array name="veiculoTipo_array">
+    	<item>Desconhecido</item>
+    	<item>Ambulância</item>
+    	<item>Veículo Aéreo</item>
+    	<item>Veículo de Socorro Terrestre</item>
+    	<item>Veículo de Socorro Aquático</item>
+    </string-array>
+    
+    <string-array name="veiculoTerrestre_array">
+        <item>Carro de Busca e Salvamento</item>
+        <item>Carro de Busca e Salvamento Leve</item>
+        <item>Carro Bomba Tanque</item>
+        <item>Carro Rápido</item>
+        <item>Carro Socorro de Emergência</item>
+        <item>Carro Posto de Comando</item>
+        <item>Carro de Produtos Químicos</item>
+        <item>Carro de Material Operacional</item>
+        <item>Serviço de Iluminação</item>
+        <item>Moto</item>
+        <item>Escada Mecânica</item>
+        <item>Bomba para Inflamáveis</item>
+        <item>Bomba com Guindaste</item>
+        <item>Cavalo Mecânico</item>
+        <item>Carro de Remoção de Cadáveres</item>
+        <item>Quadricíclo</item>
+        <item>Tanque</item>
+        <item>Viatura do Comandante</item>
+        <item>Carro Tático de Emergência</item>
+        <item>Ataque Principal</item>
+        <item>Carro Combinado</item>
+        <item>Tanque Rebocável</item>
+        <item>Carro de Comando Operacional</item>
+        <item>Carro de Produtos Perigosos</item>
+        <item>Gerador de Espuma</item>
+        <item>Plataforma Mecânica</item>
+        <item>Principal 2ª Classe</item>
+    </string-array>
+    
+    <string-array name="veiculoAmbulancia_array">
+    	<item>Ambulância Comum</item>
+    	<item>Ambulância dos Bombeiros</item>
+    </string-array>
+    
+    <string-array name="veiculoAereo_array">
+    	<item>Helicóptero</item>
+    	<item>Avião Tanque</item>
+    </string-array>
+    
+    <string-array name="veiculoAquatico_array">
+    	<item>Moto Aquática</item>
+    	<item>Lancha</item>
+    	<item>Bote Inflável</item>
+    	<item>Auto Busca e Salvamento Aquático</item>
+    </string-array>
+    
+    <string-array name="estruturaTipo_array">
+    	<item>Desconhecido</item>
+    	<item>Hospital</item>
+    	<item>Edifício</item>
+    	<item>Estádio</item>
+    	<item>Casa</item>
+    	<item>Edifício Comercial</item>
+    	<item>Indústria</item>
+    	<item>Shopping Center</item>
+    	<item>Outro...</item>
+    </string-array>
+    
+    <string name="estRevisao_prompt">Estado da Revisão</string>
+    <string-array name="estruturaRevisao_array">
+        <item>Desconhecido</item>
+        <item>Não revisado</item>
+        <item>Em revisão</item>
+        <item>Revisado</item>
+    </string-array>
+    
+    <string name="estEstabilidade_prompt">Estabilidade</string>
+    <string-array name="estruturaEstabilidade_array">
+        <item>Desconhecido</item>
+        <item>Estável</item>
+        <item>Instável</item>
+        <item>Completamente Instável</item>
+    </string-array>
+    
+    <string name="estTamanhoAcesso_prompt">Tamanho do Acesso</string>
+    <string-array name="estruturaTamanhoAcesso_array">
+        <item>Desconhecido</item>
+        <item>Pequeno</item>
+        <item>Grande</item>
+    </string-array>
+    
+    <string name="estDificuldadeAcesso_prompt">Dificuldade do Acesso</string>
+    <string-array name="estruturaDificuldadeAcesso_array">
+        <item>Desconhecido</item>
+        <item>Leve</item>
+        <item>Média</item>
+        <item>Difícil</item>
+        <item>Muito Difícil</item>
+    </string-array>
+    
+    <string name="estEvolucao_prompt">Evolução do Trabalho</string>
+    <string-array name="estruturaEvolucao_array">
+        <item>Desconhecido</item>
+        <item>Não começou</item>
+        <item>Em andamento</item>
+        <item>Em pausa</item>
+        <item>Finalizada</item>
+    </string-array>
+    
+    <string-array name="equipeFuncao_array">
+    	<item>Desconhecido</item>
+    	<item>Resgate</item>
+    	<item>Administração</item>
+    	<item>Médica</item>
+    	<item>Segurança</item>
+    	<item>Voluntários</item>
+    	<item>Serviços Públicos</item>
+    </string-array>
+    
+    <string-array name="perigoTipo_array">
+    	<item>Desconhecido</item>
+    	<item>Gases Tóxicos</item>
+    	<item>Líquidos Tóxicos</item>
+    	<item>Substâncias Tóxicas</item>
+    	<item>Exposição Radioativa</item>
+    	<item>Deslizamento de Terra</item>
+    	<item>Colapso de Edifício</item>
+    	<item>Ratos</item>
+    	<item>Outro...</item>
+    </string-array>
+    
+    <string-array name="perigoRisco_array">
+    	<item>Desconhecido</item>
+    	<item>Nulo</item>
+    	<item>Baixo</item>
+    	<item>Médio</item>
+    	<item>Alto</item>
+    </string-array>
+    
+    <string-array name="perigoDevoIr_array">
+    	<item>Desconhecido</item>
+    	<item>Não</item>
+    	<item>Sim</item>
+    </string-array>
+</resources>

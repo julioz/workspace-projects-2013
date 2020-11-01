@@ -1,0 +1,103 @@
+<clubs>
+	<club>
+		<nm_bdg>arsenal_fc</nm_bdg>
+		<nm_club>Arsenal</nm_club>
+	</club>
+	<club>
+		<nm_bdg>santos_fc</nm_bdg>
+		<nm_club>Santos</nm_club>
+	</club>
+	<club>
+		<nm_bdg>ca_bocajuniors</nm_bdg>
+		<nm_club>Boca Juniors</nm_club>
+		<alt_names>
+			<name>Boca Jrs.</name>
+			<name>Boca Jrs</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>sc_internacional</nm_bdg>
+		<nm_club>Internacional</nm_club>
+	</club>
+	<club>
+		<nm_bdg>tottenham_fc</nm_bdg>
+		<nm_club>Tottenham</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fc_barcelona</nm_bdg>
+		<nm_club>Barcelona</nm_club>
+		<alt_names>
+			<name>Barça</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>chelsea_fc</nm_bdg>
+		<nm_club>Chelsea</nm_club>
+	</club>
+	<club>
+		<nm_bdg>liverpool_fc</nm_bdg>
+		<nm_club>Liverpool</nm_club>
+	</club>
+	<club>
+		<nm_bdg>mancity_fc</nm_bdg>
+		<nm_club>Manchester City</nm_club>
+	</club>
+	<club>
+		<nm_bdg>ac_milan</nm_bdg>
+		<nm_club>Milan</nm_club>
+	</club>
+	<club>
+		<nm_bdg>ca_riverplate</nm_bdg>
+		<nm_club>River Plate</nm_club>
+	</club>
+	<club>
+		<nm_bdg>cr_flamengo</nm_bdg>
+		<nm_club>Flamengo</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fc_bayernmunich</nm_bdg>
+		<nm_club>Bayern Munich</nm_club>
+		<alt_names>
+			<name>Bayern München</name>
+			<name>Bayern Münich</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>fc_porto</nm_bdg>
+		<nm_club>Porto</nm_club>
+	</club>
+	<club>
+		<nm_bdg>internazionale_fc</nm_bdg>
+		<nm_club>Internazionale</nm_club>
+		<alt_names>
+			<name>Internazionale Milano</name>
+			<name>Inter de Milão</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>juventus_fc</nm_bdg>
+		<nm_club>Juventus</nm_club>
+	</club>
+	<club>
+		<nm_bdg>realmadrid_cf</nm_bdg>
+		<nm_club>Real Madrid</nm_club>
+	</club>
+	<club>
+		<nm_bdg>parissg_fc</nm_bdg>
+		<nm_club>Paris Saint Germain</nm_club>
+		<alt_names>
+			<name>PSG</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>sevilla_fc</nm_bdg>
+		<nm_club>Sevilla</nm_club>
+		<alt_names>
+			<name>Sevilha</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>manutd_fc</nm_bdg>
+		<nm_club>Manchester United</nm_club>
+	</club>
+</clubs>

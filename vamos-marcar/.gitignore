@@ -1,0 +1,36 @@
+# Ignore mac files
+.DS_Store
+
+# android files
+*.apk
+*.ap_
+*.dex
+*.class
+lint.xml
+
+# Java class files
+*.class
+
+# Java lib dirs
+*.jar
+
+# generated files
+*/bin/
+*/gen/
+
+#test, robolectric dirs
+reports/
+tmp/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Eclipse project files
+.classpath
+.project
+.metadata
+
+# IDEA project files
+.idea/
+*.iml
+

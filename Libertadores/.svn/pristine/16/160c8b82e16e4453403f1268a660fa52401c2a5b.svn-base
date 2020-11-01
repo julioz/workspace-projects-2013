@@ -1,0 +1,211 @@
+package br.com.zynger.libertadores.web;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import android.content.Context;
+import android.util.Log;
+import br.com.zynger.libertadores.HomeActivity;
+import br.com.zynger.libertadores.model.Article;
+import br.com.zynger.libertadores.util.JsonUtil;
+
+public class NewsParser {
+
+	private final static String NEWSURL_PREFIX_SOCCERNET = "http://soccernet.espn.go.com";
+	private final static String NEWSURL_EN = NEWSURL_PREFIX_SOCCERNET + "/news/archive/_/league/CONMEBOL.LIBERTADORES/page/1/latest-copa-libertadores-news?cc=5901";
+	private final static String NEWSURL_PREFIX_OLE = "http://www.ole.com.ar";
+	private final static String NEWSURL_ES = NEWSURL_PREFIX_OLE + "/futbol-internacional/libertadores";
+	private final static String NEWSURL_PT = "http://globoesporte.globo.com/servico/semantica/editorias/plantao/futebol/libertadores/1.json";
+	
+	private final static int LANGUAGE_EN = 0;
+	private final static int LANGUAGE_ES = 1;
+	private final static int LANGUAGE_PT = 2;
+
+	private Context context;
+	private int lang;
+	
+	public NewsParser(Context context, String lang) {
+		setContext(context);
+		
+		if(lang.contains("pt")) setLanguage(LANGUAGE_PT);
+		else if(lang.contains("es")) setLanguage(LANGUAGE_ES);
+		else setLanguage(LANGUAGE_EN);
+	}
+	
+	public ArrayList<Article> getNews() {
+		try{			
+			switch (getLanguage()) {
+			case LANGUAGE_EN:
+				return parseNewsEnglish();
+			case LANGUAGE_ES:
+				return parseNewsSpanish();
+			case LANGUAGE_PT:
+				return parseNewsPortuguese();
+			default:
+				return null;
+			}
+		}catch(JSONException je){
+			Log.e(HomeActivity.TAG, je.toString());
+			return null;
+		} catch (IOException e) {
+			Log.e(HomeActivity.TAG, e.toString());
+			return null;
+		}
+	}
+	
+	private ArrayList<Article> parseNewsEnglish() throws IOException {
+		ArrayList<Article> array = new ArrayList<Article>();
+
+		Document document = Jsoup.connect(NEWSURL_EN).get();
+		Element results = document.getElementById("results");
+		Elements result = results.getElementsByClass("result");
+		for (Element element : result) {
+			Article art = parseEnglishArticle(element);
+			array.add(art);
+		}
+		
+		return array;
+	}
+
+	private Article parseEnglishArticle(Element element) {
+		Element h2 = element.getElementsByTag("h2").get(0);
+		Element a = h2.getElementsByTag("a").get(0);
+		Element p = element.getElementsByTag("p").get(0);
+		Elements ca = element.getElementsByClass("ca");
+		Element spanCa = null;
+		for (Element el : ca) {
+			if(el.tagName().equals("span")){
+				spanCa = el;
+				break;
+			}
+		}
+		
+		GregorianCalendar cal = new GregorianCalendar();
+		try{			
+			//ex.: July, 5 2012
+			String date = spanCa.text();
+			if(date.contains("|")) date = date.substring(date.indexOf("|") + "|".length() + 1);
+			SimpleDateFormat sdf = new SimpleDateFormat("MMMM, dd yyyy");
+			cal.setTime(sdf.parse(date));
+		}catch(ParseException e){
+			Log.e(HomeActivity.TAG, e.toString() + " -> " + spanCa.text());
+			cal = null;
+		}catch(NullPointerException e){
+			cal = null;
+		}
+		
+		String title = a.text();
+		String link = NEWSURL_PREFIX_SOCCERNET + a.attr("href");
+		String subtitle = p.text();
+		
+		Article art =  new Article();
+		art.setTitle(title);
+		art.setSubTitle(subtitle);
+		art.setDate(cal);
+		art.setLink(link);
+		return art;
+	}
+
+	private ArrayList<Article> parseNewsSpanish() throws IOException {
+		ArrayList<Article> array = new ArrayList<Article>();
+		
+		Document document = Jsoup.connect(NEWSURL_ES).get();
+		Elements item = document.getElementsByAttributeValue("class", "item");
+		for (int i = 0; i < 8; i++) {
+			try{				
+				Article art = parseSpanishArticle(item.get(i));
+				array.add(art);
+			}catch(Exception e){
+				Log.e(HomeActivity.TAG, e.toString());
+				e.printStackTrace();
+				throw new IOException(e.toString());
+			}
+		}
+		
+		return array;
+	}
+
+	private Article parseSpanishArticle(Element element) throws Exception {
+		try{			
+			Element mg_big = element.getElementsByClass("mg_big").get(0);
+			String thumbnail = NEWSURL_PREFIX_OLE + mg_big.getElementsByTag("img").get(0).attr("src");
+			
+			Element mt = element.getElementsByClass("mt").get(0);
+			Element h2 = mt.getElementsByTag("h2").get(0);
+			Element link = h2.getElementsByTag("a").get(0);
+			Element h5 = mt.getElementsByTag("h5").get(0);
+			
+			String url = NEWSURL_PREFIX_OLE + link.attr("href");
+			String title = link.text();
+			String subTitle = h5.text();
+			
+			Article article = new Article();
+			article.setThumbnailUrl(thumbnail);
+			article.setLink(url);
+			article.setTitle(title);
+			article.setSubTitle(subTitle);
+			return article;
+		}catch(Exception e){
+			throw e;
+		}
+	}
+
+	private ArrayList<Article> parseNewsPortuguese() throws JSONException {
+		ArrayList<Article> array = new ArrayList<Article>();
+		
+		JSONObject json = new JSONObject(JsonUtil.readJsonFeed(NEWSURL_PT));
+		JSONArray conteudos = json.getJSONArray("conteudos");
+		for (int i = 0; i < conteudos.length(); i++) {
+			JSONObject jObj = conteudos.getJSONObject(i);
+			Article art = new Article();
+			art.setSubTitle(jObj.getString("subtitulo"));
+			art.setLink(jObj.getString("permalink"));
+			art.setTitle(jObj.getString("titulo"));
+
+			try{					
+				String date = jObj.getString("primeira_publicacao");
+				//ex.: December 22, 2012 10:47:47
+				GregorianCalendar cal = new GregorianCalendar();
+				SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy HH:mm:ss");
+				cal.setTime(sdf.parse(date));
+				art.setDate(cal);
+			}catch(ParseException e){
+				Log.e(HomeActivity.TAG, e.toString());
+			}
+			
+			String thumbnailUrl = jObj.getString("thumbnail");
+			if(!thumbnailUrl.equals("null")) art.setThumbnailUrl(thumbnailUrl);
+			
+			array.add(art);
+		}
+		
+		return array;
+	}
+	
+	public Context getContext() {
+		return context;
+	}
+	
+	private void setContext(Context context) {
+		this.context = context;
+	}
+
+	public int getLanguage() {
+		return lang;
+	}
+
+	private void setLanguage(int lang) {
+		this.lang = lang;
+	}
+}

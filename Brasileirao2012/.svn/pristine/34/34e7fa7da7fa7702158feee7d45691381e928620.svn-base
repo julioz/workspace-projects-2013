@@ -1,0 +1,382 @@
+package br.com.zynger.brasileirao2012;
+
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.Locale;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.content.Context;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.view.RankingRow;
+import br.com.zynger.brasileirao2012.view.StrikerRow;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class StrikersActivity extends ListActivity{
+	
+	private static final int ORDER_GOALS = 0;
+	private static final int ORDER_NAME = 1;
+	private static final int ORDER_TEAM = 2;
+	
+	private ArrayList<Striker> strikers;
+	private TreeMap<String, Club> clubs;
+
+	private TextView actionbar_tt, tv_goals, tv_name, tv_team, tv_selected;
+	@SuppressWarnings("unused")
+	private TextView tv_division;
+	private RelativeLayout rl_content, rl_loading;
+	@SuppressWarnings("unused")
+	private LinearLayout ll_division;
+	private ImageButton update;
+	private RotateAnimation rot;
+	
+	private int _super_clickCounter = 0;
+	private ArrayList<StrikerRow> _super_al;
+	private String _super_club_limited;
+	
+	protected void loadViews() {
+		actionbar_tt = (TextView) findViewById(R.strikers.tv_actionbar_name);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		tv_goals = (TextView) findViewById(R.strikers.tv_goals);
+		tv_name = (TextView) findViewById(R.strikers.tv_name);
+		tv_team = (TextView) findViewById(R.strikers.tv_team);
+		
+		setTV_selected(tv_goals);
+
+		rl_content = (RelativeLayout) findViewById(R.strikers.rl_content);
+		rl_loading = (RelativeLayout) findViewById(R.strikers.rl_loading);
+		
+		rot = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rot.setInterpolator(new LinearInterpolator());
+		rot.setDuration(900L);
+		rot.setStartTime(200L);
+		
+		ll_division = (LinearLayout) findViewById(R.strikers.actionbar_ll);
+		tv_division = (TextView) findViewById(R.strikers.tv_actionbar_division);
+		
+		update = (ImageButton) findViewById(R.strikers.ib_update);
+		
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				v.startAnimation(rot);
+				if(ConnectionHelper.isConnected(v.getContext())){					
+					new UpdateStrikersTask(v.getContext(), getDivision()).execute();
+				}else{
+					Toast.makeText(v.getContext(), "Verifique a conexão à internet.", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+	}
+	
+	protected void setHeaders() {
+		setOnClickHeader(tv_goals, ORDER_GOALS);
+		setOnClickHeader(tv_name, ORDER_NAME);
+		setOnClickHeader(tv_team, ORDER_TEAM);
+	}
+	
+	protected void setOnClickHeader(TextView tv, final int order){
+		tv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int clickCounter = getClickCounter();
+				
+				if((TextView) v == getTV_selected()){
+					setClickCounter(clickCounter * -1);
+					ArrayList<StrikerRow> al = orderTable(order);
+					populateTableLayout(al);
+					if(getClickCounter() == -1) v.setBackgroundColor(RankingRow.RED);
+					else if(getClickCounter() == 1) v.setBackgroundColor(RankingRow.BLUE);
+				}else{
+					setClickCounter(1);
+					ArrayList<StrikerRow> al = orderTable(order);
+					populateTableLayout(al);
+					v.setBackgroundColor(RankingRow.BLUE);
+					setTV_selected((TextView) v);
+				}
+			}
+		});
+	}
+	
+	protected void clearHeadersBackground() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {				
+				tv_goals.setBackgroundResource(0);
+				tv_name.setBackgroundResource(0);
+				tv_team.setBackgroundResource(0);
+			}
+		});
+	}
+	
+	private ArrayList<StrikerRow> orderTable(int option){
+		ArrayList<StrikerRow> al = getStrikerRowArray();
+		al.clear();
+		clearHeadersBackground();
+		
+		String club_limited = getClubLimited();
+		
+		if(club_limited != null){
+			for (Striker s : getStrikers()) {
+				if(s.getTeam().equals(club_limited)) addStrikerRowToArrayList(al, s);
+			}
+		}else{
+			for (Striker s : getStrikers()) addStrikerRowToArrayList(al, s);
+		}
+		
+		try{			
+			if(option == ORDER_GOALS) Collections.sort(al, new ByGoalsComparator(getClickCounter()));
+			else if(option == ORDER_NAME) Collections.sort(al, new ByNameComparator(getClickCounter()));
+			else if(option == ORDER_TEAM) Collections.sort(al, new ByTeamComparator(getClickCounter()));
+		}catch(ConcurrentModificationException e){ } // Se o arraylist estiver sendo alterado por outra thread, não poderei ordená-lo 
+
+		return al;
+	}
+	
+	private void addStrikerRowToArrayList(ArrayList<StrikerRow> al, Striker s){
+		TreeMap<String, Club> clubsMap = getClubs();
+		Club club = clubsMap.get(s.getTeam());
+		if(club != null){			
+			int bdg = club.getBadge();
+			Drawable d = getResources().getDrawable(bdg);
+			StrikerRow sr = new StrikerRow(this, s, d);
+			al.add(sr);
+		}else Log.e("bras2012", "club eh null=" + s.getTeam() + ", name="+s.getName()); //jogadores sem clube foram negociados e ficaram fora da divisao
+	}
+	
+	private void populateTableLayout(ArrayList<StrikerRow> al){
+		getListView().setAdapter(new StrikersListAdapter(this, al));
+	}	
+	
+	public static class ByGoalsComparator implements Comparator<StrikerRow>{
+		private int clickCounter;
+		
+		public ByGoalsComparator(int clickCounter) {
+			this.clickCounter = clickCounter;
+		}
+		
+		@Override
+		public int compare(StrikerRow r1, StrikerRow r2) {
+			if(r1.getStriker().getGoals() < r2.getStriker().getGoals()) return clickCounter*1;
+			else if(r1.getStriker().getGoals() > r2.getStriker().getGoals()) return clickCounter*-1;
+			else if(r1.getStriker().getGoals() == r2.getStriker().getGoals()){
+				return clickCounter*r1.getStriker().getName().compareTo(r2.getStriker().getName());
+			}
+			return 1;
+		}
+	}
+	
+	public static class ByNameComparator implements Comparator<StrikerRow>{
+		private Collator collator;
+		private int clickCounter;
+		
+		public ByNameComparator(int clickCounter) {
+			this.clickCounter = clickCounter;
+			collator = Collator.getInstance(Locale.US);
+	        collator.setStrength(Collator.PRIMARY);
+	        collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+		}
+		
+		@Override
+		public int compare(StrikerRow r1, StrikerRow r2) {
+			return clickCounter*collator.compare(r1.getStriker().getName(), r2.getStriker().getName());
+		}
+	}
+	
+	public static class ByTeamComparator implements Comparator<StrikerRow>{
+		private int clickCounter;
+		
+		public ByTeamComparator(int clickCounter) {
+			this.clickCounter = clickCounter;
+		}
+		
+		@Override
+		public int compare(StrikerRow r1, StrikerRow r2) {
+			return clickCounter*r1.getStriker().getTeam().compareTo(r2.getStriker().getTeam());
+		}
+	}
+	
+	public class ShowStrikerListTask extends AsyncTask<Void, Void, ArrayList<StrikerRow>> {
+		private Context c;
+		
+		public ShowStrikerListTask(Context c){
+			this.setContext(c);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			((TextView) findViewById(R.strikers.tv_loading)).setText("Aguarde...");
+			rl_content.setVisibility(View.GONE);
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected ArrayList<StrikerRow> doInBackground(Void... params) {
+			return orderTable(ORDER_GOALS);
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<StrikerRow> result) {
+			populateTableLayout(result);
+			rl_content.setVisibility(View.VISIBLE);
+			rl_loading.setVisibility(View.GONE);
+			
+			tv_goals.setBackgroundColor(RankingRow.BLUE);
+			setTV_selected(tv_goals);
+			setHeaders();
+			
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+	
+	public class UpdateStrikersTask extends AsyncTask<Void, Void, ArrayList<Striker>> {
+		private Context c;
+		private int division;
+		
+		public UpdateStrikersTask(Context c, int division){
+			this.setContext(c);
+			this.division = division;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			((TextView) findViewById(R.strikers.tv_loading)).setText("Atualizando...");
+			rl_content.setVisibility(View.GONE);
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected ArrayList<Striker> doInBackground(Void... params) {
+			try{
+				if(division == 2) return HTMLManager.getStrikers(Club.SEGUNDADIVISAO);
+				else return HTMLManager.getStrikers(Club.PRIMEIRADIVISAO);
+			}catch(Exception e){				
+				return null;
+			} catch(OutOfMemoryError e){
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<Striker> result) {
+			if(result != null){
+				setStrikers(result);
+				
+				if(division == 2) FileHandler.saveBackup(getContext(), FileHandler.STRIKERS_B, result);
+				else FileHandler.saveBackup(getContext(), FileHandler.STRIKERS_A, result);
+				
+				Toast.makeText(getContext(), "Dados atualizados", Toast.LENGTH_SHORT).show();
+			}else{
+				Toast.makeText(getContext(), "Não foi possível atualizar os dados. Tente novamente.", Toast.LENGTH_SHORT).show();
+			}
+			rl_content.setVisibility(View.VISIBLE);
+			rl_loading.setVisibility(View.GONE);
+			new ShowStrikerListTask(getContext()).execute();
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+	
+	private class StrikersListAdapter extends ArrayAdapter<StrikerRow>{
+
+		private List<StrikerRow> objects;
+		
+		public StrikersListAdapter(Context context, List<StrikerRow> objects) {
+			super(context, R.layout.striker_row, objects);
+			this.objects = objects;
+		}
+		
+		@Override
+		public int getCount() {
+			return objects.size();
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+	        return objects.get(position).getTablerow();
+		}
+	}
+	
+	
+	public int getClickCounter() {
+		return _super_clickCounter;
+	}
+	
+	public void setClickCounter(int clickCounter) { }
+	
+	public ArrayList<StrikerRow> getStrikerRowArray() {
+		return _super_al;
+	}
+	
+	protected int getDivision(){
+		return 0;
+	}
+	
+	public void setClubLimited(String clublimited) { }
+	
+	public String getClubLimited() {
+		return _super_club_limited;
+	}
+	
+	public void setStrikerRowArray(ArrayList<StrikerRow> al) { }
+	
+	public void setStrikers(ArrayList<Striker> strikers){}
+	
+	public ArrayList<Striker> getStrikers() {
+		return strikers;
+	}
+	
+	public void setClubs(TreeMap<String, Club> clubs){}
+	
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	public void setTV_selected(TextView tv_selected) { }
+	
+	public TextView getTV_selected() {
+		return tv_selected;
+	}
+
+}

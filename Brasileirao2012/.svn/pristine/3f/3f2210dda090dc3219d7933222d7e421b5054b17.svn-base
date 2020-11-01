@@ -1,0 +1,170 @@
+package br.com.zynger.brasileirao2012.model;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class RealTimeMatch extends Match {
+
+	private static final long serialVersionUID = 1L;
+
+	public static final int A_INICIAR = 0;
+	public static final int EM_ANDAMENTO = 1;
+	public static final int FINALIZADO = 2;
+
+	private String resultHome, resultAway;
+	private String urlDetails;
+	private Integer division;
+	private Integer homePos, awayPos, homePosDif, awayPosDif;
+	private int state = 0;
+	
+	public RealTimeMatch(){}
+	
+	@Override
+	public int getScoreHome() {
+		return getResultHome().equals("") ? -1 : Integer.valueOf(getResultHome());
+	}
+	
+	@Override
+	public int getScoreAway() {
+		return getResultAway().equals("") ? -1 : Integer.valueOf(getResultAway());
+	}
+
+	public String getUrlDetails() {
+		return urlDetails;
+	}
+
+	public void setUrlDetails(String urlDetails) {
+		this.urlDetails = urlDetails;
+	}
+
+	public int getStateConstant() {
+		return state;
+	}
+
+	public void setStateConstant(int state) {
+		this.state = state;
+		
+		if(this.state == A_INICIAR){
+			setResultHome("");
+			setResultAway("");
+		}
+	}
+	
+	public Integer getDivision() {
+		return division;
+	}
+	
+	public void setDivision(Integer division) {
+		this.division = division;
+	}
+	
+	public String getResultHome() {
+		return resultHome;
+	}
+	
+	public void setResultHome(String resultHome) {
+		this.resultHome = resultHome;
+	}
+	
+	public String getResultAway() {
+		return resultAway;
+	}
+	
+	public void setResultAway(String resultAway) {
+		this.resultAway = resultAway;
+	}
+	
+	public String getState() {
+		if(state == EM_ANDAMENTO) return "Em andamento";
+		else if(state == FINALIZADO) return "Finalizado";
+		else return "A iniciar";
+	}
+	
+	public Integer getHomePos() {
+		return homePos;
+	}
+	
+	public void setHomePos(Integer homePos) {
+		this.homePos = homePos;
+	}
+	
+	public Integer getAwayPos() {
+		return awayPos;
+	}
+	
+	public void setAwayPos(Integer awayPos) {
+		this.awayPos = awayPos;
+	}
+
+	public Integer getHomePosDif() {
+		return homePosDif;
+	}
+
+	public void setHomePosDif(Integer homePosDif) {
+		this.homePosDif = homePosDif;
+	}
+
+	public Integer getAwayPosDif() {
+		return awayPosDif;
+	}
+
+	public void setAwayPosDif(Integer awayPosDif) {
+		this.awayPosDif = awayPosDif;
+	}
+	
+	@Override
+	public String getStringDate() {
+		GregorianCalendar date = getDate();
+		if(date == null) return null;
+		
+		String s = "";
+		
+		if(date.get(Calendar.DAY_OF_MONTH)<10) s += "0" + date.get(Calendar.DAY_OF_MONTH);
+		else s += String.valueOf(date.get(Calendar.DAY_OF_MONTH));
+		
+		s += "/";
+		
+		int month = date.get(Calendar.MONTH) + 1;
+		if(month < 1) s += "12" + " - ";
+		else{
+			if(month < 10) s += "0" + month + " - ";
+			else s += month + " - ";			
+		}
+		
+		switch(date.get(Calendar.DAY_OF_WEEK)){
+		case Calendar.SUNDAY:
+			s += "Domingo";
+			break;
+		case Calendar.MONDAY:
+			s += "Segunda-feira";
+			break;
+		case Calendar.TUESDAY:
+			s += "Terça-feira";
+			break;
+		case Calendar.WEDNESDAY:
+			s += "Quarta-feira";
+			break;
+		case Calendar.THURSDAY:
+			s += "Quinta-feira";
+			break;
+		case Calendar.FRIDAY:
+			s += "Sexta-feira";
+			break;
+		case Calendar.SATURDAY:
+			s += "Sábado";
+			break;
+		}
+		
+		if(date.get(Calendar.HOUR_OF_DAY) != 0){			
+			s += " - " + date.get(Calendar.HOUR_OF_DAY) + ":";
+			if(date.get(Calendar.MINUTE) < 10){
+				s += "0" + date.get(Calendar.MINUTE);
+			}else{
+				s += date.get(Calendar.MINUTE);
+			}
+		}
+		
+		return s;
+	}
+
+}

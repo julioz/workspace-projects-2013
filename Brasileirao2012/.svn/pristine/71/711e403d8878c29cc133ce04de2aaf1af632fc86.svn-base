@@ -1,0 +1,68 @@
+package br.com.zynger.brasileirao2012.actionmode;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import br.com.zynger.brasileirao2012.NewsDetailsActivity;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.enums.NewsDomain;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.util.Constants;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.MenuItem;
+
+public class NewsCallback extends ActionModeCallback<Article> {
+	
+	private String clubAcronym;
+	private ShareHelper shareHelper;
+
+	public NewsCallback(Context context, String clubAcronym) {
+		super(context);
+		this.clubAcronym = clubAcronym;
+		this.shareHelper = new ShareHelper(context);
+	}
+
+	@Override
+	public void changeMenuItems() {
+		NewsDomain domain = getModel().getDomain();
+		if (domain == NewsDomain.GLOBOESPORTE
+				|| domain == NewsDomain.UOL) {
+			setMenuItemVisibility(R.contextual_menu_news.menu_read, true);
+		}
+	}
+
+	@Override
+	public int getMenuResource() {
+		return R.menu.contextual_menu_news;
+	}
+
+	@Override
+	public boolean onItemClicked(Context context, Article article, ActionMode mode, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.contextual_menu_news.menu_read:
+			mode.finish();
+			startNewsDetailsActivity(context, article);
+			return true;
+		case R.contextual_menu_news.menu_web:
+			mode.finish();
+			context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(article.getUrl().toString())));
+			return true;
+		case R.contextual_menu_news.menu_share:
+			shareHelper.share(article.getUrl().toString());
+			return true;
+		default:
+			mode.finish();
+			return false;
+		}
+	}
+	
+	private void startNewsDetailsActivity(Context context, Article article) {
+		Intent it = new Intent(context, NewsDetailsActivity.class);
+		it.putExtra(Constants.INTENT_CLUBACRONYM, clubAcronym);
+		it.putExtra(NewsDetailsActivity.INTENT_ARTICLE, article);
+		context.startActivity(it);
+	}
+	
+}

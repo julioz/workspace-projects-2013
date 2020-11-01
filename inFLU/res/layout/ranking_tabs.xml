@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#024234"
+    android:id="@+ranking_tabs/ll_actbg">
+    
+    <RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="40dp"
+		android:id="@+ranking_tabs/actionbar"
+		android:background="@drawable/actionbar_bg">
+		
+		<ImageView
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			android:src="@drawable/icon"
+			android:layout_centerVertical="true"
+			android:id="@+ranking_tabs/action_badge"/>
+		
+		<TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:layout_toRightOf="@+ranking_tabs/action_badge"
+		    android:id="@+ranking_tabs/tv_actionbar"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="10dp"
+		    android:text="Classificação"
+		    android:textColor="#FFFFFF"
+		    android:textSize="18dp"
+		    android:textStyle="bold" />
+		
+		<LinearLayout
+		    android:layout_alignParentRight="true"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:orientation="horizontal">
+		
+			<ImageButton
+			    android:layout_width="36dp"
+			    android:layout_height="36dp"
+			    android:scaleType="fitCenter"
+			    android:adjustViewBounds="true"
+			    android:layout_alignParentLeft="true"
+			    android:layout_centerVertical="true"
+			    android:id="@+ranking_tabs/ib_actionbar_plus"
+			    android:background="@null"
+			    android:src="@drawable/ic_actionbar_plus"/>
+			
+			<ImageButton
+			    android:layout_width="36dp"
+			    android:layout_height="36dp"
+			    android:scaleType="fitCenter"
+			    android:adjustViewBounds="true"
+			    android:layout_alignParentRight="true"
+			    android:layout_centerVertical="true"
+			    android:id="@+ranking_tabs/ib_actionbar_update"
+			    android:layout_marginRight="4dp"
+			    android:background="@null"
+			    android:src="@drawable/ic_actionbar_update"/>
+		</LinearLayout>
+
+	</RelativeLayout>
+	
+    <TabHost
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:id="@android:id/tabhost"
+		android:layout_marginTop="3dp">
+	
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_height="fill_parent"
+			android:layout_width="fill_parent">
+			
+			<HorizontalScrollView
+				android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:fillViewport="true"
+	            android:scrollbars="none">
+			
+				<TabWidget
+				    android:id="@android:id/tabs"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent"/>
+			</HorizontalScrollView>
+			
+			<FrameLayout
+			    android:id="@android:id/tabcontent"
+				android:layout_height="fill_parent"
+				android:layout_width="fill_parent"/>
+		</LinearLayout>
+	
+	</TabHost>
+    
+</LinearLayout>

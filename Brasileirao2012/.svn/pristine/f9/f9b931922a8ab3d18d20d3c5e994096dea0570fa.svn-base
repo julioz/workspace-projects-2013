@@ -1,0 +1,77 @@
+package br.com.zynger.brasileirao2012.view;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import br.com.zynger.brasileirao2012.StadiumsActivity;
+import br.com.zynger.brasileirao2012.model.Stadium;
+
+import com.google.android.maps.MapView;
+import com.google.android.maps.OverlayItem;
+import com.readystatesoftware.mapviewballoons.BalloonItemizedOverlay;
+import com.readystatesoftware.mapviewballoons.BalloonOverlayView;
+
+public class StadiumsMapOverlay<Item extends OverlayItem> extends BalloonItemizedOverlay<StadiumsOverlayItem> {
+
+	private ArrayList<StadiumsOverlayItem> m_overlays = new ArrayList<StadiumsOverlayItem>();
+	private Context context;
+	
+	public StadiumsMapOverlay(Drawable defaultMarker, MapView mapView) {
+		super(boundCenter(defaultMarker), mapView);
+		this.context = mapView.getContext();
+	}
+
+	public void addOverlay(StadiumsOverlayItem overlay) {
+		m_overlays.add(overlay);
+		setLastFocusedIndex(-1);
+		populate();
+	}
+
+	@Override
+	protected StadiumsOverlayItem createItem(int i) {
+		return m_overlays.get(i);
+	}
+	
+	@Override
+	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+		super.draw(canvas, mapView, false);
+	}
+
+	@Override
+	public int size() {
+		return m_overlays.size();
+	}
+
+	@Override
+	protected boolean onBalloonTap(int index, StadiumsOverlayItem item) {
+		Intent it = new Intent(context, StadiumsActivity.class);
+		Stadium st = item.getStadium();
+		
+		it.putExtra(StadiumsActivity.INTENT_NAME, st.getName());
+		it.putExtra(StadiumsActivity.INTENT_NICK, st.getNick());
+		it.putExtra(StadiumsActivity.INTENT_CITY, st.getCity());
+		
+		String cap = String.valueOf(st.getCapacity());
+		cap = cap.substring(0, cap.length()-3)+"."+cap.substring(cap.length()-3);
+		it.putExtra(StadiumsActivity.INTENT_CAPACITY, cap);
+		
+		it.putExtra(StadiumsActivity.INTENT_FOUNDATION, st.getFoundation().get(Calendar.DATE) + "/" 
+		+ st.getFoundation().get(Calendar.MONTH) + "/" + st.getFoundation().get(Calendar.YEAR));
+		it.putExtra(StadiumsActivity.INTENT_WIDTH, String.valueOf(st.getWidth()));
+		it.putExtra(StadiumsActivity.INTENT_HEIGHT, String.valueOf(st.getHeight()));
+		it.putExtra(StadiumsActivity.INTENT_DESCRIPTION, st.getDescription());
+		it.putExtra(StadiumsActivity.INTENT_URL, st.getImgUrl());
+		context.startActivity(it);
+		return true;
+	}
+
+	@Override
+	protected BalloonOverlayView<StadiumsOverlayItem> createBalloonOverlayView() {
+		// use our custom balloon view with our custom overlay item type:
+		return new CustomBalloonOverlayView<StadiumsOverlayItem>(getMapView().getContext(), getBalloonBottomOffset());
+	}
+}

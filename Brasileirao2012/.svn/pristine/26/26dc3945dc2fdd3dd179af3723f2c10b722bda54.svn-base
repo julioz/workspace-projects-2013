@@ -1,0 +1,189 @@
+package br.com.zynger.brasileirao2012.model;
+
+import java.io.Serializable;
+import java.util.Locale;
+
+import br.com.zynger.brasileirao2012.R;
+
+public class Move implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	public enum Type {
+		MOVE, IMPORTANT, GOAL, CARD, SUBSTITUTION;
+
+		public static Type getFromSource(String source) {
+			source = source.toUpperCase(Locale.getDefault());
+			if (source.equals("LANCE_IMPORTANTE"))
+				return Move.Type.IMPORTANT;
+			else if (source.equals("LANCE_CARTAO"))
+				return Move.Type.CARD;
+			else if (source.equals("LANCE_GOL"))
+				return Move.Type.GOAL;
+			else if (source.equals("LANCE_SUBSTITUICAO"))
+				return Move.Type.SUBSTITUTION;
+			else
+				return Move.Type.MOVE;
+		}
+
+		public int getImageResource() {
+			if (this == IMPORTANT)
+				return R.drawable.img_squad_important;
+			else if (this == GOAL)
+				return R.drawable.img_squad_goal_pro;
+			else if (this == SUBSTITUTION)
+				return R.drawable.img_squad_subst;
+			return -1;
+		}
+	}
+
+	public enum Card {
+		YELLOW, RED;
+
+		public static Card getFromSource(String source) {
+			source = source.toUpperCase(Locale.getDefault());
+			if (source.equals("A"))
+				return YELLOW;
+			else if (source.equals("V"))
+				return RED;
+			else
+				return null;
+		}
+
+		public int getImageResource() {
+			if (this == YELLOW)
+				return R.drawable.img_squad_cards_yellow;
+			else if (this == RED)
+				return R.drawable.img_squad_cards_red;
+			return -1;
+		}
+	}
+
+	private String operacao, nome_time, periodo, video_id, texto, momento,
+			video_url, url_thumb;
+	private int periodo_id, id;
+	private Type tipo;
+	private Card cartao;
+
+	public Move(String operacao, Type tipo, String nome_time, String periodo,
+			String video_id, String url_thumb, int periodo_id, String texto,
+			String momento, int id, String video_url, Card cartao) {
+		this.operacao = operacao;
+		this.tipo = tipo;
+		this.nome_time = nome_time;
+		this.periodo = periodo;
+		this.video_id = video_id;
+		this.url_thumb = url_thumb;
+		this.texto = texto;
+		this.momento = momento;
+		this.periodo_id = periodo_id;
+		this.id = id;
+		this.video_url = video_url;
+		this.cartao = cartao;
+	}
+
+	public String getOperacao() {
+		return operacao;
+	}
+
+	public void setOperacao(String operacao) {
+		this.operacao = operacao;
+	}
+
+	public Type getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Type tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getPeriodo() {
+		return periodo;
+	}
+
+	public void setPeriodo(String periodo) {
+		this.periodo = periodo;
+	}
+
+	public String getVideo_id() {
+		return video_id;
+	}
+
+	public void setVideo_id(String video_id) {
+		this.video_id = video_id;
+	}
+
+	public String getTexto() {
+		return texto;
+	}
+
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
+
+	public String getMomento() {
+		return momento;
+	}
+
+	public void setMomento(String momento) {
+		this.momento = momento;
+	}
+
+	public int getPeriodo_id() {
+		return periodo_id;
+	}
+
+	public void setPeriodo_id(int periodo_id) {
+		this.periodo_id = periodo_id;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getVideo_url() {
+		return video_url;
+	}
+
+	public void setVideo_url(String video_url) {
+		this.video_url = video_url;
+	}
+
+	public Card getCartao() {
+		return cartao;
+	}
+
+	public void setCartao(Card cartao) {
+		this.cartao = cartao;
+	}
+
+	public String getUrl_thumb() {
+		return url_thumb;
+	}
+
+	public void setUrl_thumb(String url_thumb) {
+		this.url_thumb = url_thumb;
+	}
+
+	public String getNome_time() {
+		return nome_time;
+	}
+
+	public void setNome_time(String nome_time) {
+		this.nome_time = nome_time;
+	}
+
+	@Override
+	public String toString() {
+		return "Move [operacao=" + operacao + ", nome_time=" + nome_time
+				+ ", periodo=" + periodo + ", video_id=" + video_id
+				+ ", texto=" + texto + ", momento=" + momento + ", video_url="
+				+ video_url + ", url_thumb=" + url_thumb + ", tipo=" + tipo
+				+ ", periodo_id=" + periodo_id + ", id=" + id + ", cartao="
+				+ cartao + "]";
+	}
+}

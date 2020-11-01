@@ -1,0 +1,121 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.MatchesListAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetMatchesTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Match;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.web.MatchesParser;
+
+public class MatchesListActivity extends ListActivity implements AsyncTaskListener {
+	
+	public final static String INTENT_PHASENUM = "matcheslistactivity_phasenum";
+	public final static String INTENT_PHASENAME = "matcheslistactivity_phasename";
+	public final static Integer PHASE_PRELIB = 0;
+	public final static Integer PHASE_ROUNDOF16 = 1;
+	public final static Integer PHASE_QUARTERFINAL = 2;
+	public final static Integer PHASE_SEMIFINAL = 3;
+	public final static Integer PHASE_FINAL = 4;
+	
+	private Integer phase = PHASE_PRELIB;
+	
+	private InternalStorageHandler internalStorage;
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	private MatchesParser matchesParser;
+	
+	private HelveticaTextView tv_title;
+	private RelativeLayout rl_loading;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.matcheslistactivity);
+		clubsDB = ClubsDB.getSingletonObject(this);
+		internalStorage = new InternalStorageHandler(this);
+		clubs = clubsDB.getClubs();
+		phase = getIntent().getIntExtra(INTENT_PHASENUM, PHASE_PRELIB);
+		String phaseName = getIntent().getStringExtra(INTENT_PHASENAME);
+		matchesParser = new MatchesParser(this, clubs);
+		
+		loadViews();
+		
+		tv_title.setText(phaseName.toUpperCase());
+		
+		tv_title.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {				
+				new GetMatchesTask(matchesParser, MatchesListActivity.this, phase).execute();
+			}
+		});
+		
+		tv_title.performClick();
+		
+		/*ArrayList<Match> matches = getMatches();
+		Collections.sort(matches);
+		setListAdapter(new MatchesListAdapter(this, matches));*/
+	}
+
+	/*private ArrayList<Match> getMatches() {
+		ArrayList<Match> matches = new ArrayList<Match>();
+		if(phase == PHASE_PRELIB){ //TODO e as outras fases?
+			for (PreLibEnum plEnum : PreLibEnum.values()) {
+				ArrayList<Club> fixture = clubsDB.getPreLib().get(plEnum);
+				Match match = new Match(fixture.get(0), fixture.get(1), "Engenhão", new GregorianCalendar(), 1, 2);
+				matches.add(match);
+			}
+		}
+		return matches;
+	}*/
+
+	private void loadViews() {
+		tv_title = (HelveticaTextView) findViewById(R.matcheslistactivity.titlebar_tvtitle);
+		rl_loading = (RelativeLayout) findViewById(R.matcheslistactivity.rl_loading);
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		//TODO persistir dados
+		ArrayList<Match> matches = (ArrayList<Match>) result;
+		Collections.sort(matches);
+		setListAdapter(new MatchesListAdapter(this, matches, phase));
+		
+		hideUpdatingLayout();
+	}
+
+	@Override
+	public void onFail(String message) {
+		//TODO load the old definitions
+		hideUpdatingLayout();
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+}

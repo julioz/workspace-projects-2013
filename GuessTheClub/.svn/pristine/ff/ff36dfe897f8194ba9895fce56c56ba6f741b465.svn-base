@@ -1,0 +1,37 @@
+<achievements>
+	<achievement>
+		<name>Abrir a segunda fase</name>
+		<points>1</points>
+		<descriptions>Você conseguiu abrir a segunda fase</descriptions>
+		<type>PHASE_OPEN</type>
+		<phase>2</phase>
+	</achievement>
+	<achievement>
+		<name>Completar a primeira fase</name>
+		<points>1</points>
+		<descriptions>Você conseguiu completar a primeira fase</descriptions>
+		<type>PHASE_COMPLETE</type>
+		<phase>1</phase>
+	</achievement>
+	<achievement>
+		<name>Abrir a terceira fase</name>
+		<points>2</points>
+		<descriptions>Você conseguiu abrir a terceira fase</descriptions>
+		<type>PHASE_OPEN</type>
+		<phase>3</phase>
+	</achievement>
+	<achievement>
+		<name>Completar a segunda fase</name>
+		<points>3</points>
+		<descriptions>Você conseguiu completar a segunda fase</descriptions>
+		<type>PHASE_COMPLETE</type>
+		<phase>2</phase>
+	</achievement>
+	<achievement>
+		<name>Completar a terceira fase</name>
+		<points>5</points>
+		<descriptions>Você conseguiu completar a terceira fase</descriptions>
+		<type>PHASE_COMPLETE</type>
+		<phase>3</phase>
+	</achievement>
+</achievements>

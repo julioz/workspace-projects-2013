@@ -1,0 +1,245 @@
+package br.com.zynger.brasileirao2012.model;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Club implements Serializable{
+	private static final long serialVersionUID = 1L;
+	public static final int PRIMEIRADIVISAO = 0;
+	public static final int SEGUNDADIVISAO = 1;
+	
+	private String name, fullName, wiki, acronym;
+	private int badge;
+	private ArrayList<Trophy> trophies;
+	private ArrayList<String> news;
+	private AprovData aprov;
+	private int division;
+	private int position;
+	private int posDif;
+	private int fans = 0;
+	private int points = 0, played = 0, win = 0, draw = 0, lose = 0, goalspro = 0, goalsagainst = 0, balance = 0;
+	
+	public Club(){}
+	
+	public Club(String name, String acronym, int badge, int division, ArrayList<Trophy> trophies, String fullName, String wiki){
+		init(name, acronym, badge, division, trophies, fullName, wiki);
+	}
+	
+	public Club(String name, String acronym, int badge, int division, String fullName, String wiki){
+		init(name, acronym, badge, division, new ArrayList<Trophy>(), fullName, wiki);
+	}
+	
+	private void init(String name, String acronym, int badge, int division, ArrayList<Trophy> trophies, String fullName, String wiki){
+		setName(name);
+		setAcronym(acronym);
+		setBadge(badge);
+		setDivision(division);
+		setTrophies(trophies);
+		setAprov(new AprovData());
+		setFullName(fullName);
+		setWiki(wiki);
+		setNews(populateNews());
+	}
+	
+	private ArrayList<String> populateNews(){
+		ArrayList<String> al = new ArrayList<String>();
+		String name = getName().toLowerCase().replaceAll("é", "e").replaceAll("ê", "e").replaceAll("ó", "o").replaceAll("í", "i").replaceAll("ú", "u").replaceAll("á", "a").replaceAll("ã", "a").replaceAll(" ", "-");
+		al.add("http://globoesporte.globo.com/dynamo/semantica/editorias/plantao/futebol/times/"+name+"/feed.rss");
+		name = name.replaceAll("-", "");
+		
+		if(name.equals("asa")) name = "asa-al";
+		
+		al.add("http://rss.esporte.uol.com.br/futebol/clubes/"+name+".xml");
+		al.add("http://news.google.com.br/news?q="+name+"&um=1&hl=pt-BR&bav=on.2,or.r_gc.r_pw.r_cp.,cf.osb&biw=1680&bih=925&ie=UTF-8&output=rss");
+		return al;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+	
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
+
+	public int getPlayed() {
+		return played;
+	}
+
+	public void setPlayed(int played) {
+		this.played = played;
+	}
+
+	public int getWin() {
+		return win;
+	}
+
+	public void setWin(int win) {
+		this.win = win;
+	}
+	
+	public void setPosDif(int posDif) {
+		this.posDif = posDif;
+	}
+	
+	public int getPosDif() {
+		return posDif;
+	}
+
+	public int getDraw() {
+		return draw;
+	}
+
+	public void setDraw(int draw) {
+		this.draw = draw;
+	}
+
+	public int getLose() {
+		return lose;
+	}
+
+	public void setLose(int lose) {
+		this.lose = lose;
+	}
+
+	public int getGoalsPro() {
+		return goalspro;
+	}
+
+	public void setGoalsPro(int goalspro) {
+		this.goalspro = goalspro;
+	}
+
+	public int getGoalsAgainst() {
+		return goalsagainst;
+	}
+
+	public void setGoalsAgainst(int goalsagainst) {
+		this.goalsagainst = goalsagainst;
+	}
+
+	public int getBalance() {
+		return balance;
+	}
+
+	public void setBalance(int balance) {
+		this.balance = balance;
+	}
+
+	public int getBadge() {
+		return badge;
+	}
+
+	public void setBadge(int badge) {
+		this.badge = badge;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public ArrayList<Trophy> getTrophies() {
+		return trophies;
+	}
+
+	public void setTrophies(ArrayList<Trophy> trophies) {
+		this.trophies = trophies;
+	}
+
+	public ArrayList<String> getNews() {
+		return news;
+	}
+
+	public void setNews(ArrayList<String> news) {
+		this.news = news;
+	}
+	
+	public AprovData getAprov() {
+		return aprov;
+	}
+	
+	public void setAprov(AprovData aprov) {
+		this.aprov = aprov;
+	}
+	
+	public void clone(Club c){
+		setPosition(c.getPosition());
+		setPoints(c.getPoints());
+		setPlayed(c.getPlayed());
+		setWin(c.getWin());
+		setDraw(c.getDraw());
+		setLose(c.getLose());
+		setGoalsPro(c.getGoalsPro());
+		setGoalsAgainst(c.getGoalsAgainst());
+		setBalance(c.getBalance());
+		setPosDif(c.getPosDif());
+		setAprov(c.getAprov());
+		setFullName(c.getFullName());
+		setWiki(c.getWiki());
+		
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getWiki() {
+		return wiki;
+	}
+
+	public void setWiki(String wiki) {
+		this.wiki = wiki;
+	}
+
+	public int getDivision() {
+		return division;
+	}
+
+	public void setDivision(int division) {
+		this.division = division;
+	}
+
+	public String getAcronym() {
+		return acronym;
+	}
+
+	public void setAcronym(String acronym) {
+		this.acronym = acronym;
+	}
+
+	public int getFans() {
+		return fans;
+	}
+
+	public void setFans(int fans) {
+		this.fans = fans;
+	}
+	
+	public String getToastDescription(){
+		String s = getName();
+		int position = getPosition();
+		int points = getPoints();
+		
+		if(position > 0) s += "\n" + position + "° lugar";
+		if(points > 0) s += ": " + points + " pontos";
+		
+		return s;
+	}
+	
+}

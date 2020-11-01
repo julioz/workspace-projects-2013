@@ -1,0 +1,111 @@
+<clubs>
+	<club>
+		<nm_bdg>corinthians</nm_bdg>
+		<nm_club>Corinthians</nm_club>
+	</club>
+	<club>
+		<nm_bdg>benfica</nm_bdg>
+		<nm_club>Benfica</nm_club>
+	</club>
+	<club>
+		<nm_bdg>villareal_cf</nm_bdg>
+		<nm_club>Villareal</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fluminense_fc</nm_bdg>
+		<nm_club>Fluminense</nm_club>
+	</club>
+	<club>
+		<nm_bdg>cska_moskow</nm_bdg>
+		<nm_club>CSKA</nm_club>
+		<alt_names>
+			<name>CSKA Moscou</name>
+			<name>CSKA Moskow</name>
+			<name>CSKA Moskovo</name>
+			<name>CSKA Moskva</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>palmeiras</nm_bdg>
+		<nm_club>Palmeiras</nm_club>
+	</club>
+	<club>
+		<nm_bdg>estudiantes</nm_bdg>
+		<nm_club>Estudiantes</nm_club>
+	</club>
+	<club>
+		<nm_bdg>valencia_cf</nm_bdg>
+		<nm_club>Valencia</nm_club>
+	</club>
+	<club>
+		<nm_bdg>sporting_cf</nm_bdg>
+		<nm_club>Sporting</nm_club>
+	</club>
+	<club>
+		<nm_bdg>ca_velez</nm_bdg>
+		<nm_club>Vélez</nm_club>
+		<alt_names>
+			<name>Vélez Sarsfield</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>lyon</nm_bdg>
+		<nm_club>Lyon</nm_club>
+		<alt_names>
+			<name>Olympique Lyonnais</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>fullham</nm_bdg>
+		<nm_club>Fullham</nm_club>
+	</club>
+	<club>
+		<nm_bdg>as_roma</nm_bdg>
+		<nm_club>Roma</nm_club>
+	</club>
+	<club>
+		<nm_bdg>cruzeiro</nm_bdg>
+		<nm_club>Cruzeiro</nm_club>
+	</club>
+	<club>
+		<nm_bdg>afc_ajax</nm_bdg>
+		<nm_club>Ajax</nm_club>
+		<alt_names>
+			<name>Amsterdamsche Ajax</name>
+			<name>Ajax Amsterdam</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>cr_vasco</nm_bdg>
+		<nm_club>Vasco</nm_club>
+		<alt_names>
+			<name>Vasco da Gama</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>shaktar</nm_bdg>
+		<nm_club>Shakhtar Donetsk</nm_club>
+		<alt_names>
+			<name>Shakhtar</name>
+			<name>Шахтар</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>atleticomadrid</nm_bdg>
+		<nm_club>Atlético de Madrid</nm_club>
+		<alt_names>
+			<name>Atlético Madrid</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>marseille</nm_bdg>
+		<nm_club>Olympique de Marseille</nm_club>
+		<alt_names>
+			<name>Marselha</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>saopaulo_fc</nm_bdg>
+		<nm_club>São Paulo</nm_club>
+	</club>
+</clubs>

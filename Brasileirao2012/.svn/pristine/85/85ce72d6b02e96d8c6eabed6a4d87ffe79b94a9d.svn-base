@@ -1,0 +1,188 @@
+package br.com.zynger.brasileirao2012.movetomove;
+
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.adapters.MoveToMoveArrayAdapter;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerItem;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerListItem;
+import br.com.zynger.brasileirao2012.asynctasks.GetMoveToMoveTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.service.RealTimeMatchService;
+import br.com.zynger.brasileirao2012.util.Constants;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+
+public class RealTimeMoveToMoveActivity extends MoveToMoveActivity {
+	private final int SECOND = 1000;
+	private final int UPDATE_INTERVAL = 90 * SECOND;
+
+	private Timer timer;
+
+	@Override
+	public Match getMatchFromJsonArray(JSONArray json,
+			TreeMap<String, Club> clubs) {
+		return new RealTimeMatch(json, clubs);
+	}
+
+	@Override
+	protected void onResume() {
+		if (timer != null) {
+			timer.cancel();
+		}
+		startRecorrentTask();
+		super.onResume();
+	}
+
+	@Override
+	public void onStop() {
+		if (timer != null) {
+			timer.cancel();
+		}
+		super.onStop();
+	}
+
+	private void startRecorrentTask() {
+		TimerTask doAsynchronousTask;
+		final Handler handler = new Handler();
+		timer = new Timer();
+
+		doAsynchronousTask = new TimerTask() {
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					public void run() {
+						MoveToMoveArrayAdapter adapter = getListAdapter();
+						if (adapter != null && isMainContentVisible()) {
+							new GetMoveToMoveTask(RealTimeMoveToMoveActivity.this, match).execute();
+						}
+					}
+				});
+			}
+		};
+
+		timer.schedule(doAsynchronousTask, 0, UPDATE_INTERVAL);
+	}
+
+	@Override
+	public List<DrawerItem> getDrawerListViewAdapter(List<DrawerItem> items) {
+		super.getDrawerListViewAdapter(items);
+		RealTimeMatch rtm = getMatch();
+
+		// if (rtm.hasSquadDetails()) {
+		// addSquadActionItem(quickAction, rtm); TODO
+		// }
+
+		if (rtm.getState() == RealTimeMatch.State.TO_START
+				|| rtm.getState() == RealTimeMatch.State.IN_PROGRESS) {
+			if (rtm.equals(getRealTimeMatchFromInternalStorage())) {
+				addDrawerItemToList(R.drawable.ic_alert_disable,
+						R.string.movetomoveactivity_dontfollow);
+			} else {
+				addDrawerItemToList(R.drawable.ic_alert,
+						R.string.movetomoveactivity_follow);
+			}
+		}
+		return items;
+	}
+
+	@Override
+	public void onDrawerListItemClick(AdapterView<?> parent, View view,
+			int position, long id, DrawerListItem item) {
+		super.onDrawerListItemClick(parent, view, position, id, item);
+		if (item.getTextRes() == R.string.movetomoveactivity_dontfollow) {
+			setOnDontFollowClick(item);
+		} else if (item.getTextRes() == R.string.movetomoveactivity_follow) {
+			setOnFollowClick(item);
+		}
+	}
+
+	private void setOnFollowClick(DrawerListItem item) {
+		Intent intent = new Intent(this, RealTimeMatchService.class);
+		if (isMyServiceRunning(this)) {
+			stopService(intent);
+		}
+		intent.putExtra(RealTimeMatchService.INTENT_REALTIMEMATCH_JSON,
+				getMatch().toJson().toString());
+		startService(intent);
+
+		replaceDrawerListItem(item, new DrawerListItem(this, item.getIconRes(),
+				R.string.movetomoveactivity_dontfollow));
+	}
+
+	private void setOnDontFollowClick(DrawerListItem item) {
+		stopService(new Intent(this, RealTimeMatchService.class));
+		PreferenceEditor.setFollowedRealTimeMatchJson(this, null);
+		Toast.makeText(this,
+				getString(R.string.movetomoveactivity_nolongerfollowing),
+				Toast.LENGTH_SHORT).show();
+
+		replaceDrawerListItem(item, new DrawerListItem(this, item.getIconRes(),
+				R.string.movetomoveactivity_follow));
+	}
+
+	private RealTimeMatch getRealTimeMatchFromInternalStorage() {
+		RealTimeMatch realTimeMatch = null;
+		try {
+			String json = PreferenceEditor.getFollowedRealTimeMatchJson(this);
+			if (json != null) {
+				realTimeMatch = new RealTimeMatch(new JSONArray(json), ClubsDB
+						.getInstance(this).getClubs());
+			}
+		} catch (Exception e) {
+			Log.e(Constants.TAG, e.toString());
+			e.printStackTrace();
+		}
+		return realTimeMatch;
+	}
+
+	// private void addSquadActionItem(final QuickAction quickAction,
+	// final RealTimeMatch rtm) {
+	// addToQuickAction(quickAction, R.drawable.ic_squad_quickaction,
+	// R.string.movetomoveactivity_squad, new OnClickListener() {
+	// @Override
+	// public void onClick(View v) {
+	// Intent it = new Intent(v.getContext(),
+	// RealTimeMatchSquadActivity.class);
+	// it.putExtra(
+	// RealTimeMatchSquadActivity.INTENT_REALTIMEMATCH,
+	// rtm.toJson().toString());
+	// quickAction.dismiss();
+	// v.getContext().startActivity(it);
+	// }
+	// });
+	// }
+
+	private boolean isMyServiceRunning(Context context) {
+		ActivityManager manager = (ActivityManager) context
+				.getSystemService(ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager
+				.getRunningServices(Integer.MAX_VALUE)) {
+			if (service.service.getClassName().equals(Constants.SERVICE_PATH)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public RealTimeMatch getMatch() {
+		return (RealTimeMatch) match;
+	}
+}

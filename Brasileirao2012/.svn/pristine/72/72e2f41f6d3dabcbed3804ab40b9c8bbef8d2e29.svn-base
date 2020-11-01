@@ -1,0 +1,101 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.List;
+
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+import android.widget.ZoomButtonsController;
+import br.com.zynger.brasileirao2012.data.StadiumsDB;
+import br.com.zynger.brasileirao2012.model.Stadium;
+import br.com.zynger.brasileirao2012.view.StadiumsMapOverlay;
+import br.com.zynger.brasileirao2012.view.StadiumsOverlayItem;
+
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
+
+public class StadiumsMapActivity extends MapActivity {
+	
+	public static final String LIMITATION = "STADIUM_LIMITED";
+	
+	private StadiumsDB stadiumsDB;
+	
+	private String stadium_limited;
+	
+	private MapView mapView;
+	private ToggleButton satelliteToggle;
+	private Drawable drawable;
+	private List<Overlay> mapOverlays;
+	private StadiumsMapOverlay<StadiumsOverlayItem> itemizedOverlay;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.stadiums_map);
+		stadiumsDB = StadiumsDB.getInstance(this);
+		
+		mapView = (MapView) findViewById(R.stadiums_map.mapview);
+		satelliteToggle = (ToggleButton) findViewById(R.stadiums_map.satellite_toggle);
+		
+		stadium_limited = getIntent().getStringExtra(LIMITATION);
+		
+		mapView.setSatellite(false);
+		satelliteToggle.setChecked(false);
+		
+		satelliteToggle.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mapView.setSatellite(!mapView.isSatellite());
+			}
+		});
+		
+		mapOverlays = mapView.getOverlays();
+		
+		MapController mc = mapView.getController();
+    	mc.setZoom(5);
+    	mc.animateTo(new GeoPoint((int) (-15.783611*1E6), (int) (-47.899167*1E6)));
+		
+		mapView.setBuiltInZoomControls(true);
+    	ZoomButtonsController zbc = mapView.getZoomButtonsController();
+    	View zc = zbc.getZoomControls();
+    	
+    	FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) zc.getLayoutParams();
+    	lp.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+	    zc.requestLayout();
+
+	    drawable = getResources().getDrawable(R.drawable.ic_stadium);
+	    itemizedOverlay = new StadiumsMapOverlay<StadiumsOverlayItem>(drawable, mapView);
+
+	    for (Stadium s : stadiumsDB.getStadiums()) {
+			createStadiumOverlayItem(s);
+		}
+	    
+	    if(itemizedOverlay.size() < 1){
+	    	Toast.makeText(this, "Não foi possível encontrar o estádio", Toast.LENGTH_SHORT).show();
+	    	finish();
+	    }
+
+	    mapOverlays.add(itemizedOverlay);
+	}
+
+	private void createStadiumOverlayItem(Stadium stadium){
+		if(stadium_limited == null || stadium_limited.equals(stadium.getNick())){
+			GeoPoint p = new GeoPoint((int) stadium.getLat(), (int) stadium.getLng());
+			StadiumsOverlayItem oi = new StadiumsOverlayItem(p, stadium);
+			itemizedOverlay.addOverlay(oi);
+		}
+	}
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
+}

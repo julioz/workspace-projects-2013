@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+        android:background="@drawable/actionbar_gradient2"
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:id="@+myteamactivity/rl_actionbar"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:id="@+myteamactivity/iv_actionbar_badge"
+            android:src="@drawable/ic_team"
+            android:layout_centerVertical="true" />
+        
+        <br.com.zynger.brasileirao2012.view.TertreTextView
+            android:text="Meu Time"
+            android:layout_marginLeft="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_toRightOf="@+myteamactivity/iv_actionbar_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="30dp" />
+        
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal" >
+            
+            <View
+                android:layout_height="45dp"
+                android:layout_width="1px"
+                android:layout_alignParentLeft="true"
+                android:background="#88FFFFFF" />
+
+            <br.com.zynger.brasileirao2012.view.UpdateImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:id="@+myteamactivity/uiv_update"
+                android:background="@null"
+                android:scaleType="fitCenter"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+myteamactivity/rl_actionbar"
+        android:layout_above="@+myteamactivity/ll_ad">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+myteamactivity/iv_badge"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="10dp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.54"
+                android:orientation="vertical"
+                android:padding="3dp" >
+
+                <TextView
+                    android:id="@+myteamactivity/tv_fullname"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nome completo"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+myteamactivity/tv_points_place"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="X Pontos - N Lugar"
+                    android:textColor="#FFFFFFFF" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3" >
+
+                    <Button
+                        android:id="@+myteamactivity/bt_strikers"
+                        android:layout_width="0dp"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.15"
+                        android:text="Artilheiros" />
+
+                    <Button
+                        android:id="@+myteamactivity/bt_trophies"
+                        android:layout_width="0dp"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.15"
+                        android:text="Troféus" />
+
+                    <Button
+                        android:id="@+myteamactivity/bt_wiki"
+                        android:layout_width="0dp"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Mais" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        
+        <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+myteamactivity/dul_loading" />
+        
+        <ListView
+			android:layout_height="fill_parent"
+			android:layout_width="fill_parent"
+			android:id="@android:id/list"
+			android:divider="#00000000"
+			android:cacheColorHint="#00000000"
+			android:background="@null"/>
+    </LinearLayout>
+    
+    <LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+myteamactivity/ll_ad"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>
+</RelativeLayout>

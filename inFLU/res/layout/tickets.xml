@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#FF00372a"
+	android:id="@+tickets/ll_actbg"
+	android:orientation="vertical">
+	<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="40dp"
+		android:orientation="horizontal"
+		android:layout_alignParentTop="true"
+		android:id="@+tickets/actionbar"
+		android:background="@drawable/actionbar_bg">
+		
+	    <ImageView
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			android:src="@drawable/icon"
+			android:layout_centerVertical="true"
+			android:id="@+tickets/action_badge"/>
+		
+	    <TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:layout_toRightOf="@+tickets/action_badge"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="10dp"
+		    android:text="Ingressos"
+		    android:textColor="#FFFFFF"
+		    android:textSize="18dp"
+		    android:textStyle="bold" />
+	    
+	    <ImageButton
+		    android:layout_width="36dp"
+		    android:layout_height="36dp"
+		    android:scaleType="fitCenter"
+		    android:adjustViewBounds="true"
+		    android:layout_alignParentRight="true"
+		    android:layout_centerVertical="true"
+		    android:id="@+tickets/ib_actionbar_update"
+		    android:layout_marginRight="4dp"
+		    android:background="@null"
+		    android:src="@drawable/ic_actionbar_update"/>
+
+	</RelativeLayout>
+
+	<ScrollView
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:id="@+tickets/sv_info"
+		android:layout_below="@+tickets/actionbar"
+		android:layout_above="@+tickets/ll_ad"
+		android:background="#FF00372a">
+		<LinearLayout
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+			<TextView
+				android:paddingTop="3dp"
+				android:paddingLeft="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+tickets/textview"
+				android:textColor="#FFFFFF"
+				android:textSize="14dp"/>
+		</LinearLayout>
+	</ScrollView>
+	
+	<LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:id="@+tickets/ll_ad"
+		android:layout_above="@+tickets/ll_info"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f107da2e8de1"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>
+	
+	<LinearLayout
+	    android:layout_height="wrap_content"
+	    android:layout_width="fill_parent"
+	    android:layout_alignParentBottom="true"
+	    android:id="@+tickets/ll_info"
+	    android:background="#FF5F011A">
+		
+	    <TextView
+	        android:textColor="#FFFFFFFF"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:layout_gravity="center"
+	        android:textSize="12dp"
+	        android:text="Informações do site oficial do Fluminense Football Club. Em caso de dúvida, contate o clube."/>
+	    
+	</LinearLayout>
+</RelativeLayout>

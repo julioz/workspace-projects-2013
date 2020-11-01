@@ -1,0 +1,102 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+
+import org.taptwo.android.widget.TitleProvider;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Club;
+
+public class ThirdDivisionViewFlowAdapter extends BaseAdapter implements TitleProvider {
+	
+	private static final int LAYOUT_RESOURCE = R.layout.newsviewflowadapteritem;
+	
+	public static final Integer GROUP_A = 0;
+	public static final Integer GROUP_B = 1;
+
+	private Context context;
+	private LayoutInflater mInflater;
+	private HashMap<Integer, ArrayList<Club>> clubsMap;
+	private ArrayList<Club> clubsA, clubsB;
+	
+	public ThirdDivisionViewFlowAdapter(Context context,
+			HashMap<Integer, ArrayList<Club>> clubsMap) {
+		this.context = context;
+		mInflater = LayoutInflater.from(context);
+		this.clubsMap = clubsMap;
+		this.clubsA = clubsMap.get(GROUP_A);
+		this.clubsB = clubsMap.get(GROUP_B);
+		Collections.sort(clubsA, new ThirdDivisionClubComparator());
+		Collections.sort(clubsB, new ThirdDivisionClubComparator());
+	}
+	
+	@Override
+	public int getCount() {
+		return clubsMap.size();
+	}
+
+	@Override
+	public ArrayList<Club> getItem(int position) {
+		return position == 0 ? clubsA : clubsB;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return getItem(position).hashCode();
+	}
+
+	@Override
+	public View getView(int position, View view, ViewGroup parent) {
+		ThirdDivisionListViewHolder holder = null;
+
+		if(view == null) {
+			view = mInflater.inflate(LAYOUT_RESOURCE, null);
+
+			holder = new ThirdDivisionListViewHolder();
+
+			holder.listView = (ListView) view.findViewById(R.newsviewflowadapteritem.listview);
+
+			view.setTag(holder);
+		} else {
+			holder = (ThirdDivisionListViewHolder) view.getTag();
+		}
+		
+		holder.listView.setAdapter(new RankingListAdapter(context, getItem(position)));
+		return view;
+	}
+
+	@Override
+	public String getTitle(int position) {
+		String title = context.getString(R.string.thirddivisionviewflowadapter_group);
+		return title + " " + (position == 0 ? "A" : "B");
+	}
+	
+	class ThirdDivisionListViewHolder {
+		ListView listView;
+	}
+
+	class ThirdDivisionClubComparator implements Comparator<Club> {
+		@Override
+		public int compare(Club lhs, Club another) {
+			int differ = lhs.getPosition() - another.getPosition();
+			if(differ == 0){
+				differ = lhs.getPoints() - another.getPoints();
+				
+				if(differ == 0){
+					differ = lhs.getBalance() - another.getBalance();
+				}
+			}
+			return differ;
+		}
+	}
+
+}

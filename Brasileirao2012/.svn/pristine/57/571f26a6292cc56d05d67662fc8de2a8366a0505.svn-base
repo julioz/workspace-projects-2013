@@ -1,0 +1,151 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.UpdateAprovTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.view.AprovRow;
+
+public class AprovActivity extends Activity implements AsyncTaskListener {
+	
+	public static final String INTENT_DIVISION = "aprovact_division";
+	
+	private TreeMap<String, Club> clubs;
+	
+	private Division division;
+
+	private TextView tv_division;
+	private LinearLayout ll_division;
+	private ImageButton update;
+	private RotateAnimation rot;
+	private TableLayout tl_table;
+	private RelativeLayout rl_loading;
+	private LinearLayout ll_data;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aprovactivity);
+		
+		clubs = ClubsDB.getInstance(this).getClubs();
+		division = (Division) getIntent().getSerializableExtra(INTENT_DIVISION);
+		
+		loadViews();
+		
+		setDivisionLayoutConfigs();
+		
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_actsupdates", false)) {
+			new UpdateAprovTask(this, clubs, this).execute();
+		}else setTable();
+	}
+
+	private void loadViews() {		
+		ll_division = (LinearLayout) findViewById(R.aprovactivity.actionbar_ll);
+		tv_division = (TextView) findViewById(R.aprovactivity.tv_actionbar_division);
+		
+		rl_loading = (RelativeLayout) findViewById(R.aprovactivity.rl_loading);
+		ll_data = (LinearLayout) findViewById(R.aprovactivity.ll_data);
+		
+		tl_table = (TableLayout) findViewById(R.aprovactivity.tl_table);
+		
+		rot = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rot.setInterpolator(new LinearInterpolator());
+		rot.setDuration(900L);
+		rot.setStartTime(200L);
+		
+		update = (ImageButton) findViewById(R.aprovactivity.ib_update);
+		
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				v.startAnimation(rot);
+				if(ConnectionHelper.isConnected(v.getContext())){
+					new UpdateAprovTask(v.getContext(), clubs, AprovActivity.this).execute();
+				}else Toast.makeText(v.getContext(), "Verifique a conexão à internet.", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	
+	private void setDivisionLayoutConfigs(){
+		if(division == Division.FIRSTDIVISION) tv_division.setText("A");
+		else tv_division.setText("B");
+		
+		ll_division.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(division == Division.FIRSTDIVISION){
+					tv_division.setText("B");
+					division = Division.SECONDDIVISION;
+				}else{
+					tv_division.setText("A");
+					division = Division.FIRSTDIVISION;
+				}
+				setTable();
+			}
+		});
+	}
+	
+	private void setTable() {
+		tl_table.removeAllViews();
+		for (Club c : clubs.values()) {
+			if(c.getDivision() == division) tl_table.addView(new AprovRow(this, c).getTableRow());
+		}
+		tl_table.invalidate();
+	}
+
+	@Override
+	public void preExecution() {
+		ll_data.setVisibility(View.GONE);
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		TreeMap<String, AprovData> map = (TreeMap<String, AprovData>) result;
+		
+		FileHandler.saveBackup(this, FileHandler.JSON_APROV, JsonUtil.createAprovJson(map).toString());
+		for (Iterator<String> it = map.keySet().iterator(); it.hasNext();) {
+			String clubAcronym = (String) it.next();
+			clubs.get(clubAcronym).setAprov(map.get(clubAcronym));
+		}
+		Toast.makeText(this, "Dados atualizados", Toast.LENGTH_SHORT).show();
+		
+		setTable();
+
+		rl_loading.setVisibility(View.GONE);
+		ll_data.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		
+		setTable();
+
+		rl_loading.setVisibility(View.GONE);
+		ll_data.setVisibility(View.VISIBLE);
+	}
+}

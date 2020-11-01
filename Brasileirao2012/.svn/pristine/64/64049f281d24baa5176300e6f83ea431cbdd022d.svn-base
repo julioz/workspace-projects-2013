@@ -1,0 +1,223 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.ImageManager;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class NewsDetailsActivity extends Activity {
+	
+	private SharedPreferences prefs;
+	
+	private String clubname, newsurl, title, imgurl;
+	private float[] textSizes = { 8, 12, 15, 19, 24 };
+	private int currentTextSize = 2;
+	private int domain;
+	
+	private TextView tv_actionbar, tv_title, articletext;
+	private ImageView iv_actionbar, img;
+	private ImageButton ib_zoomtext;
+	private LinearLayout ll_tv_loading;
+	private ScrollView sv_tv_text;
+	private TreeMap<String, Club> clubs;
+	private Club club;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.newsdetails);
+		
+		clubname = getIntent().getStringExtra("CLUB_NAME");
+		newsurl = getIntent().getStringExtra("ARTICLE_URL");
+		title = getIntent().getStringExtra("ARTICLE_TT");
+		imgurl = getIntent().getStringExtra("ARTICLE_IMGURL");
+		domain = getIntent().getIntExtra("DOMAIN", 0);
+		setActionbar(clubname);
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this); 
+		
+		articletext = (TextView) findViewById(R.newsdetails.tv_articletext);
+		
+		ib_zoomtext = (ImageButton) findViewById(R.newsdetails.ib_zoomtext);
+		ib_zoomtext.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(currentTextSize == textSizes.length - 1) currentTextSize = 0;
+				else currentTextSize++;
+				
+				float newSize = textSizes[currentTextSize];
+				articletext.setTextSize(TypedValue.COMPLEX_UNIT_SP, newSize);
+			}
+		});
+		
+		img = (ImageView) findViewById(R.newsdetails.iv_image);
+		img.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Dialog d = new Dialog(v.getContext()); 
+				d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				d.setContentView(R.layout.dialog_image);
+				ImageView iv = (ImageView) d.findViewById(R.dialog_image.iv);
+				iv.setImageDrawable(((ImageView) v).getDrawable());
+				d.setCanceledOnTouchOutside(true);
+				d.show();
+			}
+		});
+		
+		ll_tv_loading = (LinearLayout) findViewById(R.newsdetails.ll_tv_loading);
+		sv_tv_text = (ScrollView) findViewById(R.newsdetails.sv_tv_text);
+		
+		tv_title = (TextView) findViewById(R.newsdetails.tv_title);
+		tv_title.setText(title);
+		
+		boolean showImg = prefs.getBoolean("cb_imgsdownload", true);
+		
+		if(domain == Article.UOL || domain == Article.NETFLU) new ReadServerNewsTask(newsurl, domain, showImg).execute();
+		else{			
+			if(showImg) new DownloadImageTask(imgurl).execute();
+			new ReadNewsTask(newsurl, domain).execute();
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		if(img.getVisibility() == View.GONE && prefs.getBoolean("cb_imgsdownload", true)) new DownloadImageTask(imgurl).execute();
+		super.onResume();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void setActionbar(String clubname){
+		tv_actionbar = (TextView) findViewById(R.newsdetails.tv_name);
+		tv_actionbar.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		iv_actionbar = (ImageView) findViewById(R.newsdetails.iv_badge);
+		
+		this.clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		
+		club = clubs.get(clubname);
+		
+		tv_actionbar.setText(club.getName().toUpperCase());
+		iv_actionbar.setImageDrawable(getResources().getDrawable(club.getBadge()));
+	}
+
+	private class ReadNewsTask extends AsyncTask<Void, Void, String> {
+		private String newsurl;
+		private int domain;
+		
+		public ReadNewsTask(String newsurl, int domain){
+			this.newsurl = newsurl;
+			this.domain = domain;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			sv_tv_text.setVisibility(View.GONE);
+			ll_tv_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected String doInBackground(Void... arg0) {
+			return HTMLManager.getNewsContent(newsurl, domain);
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			ll_tv_loading.setVisibility(View.GONE);
+			sv_tv_text.setVisibility(View.VISIBLE);
+			articletext.setText(Html.fromHtml(result));
+			articletext.setMovementMethod(LinkMovementMethod.getInstance());
+			super.onPostExecute(result);
+		}
+	}
+	
+	private class ReadServerNewsTask extends AsyncTask<Void, Void, String[]> {
+		private String newsurl, imgsrcServer, serverId;
+		private int domain;
+		private boolean showImg;
+		
+		public ReadServerNewsTask(String newsurl, int domain, boolean showImg){
+			this.newsurl = newsurl;
+			this.domain = domain;
+			this.showImg = showImg;
+			
+			if(this.domain == Article.UOL) serverId = "uol";
+			else if(this.domain == Article.NETFLU) serverId = "netflu";
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			sv_tv_text.setVisibility(View.GONE);
+			ll_tv_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected String[] doInBackground(Void... arg0) {
+			try{
+				return HTMLManager.getNewsDetailsContent(serverId, newsurl);
+			}catch(Exception e){
+				String[] result = new String[2];
+				result[0] = null;
+				result[1] = "Não foi possível ler a notícia";
+				return result;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(String[] result) {
+			imgsrcServer = result[0];
+			ll_tv_loading.setVisibility(View.GONE);
+			sv_tv_text.setVisibility(View.VISIBLE);
+			if(showImg && imgsrcServer != null) new DownloadImageTask(imgsrcServer).execute();
+			articletext.setText(Html.fromHtml(result[1]));
+			articletext.setMovementMethod(LinkMovementMethod.getInstance());
+			super.onPostExecute(result);
+		}
+	}
+	
+	private class DownloadImageTask extends AsyncTask<Void, Void, Bitmap> {
+		
+		private String imgurl;
+		
+		public DownloadImageTask(String imgurl){
+			this.imgurl = imgurl;
+		}
+
+		@Override
+		protected Bitmap doInBackground(Void... arg0) {
+			return ImageManager.loadFromUrl(imgurl);
+		}
+		
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			if(result != null){
+				img.setImageBitmap(result);
+				img.setVisibility(View.VISIBLE);
+			}
+			else img.setVisibility(View.GONE);
+			super.onPostExecute(result);
+		}
+	}
+}

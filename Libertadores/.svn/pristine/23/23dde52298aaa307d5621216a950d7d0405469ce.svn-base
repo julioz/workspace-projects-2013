@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">    
+	<com.cyrilmottier.polaris.PolarisMapView
+	    android:id="@+headquarters/mapview"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:apiKey="@string/maps_api_key" />
+	
+	<ToggleButton 
+        android:textOn="@string/headquartersactivity_satellite"
+        android:textOff="@string/headquartersactivity_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+headquarters/satellite_toggle"
+        android:layout_alignParentRight="true"
+        android:layout_margin="4dp"/>
+	
+	<include layout="@layout/admob_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+standingsactivity/ll_ad"
+        android:layout_alignParentBottom="true"
+		android:gravity="bottom|center_horizontal"/>
+</RelativeLayout>

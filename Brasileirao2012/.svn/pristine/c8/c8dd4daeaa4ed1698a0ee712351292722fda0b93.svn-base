@@ -1,0 +1,174 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.TreeMap;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import br.com.zynger.brasileirao2012.actionmode.ActionModeCallback.ActionModeListener;
+import br.com.zynger.brasileirao2012.actionmode.ShareActionModeCallback;
+import br.com.zynger.brasileirao2012.adapters.TorcidometerArrayAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.UpdateFansTask;
+import br.com.zynger.brasileirao2012.base.UpdateableActivity;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+
+import com.actionbarsherlock.view.ActionMode;
+
+public class TorcidometerActivity extends UpdateableActivity<TreeMap<String, Club>>
+		implements ActionModeListener<Club> {
+
+	private ShareActionModeCallback<Club> mActionMode;
+	
+	private ListView lvContent;
+	private View viewBase;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView();
+		mActionMode = new ShareActionModeCallback<Club>(this);
+
+		if(ClubsDB.getInstance(this).hasClubWithFans()){			
+			setListAdapter();
+		}else{
+			setClickToUpdateMessage(getString(R.string.message_updatedatatoshow));
+		}
+	}
+
+	private void setContentView() {
+		View layout = LayoutInflater.from(this).inflate(
+				R.layout.torcidometeractivity, null);
+		setContentView(layout);
+		loadViews(layout);
+		setDataUpdateLayout(layout);
+		setPullToRefresh(layout);
+	}
+
+	private void loadViews(View activityView) {
+		lvContent = (ListView) activityView.findViewById(R.torcidometeractivity.lv_content);
+		viewBase = activityView.findViewById(R.torcidometeractivity.dummy_ll_bar);
+	}
+
+	private void setListAdapter() {
+		lvContent.setAdapter(new TorcidometerArrayAdapter(this, viewBase));
+		setListViewListeners();
+	}
+	
+	private void setListViewListeners() {
+		lvContent.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+		lvContent.setOnScrollListener(new OnScrollListener() {
+			private int scrollState;
+
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				this.scrollState = scrollState;
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+					mActionMode.dismissActionMode();
+				}
+			}
+		});
+
+		lvContent.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> listView, View view,
+					int position, long id) {
+				mActionMode.setModel((Club) lvContent.getItemAtPosition(position));
+				mActionMode.startActionMode();
+			}
+		});
+	}
+
+	@Override
+	public View[] getDataUpdateViewsToToggle(View activityView) {
+		return new View[] { lvContent };
+	}
+
+	@Override
+	public Integer getDataUpdateLayoutId() {
+		return R.torcidometeractivity.dul_loading;
+	}
+
+	@Override
+	public AsyncTask<Void, Void, TreeMap<String, Club>> getAsyncTask() {
+		return new UpdateFansTask(this);
+	}
+
+	@Override
+	public boolean onAsyncSuccess(TreeMap<String, Club> result) {
+		String json = JsonUtil.createFansJson(result).toString();
+		FileHandler.saveBackup(this, FileHandler.JSON_FANS, json);
+		setListAdapter();
+		return true;
+	}
+
+	@Override
+	public void onAsyncFail(String message) {
+		setErrorMessage(message);
+	}
+
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_torcidometer;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.torcidometeractivity_title;
+	}
+
+	@Override
+	public Integer getPullToRefreshViewId() {
+		return R.torcidometeractivity.lv_content;
+	}
+
+	@Override
+	public int getMenuResource() {
+		return mActionMode.getMenuResource();
+	}
+
+	@Override
+	public void onPrepareActionMode() {
+	}
+
+	@Override
+	public void changeMenuItems(Club club) {
+	}
+
+	@Override
+	public void onDestroyActionMode() {
+		lvContent.clearChoices();
+		lvContent.requestLayout();
+	}
+
+	@Override
+	public boolean onActionModeItemClick(Club club, ActionMode mode, int itemId) {
+		return mActionMode.onShareClicked(getShareClubInformation(club), mode, itemId);
+	}
+	
+	private String getShareClubInformation(Club club) {
+		TorcidometerArrayAdapter adapter = (TorcidometerArrayAdapter) lvContent.getAdapter();
+		if(adapter != null){
+			int positionInTorcidometer = Integer.valueOf(adapter.getPosition(club) + 1);
+			String message = getContext().getString(
+					R.string.torcidometeractivity_sharemessage, club.getName(),
+					positionInTorcidometer,
+					getContext().getString(R.string.app_name), club.getFans());
+			return message;
+		}
+		return null;
+	}
+}

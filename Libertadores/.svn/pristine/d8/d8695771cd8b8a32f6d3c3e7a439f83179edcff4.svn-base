@@ -1,0 +1,80 @@
+package br.com.zynger.libertadores.xml;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import android.content.Context;
+import android.util.Log;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Headquarters;
+import br.com.zynger.libertadores.util.Raw;
+
+public class ClubsParser {
+	
+	private static final String BADGE_PREFIX = "badge_";
+	private static final String ICON_PREFIX = "ic_";
+
+	public ArrayList<Club> getClubs(Context context){
+		String xml = Raw.openRaw(context, "clubs");
+		ArrayList<Club> clubs = parseXML(xml);
+		return clubs;
+	}
+	
+	private static ArrayList<Club> parseXML(String xml){
+		ArrayList<Club> clubs = new ArrayList<Club>();
+		Element root = XMLUtils.getRoot(xml, "UTF-8");
+		List<Node> nodeStadiums = XMLUtils.getChildren(root, "club");
+		for (Node node : nodeStadiums) {
+			Club club = new Club();
+			String name = XMLUtils.getText(node, "name");
+			String acronym = XMLUtils.getText(node, "acronym");
+			String badge = XMLUtils.getText(node, "badge");
+			
+			if(badge.equals("")) Log.e("bras2012", name);
+			
+			Node headquarters = XMLUtils.getChild(node, "headquarters");
+			Headquarters hq = parseHeadquarters(headquarters);
+			
+			club.setName(name);
+			club.setAcronym(acronym);
+			club.setBadge(BADGE_PREFIX + badge);
+			club.setIcon(ICON_PREFIX + badge);
+			club.setHeadquarters(hq);
+			clubs.add(club);
+		}
+		return clubs;
+	}
+
+	private static Headquarters parseHeadquarters(Node headquarters) {
+		Headquarters hq = new Headquarters();
+		
+		String name = XMLUtils.getText(headquarters, "name");
+		String city = XMLUtils.getText(headquarters, "city");
+		String latitude = XMLUtils.getText(headquarters, "latitude");
+		String longitude = XMLUtils.getText(headquarters, "longitude");
+
+		hq.setName(name);
+		
+		if(city.equals("")) hq.setCity(null);
+		else hq.setCity(city);
+		
+		try{			
+			Long lat = Long.valueOf(latitude);
+			hq.setLatitude(lat);
+		}catch(NumberFormatException e){
+			hq.setLatitude(null);
+		}
+		try{
+			Long lng = Long.valueOf(longitude);
+			hq.setLongitude(lng);			
+		}catch(NumberFormatException e){
+			hq.setLongitude(null);
+		}
+		
+		return hq;
+	}
+
+}

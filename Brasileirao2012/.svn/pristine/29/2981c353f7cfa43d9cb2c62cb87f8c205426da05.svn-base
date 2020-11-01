@@ -1,0 +1,95 @@
+package br.com.zynger.brasileirao2012.actionmode;
+
+import android.content.Context;
+
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+public class ActionModeCallback<T> implements ActionMode.Callback {
+	public interface ActionModeListener<T> {
+		Context getContext();
+		int getMenuResource();
+		void onPrepareActionMode();
+		void changeMenuItems(T model);
+		void onDestroyActionMode();
+		boolean onActionModeItemClick(T model, ActionMode mode, int itemId);
+	}
+	
+	private ActionModeListener<T> listener;
+	protected ActionMode mActionMode;
+	private T model;
+	private Menu menu;
+	private boolean visible;
+	
+	public ActionModeCallback(ActionModeListener<T> listener) {
+		this.listener = listener;
+	}
+	
+	public boolean isVisible() {
+		return visible;
+	}
+	
+	public void setModel(T model) {
+		this.model = model;
+		listener.changeMenuItems(model);
+	}
+	
+	public T getModel() {
+		return model;
+	}
+	
+	public void setItemVisibility(int id, boolean visible) {
+		if(menu != null){			
+			menu.findItem(id).setVisible(visible);
+		}
+	}
+	
+	public void startActionMode() {
+		Context context = listener.getContext();
+		if(!isVisible()){
+			if (context instanceof SherlockActivity) {
+				mActionMode = ((SherlockActivity) context)
+						.startActionMode(this);
+			}else if(context instanceof SherlockFragmentActivity){
+				mActionMode = ((SherlockFragmentActivity) context)
+						.startActionMode(this);
+			}
+		}
+	}
+	
+	public void dismissActionMode() {
+		if(mActionMode != null && isVisible()){
+			mActionMode.finish();
+		}
+	}
+	
+	@Override
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+		mode.getMenuInflater().inflate(listener.getMenuResource(), menu);
+		this.menu = menu;
+		listener.changeMenuItems(getModel());
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+		visible = true;
+		listener.onPrepareActionMode();
+		return false;
+	}
+
+	@Override
+	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+		mode.finish();
+		return listener.onActionModeItemClick(model, mode, item.getItemId());
+	}
+
+	@Override
+	public void onDestroyActionMode(ActionMode mode) {
+		visible = false;
+		listener.onDestroyActionMode();
+	}
+}

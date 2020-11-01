@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomActionBar">
+        <attr name="titleText" format="string"/>
+        <attr name="titleSize" format="dimension"/>
+        <attr name="logosrc" format="reference"/>
+        <attr name="showTextBox" format="boolean"/>
+        <attr name="showUpdate" format="boolean"/>
+        <attr name="showZoom" format="boolean"/>
+        <attr name="showImage" format="boolean"/>
+    </declare-styleable>
+</resources>

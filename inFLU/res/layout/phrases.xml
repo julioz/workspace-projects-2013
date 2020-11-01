@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<br.com.zynger.influ.view.ViewFlinger
+    xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+phrases/flinger"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/logo_bg">
+	<include
+		android:id="@+phrases/phrases_1"
+		layout="@layout/phrases_1" />
+	<include
+		android:id="@+phrases/phrases_2"
+		layout="@layout/phrases_2" />
+	<include
+		android:id="@+phrases/phrases_3"
+		layout="@layout/phrases_3" />
+</br.com.zynger.influ.view.ViewFlinger>

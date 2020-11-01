@@ -1,0 +1,173 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.view.AprovRow;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class AprovActivity extends Activity {
+	
+	public static final String INTENT_DIVISION = "aprovact_division";
+	
+	private static TreeMap<String, Club> clubs;
+	
+	private int division;
+	
+	private TextView actionbar_tt;
+	private TextView tv_division;
+	private LinearLayout ll_division;
+	private ImageButton update;
+	private RotateAnimation rot;
+	private TableLayout tl_table;
+	private RelativeLayout rl_loading;
+	private LinearLayout ll_data;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aprov);
+		
+		clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		division = getIntent().getIntExtra(INTENT_DIVISION, 0);
+		
+		loadViews();
+		
+		setDivisionLayoutConfigs();
+		
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_actsupdates", false)) new UpdateAprovTask(this).execute();
+		else setTable();
+	}
+
+	private void loadViews() {
+		actionbar_tt = (TextView) findViewById(R.aprov.tv_name);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		ll_division = (LinearLayout) findViewById(R.aprov.actionbar_ll);
+		tv_division = (TextView) findViewById(R.aprov.tv_actionbar_division);
+		
+		rl_loading = (RelativeLayout) findViewById(R.aprov.rl_loading);
+		ll_data = (LinearLayout) findViewById(R.aprov.ll_data);
+		
+		tl_table = (TableLayout) findViewById(R.aprov.tl_table);
+		
+		rot = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rot.setInterpolator(new LinearInterpolator());
+		rot.setDuration(900L);
+		rot.setStartTime(200L);
+		
+		update = (ImageButton) findViewById(R.aprov.ib_update);
+		
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				v.startAnimation(rot);
+				if(ConnectionHelper.isConnected(v.getContext())) new UpdateAprovTask(v.getContext()).execute();
+				else Toast.makeText(v.getContext(), "Verifique a conexão à internet.", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	
+	private void setDivisionLayoutConfigs(){
+		if(division == Club.PRIMEIRADIVISAO) tv_division.setText("A");
+		else tv_division.setText("B");
+		
+		ll_division.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(division == Club.PRIMEIRADIVISAO){
+					tv_division.setText("B");
+					division = Club.SEGUNDADIVISAO;
+				}else{
+					tv_division.setText("A");
+					division = Club.PRIMEIRADIVISAO;
+				}
+				setTable();
+			}
+		});
+	}
+	
+	private void setTable() {
+		tl_table.removeAllViews();
+		for (Club c : clubs.values()) {
+			if(c.getDivision() == division) tl_table.addView(new AprovRow(this, c).getTableRow());
+		}
+		tl_table.invalidate();
+	}
+	
+	private class UpdateAprovTask extends AsyncTask<Void, Void, TreeMap<String, AprovData>> {
+		private Context c;
+		
+		public UpdateAprovTask(Context c){
+			this.setContext(c);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			ll_data.setVisibility(View.GONE);
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		protected TreeMap<String, AprovData> doInBackground(Void... arg0) {
+			try{
+				TreeMap<Integer, Fixture> matches = (TreeMap<Integer, Fixture>) FileHandler.openBackup(c, FileHandler.MATCHES, division);
+				return HTMLManager.getAprov(clubs, matches);
+			}catch(Exception e){
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(TreeMap<String, AprovData> result) {
+			if(result != null){
+				for (Iterator<String> it = result.keySet().iterator(); it.hasNext();) {
+					String clubName = (String) it.next();
+					clubs.get(clubName).setAprov(result.get(clubName));
+				}
+				FileHandler.saveBackup(getContext(), FileHandler.CLUBS, clubs);
+				Toast.makeText(getContext(), "Dados atualizados", Toast.LENGTH_SHORT).show();
+			}else{
+				Toast.makeText(getContext(), "Não foi possível atualizar os dados. Tente novamente.", Toast.LENGTH_SHORT).show();
+			}
+			setTable();
+			
+			rl_loading.setVisibility(View.GONE);
+			ll_data.setVisibility(View.VISIBLE);
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+}

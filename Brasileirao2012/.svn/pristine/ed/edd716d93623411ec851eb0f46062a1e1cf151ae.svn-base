@@ -1,0 +1,169 @@
+package br.com.zynger.brasileirao2012.asynctasks;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.HomeActivity;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.data.AprovCalculator;
+import br.com.zynger.brasileirao2012.data.MatchesDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.rest.FansREST;
+import br.com.zynger.brasileirao2012.rest.StrikersREST;
+import br.com.zynger.brasileirao2012.util.AppHelper;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class UpdateAllFromHomeActivityTask extends AsyncTask<Void, Integer, Boolean> {
+	private final int UPDATE_RANKING = 1;
+	private final int UPDATE_TABLE = 2;
+	private final int UPDATE_STRIKERS = 3;
+	private final int UPDATE_APROV = 4;
+	private final int UPDATE_OTHERS = 5;
+
+	private TreeMap<String, Club> clubs;
+	private Club myClub;
+	private MatchesDB matchesDB;
+	
+	private Context context;
+	private View viewToShowWhileExecuting, viewToHideWhileExecuting;
+	private View callerButton;
+	private TextView tv_progress;
+
+	public UpdateAllFromHomeActivityTask(
+			TreeMap<String, Club> clubs,
+			Club myClub,
+			Context context,
+			View viewToShowWhileExecuting,
+			View viewToHideWhileExecuting,
+			View callerButton, TextView tv_progress){
+		this.clubs = clubs;
+		this.myClub = myClub;
+		this.matchesDB = MatchesDB.getInstance(context, clubs);
+		
+		this.context = context;
+		this.viewToHideWhileExecuting = viewToHideWhileExecuting;
+		this.viewToShowWhileExecuting = viewToShowWhileExecuting;
+		this.callerButton = callerButton;
+		this.tv_progress = tv_progress;
+	}
+
+	@Override
+	protected void onPreExecute() {
+		viewToShowWhileExecuting.setVisibility(View.VISIBLE);
+		viewToHideWhileExecuting.setVisibility(View.GONE);
+		callerButton.setVisibility(View.GONE);
+		super.onPreExecute();
+	}
+
+	@Override
+	protected Boolean doInBackground(Void... arg0) {
+		if(ConnectionHelper.isConnected(context)){
+			try{
+				publishProgress(UPDATE_RANKING);
+				TreeMap<String, Club> ranking1 = HTMLManager.getRanking(clubs, Division.FIRSTDIVISION);
+				FileHandler.saveBackup(context, FileHandler.JSON_RANKING,
+						JsonUtil.createRankingJson(ranking1).toString());
+				Log.d(HomeActivity.TAG, "Ranking A atualizado");
+
+				TreeMap<String, Club> ranking2 = HTMLManager.getRanking(clubs, Division.SECONDDIVISION);
+				FileHandler.saveBackup(context, FileHandler.JSON_RANKING,
+						JsonUtil.createRankingJson(ranking2).toString());
+				Log.d(HomeActivity.TAG, "Ranking B atualizado");
+
+				publishProgress(UPDATE_TABLE);
+				JSONObject matches_a = HTMLManager.getTableData(context, matchesDB, clubs, Division.FIRSTDIVISION);
+				FileHandler.saveBackup(context, FileHandler.JSON_MATCHES, matches_a.toString(), Division.FIRSTDIVISION);
+				FileHandler.saveBackup(context, FileHandler.VERSION_MATCHES,
+						AppHelper.getAppVersion(context), Division.FIRSTDIVISION);
+				Log.d(HomeActivity.TAG, "Matches A atualizado");
+
+				JSONObject matches_b = HTMLManager.getTableData(context, matchesDB, clubs, Division.SECONDDIVISION);
+				FileHandler.saveBackup(context, FileHandler.JSON_MATCHES, matches_b.toString(), Division.SECONDDIVISION);
+				FileHandler.saveBackup(context, FileHandler.VERSION_MATCHES,
+						AppHelper.getAppVersion(context), Division.SECONDDIVISION);
+				Log.d(HomeActivity.TAG, "Matches B atualizado");
+
+				publishProgress(UPDATE_STRIKERS);
+				TreeMap<Division, ArrayList<Striker>> tmStrikers = new TreeMap<Division, ArrayList<Striker>>();
+				StrikersREST strikersREST = new StrikersREST(clubs);
+				tmStrikers.put(Division.FIRSTDIVISION, strikersREST.getStrikers(Division.FIRSTDIVISION));
+				tmStrikers.put(Division.SECONDDIVISION, strikersREST.getStrikers(Division.SECONDDIVISION));
+				FileHandler.saveBackup(context, FileHandler.JSON_STRIKERS, JsonUtil.createStrikersJson(tmStrikers));
+				Log.d(HomeActivity.TAG, "Strikers atualizado");
+
+				publishProgress(UPDATE_APROV);
+				TreeMap<String, AprovData> tmAprov = new AprovCalculator().getAprov(clubs, matchesDB);
+				for (Iterator<String> it = tmAprov.keySet().iterator(); it.hasNext();) {
+					String clubAcr = (String) it.next();
+					clubs.get(clubAcr).setAprov(tmAprov.get(clubAcr));
+				}
+				FileHandler.saveBackup(context, FileHandler.JSON_APROV, JsonUtil.createAprovJson(tmAprov).toString());
+				Log.d(HomeActivity.TAG, "Aproveitamento atualizado");
+
+				publishProgress(UPDATE_OTHERS);
+				FileHandler.saveBackup(context, FileHandler.JSON_FANS,
+						JsonUtil.createFansJson(new FansREST().updateFansData(context, clubs, myClub.getAcronym())).toString());
+				Log.d(HomeActivity.TAG, "Torcidômetro atualizado");
+				return true;
+			}catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}catch(OutOfMemoryError e){
+				return false;
+			}
+		}else return false;
+	}
+
+	@Override
+	protected void onProgressUpdate(Integer... values) {
+		switch (values[0]) {
+		case UPDATE_RANKING:
+			tv_progress.setText("Atualizando classificações...");
+			break;
+		case UPDATE_TABLE:
+			tv_progress.setText("Atualizando tabelas...");
+			break;
+		case UPDATE_STRIKERS:
+			tv_progress.setText("Atualizando artilharias...");
+			break;
+		case UPDATE_APROV:
+			tv_progress.setText("Atualizando aproveitamento...");
+			break;
+		case UPDATE_OTHERS:
+			tv_progress.setText("Completando atualização...");
+			break;
+		default:
+			tv_progress.setText("Atualizando...");
+			break;
+		}
+		super.onProgressUpdate(values);
+	}
+
+	protected void onPostExecute(Boolean result) {
+		viewToHideWhileExecuting.setVisibility(View.VISIBLE);
+		callerButton.setVisibility(View.VISIBLE);
+		viewToShowWhileExecuting.setVisibility(View.GONE);
+
+		if(result){
+			FileHandler.saveBackup(context, FileHandler.LASTDATE_UPDATEALL, Calendar.getInstance());
+			Toast.makeText(context, R.string.message_dataupdated, Toast.LENGTH_SHORT).show();
+		}
+		else Toast.makeText(context, R.string.message_errorupdatefail, Toast.LENGTH_SHORT).show();
+	}
+}

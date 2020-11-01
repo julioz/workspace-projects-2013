@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+ 	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#00372a"
+	android:id="@+ranking/ll_actback"
+	android:orientation="vertical">
+	
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:id="@+ranking/ll_headers"
+		android:weightSum="15"
+		android:paddingTop="3dp"
+		android:paddingBottom="3dp"
+		android:background="@drawable/actionbar_bg">
+		
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:textSize="18dp"
+			android:layout_weight="5.1" />
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="P"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_points"
+			android:layout_weight="1.1" />	
+		
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="J"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_played"
+			android:layout_weight="1.1" />
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="V"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_win"
+			android:layout_weight="1.1" />
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="E"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_draw"
+			android:layout_weight="1.1" />
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="D"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_lose"
+			android:layout_weight="1.1" />
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="GP"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_goalspro"
+			android:layout_weight="1.1" />
+		
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="GC"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_goalsagainst"
+			android:layout_weight="1.1" />
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="S"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_balance"
+			android:layout_weight="1.1" />
+			
+		<!-- <TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="CA"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_ycards"
+			android:layout_weight="0.9" />
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="CV"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_rcards"
+			android:layout_weight="0.9" /> -->
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="AP"
+			android:textColor="#ffffff"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:textSize="18dp"
+			android:id="@+ranking/tv_aprov"
+			android:layout_weight="1.1" />
+	</LinearLayout>
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+ranking/ll_headers"
+		android:layout_above="@+ranking/ll_footer"
+		android:scrollbarFadeDuration="750"
+		android:background="#00372a"
+		android:id="@+ranking/sv_table"
+		android:fadeScrollbars="true">
+	
+		<TableLayout
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+ranking/tablelayout"/>
+	</ScrollView>
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+ranking/ll_footer"
+		android:visibility="invisible"
+		android:gravity="center"
+		android:paddingTop="3dp"
+		android:paddingBottom="3dp"
+		android:background="#00372a">
+		
+		<View
+			android:background="#6495ED"
+			android:layout_width="9dp"
+			android:layout_height="9dp"/>
+		
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingLeft="3dp"
+			android:textColor="#ffffff"
+			android:text="Libertadores" />
+			
+		<View
+			android:background="#FFFF00"
+			android:layout_marginLeft="3dp"
+			android:layout_width="9dp"
+			android:layout_height="9dp"/>
+		
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingLeft="3dp"
+			android:textColor="#ffffff"
+			android:text="Sul-Americana" />
+			
+		<View
+			android:background="#FF0000"
+			android:layout_marginLeft="3dp"
+			android:layout_width="9dp"
+			android:layout_height="9dp"/>
+		
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingLeft="3dp"
+			android:textColor="#ffffff"
+			android:text="Rebaixamento" />
+	</LinearLayout>
+</RelativeLayout>

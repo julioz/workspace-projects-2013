@@ -1,0 +1,1046 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#FFFFFFFF"
+  android:orientation="vertical">
+  	<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:shrinkColumns="0,1"
+  		android:stretchColumns="2">
+  		
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#FF068ED4">
+  		
+  		<ImageView
+  		android:src="@drawable/ic_exibicao"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:gravity="center_vertical|right" android:paddingRight="20sp"
+        android:text="Exibir Pontos de Interesse" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		
+			
+		<ImageButton
+			android:src="@drawable/bt_add"
+			android:id="@+exibicao/btnExibicaoAplicar"
+			android:background="@null"
+			android:layout_gravity="right"
+			android:paddingRight="10sp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  		
+  		</TableRow>
+</TableLayout>
+
+<ScrollView
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:background="#FFFFFFFF"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:scrollbars="horizontal|vertical">
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#FFFFFFFF"
+  android:orientation="vertical"
+  android:paddingTop="3sp">
+  
+  <TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:shrinkColumns="0,1,3"
+  		android:stretchColumns="2">
+  		
+  		<!-- Veiculo -->
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:id="@+exibicao/trExibicaoVeiculo"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#88068ED4">
+  		
+  		<ImageView
+  		android:src="@drawable/car_icon"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <RelativeLayout 
+		  xmlns:android="http://schemas.android.com/apk/res/android"
+		  android:layout_width="fill_parent"
+		  android:layout_height="fill_parent">
+		  <CheckBox
+			android:id="@+exibicao/cbVeiculo" android:gravity="left"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:button="@drawable/checkboxtristate"/>
+		  <ImageView
+		    android:background="#0000"      
+		    android:src="@drawable/marca_cb"
+		    android:layout_alignTop="@exibicao/cbVeiculo"
+		    android:layout_alignBottom="@exibicao/cbVeiculo"
+		    android:layout_alignRight="@exibicao/cbVeiculo"
+		    android:layout_alignLeft="@exibicao/cbVeiculo"
+		    android:scaleType="center"
+		    android:layout_width="wrap_content" 
+		    android:layout_height="fill_parent"
+		    android:id="@+exibicao/marcaCBVei"
+		    android:visibility="gone"/>
+		</RelativeLayout>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:gravity="center_vertical|right" android:paddingRight="10sp"
+        android:text="Veículo" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		<ImageView
+  		android:src="@drawable/ic_expandir"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:paddingRight="10sp"/>
+  		
+  		</TableRow>
+  		
+  		<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:id="@+exibicao/tlExibicaoVeiculoCB"
+  		android:stretchColumns="1"
+  		android:shrinkColumns="0,2">
+  		
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_ambulancia"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Ambulância" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbVeiculoAmbulancia"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_veiculoaereo"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Veículo Aéreo" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbVeiculoAereos"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_veiculoterrestre"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Veículo de Socorro Terrestre" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbVeiculoTerrestre"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_veiculoaquatico"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Veículo de Socorro Aquático" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbVeiculoAquatico"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  		</TableLayout>
+  		
+  		<!-- Estrutura -->
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:id="@+exibicao/trExibicaoEstrutura"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#FF068ED4">
+  		
+  		<ImageView
+  		android:src="@drawable/casa_icon"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <RelativeLayout 
+		  xmlns:android="http://schemas.android.com/apk/res/android"
+		  android:layout_width="fill_parent"
+		  android:layout_height="fill_parent">
+		  <CheckBox
+			android:id="@+exibicao/cbEstrutura" android:gravity="left"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:button="@drawable/checkboxtristate"/>
+		  <ImageView
+		    android:background="#0000"      
+		    android:src="@drawable/marca_cb"
+		    android:layout_alignTop="@exibicao/cbEstrutura"
+		    android:layout_alignBottom="@exibicao/cbEstrutura"
+		    android:layout_alignRight="@exibicao/cbEstrutura"
+		    android:layout_alignLeft="@exibicao/cbEstrutura"
+		    android:scaleType="center"
+		    android:layout_width="wrap_content" 
+		    android:layout_height="fill_parent"
+		    android:id="@+exibicao/marcaCBEstrut"
+		    android:visibility="gone"/>
+		</RelativeLayout>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:gravity="center_vertical|right" android:paddingRight="10sp"
+        android:text="Estrutura" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		<ImageView
+  		android:src="@drawable/ic_expandir"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:paddingRight="10sp"/>
+  		
+  		</TableRow>
+  		
+  		<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:id="@+exibicao/tlExibicaoEstruturaCB"
+  		android:stretchColumns="1"
+  		android:shrinkColumns="0,2">
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_hospital"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Hospital" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEstrutHospital"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_predio"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Edifício" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEstrutEdificio"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_prediocomercial"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Edifício Comercial" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEstrutEdificioComerial"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_estadio"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Estádio" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEstrutEstadio"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_casa"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Casa" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEstrutCasa"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_industria"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Indústria" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEstrutIndustria"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_shopping"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Shopping Center" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEstrutShopping"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/casa_icon"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Outros" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEstrutOutro"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  		</TableLayout>
+  		
+  		<!-- Equipamento -->
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:id="@+exibicao/trExibicaoEquipamento"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#88068ED4">
+  		
+  		<ImageView
+  		android:src="@drawable/equipment_icon"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <CheckBox
+		android:id="@+exibicao/cbEquipamento" android:gravity="left"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:button="@drawable/checkboxtristate"/>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:gravity="center_vertical|right" android:paddingRight="10sp"
+        android:text="Equipamento" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		</TableRow>
+  		
+  		<!-- Equipe -->
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:id="@+exibicao/trExibicaoEquipe"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#FF068ED4">
+  		
+  		<ImageView
+  		android:src="@drawable/team_icon"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <RelativeLayout 
+		  xmlns:android="http://schemas.android.com/apk/res/android"
+		  android:layout_width="fill_parent"
+		  android:layout_height="fill_parent">
+		  <CheckBox
+			android:id="@+exibicao/cbEquipe" android:gravity="left"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:button="@drawable/checkboxtristate"/>
+		  <ImageView
+		    android:background="#0000"      
+		    android:src="@drawable/marca_cb"
+		    android:layout_alignTop="@exibicao/cbEquipe"
+		    android:layout_alignBottom="@exibicao/cbEquipe"
+		    android:layout_alignRight="@exibicao/cbEquipe"
+		    android:layout_alignLeft="@exibicao/cbEquipe"
+		    android:scaleType="center"
+		    android:layout_width="wrap_content" 
+		    android:layout_height="fill_parent"
+		    android:id="@+exibicao/marcaCBEquipe"
+		    android:visibility="gone"/>
+		</RelativeLayout>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:gravity="center_vertical|right" android:paddingRight="10sp"
+        android:text="Equipe" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		<ImageView
+  		android:src="@drawable/ic_expandir"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:paddingRight="10sp"/>
+        
+  		</TableRow>
+  		
+  		<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:id="@+exibicao/tlExibicaoEquipeCB"
+  		android:stretchColumns="1"
+  		android:shrinkColumns="0,2">
+  		
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_bombeiros"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Bombeiros" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeBombeiros"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_voluntario"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Voluntários" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeVoluntarios"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_policia"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Polícia Militar" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipePoliciaMilitar"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_policia"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Polícia Civil" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipePoliciaCivil"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_defesacivil"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Defesa Civil Municipal" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeDefCivMun"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_defesacivil"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Defesa Civil Estadual" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeDefCivEstad"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_comlurb"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Comlurb" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeComlurb"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_public"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Cet-Rio" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeCetRio"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_public"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="CEG" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeCEG"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_public"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Light" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeLight"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_public"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="CEDAE" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeCedae"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_public"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Geo-Rio" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeGeoRio"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_public"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="IML" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeIML"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_public"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="CNEN" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeCNEN"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_inea"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="INEA" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeINEA"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_ibama"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="IBAMA" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeIBAMA"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_militares"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Exército" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeExercito"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_militares"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Marinha" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeMarinha"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			<ImageView
+  			android:src="@drawable/ic_militares"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Aeronáutica" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbEquipeAeronautica"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			</TableRow>
+  			
+  			
+  			
+  		</TableLayout>
+  		
+  		<!-- Perigo -->
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:id="@+exibicao/trExibicaoPerigo"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#88068ED4">
+  		
+  		<ImageView
+  		android:src="@drawable/danger_icon"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <RelativeLayout 
+		  xmlns:android="http://schemas.android.com/apk/res/android"
+		  android:layout_width="fill_parent"
+		  android:layout_height="fill_parent">
+		  <CheckBox
+			android:id="@+exibicao/cbPerigo" android:gravity="left"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:button="@drawable/checkboxtristate"/>
+		  <ImageView
+		    android:background="#0000"      
+		    android:src="@drawable/marca_cb"
+		    android:layout_alignTop="@exibicao/cbPerigo"
+		    android:layout_alignBottom="@exibicao/cbPerigo"
+		    android:layout_alignRight="@exibicao/cbPerigo"
+		    android:layout_alignLeft="@exibicao/cbPerigo"
+		    android:scaleType="center"
+		    android:layout_width="wrap_content" 
+		    android:layout_height="fill_parent"
+		    android:id="@+exibicao/marcaCBPerigo"
+		    android:visibility="gone"/>
+		</RelativeLayout>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:gravity="center_vertical|right" android:paddingRight="10sp"
+        android:text="Perigo" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		<ImageView
+  		android:src="@drawable/ic_expandir"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:paddingRight="10sp"/>
+        
+  		</TableRow>
+  		
+  		<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:id="@+exibicao/tlExibicaoPerigoCB"
+  		android:stretchColumns="1"
+  		android:shrinkColumns="0,2">
+  		
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_gastoxico"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Gases Tóxicos" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbPerigoGases"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#00000000" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_liquido"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Líquidos Tóxicos" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbPerigoLiquidos"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#00000000" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_quimica"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Substâncias Tóxicas" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbPerigoSubst"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#00000000" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_radioativo"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Exposição Radioativa" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbPerigoRadioativa"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#00000000" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_pedra"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Deslizamento de Terra" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbPerigoDeslizamento"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#00000000" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_prediocolapso"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Colapso de Edifício" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbPerigoColapsoEdificio"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#00000000" >
+  			
+  			<ImageView
+  			android:src="@drawable/ic_rato"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Ratos" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbPerigoRatos"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  			<TableRow
+  			android:layout_width="fill_parent" android:layout_height="wrap_content"
+  			android:background="#FFFFFFFF" >
+  			
+  			<ImageView
+  			android:src="@drawable/danger_icon"
+  			android:layout_gravity="left"
+        	android:layout_height="fill_parent" android:layout_width="wrap_content"/>
+  			<TextView
+  			android:layout_width="fill_parent" android:layout_height="fill_parent"
+  			android:textColor="#000000"
+  			android:text="Outros" android:gravity="center_horizontal|center_vertical"/>
+  			<CheckBox
+			android:id="@+exibicao/cbPerigoOutro"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  			
+  			</TableRow>
+  			
+  		</TableLayout>
+  		
+  		<!-- Vitima -->
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:id="@+exibicao/trExibicaoVitima"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#FF068ED4">
+  		
+  		<ImageView
+  		android:src="@drawable/victim_icon"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <CheckBox
+		android:id="@+exibicao/cbVitima" android:gravity="left"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:button="@drawable/checkboxtristate"/>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:gravity="center_vertical|right" android:paddingRight="10sp"
+        android:text="Vítima" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+        
+        
+  		
+  		</TableRow>
+  		
+  		
+  		
+  </TableLayout>
+  	
+                
+</LinearLayout>
+</ScrollView>
+</LinearLayout>

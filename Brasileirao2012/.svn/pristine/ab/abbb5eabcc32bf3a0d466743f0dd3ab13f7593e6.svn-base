@@ -1,0 +1,129 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.AprovAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.UpdateAprovTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.ClubFullNameComparator;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+import br.com.zynger.brasileirao2012.view.CustomActionBar;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+
+public class AprovActivity extends ListActivity implements AsyncTaskListener {
+	
+	public static final String INTENT_DIVISION = "aprovact_division";
+	
+	private TreeMap<String, Club> clubs;
+	
+	private Division division;
+
+	private CustomActionBar actionbar;
+	private DataUpdateLayout dul_loading;
+	private LinearLayout ll_data;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aprovactivity);
+		
+		clubs = ClubsDB.getInstance(this).getClubs();
+		division = (Division) getIntent().getSerializableExtra(INTENT_DIVISION);
+		
+		loadViews();
+		
+		actionbar.setDivisionText(division.getStringNotation());
+		
+		if(PreferenceEditor.shouldAutoUpdate(this)) {
+			new UpdateAprovTask(this, clubs, this).execute();
+		}else setTable();
+	}
+
+	private void loadViews() {
+		actionbar = (CustomActionBar) findViewById(R.aprovactivity.actionbar);
+		ll_data = (LinearLayout) findViewById(R.aprovactivity.ll_data);
+		dul_loading = (DataUpdateLayout) findViewById(R.aprovactivity.dul_loading);
+		dul_loading.addViewToToggle(ll_data);
+		dul_loading.addViewToToggle(getListView());
+		
+		actionbar.setDivisionOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Division opposite = division.getOppositeDivision();
+				actionbar.setDivisionText(opposite.getStringNotation());
+				division = opposite;
+				setTable();
+			}
+		});
+		
+		actionbar.setUpdateOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(ConnectionHelper.isConnected(v.getContext())){
+					new UpdateAprovTask(v.getContext(),
+							clubs, AprovActivity.this).execute();
+				}else{
+					Toast.makeText(v.getContext(), 
+							getString(R.string.message_verifyconnection),
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+	}
+	
+	private void setTable() {
+		ArrayList<Club> list = new ArrayList<Club>();
+		for (Club c : clubs.values()) {
+			if(c.getDivision() == division) list.add(c);
+		}
+		Collections.sort(list, new ClubFullNameComparator());
+		setListAdapter(new AprovAdapter(this, list));
+	}
+
+	@Override
+	public void preExecution() {
+		dul_loading.show();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		TreeMap<String, AprovData> map = (TreeMap<String, AprovData>) result;
+		
+		FileHandler.saveBackup(this,
+				FileHandler.JSON_APROV, JsonUtil.createAprovJson(map).toString());
+		for (Iterator<String> it = map.keySet().iterator(); it.hasNext();) {
+			String clubAcronym = (String) it.next();
+			clubs.get(clubAcronym).setAprov(map.get(clubAcronym));
+		}
+		Toast.makeText(this,
+				getString(R.string.message_dataupdated), Toast.LENGTH_SHORT).show();
+		
+		setTable();
+		dul_loading.hide();
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		
+		setTable();
+		dul_loading.hide();
+	}
+}

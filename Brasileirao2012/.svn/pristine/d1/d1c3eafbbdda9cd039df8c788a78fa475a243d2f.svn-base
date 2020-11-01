@@ -1,0 +1,156 @@
+package br.com.zynger.brasileirao2012;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.Html;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+public class StadiumsActivity extends Activity {
+	
+	private SharedPreferences prefs;
+	
+	private TextView actionbar_tv;
+	private TextView tv_name, tv_nick, tv_city, tv_capacity, tv_size, tv_foundation, tv_description;
+	private ImageView iv_stadium;
+	private LinearLayout ll_data;
+	private OnClickListener ocl_iv;
+	
+	private String name, nick, city, capacity, foundation, width, height, desc, url;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.stadiums);
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		loadViews();
+		
+		hideStadiumImage();
+		
+		name = getIntent().getStringExtra("ST_NAME");
+		nick = getIntent().getStringExtra("ST_NICK");
+		city = getIntent().getStringExtra("ST_CITY");
+		capacity = getIntent().getStringExtra("ST_CAPACITY");
+		foundation = getIntent().getStringExtra("ST_FOUNDATION");
+		width = getIntent().getStringExtra("ST_WIDTH");
+		height = getIntent().getStringExtra("ST_HEIGHT");
+		desc = getIntent().getStringExtra("ST_DESCRIPTION");
+		url = getIntent().getStringExtra("ST_URL");
+		
+		actionbar_tv.setText(nick);
+		tv_name.setText(Html.fromHtml("<b>Nome:</b> " + name));
+		tv_nick.setText(Html.fromHtml("<b>Apelido:</b> " + nick));
+		tv_city.setText(Html.fromHtml("<b>Cidade:</b> " + city));
+		tv_capacity.setText(Html.fromHtml("<b>Capacidade:</b> " + capacity));
+		tv_size.setText(Html.fromHtml("<b>Medidas:</b> " + width + "m x "+ height + "m"));
+		tv_foundation.setText(Html.fromHtml("<b>Inaugurado em:</b> " + foundation));
+		tv_description.setText(desc);
+		
+		if(prefs.getBoolean("cb_imgsdownload", true)){			
+			new FetchImageTask() { 
+				protected void onPostExecute(Bitmap result) {
+					if (result != null) {
+						iv_stadium.setImageBitmap(result);
+						showStadiumImage();
+					}
+				}
+			}.execute(url);
+		}
+		
+	}
+	
+	@Override
+	protected void onResume() {
+		if(!ConnectionHelper.isConnected(this)) hideStadiumImage();
+		else{
+			if(iv_stadium.getVisibility() == View.GONE && prefs.getBoolean("cb_imgsdownload", true)){
+				new FetchImageTask() { 
+			        protected void onPostExecute(Bitmap result) {
+			            if (result != null) {
+			            	iv_stadium.setImageBitmap(result);
+			            	showStadiumImage();
+			            }
+			        }
+			    }.execute(url);
+			}
+		}
+		super.onResume();
+	}
+
+	private void loadViews() {
+		actionbar_tv = (TextView) findViewById(R.stadiums.actionbar_name);
+		actionbar_tv.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		tv_name = (TextView) findViewById(R.stadiums.tv_name);
+		tv_nick = (TextView) findViewById(R.stadiums.tv_nick);
+		tv_city = (TextView) findViewById(R.stadiums.tv_city);
+		tv_capacity = (TextView) findViewById(R.stadiums.tv_capacity);
+		tv_size = (TextView) findViewById(R.stadiums.tv_size);
+		tv_foundation = (TextView) findViewById(R.stadiums.tv_foundation);
+		tv_description = (TextView) findViewById(R.stadiums.tv_description);
+		iv_stadium = (ImageView) findViewById(R.stadiums.iv_image);
+		ll_data = (LinearLayout) findViewById(R.stadiums.ll_data);
+		
+		ocl_iv = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Dialog d = new Dialog(v.getContext()); 
+				d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				d.setContentView(R.layout.dialog_image);
+				ImageView iv = (ImageView) d.findViewById(R.dialog_image.iv);
+				iv.setImageDrawable(((ImageView) v).getDrawable());
+				d.setCanceledOnTouchOutside(true);
+				d.show();
+			}
+		};
+	}
+	
+	private void hideStadiumImage(){
+		iv_stadium.setVisibility(View.GONE);
+		iv_stadium.setOnClickListener(null);
+		ll_data.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
+	}
+	
+	private void showStadiumImage(){
+		iv_stadium.setVisibility(View.VISIBLE);
+		iv_stadium.setOnClickListener(ocl_iv);
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f);
+		lp.setMargins(15, 0, 0, 0);
+		ll_data.setLayoutParams(lp);
+	}
+	
+	private class FetchImageTask extends AsyncTask<String, Integer, Bitmap> {
+	    @Override
+	    protected Bitmap doInBackground(String... arg0) {
+	    	Bitmap b = null;
+	    	try {
+				 b = BitmapFactory.decodeStream((InputStream) new URL(arg0[0]).getContent());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+	        return b;
+	    }	
+	}
+}

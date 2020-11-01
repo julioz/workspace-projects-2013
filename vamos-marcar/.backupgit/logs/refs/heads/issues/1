@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 536478a41148cfc4faad30aa7c145856abba1bbb Júlio Zynger <julioz92@gmail.com> 1378599645 -0300	branch: Created from HEAD
+536478a41148cfc4faad30aa7c145856abba1bbb d58888189dcbea9b26cb6c9ecc32095229f5b200 Júlio Zynger <julioz92@gmail.com> 1378602638 -0300	commit: Adds google maps integration, centering on marker on map.
+d58888189dcbea9b26cb6c9ecc32095229f5b200 90e21f8f53f6ad53e60d25a75aa76184c361858f Júlio Zynger <julioz92@gmail.com> 1378939363 -0300	commit: Scope creep. Adds circular imageview to MainActivity.

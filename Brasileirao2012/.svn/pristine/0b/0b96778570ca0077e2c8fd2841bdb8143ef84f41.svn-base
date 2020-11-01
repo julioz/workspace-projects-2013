@@ -1,0 +1,119 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.StrikersDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+public class SplashScreen extends Activity implements Runnable {
+	
+	private final static int SPLASH_TIME = 2000;
+	
+	private ClubsDB clubsDB;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		clubsDB = ClubsDB.getInstance(this);
+		
+		String myClubAcronym = (String) FileHandler.openBackup(this, FileHandler.MYCLUB);
+		clubsDB.setMyClub(myClubAcronym != null ? clubsDB.getClubs().get(myClubAcronym) : null);
+		
+		try {
+			setBackedUpData(clubsDB.getClubs());
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try{			
+			setContentView(R.layout.splash);
+		}catch(IndexOutOfBoundsException e){ //se o device tem pouquissima memoria e nao consegue nem renderizar a splashscreen
+			this.run();
+		}
+		
+		Handler h = new Handler();
+		h.postDelayed(this, SPLASH_TIME); //aqui é definido o delay do handler em milisegundos
+	}
+	
+	private void setBackedUpData(TreeMap<String, Club> clubs) throws JSONException {
+		Object jsonStringRanking = FileHandler.openBackup(this, FileHandler.JSON_RANKING);
+		if(null != jsonStringRanking){
+			JSONObject jsonRanking = new JSONObject(jsonStringRanking.toString());
+			for (Iterator<String> it = clubs.keySet().iterator(); it.hasNext();) {
+				String acronym = (String) it.next();
+				if(jsonRanking.has(acronym)){					
+					JSONArray ja = jsonRanking.getJSONArray(acronym);
+					clubs.get(acronym).setRankingFromJson(ja);
+				}
+			}
+		}
+		
+		Object jsonStringStrikers = FileHandler.openBackup(this, FileHandler.JSON_STRIKERS);
+		if(null != jsonStringStrikers){
+			JSONObject jsonStrikers = new JSONObject(jsonStringStrikers.toString());
+			JSONArray strikersA = jsonStrikers.getJSONArray(Division.FIRSTDIVISION.toString());
+			JSONArray strikersB = jsonStrikers.getJSONArray(Division.SECONDDIVISION.toString());
+			ArrayList<Striker> alStrikersA = new ArrayList<Striker>();
+			ArrayList<Striker> alStrikersB = new ArrayList<Striker>();
+			
+			for (int i = 0; i < strikersA.length(); i++) {
+				JSONArray arr = strikersA.getJSONArray(i);
+				alStrikersA.add(new Striker(arr, clubsDB.getClubs()));
+			}
+			
+			for (int i = 0; i < strikersB.length(); i++) {
+				JSONArray arr = strikersB.getJSONArray(i);
+				alStrikersB.add(new Striker(arr, clubsDB.getClubs()));
+			}
+			
+			StrikersDB.getInstance().setStrikersA(alStrikersA);
+			StrikersDB.getInstance().setStrikersB(alStrikersB);
+		}
+		
+		Object jsonStringFans = FileHandler.openBackup(this, FileHandler.JSON_FANS);
+		if(null != jsonStringFans){
+			JSONObject jsonFans = new JSONObject(jsonStringFans.toString());
+			for (Iterator<String> it = clubs.keySet().iterator(); it.hasNext();) {
+				String acronym = (String) it.next();
+				if(jsonFans.has(acronym)){					
+					JSONArray ja = jsonFans.getJSONArray(acronym);
+					clubs.get(acronym).setFansFromJson(ja);
+				}
+			}
+		}
+		
+		Object jsonStringAprov = FileHandler.openBackup(this, FileHandler.JSON_APROV);
+		if(null != jsonStringAprov){
+			JSONObject jsonAprov = new JSONObject(jsonStringAprov.toString());
+			for (Iterator<String> it = clubs.keySet().iterator(); it.hasNext();) {
+				String acronym = (String) it.next();
+				if(jsonAprov.has(acronym)){					
+					JSONArray ja = jsonAprov.getJSONArray(acronym);
+					AprovData aprovData = new AprovData(ja);
+					clubs.get(acronym).setAprov(aprovData);
+				}
+			}
+		}
+	}
+	
+	public void run(){
+		startActivity(new Intent(this, HomeActivity.class));
+		finish();
+	}
+}

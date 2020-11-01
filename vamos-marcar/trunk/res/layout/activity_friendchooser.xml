@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:font="http://schemas.android.com/apk/res/br.com.zynger.vamosmarcar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+friendchooser_activity/ll_loading"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:id="@+friendchooser_activity/pb_loading"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <br.com.zynger.vamosmarcar.view.RobotoTextView
+            android:id="@+friendchooser_activity/tv_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/friendchooseractivity_fetchingfriends"
+            android:textColor="@color/darkgray"
+            android:textSize="18sp"
+            font:typeface="roboto_regular" />
+    </LinearLayout>
+
+    <br.com.zynger.vamosmarcar.view.IndexableListView
+        android:id="@+friendchooser_activity/lv_friends"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/lightgray"
+        android:dividerHeight="1dp" />
+
+</RelativeLayout>

@@ -1,0 +1,94 @@
+package br.com.zynger.libertadores.model;
+
+import java.util.GregorianCalendar;
+
+public class Match implements Comparable<Match> {
+	
+	public static final int SCORE_NULL = -1;
+	
+	private String title;
+	private Club home;
+	private Club away;
+	private String stadium;
+	private GregorianCalendar date;
+	private Integer scoreHome;
+	private Integer scoreAway;
+	
+	public Match() { }
+	
+	public Match(Club home, Club away, String stadium, GregorianCalendar date,
+			Integer scoreHome, Integer scoreAway) {
+		this.home = home;
+		this.away = away;
+		this.stadium = stadium;
+		this.date = date;
+		this.scoreHome = scoreHome;
+		this.scoreAway = scoreAway;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public Club getHome() {
+		return home;
+	}
+	
+	public void setHome(Club home) {
+		this.home = home;
+	}
+	
+	public Club getAway() {
+		return away;
+	}
+	
+	public void setAway(Club away) {
+		this.away = away;
+	}
+	
+	public String getStadium() {
+		return stadium;
+	}
+	
+	public void setStadium(String stadium) {
+		this.stadium = stadium;
+	}
+	
+	public GregorianCalendar getDate() {
+		return date;
+	}
+	
+	public void setDate(GregorianCalendar date) {
+		this.date = date;
+	}
+	
+	public Integer getScoreHome() {
+		return scoreHome;
+	}
+	
+	public void setScoreHome(Integer scoreHome) {
+		this.scoreHome = scoreHome;
+	}
+	
+	public Integer getScoreAway() {
+		return scoreAway;
+	}
+	
+	public void setScoreAway(Integer scoreAway) {
+		this.scoreAway = scoreAway;
+	}
+
+	@Override
+	public int compareTo(Match another) {
+		int comparisonByTitle = 0;
+		if(getTitle() != null && another.getTitle() != null) comparisonByTitle = getTitle().compareTo(another.getTitle());
+		if(comparisonByTitle == 0){			
+			if(getDate() == null || another.getDate() == null) return 0;
+			return getDate().compareTo(another.getDate());
+		} else return comparisonByTitle;
+	}
+}

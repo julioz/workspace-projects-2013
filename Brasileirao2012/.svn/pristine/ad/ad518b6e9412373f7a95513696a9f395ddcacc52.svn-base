@@ -1,0 +1,173 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.content.Context;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Trophy;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.view.ExpandAnimation;
+
+public class TrophiesActivity extends ListActivity {
+	@SuppressWarnings("unused")
+	private String clubname;
+	private TreeMap<String, Club> clubs;
+	private Club club, myclub;
+	
+	private ImageView iv;
+	private TextView tv;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.trophies);
+		
+		tv = (TextView) findViewById(R.trophies.tv_name);
+		tv.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		iv = (ImageView) findViewById(R.trophies.iv_badge);
+		
+		String clubname = getIntent().getStringExtra("CLUB_NAME");
+		
+		this.clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		
+		club = clubs.get(clubname);
+		myclub = clubs.get((String) FileHandler.openBackup(this, FileHandler.MYCLUB));
+		
+		tv.setText(club.getName().toUpperCase());
+		iv.setImageDrawable(getResources().getDrawable(club.getBadge()));
+		
+		TrophiesArrayAdapter adapter = new TrophiesArrayAdapter(this, R.layout.trophies_row, club.getTrophies());
+		setListAdapter(adapter);
+	}
+	
+	private class TrophiesArrayAdapter extends ArrayAdapter<Trophy>{
+
+		@SuppressWarnings("unused")
+		private Context mContext;
+		private final LayoutInflater mInflater;
+		private int layoutResourceId;
+		private ArrayList<Trophy> objects;
+		
+		public TrophiesArrayAdapter(Context context, int layoutResourceId, ArrayList<Trophy> objects) {
+			super(context, layoutResourceId, objects);
+			this.mInflater = LayoutInflater.from(context);
+			this.layoutResourceId = layoutResourceId;
+			this.objects = objects;
+			this.mContext = context;
+		}
+		
+		@Override
+		public int getCount() {
+			return objects.size();
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			View row = convertView;
+	        TrophyHolder holder = null;
+	        
+	        if(row == null){
+	            row = mInflater.inflate(layoutResourceId, parent, false);
+	            
+	            holder = new TrophyHolder();
+	            holder.imgIcon = (ImageView) row.findViewById(R.trophies_row.imageview);
+	            holder.txtTitle = (TextView) row.findViewById(R.trophies_row.tv_title);
+	            holder.txtTimes = (TextView) row.findViewById(R.trophies_row.tv_times);
+	            holder.toolbar = (LinearLayout) row.findViewById(R.trophies_row.toolbar);
+	            holder.txtTrophyYears = (TextView) row.findViewById(R.trophies_row.tv_years);
+	            
+	            row.setTag(holder);
+	        }else{
+	            holder = (TrophyHolder) row.getTag();
+	        }
+	        
+	        Trophy trp = objects.get(position);
+	        
+	        int res = -1;
+	        switch (trp.getRegion()) {
+			case Trophy.ESTADUAL:
+				res = R.drawable.img_estaduais;
+				break;
+			case Trophy.REGIONAL:
+				res = R.drawable.img_regionais;
+				break;
+			case Trophy.NACIONAL:
+				res = R.drawable.img_brasileiro;
+				break;
+			case Trophy.INTERNACIONAL:
+				res = R.drawable.img_internacional;
+				break;
+			default:
+				break;
+			}
+	        
+	        if(res != -1) holder.imgIcon.setImageResource(res);
+	        else holder.imgIcon.setVisibility(View.GONE);
+	        
+	        holder.txtTitle.setText(trp.getType());
+	        int times = trp.getTimes();
+	        String years = trp.getYears();
+	        
+	        row.setClickable(true);
+	        row.setFocusable(true);
+	        row.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					View toolbar = v.findViewById(R.trophies_row.toolbar);
+
+	                // Criando a animacao de expansao para o item
+	                ExpandAnimation expandAni = new ExpandAnimation(toolbar, 500);
+
+	                // Iniciar a animacao
+	                toolbar.startAnimation(expandAni);
+				}
+			});
+	        
+	        if(myclub.getName().equals("Flamengo")){
+	        	if(club.getName().equals("Flamengo") && trp.getType().equals("Campeonato Brasileiro")){
+	        		times = 6;
+	        		years = "1980, 1982, 1983, 1987, 1992, 2009";
+	        	}
+	        }
+	        
+	        int factor = 1;
+	        if(times > 12 && times <= 24) factor = 2;
+	        if(times > 24 && times <= 36) factor = 3;
+	        if(times > 36 && times <= 60) factor = 4;
+	        if(times > 60) factor = 5;
+	        
+	        ((LinearLayout.LayoutParams) holder.toolbar.getLayoutParams()).bottomMargin = factor*-35;
+	        holder.toolbar.getLayoutParams().height = factor*35;
+            holder.toolbar.setVisibility(View.GONE);
+	        
+	        if(times == 1) holder.txtTimes.setText(times + " vez");
+	        else holder.txtTimes.setText(times + " vezes");
+	        
+	        holder.txtTrophyYears.setText(years);
+
+	        return row;
+		}
+	}
+	
+	private static class TrophyHolder{
+        ImageView imgIcon;
+        TextView txtTitle;
+        TextView txtTimes;
+        View toolbar;
+        TextView txtTrophyYears;
+    }
+}

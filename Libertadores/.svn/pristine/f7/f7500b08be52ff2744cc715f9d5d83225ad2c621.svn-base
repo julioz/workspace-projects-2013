@@ -1,0 +1,27 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import br.com.zynger.libertadores.adapters.HistoryFinalsAdapter;
+import br.com.zynger.libertadores.model.HistoricFinal;
+import br.com.zynger.libertadores.xml.HistoryParser;
+
+public class HistoryFinalsActivity extends ListActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.historyfinalsactivity);
+		
+		ArrayList<HistoricFinal> finalsArray = getFinalsDatabase();
+		setListAdapter(new HistoryFinalsAdapter(this, finalsArray));
+	}
+
+	private ArrayList<HistoricFinal> getFinalsDatabase() {
+		ArrayList<HistoricFinal> map = new HistoryParser().getFinals(this);
+		return map;
+	}
+	
+}

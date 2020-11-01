@@ -1,0 +1,686 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TreeMap;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+public class TableDivision2Activity extends TableActivity {
+
+	private static TreeMap<String, Club> clubs;
+	private static TreeMap<Integer, ArrayList<Match>> matches;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.table);
+		
+		clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		if(clubs == null){
+			clubs = HomeActivity.getMapClubs();
+			FileHandler.saveBackup(this, FileHandler.CLUBS, clubs);
+		}
+		matches = (TreeMap<Integer, ArrayList<Match>>) FileHandler.openBackup(this, FileHandler.MATCHES_B);
+		if(matches == null){
+			matches = matchesDatabase(clubs);
+			FileHandler.saveBackup(this, FileHandler.MATCHES_B, matches);
+			FileHandler.saveBackup(this, FileHandler.CLUBS, clubs);
+		}
+		
+		setUsingViewFlow(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_highperformance", true));
+		
+		loadViews();
+		
+		((TextView) findViewById(R.table.tv_actionbar_div)).setText("B");
+		findViewById(R.table.actionbar_ll_div).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+				Intent it = new Intent(v.getContext(), TableDivision1Activity.class);
+				startActivity(it);
+			}
+		});
+		
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_actsupdates", false)) new UpdateTableTask(this, getDivision()).execute();
+		else{
+			if(isUsingViewFlow()) new ShowTableUsingViewFlowTask(this, matches).execute();
+			else setTable(getRodBasedOnCalendar());
+		}
+	}
+	
+	@Override
+	protected int getRodBasedOnCalendar(){
+		Calendar c = Calendar.getInstance(); 
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		int month = c.get(Calendar.MONTH)+1;
+		
+		if(month < 5) return 1;
+		else if(month == 5){
+			if(day < 19 +1) return 1;
+			else if(day < 26 +1) return 2;
+			else if(day < 29 +1) return 3;
+			else return 4;
+		}else if (month == 6){
+			if(day < 2 +1) return 4;
+			else if(day < 9 +1) return 5;
+			else if(day < 16 +1) return 6;
+			else if(day < 23 +1) return 7;
+			else return 8;
+		}else if (month == 7){
+			if(day < 1 +1) return 8;
+			else if(day < 7 +1) return 9;
+			else if(day < 14 +1) return 10;
+			else if(day < 17 +1) return 11;
+			else if(day < 21 +1) return 12;
+			else if(day < 28 +1) return 13;
+			else return 14;
+		}else if (month == 8){
+			if(day < 1 +1) return 14;
+			else if(day < 4 +1) return 15;
+			else if(day < 11 +1) return 16;
+			else if(day < 14 +1) return 17;
+			else if(day < 18 +1) return 18;
+			else if(day < 25 +1) return 19;
+			else if(day < 28 +1) return 20;
+			else return 21;
+		}else if (month == 9){
+			if(day < 1 +1) return 21;
+			else if(day < 4 +1) return 22;
+			else if(day < 8 +1) return 23;
+			else if(day < 11 +1) return 24;
+			else if(day < 15 +1) return 25;
+			else if(day < 22 +1) return 26;
+			else return 27;
+		}else if (month == 10){
+			if(day < 6 +1) return 28;
+			else if(day < 13 +1) return 29;
+			else if(day < 16 +1) return 30;
+			else if(day < 20 +1) return 31;
+			else if(day < 23 +1) return 32;
+			else if(day < 26 +1) return 33;
+			else return 34;
+		}else if (month == 11){
+			if(day < 3 +1) return 34;
+			else if(day < 6 +1) return 35;
+			else if(day < 10 +1) return 36;
+			else if(day < 17 +1) return 37;
+			else return 38;
+		}else if (month == 12){
+			return 38;
+		}else return 1;
+	}
+
+	public static TreeMap<Integer, ArrayList<Match>> matchesDatabase(TreeMap<String, Club> clubs){
+		TreeMap<Integer, ArrayList<Match>> tm = new TreeMap<Integer, ArrayList<Match>>();
+		
+		int rodada = 1;
+		
+		ArrayList<Match> rod1 = new ArrayList<Match>();
+		addMatch(clubs, rod1, "Ipatinga", "ABC", "Ipatingão", 1, 1, rodada, 18, 5, 21, 00, true);
+		addMatch(clubs, rod1, "Ceará", "América-MG", "Presidente Vargas", 1, 2, rodada, 18, 5, 21, 00, true);
+		addMatch(clubs, rod1, "CRB", "Bragantino", "Rei Pelé", 0, 2, rodada, 18, 5, 21, 00, true);
+		addMatch(clubs, rod1, "Joinville", "Atlético-PR", "Arena Joinville", 1, 4, rodada, 19, 5, 16, 20, true);
+		addMatch(clubs, rod1, "Criciúma", "Guaratinguetá", "Heriberto Hulse", 4, 1, rodada, 19, 5, 16, 20, true);
+		addMatch(clubs, rod1, "Grêmio Barueri", "Vitória", "Arena Barueri", 0, 1, rodada, 19, 5, 16, 20, true);
+		addMatch(clubs, rod1, "Paraná", "Guarani", "Durival de Britto", 1, 1, rodada, 19, 5, 16, 20, true);
+		addMatch(clubs, rod1, "América-RN", "Goiás", "Nazarenão", 5, 2, rodada, 19, 5, 16, 20, true);
+		addMatch(clubs, rod1, "Boa Esporte", "Avaí", "Melão", 2, 2, rodada, 19, 5, 16, 20, true);
+		addMatch(clubs, rod1, "São Caetano", "Asa", "Anacleto Campanella", 0, 1, rodada, 19, 5, 21, 00, true);
+		tm.put(rodada, rod1);
+		
+		rodada++;
+		ArrayList<Match> rod2 = new ArrayList<Match>();
+		addMatch(clubs, rod2, "Avaí", "São Caetano", "Ressacada", 1, 0, rodada, 22, 5, 21, 00, true);
+		addMatch(clubs, rod2, "Guarani", "Boa Esporte", "Brinco de Ouro", 0, 0, rodada, 25, 5, 21, 00, true);
+		addMatch(clubs, rod2, "ABC", "Joinville", "Frasqueirão", 0, 0, rodada, 25, 5, 21, 00, true);
+		addMatch(clubs, rod2, "Guaratinguetá", "Ceará", "Dario Rodrigues Leite", 2, 1, rodada, 26, 5, 16, 20, true);
+		addMatch(clubs, rod2, "América-MG", "CRB", "Arena do Jacaré", 4, 0, rodada, 26, 5, 16, 20, true);
+		addMatch(clubs, rod2, "Bragantino", "Criciúma", "Nabi Abi Chedid", 3, 4, rodada, 26, 5, 16, 20, true);
+		addMatch(clubs, rod2, "Asa", "Grêmio Barueri", "Municipal Arapiraca", 1, 1, rodada, 26, 5, 21, 00, true);
+		addMatch(clubs, rod2, "Goiás", "Paraná", "Serra Dourada", 2, 0, rodada, 5, 6, 21, 00, true);
+		addMatch(clubs, rod2, "Vitória", "América-RN", "Barradão", 2, 2, rodada, 5, 6, 21, 00, true);
+		addMatch(clubs, rod2, "Atlético-PR", "Ipatinga", "Gigante do Itiberê", 1, 0, rodada, 10, 7, 21, 00, true);
+		tm.put(rodada, rod2);
+		
+		rodada++;
+		ArrayList<Match> rod3 = new ArrayList<Match>();
+		addMatch(clubs, rod3, "Joinville", "Guarani", "Arena Joinville", 2, 0, rodada, 29, 5, 19, 30, true);
+		addMatch(clubs, rod3, "São Caetano", "Bragantino", "Anacleto Campanella", 2, 0, rodada, 29, 5, 19, 30, true);
+		addMatch(clubs, rod3, "Ceará", "Goiás", "Presidente Vargas", 2, 2, rodada, 29, 5, 19, 30, true);
+		addMatch(clubs, rod3, "América-RN", "Avaí", "Nazarenão", 1, 0, rodada, 29, 5, 19, 30, true);
+		addMatch(clubs, rod3, "CRB", "Guaratinguetá", "Rei Pelé", 3, 1, rodada, 29, 5, 19, 30, true);
+		addMatch(clubs, rod3, "Criciúma", "Vitória", "Heriberto Hulse", 2, 1, rodada, 29, 5, 21, 50, true);
+		addMatch(clubs, rod3, "Grêmio Barueri", "ABC", "Arena Barueri", 0, 3, rodada, 29, 5, 21, 50, true);
+		addMatch(clubs, rod3, "Ipatinga", "Asa", "Lamegão", 1, 0, rodada, 29, 5, 21, 50, true);
+		addMatch(clubs, rod3, "Paraná", "América-MG", "Durival de Britto", 0, 1, rodada, 29, 5, 21, 50, true);
+		addMatch(clubs, rod3, "Boa Esporte", "Atlético-PR", "Melão", 2, 1, rodada, 29, 5, 21, 50, true);
+		tm.put(rodada, rod3);
+		
+		rodada++;
+		ArrayList<Match> rod4 = new ArrayList<Match>();
+		addMatch(clubs, rod4, "Goiás", "CRB", "Serra Dourada", 1, 0, rodada, 1, 6, 21, 00, true);
+		addMatch(clubs, rod4, "Guaratinguetá", "América-RN", "Dario Rodrigues Leite", 0, 2, rodada, 1, 6, 21, 00, true);
+		addMatch(clubs, rod4, "Atlético-PR", "Grêmio Barueri", "Durival de Britto", 3, 0, rodada, 1, 6, 21, 00, true);
+		addMatch(clubs, rod4, "Avaí", "Joinville", "Ressacada", 1, 2, rodada, 2, 6, 16, 20, true);
+		addMatch(clubs, rod4, "Vitória", "Ipatinga", "Barradão", 4, 0, rodada, 2, 6, 16, 20, true);
+		addMatch(clubs, rod4, "Guarani", "Ceará", "Brinco de Ouro", 4, 1, rodada, 2, 6, 16, 20, true);
+		addMatch(clubs, rod4, "América-MG", "Criciúma", "Arena do Jacaré", 3, 0, rodada, 2, 6, 16, 20, true);
+		addMatch(clubs, rod4, "Bragantino", "Paraná", "Nabi Abi Chedid", 3, 3, rodada, 2, 6, 16, 20, true);
+		addMatch(clubs, rod4, "Asa", "Boa Esporte", "Municipal Arapiraca", 3, 2, rodada, 2, 6, 16, 20, true);
+		addMatch(clubs, rod4, "ABC", "São Caetano", "Frasqueirão", 0, 1, rodada, 2, 6, 21, 00, true);
+		tm.put(rodada, rod4);
+		
+		rodada++;
+		ArrayList<Match> rod5 = new ArrayList<Match>();
+		addMatch(clubs, rod5, "Joinville", "Asa", "Arena Joinville", 1, 0, rodada, 5, 6, 21, 00, true);
+		addMatch(clubs, rod5, "São Caetano", "América-MG", "Anacleto Campanella", 1, 1, rodada, 5, 6, 21, 00, true);
+		addMatch(clubs, rod5, "Ipatinga", "Avaí", "Lamegão", 1, 2, rodada, 8, 6, 21, 00, true);
+		addMatch(clubs, rod5, "América-RN", "Bragantino", "Nazarenão", 2, 1, rodada, 8, 6, 21, 00, true);
+		addMatch(clubs, rod5, "Boa Esporte", "Vitória", "Melão", 1, 2, rodada, 8, 6, 21, 00, true);
+		addMatch(clubs, rod5, "Criciúma", "Goiás", "Heriberto Hulse", 3, 0, rodada, 9, 6, 16, 20, true);
+		addMatch(clubs, rod5, "Grêmio Barueri", "Guarani", "Arena Barueri", 2, 2, rodada, 9, 6, 16, 20, true);
+		addMatch(clubs, rod5, "Paraná", "Guaratinguetá", "Durival de Britto", 3, 2, rodada, 9, 6, 16, 20, true);
+		addMatch(clubs, rod5, "CRB", "Atlético-PR", "Rei Pelé", 2, 0, rodada, 9, 6, 16, 20, true);
+		addMatch(clubs, rod5, "Ceará", "ABC", "Presidente Vargas", 4, 2, rodada, 9, 6, 21, 00, true);
+		tm.put(rodada, rod5);
+		
+		rodada++;
+		ArrayList<Match> rod6 = new ArrayList<Match>();
+		addMatch(clubs, rod6, "Grêmio Barueri", "Paraná", "Arena Barueri", 1, 2, rodada, 12, 6, 21, 00, true);
+		addMatch(clubs, rod6, "Ipatinga", "Boa Esporte", "Lamegão", 1, 2, rodada, 12, 6, 21, 00, true);
+		addMatch(clubs, rod6, "Vitória", "Guarani", "Barradão", 1, 0, rodada, 12, 6, 21, 00, true);
+		addMatch(clubs, rod6, "Avaí", "América-MG", "Ressacada", 2, 0, rodada, 15, 6, 21, 00, true);
+		addMatch(clubs, rod6, "São Caetano", "América-RN", "Anacleto Campanella", 3, 2, rodada, 15, 6, 21, 00, true);
+		addMatch(clubs, rod6, "Joinville", "Ceará", "Arena Joinville", 1, 1, rodada, 16, 6, 16, 20, true);
+		addMatch(clubs, rod6, "Atlético-PR", "Goiás", "Gigante do Itiberê", 0, 0, rodada, 16, 6, 16, 20, true);
+		addMatch(clubs, rod6, "ABC", "CRB", "Frasqueirão", 4, 2, rodada, 16, 6, 16, 20, true);
+		addMatch(clubs, rod6, "Bragantino", "Guaratinguetá", "Nabi Abi Chedid", 1, 0, rodada, 16, 6, 16, 20, true);
+		addMatch(clubs, rod6, "Asa", "Criciúma", "Municipal Arapiraca", 1, 2, rodada, 16, 6, 21, 00, true);
+		tm.put(rodada, rod6);
+		
+		rodada++;
+		ArrayList<Match> rod7 = new ArrayList<Match>();
+		addMatch(clubs, rod7, "América-RN", "Asa", "Nazarenão", 2, 0, rodada, 19, 6, 21, 00, true);
+		addMatch(clubs, rod7, "América-MG", "Bragantino", "Arena do Jacaré", 3, 2, rodada, 19, 6, 21, 00, true);
+		addMatch(clubs, rod7, "CRB", "São Caetano", "Rei Pelé", 2, 2, rodada, 19, 6, 21, 00, true);
+		addMatch(clubs, rod7, "Guaratinguetá", "Avaí", "Dario Rodrigues Leite", 1, 1, rodada, 22, 6, 21, 00, true);
+		addMatch(clubs, rod7, "Paraná", "Joinville", "Durival de Britto", 2, 0, rodada, 22, 6, 21, 00, true);
+		addMatch(clubs, rod7, "Goiás", "Vitória", "Serra Dourada", 4, 3, rodada, 23, 6, 16, 20, true);
+		addMatch(clubs, rod7, "Criciúma", "Ipatinga", "Heriberto Hulse", 3, 2, rodada, 23, 6, 16, 20, true);
+		addMatch(clubs, rod7, "Guarani", "ABC", "Brinco de Ouro", 1, 1, rodada, 23, 6, 16, 20, true);
+		addMatch(clubs, rod7, "Ceará", "Atlético-PR", "Presidente Vargas", 1, 0, rodada, 23, 6, 16, 20, true);
+		addMatch(clubs, rod7, "Boa Esporte", "Grêmio Barueri", "Melão", 3, 1, rodada, 23, 6, 21, 00, true);
+		tm.put(rodada, rod7);
+		
+		rodada++;
+		ArrayList<Match> rod8 = new ArrayList<Match>();
+		addMatch(clubs, rod8, "Goiás", "Guaratinguetá", "Serra Dourada", 1, 1, rodada, 26, 6, 21, 00, true);
+		addMatch(clubs, rod8, "Grêmio Barueri", "América-MG", "Arena Barueri", 0, 1, rodada, 26, 6, 21, 00, true);
+		addMatch(clubs, rod8, "Ipatinga", "Ceará", "Lamegão", 1, 2, rodada, 26, 6, 21, 00, true);
+		addMatch(clubs, rod8, "América-RN", "Guarani", "Nazarenão", 1, 0, rodada, 29, 6, 21, 00, true);
+		addMatch(clubs, rod8, "Asa", "ABC", "Municipal Arapiraca", 3, 1, rodada, 29, 6, 21, 00, true);
+		addMatch(clubs, rod8, "Criciúma", "CRB", "Heriberto Hulse", 2, 0, rodada, 30, 6, 16, 20, true);
+		addMatch(clubs, rod8, "São Caetano", "Paraná", "Anacleto Campanella", 1, 1, rodada, 30, 6, 16, 20, true);
+		addMatch(clubs, rod8, "Vitória", "Avaí", "Barradão", 2, 0, rodada, 30, 6, 16, 20, true);
+		addMatch(clubs, rod8, "Atlético-PR", "Bragantino", "Gigante do Itibirê", 0, 0, rodada, 30, 6, 16, 20, true);
+		addMatch(clubs, rod8, "Boa Esporte", "Joinville", "Melão", 0, 0, rodada, 30, 6, 21, 00, true);
+		tm.put(rodada, rod8);
+		
+		rodada++;
+		ArrayList<Match> rod9 = new ArrayList<Match>();
+		addMatch(clubs, rod9, "Guarani", "Ipatinga", "Brinco de Ouro", 1, 0, rodada, 3, 7, 21, 00, true);
+		addMatch(clubs, rod9, "Guaratinguetá", "São Caetano", "Dario Rodrigues Leite", 0, 1, rodada, 3, 7, 21, 00, true);
+		addMatch(clubs, rod9, "Joinville", "Grêmio Barueri", "Arena Joinville", 4, 0, rodada, 6, 7, 21, 00, true);
+		addMatch(clubs, rod9, "Avaí", "Asa", "Ressacada", 2, 1, rodada, 6, 7, 21, 00, true);
+		addMatch(clubs, rod9, "Ceará", "Criciúma", "Presidente Vargas", 2, 2, rodada, 6, 7, 21, 00, true);
+		addMatch(clubs, rod9, "América-MG", "Atlético-PR", "Arena do Jacaré", 3, 2, rodada, 7, 7, 16, 20, true);
+		addMatch(clubs, rod9, "ABC", "Vitória", "Frasqueirão", 0, 1, rodada, 7, 7, 16, 20, true);
+		addMatch(clubs, rod9, "Bragantino", "Goiás", "Nabi Abi Chedid", 3, 3, rodada, 7, 7, 16, 20, true);
+		addMatch(clubs, rod9, "CRB", "América-RN", "Rei Pelé", 4, 2, rodada, 7, 7, 16, 20, true);
+		addMatch(clubs, rod9, "Paraná", "Boa Esporte", "Durival de Britto", 2, 0, rodada, 7, 7, 21, 00, true);
+		tm.put(rodada, rod9);
+		
+		rodada++;
+		ArrayList<Match> rod10 = new ArrayList<Match>();
+		addMatch(clubs, rod10, "Criciúma", "Boa Esporte", "Heriberto Hulse", 4, 3, rodada, 10, 7, 21, 00, true);
+		addMatch(clubs, rod10, "Guaratinguetá", "Asa", "Dario Rodrigues Leite", 2, 1, rodada, 10, 7, 21, 00, true);
+		addMatch(clubs, rod10, "Vitória", "Paraná", "Barradão", 4, 3, rodada, 10, 7, 21, 00, true);
+		addMatch(clubs, rod10, "Goiás", "América-MG", "Serra Dourada", 2, 0, rodada, 13, 7, 21, 00, true);
+		addMatch(clubs, rod10, "Ipatinga", "Grêmio Barueri", "Lamegão", 0, 3, rodada, 13, 7, 21, 00, true);
+		addMatch(clubs, rod10, "Atlético-PR", "ABC", "Durival de Britto", 2, 1, rodada, 13, 7, 21, 00, true);
+		addMatch(clubs, rod10, "São Caetano", "Joinville", "Anacleto Campanella", 1, 0, rodada, 14, 7, 16, 20, true);
+		addMatch(clubs, rod10, "América-RN", "Ceará", "Nazarenão", 1, 1, rodada, 14, 7, 16, 20, true);
+		addMatch(clubs, rod10, "Bragantino", "Guarani", "Nabi Abi Chedid", 0, 0, rodada, 14, 7, 16, 20, true);
+		addMatch(clubs, rod10, "CRB", "Avaí", "Rei Pelé", 2, 0, rodada, 14, 7, 16, 20, true);
+		tm.put(rodada, rod10);
+		
+		rodada++;
+		ArrayList<Match> rod11 = new ArrayList<Match>();
+		addMatch(clubs, rod11, "Joinville", "Ipatinga", "Arena Joinville", 6, 0, rodada, 17, 7, 19, 30, true);
+		addMatch(clubs, rod11, "Guarani", "Goiás", "Brinco de Ouro", 1, 2, rodada, 17, 7, 19, 30, true);
+		addMatch(clubs, rod11, "Ceará", "São Caetano", "Presidente Vargas", 2, 2, rodada, 17, 7, 19, 30, true);
+		addMatch(clubs, rod11, "Boa Esporte", "CRB", "Melão", 0, 0, rodada, 17, 7, 19, 30, true);
+		addMatch(clubs, rod11, "Asa", "Vitória", "Municipal Arapiraca", 2, 3, rodada, 17, 7, 19, 30, true);
+		addMatch(clubs, rod11, "Avaí", "Atlético-PR", "Serra Dourada", 1, 2, rodada, 17, 7, 21, 50, true);
+		addMatch(clubs, rod11, "Grêmio Barueri", "Bragantino", "Arena Barueri", 0, 0, rodada, 17, 7, 21, 50, true);
+		addMatch(clubs, rod11, "América-MG", "Guaratinguetá", "Arena do Jacaré", 2, 1, rodada, 17, 7, 21, 50, true);
+		addMatch(clubs, rod11, "Paraná", "América-RN", "Durival Britto", 1, 0, rodada, 17, 7, 21, 50, true);
+		addMatch(clubs, rod11, "ABC", "Criciúma", "Frasqueirão", 2, 2, rodada, 17, 7, 21, 50, true);
+		tm.put(rodada, rod11);
+		
+		rodada++;
+		ArrayList<Match> rod12 = new ArrayList<Match>();
+		addMatch(clubs, rod12, "São Caetano", "Grêmio Barueri", "Anacleto Campanella", 3, 0, rodada, 20, 7, 21, 00, true);
+		addMatch(clubs, rod12, "Guaratinguetá", "Boa Esporte", "Dario Rodrigues Leite", 0, 0, rodada, 20, 7, 21, 00, true);
+		addMatch(clubs, rod12, "América-MG", "Guarani", "Arena do Jacaré", 1, 1, rodada, 20, 7, 21, 00, true);
+		addMatch(clubs, rod12, "América-RN", "Ipatinga", "Nazarenão", 2, 1, rodada, 20, 7, 21, 00, true);
+		addMatch(clubs, rod12, "Criciúma", "Paraná", "Heriberto Hulse", 2, 1, rodada, 21, 7, 16, 20, true);
+		addMatch(clubs, rod12, "Goiás", "Avaí", "Serra Dourada", 2, 0, rodada, 21, 7, 16, 20, true);
+		addMatch(clubs, rod12, "Ceará", "Asa", "Presidente Vargas", 3, 2, rodada, 21, 7, 16, 20, true);
+		addMatch(clubs, rod12, "Atlético-PR", "Vitória", "Durival de Britto", 0, 1, rodada, 21, 7, 16, 20, true);
+		addMatch(clubs, rod12, "CRB", "Joinville", "Rei Pelé", 4, 3, rodada, 21, 7, 16, 20, true);
+		addMatch(clubs, rod12, "Bragantino", "ABC", "Nabi Abi Chedid", 1, 2, rodada, 21, 7, 21, 00, true);
+		tm.put(rodada, rod12);
+		
+		rodada++;
+		ArrayList<Match> rod13 = new ArrayList<Match>();
+		addMatch(clubs, rod13, "Boa Esporte", "América-MG", "Melão", 2, 1, rodada, 24, 7, 21, 00, true);
+		addMatch(clubs, rod13, "Asa", "Goiás", "Municipal Arapiraca", 0, 1, rodada, 24, 7, 21, 00, true);
+		addMatch(clubs, rod13, "Joinville", "América-RN", "Arena Joinville", 1, 0, rodada, 24, 7, 21, 00, true);
+		addMatch(clubs, rod13, "Grêmio Barueri", "Criciúma", "Arena Barueri", 1, 4, rodada, 27, 7, 21, 00, true);
+		addMatch(clubs, rod13, "Avaí", "Bragantino", "Ressacada", 1, 0, rodada, 27, 7, 21, 00, true);
+		addMatch(clubs, rod13, "Guarani", "Atlético-PR", "Brinco de Ouro", 2, 1, rodada, 28, 7, 16, 20, true);
+		addMatch(clubs, rod13, "Vitória", "CRB", "Barradão", 1, 0, rodada, 28, 7, 16, 20, true);
+		addMatch(clubs, rod13, "Paraná", "Ceará", "Durival de Britto", 1, 0, rodada, 28, 7, 16, 20, true);
+		addMatch(clubs, rod13, "ABC", "Guaratinguetá", "Frasqueirão", 3, 0, rodada, 28, 7, 16, 20, true);
+		addMatch(clubs, rod13, "Ipatinga", "São Caetano", "Lamegão", 1, 2, rodada, 28, 7, 21, 00, true);
+		tm.put(rodada, rod13);
+		
+		rodada++;
+		ArrayList<Match> rod14 = new ArrayList<Match>();
+		addMatch(clubs, rod14, "América-MG", "Joinville", "Arena do Jacaré", 0, 2, rodada, 31, 7, 19, 30, true);
+		addMatch(clubs, rod14, "Goiás", "ABC", "Serra Dourada", 1, 1, rodada, 31, 7, 19, 30, true);
+		addMatch(clubs, rod14, "Criciúma", "Guarani", "Heriberto Hulse", 2, 1, rodada, 31, 7, 19, 30, true);
+		addMatch(clubs, rod14, "Paraná", "Avaí", "Durival de Britto", 1, 1, rodada, 31, 7, 19, 30, true);
+		addMatch(clubs, rod14, "Ceará", "Boa Esporte", "Presidente Vargas", 1, 1, rodada, 31, 7, 19, 30, true);
+		addMatch(clubs, rod14, "São Caetano", "Vitória", "Anacleto Campanella", 0, 0, rodada, 31, 7, 21, 50, true);
+		addMatch(clubs, rod14, "Guaratinguetá", "Atlético-PR", "Dario Rodrigues Leite", 0, 1, rodada, 31, 7, 21, 50, true);
+		addMatch(clubs, rod14, "América-RN", "Grêmio Barueri", "Nazarenão", 2, 1, rodada, 31, 7, 21, 50, true);
+		addMatch(clubs, rod14, "Bragantino", "Asa", "Nabi Abi Chedid", 2, 2, rodada, 31, 7, 21, 50, true);
+		addMatch(clubs, rod14, "CRB", "Ipatinga", "Rei Pelé", 2, 0, rodada, 31, 7, 21, 50, true);
+		tm.put(rodada, rod14);
+		
+		rodada++;
+		ArrayList<Match> rod15 = new ArrayList<Match>();
+		addMatch(clubs, rod15, "Grêmio Barueri", "CRB", "Arena Barueri", 0, 0, rodada, 3, 8, 21, 00, true);
+		addMatch(clubs, rod15, "Ipatinga", "Goiás", "Lamegão", 0, 6, rodada, 3, 8, 21, 00, true);
+		addMatch(clubs, rod15, "Vitória", "Bragantino", "Barradão", 0, 1, rodada, 3, 8, 21, 00, true);
+		addMatch(clubs, rod15, "Boa Esporte", "América-RN", "Melão", 1, 1, rodada, 3, 8, 21, 00, true);
+		addMatch(clubs, rod15, "Joinville", "Criciúma", "Arena Joinville", 3, 1, rodada, 4, 8, 16, 20, true);
+		addMatch(clubs, rod15, "Avaí", "Ceará", "Ressacada", 2, 1, rodada, 4, 8, 16, 20, true);
+		addMatch(clubs, rod15, "Guarani", "Guaratinguetá", "Brinco de Ouro", 2, 1, rodada, 4, 8, 16, 20, true);
+		addMatch(clubs, rod15, "Atlético-PR", "São Caetano", "Durival de Britto", 0, 1, rodada, 4, 8, 16, 20, true);
+		addMatch(clubs, rod15, "Asa", "América-MG", "Municipal Arapiraca", 3, 2, rodada, 4, 8, 16, 20, true);
+		addMatch(clubs, rod15, "ABC", "Paraná", "Frasqueirão", 2, 0, rodada, 4, 8, 21, 00, true);
+		tm.put(rodada, rod15);
+		
+		rodada++;
+		ArrayList<Match> rod16 = new ArrayList<Match>();
+		addMatch(clubs, rod16, "Avaí", "ABC", "Ressacada", 3, 1, rodada, 7, 8, 21, 00, true);
+		addMatch(clubs, rod16, "América-RN", "Atlético-PR", "Nazarenão", 0, 2, rodada, 7, 8, 21, 00, true);
+		addMatch(clubs, rod16, "Bragantino", "Ipatinga", "Nabi Abi Chedid", 0, 2, rodada, 7, 8, 21, 00, true);
+		addMatch(clubs, rod16, "Ceará", "Grêmio Barueri", "Presidente Vargas", 2, 0, rodada, 10, 8, 21, 00, true);
+		addMatch(clubs, rod16, "Asa", "Guarani", "Municipal Arapiraca", 1, 0, rodada, 10, 8, 21, 00, true);
+		addMatch(clubs, rod16, "Goiás", "Boa Esporte", "Serra Dourada", 2, 0, rodada, 11, 8, 16, 20, true);
+		addMatch(clubs, rod16, "São Caetano", "Criciúma", "Anacleto Campanella", 1, 1, rodada, 11, 8, 16, 20, true);
+		addMatch(clubs, rod16, "Guaratinguetá", "Joinville", "Dario Rodrigues Leite", 0, 3, rodada, 11, 8, 16, 20, true);
+		addMatch(clubs, rod16, "América-MG", "Vitória", "Arena do Jacaré", 1, 2, rodada, 11, 8, 16, 20, true);
+		addMatch(clubs, rod16, "Paraná", "CRB", "Durival de Britto", 4, 0, rodada, 11, 8, 16, 20, true);
+		tm.put(rodada, rod16);
+		
+		rodada++;
+		ArrayList<Match> rod17 = new ArrayList<Match>();
+		addMatch(clubs, rod17, "Joinville", "Bragantino", "Arena Joinville", 1, 0, rodada, 14, 8, 19, 30, true);
+		addMatch(clubs, rod17, "Criciúma", "América-RN", "Heriberto Hulse", 4, 3, rodada, 14, 8, 19, 30, true);
+		addMatch(clubs, rod17, "Ipatinga", "Paraná", "Lamegão", 2, 0, rodada, 14, 8, 19, 30, true);
+		addMatch(clubs, rod17, "Vitória", "Guaratinguetá", "Barradão", 2, 0, rodada, 14, 8, 19, 30, true);
+		addMatch(clubs, rod17, "CRB", "Ceará", "Rei Pelé", 0, 2, rodada, 14, 8, 19, 30, true);
+		addMatch(clubs, rod17, "Guarani", "Avaí", "Brinco de Ouro", 0, 2, rodada, 14, 8, 21, 50, true);
+		addMatch(clubs, rod17, "Grêmio Barueri", "Goiás", "Arena Barueri", 2, 0, rodada, 14, 8, 21, 50, true);
+		addMatch(clubs, rod17, "Atlético-PR", "Asa", "Durival de Britto", 1, 0, rodada, 14, 8, 21, 50, true);
+		addMatch(clubs, rod17, "ABC", "América-MG", "Frasqueirão", 0, 2, rodada, 14, 8, 21, 50, true);
+		addMatch(clubs, rod17, "Boa Esporte", "São Caetano", "Melão", 1, 3, rodada, 14, 8, 21, 50, true);
+		tm.put(rodada, rod17);
+		
+		rodada++;
+		ArrayList<Match> rod18 = new ArrayList<Match>();
+		addMatch(clubs, rod18, "Vitória", "Joinville", "Barradão", 2, 1, rodada, 17, 8, 19, 30, true);
+		addMatch(clubs, rod18, "Avaí", "Grêmio Barueri", "Ressacada", 2, 1, rodada, 17, 8, 21, 00, true);
+		addMatch(clubs, rod18, "Guarani", "CRB", "Brinco de Ouro", 4, 0, rodada, 17, 8, 21, 00, true);
+		addMatch(clubs, rod18, "Guaratinguetá", "Ipatinga", "Dario Rodrigues Leite", 3, 1, rodada, 17, 8, 21, 00, true);
+		addMatch(clubs, rod18, "América-MG", "América-RN", "Arena do Jacaré", 1, 1, rodada, 17, 8, 21, 50, true);
+		addMatch(clubs, rod18, "Goiás", "São Caetano", "Serra Dourada", 0, 0, rodada, 18, 8, 16, 20, true);
+		addMatch(clubs, rod18, "Atlético-PR", "Criciúma", "Durival de Britto", 1, 0, rodada, 18, 8, 16, 20, true);
+		addMatch(clubs, rod18, "ABC", "Boa Esporte", "Frasqueirão", 1, 2, rodada, 18, 8, 16, 20, true);
+		addMatch(clubs, rod18, "Bragantino", "Ceará", "Nabi Abi Chedid", 1, 3, rodada, 18, 8, 16, 20, true);
+		addMatch(clubs, rod18, "Asa", "Paraná", "Municipal Arapiraca", 1, 1, rodada, 18, 8, 21, 00, true);
+		tm.put(rodada, rod18);
+		
+		rodada++;
+		ArrayList<Match> rod19 = new ArrayList<Match>();
+		addMatch(clubs, rod19, "Criciúma", "Avaí", "Heriberto Hulse", 2, 0, rodada, 21, 8, 21, 00, true);
+		addMatch(clubs, rod19, "Grêmio Barueri", "Guaratinguetá", "Arena Barueri", 2, 3, rodada, 21, 8, 21, 00, true);
+		addMatch(clubs, rod19, "Ipatinga", "América-MG", "Lamegão", 1, 0, rodada, 21, 8, 21, 00, true);
+		addMatch(clubs, rod19, "Ceará", "Vitória", "Presidente Vargas", 1, 3, rodada, 24, 8, 21, 00, true);
+		addMatch(clubs, rod19, "Joinville", "Goiás", "Arena Joinville", 1, 0, rodada, 25, 8, 16, 00, true);
+		addMatch(clubs, rod19, "São Caetano", "Guarani", "Anacleto Campanella", 1, 2, rodada, 25, 8, 16, 00, true);
+		addMatch(clubs, rod19, "Paraná", "Atlético-PR", "Durival de Britto", 1, 2, rodada, 25, 8, 16, 00, true);
+		addMatch(clubs, rod19, "América-RN", "ABC", "Nazarenão", 1, 0, rodada, 25, 8, 16, 20, true);
+		addMatch(clubs, rod19, "CRB", "Asa", "Rei Pelé", 0, 1, rodada, 25, 8, 16, 20, true);
+		addMatch(clubs, rod19, "Boa Esporte", "Bragantino", "Melão", 3, 0, rodada, 25, 8, 21, 00, true);
+		tm.put(rodada, rod19);
+		
+		rodada++;
+		ArrayList<Match> rod20 = new ArrayList<Match>();
+		addMatch(clubs, rod20, "Avaí", "Boa Esporte", "Ressacada", 2, 1, rodada, 28, 8, 19, 30, true);
+		addMatch(clubs, rod20, "Guarani", "Paraná", "Brinco de Ouro", 0, 0, rodada, 28, 8, 19, 30, true);
+		addMatch(clubs, rod20, "Vitória", "Grêmio Barueri", "Barradão", 1, 0, rodada, 28, 8, 19, 30, true);
+		addMatch(clubs, rod20, "Bragantino", "CRB", "Nabi Abi Chedid", 0, 2, rodada, 28, 8, 19, 30, true);
+		addMatch(clubs, rod20, "Atlético-PR", "Joinville", "Durival de Britto", 1, 1, rodada, 28, 8, 19, 30, true);		
+		addMatch(clubs, rod20, "Goiás", "América-RN", "Serra Dourada", 1, 0, rodada, 28, 8, 21, 50, true);
+		addMatch(clubs, rod20, "Guaratinguetá", "Criciúma", "Martins Pereira", 2, 1, rodada, 28, 8, 21, 50, true);
+		addMatch(clubs, rod20, "América-MG", "Ceará", "Arena Independência", 1, 3, rodada, 28, 8, 21, 50, true);
+		addMatch(clubs, rod20, "ABC", "Ipatinga", "Frasqueirão", 2, 2, rodada, 28, 8, 21, 50, true);
+		addMatch(clubs, rod20, "Asa", "São Caetano", "Municipal Arapiraca", 4, 1, rodada, 28, 8, 21, 50, true);
+		tm.put(rodada, rod20);
+		
+		rodada++;
+		ArrayList<Match> rod21 = new ArrayList<Match>();
+		addMatch(clubs, rod21, "Boa Esporte", "Guarani", "Melão", 1, 2, rodada, 31, 8, 19, 30, true);
+		addMatch(clubs, rod21, "Criciúma", "Bragantino", "Heriberto Hulse", 3, 2, rodada, 31, 8, 19, 30, true);
+		addMatch(clubs, rod21, "Grêmio Barueri", "Asa", "Arena Barueri", 1, 0, rodada, 31, 8, 21, 00, true);
+		addMatch(clubs, rod21, "Ceará", "Guaratinguetá", "Presidente Vargas", 1, 1, rodada, 31, 8, 21, 00, true);
+		addMatch(clubs, rod21, "Ipatinga", "Atlético-PR", "Lamegão", 1, 1, rodada, 31, 8, 21, 50, true);
+		addMatch(clubs, rod21, "Joinville", "ABC", "Arena Joinville", 0, 0, rodada, 1, 9, 16, 00, true);
+		addMatch(clubs, rod21, "São Caetano", "Avaí", "Anacleto Campanella", 1, 0, rodada, 1, 9, 16, 00, true);
+		addMatch(clubs, rod21, "Paraná", "Goiás", "Durival de Britto", 1, 3, rodada, 1, 9, 16, 00, true);
+		addMatch(clubs, rod21, "América-RN", "Vitória", "Nazarenão", 2, 2, rodada, 1, 9, 16, 00, true);
+		addMatch(clubs, rod21, "CRB", "América-MG", "Rei Pelé", 0, 1, rodada, 1, 9, 21, 00, true);
+		tm.put(rodada, rod21);
+		
+		rodada++;
+		ArrayList<Match> rod22 = new ArrayList<Match>();
+		addMatch(clubs, rod22, "Atlético-PR", "Boa Esporte", "J. Malucelli", 2, 1, rodada, 4, 9, 15, 00, true);
+		addMatch(clubs, rod22, "Avaí", "América-RN", "Ressacada", 2, 2, rodada, 4, 9, 19, 30, true);
+		addMatch(clubs, rod22, "Guarani", "Joinville", "Brinco de Ouro", 2, 1, rodada, 4, 9, 19, 30, true);
+		addMatch(clubs, rod22, "América-MG", "Paraná", "Arena do Jacaré", 0, 0, rodada, 4, 9, 19, 30, true);
+		addMatch(clubs, rod22, "Vitória", "Criciúma", "Barradão", 2, 2, rodada, 4, 9, 19, 30, true);
+		addMatch(clubs, rod22, "Goiás", "Ceará", "Serra Dourada", 0, 0, rodada, 4, 9, 21, 50, true);
+		addMatch(clubs, rod22, "Guaratinguetá", "CRB", "Martins Pereira", 1, 2, rodada, 4, 9, 21, 50, true);
+		addMatch(clubs, rod22, "ABC", "Grêmio Barueri", "Frasqueirão", 2, 1, rodada, 4, 9, 21, 50, true);
+		addMatch(clubs, rod22, "Bragantino", "São Caetano", "Nabi Abi Chedid", 2, 3, rodada, 4, 9, 21, 50, true);
+		addMatch(clubs, rod22, "Asa", "Ipatinga", "Municipal Arapiraca", 3, 0, rodada, 4, 9, 21, 50, true);
+		tm.put(rodada, rod22);
+		
+		rodada++;
+		ArrayList<Match> rod23 = new ArrayList<Match>();
+		addMatch(clubs, rod23, "Ceará", "Guarani", "Presidente Vargas", 1, 0, rodada, 7, 9, 19, 30, true);
+		addMatch(clubs, rod23, "Paraná", "Bragantino", "Durival de Britto", 2, 0, rodada, 7, 9, 19, 30, true);
+		addMatch(clubs, rod23, "América-RN", "Guaratinguetá", "Nazarenão", 4, 1, rodada, 7, 9, 19, 30, true);
+		addMatch(clubs, rod23, "Boa Esporte", "Asa", "Melão", 3, 2, rodada, 7, 9, 19, 30, true);
+		addMatch(clubs, rod23, "Grêmio Barueri", "Atlético-PR", "Arena Barueri", 0, 6, rodada, 7, 9, 21, 50, true);
+		addMatch(clubs, rod23, "Joinville", "Avaí", "Arena Joinville", 1, 0, rodada, 8, 9, 16, 00, true);
+		addMatch(clubs, rod23, "Criciúma", "América-MG", "Heriberto Hulse", 0, 4, rodada, 8, 9, 16, 00, true);
+		addMatch(clubs, rod23, "Ipatinga", "Vitória", "Lamegão", 1, 1, rodada, 8, 9, 16, 00, true);
+		addMatch(clubs, rod23, "CRB", "Goiás", "Rei Pelé", 0, 2, rodada, 8, 9, 16, 00, true);
+		addMatch(clubs, rod23, "São Caetano", "ABC", "Anacleto Campanella", 0, 1, rodada, 8, 9, 21, 00, true);
+		tm.put(rodada, rod23);
+		
+		rodada++;
+		ArrayList<Match> rod24 = new ArrayList<Match>();
+		addMatch(clubs, rod24, "Atlético-PR", "CRB", "J. Malucelli", 4, 1, rodada, 11, 9, 15, 00, true);
+		addMatch(clubs, rod24, "Avaí", "Ipatinga", "Ressacada", 2, 1, rodada, 11, 9, 19, 30, true);
+		addMatch(clubs, rod24, "Guaratinguetá", "Paraná", "Martins Pereira", 2, 0, rodada, 11, 9, 19, 30, true);
+		addMatch(clubs, rod24, "América-MG", "São Caetano", "Arena Independência", 2, 5, rodada, 11, 9, 19, 30, true);
+		addMatch(clubs, rod24, "Vitória", "Boa Esporte", "Barradão", 3, 2, rodada, 11, 9, 19, 30, true);
+		addMatch(clubs, rod24, "Asa", "Joinville", "Municipal Arapiraca", 1, 0, rodada, 11, 9, 19, 30, true);
+		addMatch(clubs, rod24, "Goiás", "Criciúma", "Serra Dourada", 1, 0, rodada, 11, 9, 21, 50, true);
+		addMatch(clubs, rod24, "Guarani", "Grêmio Barueri", "Brinco de Ouro", 1, 0, rodada, 11, 9, 21, 50, true);
+		addMatch(clubs, rod24, "ABC", "Ceará", "Frasqueirão", 0, 1, rodada, 11, 9, 21, 50, true);
+		addMatch(clubs, rod24, "Bragantino", "América-RN", "Nabi Abi Chedid", 1, 0, rodada, 11, 9, 21, 50, true);
+		tm.put(rodada, rod24);
+		
+		rodada++;
+		ArrayList<Match> rod25 = new ArrayList<Match>();
+		addMatch(clubs, rod25, "Criciúma", "Asa", "Heriberto Hulse", 2, 1, rodada, 14, 9, 19, 30, true);
+		addMatch(clubs, rod25, "Paraná", "Grêmio Barueri", "Durival de Britto", 1, 1, rodada, 14, 9, 19, 30, true);
+		addMatch(clubs, rod25, "Guaratinguetá", "Bragantino", "Martins Pereira", 2, 0, rodada, 14, 9, 21, 00, true);
+		addMatch(clubs, rod25, "América-RN", "São Caetano", "Nazarenão", 0, 2, rodada, 14, 9, 21, 00, true);
+		addMatch(clubs, rod25, "América-MG", "Avaí", "Arena Independência", 1, 0, rodada, 14, 9, 21, 50, true);
+		addMatch(clubs, rod25, "Goiás", "Atlético-PR", "Serra Dourada", 3, 2, rodada, 15, 9, 16, 00, true);
+		addMatch(clubs, rod25, "Guarani", "Vitória", "Brinco de Ouro", 0, 0, rodada, 15, 9, 16, 00, true);
+		addMatch(clubs, rod25, "Ceará", "Joinville", "Presidente Vargas", 4, 3, rodada, 15, 9, 16, 00, true);
+		addMatch(clubs, rod25, "CRB", "ABC", "Rei Pelé", 3, 3, rodada, 15, 9, 16, 00, true);
+		addMatch(clubs, rod25, "Boa Esporte", "Ipatinga", "Melão", 2, 1, rodada, 15, 9, 21, 00, true);
+		tm.put(rodada, rod25);
+		
+		rodada++;
+		ArrayList<Match> rod26 = new ArrayList<Match>();
+		addMatch(clubs, rod26, "Bragantino", "América-MG", "Nabi Abi Chedid", 2, 0, rodada, 18, 9, 21, 00, true);
+		addMatch(clubs, rod26, "Avaí", "Guaratinguetá", "Ressacada", 2, 0, rodada, 21, 9, 19, 300, true);
+		addMatch(clubs, rod26, "Joinville", "Paraná", "Arena Joinville", 3, 1, rodada, 21, 9, 21, 00, true);
+		addMatch(clubs, rod26, "ABC", "Guarani", "Frasqueirão", 3, 1, rodada, 21, 9, 21, 00, true);
+		addMatch(clubs, rod26, "Atlético-PR", "Ceará", "Janguito Malucelli", 2, 1, rodada, 22, 9, 15, 00, true);
+		addMatch(clubs, rod26, "São Caetano", "CRB", "Anacleto Campanella", 3, 2, rodada, 22, 9, 16, 00, true);
+		addMatch(clubs, rod26, "Grêmio Barueri", "Boa Esporte", "Arena Barueri", 1, 2, rodada, 22, 9, 16, 00, true);
+		addMatch(clubs, rod26, "Ipatinga", "Criciúma", "Lamegão", 2, 3, rodada, 22, 9, 16, 00, true);
+		addMatch(clubs, rod26, "Vitória", "Goiás", "Barradão", 3, 1, rodada, 22, 9, 16, 00, true);
+		addMatch(clubs, rod26, "Asa", "América-RN", "Municipal Arapiraca", 0, 2, rodada, 22, 9, 21, 00, true);
+		tm.put(rodada, rod26);
+		
+		rodada++;
+		ArrayList<Match> rod27 = new ArrayList<Match>();
+		addMatch(clubs, rod27, "ABC", "Asa", "Frasqueirão", 1, 1, rodada, 25, 9, 19, 30, true);
+		addMatch(clubs, rod27, "Joinville", "Boa Esporte", "Arena Joinville", 3, 0, rodada, 25, 9, 21, 00, true);
+		addMatch(clubs, rod27, "América-MG", "Grêmio Barueri", "Arena Independência", 1, 2, rodada, 25, 9, 21, 00, true);
+		addMatch(clubs, rod27, "Paraná", "São Caetano", "Durival de Britto", 2, 1, rodada, 28, 9, 19, 30, true);
+		addMatch(clubs, rod27, "Guaratinguetá", "Goiás", "Martins Pereira", 0, 3, rodada, 28, 9, 21, 00, true);
+		addMatch(clubs, rod27, "CRB", "Criciúma", "Rei Pelé", 0, 2, rodada, 28, 9, 21, 00, true);
+		addMatch(clubs, rod27, "Avaí", "Vitória", "Ressacada", 2, 0, rodada, 29, 9, 16, 00, true);
+		addMatch(clubs, rod27, "Guarani", "América-RN", "Brinco de Ouro", 0, 0, rodada, 29, 9, 16, 00, true);
+		addMatch(clubs, rod27, "Bragantino", "Atlético-PR", "Nabi Abi Chedid", 2, 1, rodada, 29, 9, 16, 00, true);
+		addMatch(clubs, rod27, "Ceará", "Ipatinga", "Presidente Vargas", 1, 1, rodada, 29, 9, 21, 00, true);
+		tm.put(rodada, rod27);
+		
+		rodada++;
+		ArrayList<Match> rod28 = new ArrayList<Match>();
+		addMatch(clubs, rod28, "Asa", "Avaí", "Municipal Arapiraca", 1, 0, rodada, 2, 10, 19, 30, true);
+		addMatch(clubs, rod28, "Goiás", "Bragantino", "Serra Dourada", 1, 0, rodada, 2, 10, 21, 00, true);
+		addMatch(clubs, rod28, "São Caetano", "Guaratinguetá", "Anacleto Campanella", 1, 0, rodada, 2, 10, 21, 00, true);
+		addMatch(clubs, rod28, "Grêmio Barueri", "Joinville", "Arena Barueri", 1, 1, rodada, 5, 10, 19, 30, true);
+		addMatch(clubs, rod28, "Ipatinga", "Guarani", "Lamegão", 0, 0, rodada, 5, 10, 19, 30, true);
+		addMatch(clubs, rod28, "América-RN", "CRB", "Nazarenão", 3, 3, rodada, 5, 10, 19, 30, true);
+		addMatch(clubs, rod28, "Criciúma", "Ceará", "Heriberto Hulse", 2, 1, rodada, 5, 10, 21, 00, true);
+		addMatch(clubs, rod28, "Boa Esporte", "Paraná", "Melão", 2, 1, rodada, 5, 10, 21, 50, true);
+		addMatch(clubs, rod28, "Atlético-PR", "América-MG", "J. Malucelli", 5, 4, rodada, 6, 10, 14, 00, true);
+		addMatch(clubs, rod28, "Vitória", "ABC", "Barradão", 1, 0, rodada, 6, 10, 16, 00, true);
+		tm.put(rodada, rod28);
+		
+		rodada++;
+		ArrayList<Match> rod29 = new ArrayList<Match>();
+		addMatch(clubs, rod29, "Joinville", "São Caetano", "Arena Joinville", 0, 0, rodada, 9, 10, 19, 30, true);
+		addMatch(clubs, rod29, "Grêmio Barueri", "Ipatinga", "Arena Barueri", 2, 0, rodada, 9, 10, 21, 00, true);
+		addMatch(clubs, rod29, "Asa", "Guaratinguetá", "Municipal Arapiraca", 3, 1, rodada, 9, 10, 21, 00, true);
+		addMatch(clubs, rod29, "ABC", "Atlético-PR", "Frasqueirão", 0, 1, rodada, 12, 10, 21, 00, true);
+		addMatch(clubs, rod29, "Guarani", "Bragantino", "Brinco de Ouro", 1, 2, rodada, 12, 10, 21, 00, true);
+		addMatch(clubs, rod29, "Boa Esporte", "Criciúma", "Melão", 0, 4, rodada, 13, 10, 16, 00, true);
+		addMatch(clubs, rod29, "Paraná", "Vitória", "Durival de Britto", 3, 1, rodada, 13, 10, 16, 00, true);
+		addMatch(clubs, rod29, "América-MG", "Goiás", "Arena do Jacaré", 1, 2, rodada, 13, 10, 16, 00, true);
+		addMatch(clubs, rod29, "Ceará", "América-RN", "Presidente Vargas", 4, 0, rodada, 13, 10, 16, 00, true);
+		addMatch(clubs, rod29, "Avaí", "CRB", "Ressacada", 1, 0, rodada, 13, 10, 21, 00, true);
+		tm.put(rodada, rod29);
+		
+		rodada++;
+		ArrayList<Match> rod30 = new ArrayList<Match>();
+		addMatch(clubs, rod30, "Atlético-PR", "Avaí", "J. Malucelli", 3, 1, rodada, 16, 10, 15, 00, true);
+		addMatch(clubs, rod30, "Goiás", "Guarani", "Serra Dourada", 5, 0, rodada, 16, 10, 19, 30, true);
+		addMatch(clubs, rod30, "São Caetano", "Ceará", "Anacleto Campanella", 2, 0, rodada, 16, 10, 19, 30, true);
+		addMatch(clubs, rod30, "Vitória", "Asa", "Barradão", 2, 0, rodada, 16, 10, 19, 30, true);
+		addMatch(clubs, rod30, "América-RN", "Paraná", "Nazarenão", 2, 1, rodada, 16, 10, 19, 30, true);
+		addMatch(clubs, rod30, "Bragantino", "Grêmio Barueri", "Nabi Abi Chedid", 2, 2, rodada, 16, 10, 19, 30, true);
+		addMatch(clubs, rod30, "Criciúma", "ABC", "Heriberto Hulse", 2, 0, rodada, 16, 10, 21, 50, true);
+		addMatch(clubs, rod30, "Guaratinguetá", "América-MG", "Dario Rodrigues Leite", 1, 2, rodada, 16, 10, 21, 50, true);
+		addMatch(clubs, rod30, "CRB", "Boa Esporte", "Rei Pelé", 0, 0, rodada, 16, 10, 21, 50, true);
+		addMatch(clubs, rod30, "Ipatinga", "Joinville", "Lamegão", 1, 0, rodada, 16, 10, 21, 50, true);
+		tm.put(rodada, rod30);
+		
+		rodada++;
+		ArrayList<Match> rod31 = new ArrayList<Match>();
+		addMatch(clubs, rod31, "Grêmio Barueri", "São Caetano", "Arena Barueri", 2, 2, rodada, 19, 10, 19, 30, true);
+		addMatch(clubs, rod31, "Ipatinga", "América-RN", "Lamegão", 4, 0, rodada, 19, 10, 19, 30, true);
+		addMatch(clubs, rod31, "Asa", "Ceará", "Municipal Arapiraca", 3, 0, rodada, 19, 10, 19, 30, true);
+		addMatch(clubs, rod31, "Avaí", "Goiás", "Ressacada", 1, 4, rodada, 19, 10, 21, 50, true);
+		addMatch(clubs, rod31, "Joinville", "CRB", "Arena Joinville", 3, 1, rodada, 20, 10, 16, 00, true);
+		addMatch(clubs, rod31, "Guarani", "América-MG", "Brinco de Ouro", 0, 3, rodada, 20, 10, 16, 00, true);
+		addMatch(clubs, rod31, "Vitória", "Atlético-PR", "Barradão", 0, 2, rodada, 20, 10, 16, 00, true);
+		addMatch(clubs, rod31, "Paraná", "Criciúma", "Couto Pereira", 1, 1, rodada, 20, 10, 16, 00, true);
+		addMatch(clubs, rod31, "ABC", "Bragantino", "Frasqueirão", 1, 0, rodada, 20, 10, 16, 00, true);
+		addMatch(clubs, rod31, "Boa Esporte", "Guaratinguetá", "Melão", 0, 1, rodada, 20, 10, 21, 00, true);
+		tm.put(rodada, rod31);
+		
+		rodada++;
+		ArrayList<Match> rod32 = new ArrayList<Match>();
+		addMatch(clubs, rod32, "Atlético-PR", "Guarani", "Janguito Malucelli", -1, -1, rodada, 23, 10, 15, 00);
+		addMatch(clubs, rod32, "Goiás", "Asa", "Serra Dourada", -1, -1, rodada, 23, 10, 19, 30);
+		addMatch(clubs, rod32, "Criciúma", "Grêmio Barueri", "Heriberto Hulse", -1, -1, rodada, 23, 10, 19, 30);
+		addMatch(clubs, rod32, "São Caetano", "Ipatinga", "Anacleto Campanella", -1, -1, rodada, 23, 10, 19, 30);
+		addMatch(clubs, rod32, "América-RN", "Joinville", "Nazarenão", -1, -1, rodada, 23, 10, 19, 30);
+		addMatch(clubs, rod32, "CRB", "Vitória", "Rei Pelé", -1, -1, rodada, 23, 10, 19, 30);
+		addMatch(clubs, rod32, "Ceará", "Paraná", "Presidente Vargas", -1, -1, rodada, 23, 10, 21, 50);
+		addMatch(clubs, rod32, "América-MG", "Boa Esporte", "Arena Independência", -1, -1, rodada, 23, 10, 21, 50);
+		addMatch(clubs, rod32, "Guaratinguetá", "ABC", "Dario Leite", -1, -1, rodada, 23, 10, 21, 50);
+		addMatch(clubs, rod32, "Bragantino", "Avaí", "Nabi Abi Chedid", -1, -1, rodada, 23, 10, 21, 50);
+		tm.put(rodada, rod32);
+		
+		rodada++;
+		ArrayList<Match> rod33 = new ArrayList<Match>();
+		addMatch(clubs, rod33, "Vitória", "São Caetano", "Barradão", -1, -1, rodada, 26, 10, 19, 30);
+		addMatch(clubs, rod33, "ABC", "Goiás", "Frasqueirão", -1, -1, rodada, 26, 10, 19, 30);
+		addMatch(clubs, rod33, "Boa Esporte", "Ceará", "Melão", -1, -1, rodada, 26, 10, 21, 00);
+		addMatch(clubs, rod33, "Grêmio Barueri", "América-RN", "Arena Barueri", -1, -1, rodada, 26, 10, 21, 00);
+		addMatch(clubs, rod33, "Avaí", "Paraná", "Ressacada", -1, -1, rodada, 26, 10, 21, 50);
+		addMatch(clubs, rod33, "Atlético-PR", "Guaratinguetá", "Janguito Malucelli", -1, -1, rodada, 27, 10, 14, 00);
+		addMatch(clubs, rod33, "Guarani", "Criciúma", "Brinco de Ouro", -1, -1, rodada, 27, 10, 16, 00);
+		addMatch(clubs, rod33, "Joinville", "América-MG", "Arena Joinville", -1, -1, rodada, 27, 10, 16, 00);
+		addMatch(clubs, rod33, "Ipatinga", "CRB", "Lamegão", -1, -1, rodada, 27, 10, 16, 00);
+		addMatch(clubs, rod33, "Asa", "Bragantino", "Municipal Arapiraca", -1, -1, rodada, 27, 10, 16, 00);
+		tm.put(rodada, rod33);
+		
+		rodada++;
+		ArrayList<Match> rod34 = new ArrayList<Match>();
+		addMatch(clubs, rod34, "Goiás", "Ipatinga", "Serra Dourada", -1, -1, rodada, 30, 10, 21, 00);
+		addMatch(clubs, rod34, "Paraná", "ABC", "Durival de Britto", -1, -1, rodada, 30, 10, 21, 00);
+		addMatch(clubs, rod34, "América-MG", "Asa", "Arena Independência", -1, -1, rodada, 30, 10, 21, 00);
+		addMatch(clubs, rod34, "Ceará", "Avaí", "Presidente Vargas", -1, -1, rodada, 2, 11, 21, 00);
+		addMatch(clubs, rod34, "Guaratinguetá", "Guarani", "Dario Leite", -1, -1, rodada, 2, 11, 21, 00);
+		addMatch(clubs, rod34, "CRB", "Grêmio Barueri", "Rei Pelé", -1, -1, rodada, 2, 11, 21, 00);
+		addMatch(clubs, rod34, "Bragantino", "Vitória", "Nabi Abi Chedid", -1, -1, rodada, 3, 11, 16, 20);
+		addMatch(clubs, rod34, "Criciúma", "Joinville", "Heriberto Hulse", -1, -1, rodada, 3, 11, 16, 20);
+		addMatch(clubs, rod34, "São Caetano", "Atlético-PR", "Anacleto Campanella", -1, -1, rodada, 3, 11, 16, 20);
+		addMatch(clubs, rod34, "América-RN", "Boa Esporte", "Nazarenão", -1, -1, rodada, 3, 11, 21, 00);
+		tm.put(rodada, rod34);
+		
+		rodada++;
+		ArrayList<Match> rod35 = new ArrayList<Match>();
+		addMatch(clubs, rod35, "Atlético-PR", "América-RN", "Janguito Malucelli", -1, -1, rodada, 6, 11, 16, 00);
+		addMatch(clubs, rod35, "Guarani", "Asa", "Brinco de Ouro", -1, -1, rodada, 6, 11, 19, 30);
+		addMatch(clubs, rod35, "Grêmio Barueri", "Ceará", "Arena Barueri", -1, -1, rodada, 6, 11, 19, 30);
+		addMatch(clubs, rod35, "Criciúma", "São Caetano", "Heriberto Hulse", -1, -1, rodada, 6, 11, 19, 30);
+		addMatch(clubs, rod35, "Joinville", "Guaratinguetá", "Arena Joinville", -1, -1, rodada, 6, 11, 19, 30);
+		addMatch(clubs, rod35, "Vitória", "América-MG", "Barradão", -1, -1, rodada, 6, 11, 21, 50);
+		addMatch(clubs, rod35, "ABC", "Avaí", "Frasqueirão", -1, -1, rodada, 6, 11, 21, 50);
+		addMatch(clubs, rod35, "Ipatinga", "Bragantino", "Lamegão", -1, -1, rodada, 6, 11, 21, 50);
+		addMatch(clubs, rod35, "Boa Esporte", "Goiás", "Melão", -1, -1, rodada, 6, 11, 21, 50);
+		addMatch(clubs, rod35, "CRB", "Paraná", "Rei Pelé", -1, -1, rodada, 6, 11, 21, 50);
+		tm.put(rodada, rod35);
+		
+		rodada++;
+		ArrayList<Match> rod36 = new ArrayList<Match>();
+		addMatch(clubs, rod36, "Goiás", "Grêmio Barueri", "Serra Dourada", -1, -1, rodada, 9, 11, 19, 30);
+		addMatch(clubs, rod36, "São Caetano", "Boa Esporte", "Anacleto Campanella", -1, -1, rodada, 9, 11, 19, 30);
+		addMatch(clubs, rod36, "Asa", "Atlético-PR", "Municipal Arapiraca", -1, -1, rodada, 9, 11, 21, 50);
+		addMatch(clubs, rod36, "Avaí", "Guarani", "Ressacada", -1, -1, rodada, 9, 11, 21, 50);
+		addMatch(clubs, rod36, "Guaratinguetá", "Vitória", "Dario Rodrigues Leite", -1, -1, rodada, 10, 11, 16, 20);
+		addMatch(clubs, rod36, "América-RN", "Criciúma", "Nazarenão", -1, -1, rodada, 10, 11, 16, 20);
+		addMatch(clubs, rod36, "Bragantino", "Joinville", "Nabi Abi Chedid", -1, -1, rodada, 10, 11, 17, 00);
+		addMatch(clubs, rod36, "América-MG", "ABC", "Arena Independência", -1, -1, rodada, 10, 11, 17, 00);
+		addMatch(clubs, rod36, "Paraná", "Ipatinga", "Durival de Britto", -1, -1, rodada, 10, 11, 17, 00);
+		addMatch(clubs, rod36, "Ceará", "CRB", "Presidente Vargas", -1, -1, rodada, 10, 11, 21, 00);
+		tm.put(rodada, rod36);
+		
+		rodada++;
+		ArrayList<Match> rod37 = new ArrayList<Match>();
+		addMatch(clubs, rod37, "Joinville", "Vitória", "Arena Joinville", -1, -1, rodada, 17, 11);
+		addMatch(clubs, rod37, "Criciúma", "Atlético-PR", "Heriberto Hulse", -1, -1, rodada, 17, 11);
+		addMatch(clubs, rod37, "São Caetano", "Goiás", "Anacleto Campanella", -1, -1, rodada, 17, 11);
+		addMatch(clubs, rod37, "Grêmio Barueri", "Avaí", "Arena Barueri", -1, -1, rodada, 17, 11);
+		addMatch(clubs, rod37, "Ipatinga", "Guaratinguetá", "Lamegão", -1, -1, rodada, 17, 11);
+		addMatch(clubs, rod37, "Ceará", "Bragantino", "Presidente Vargas", -1, -1, rodada, 17, 11);
+		addMatch(clubs, rod37, "Paraná", "Asa", "Durival de Britto", -1, -1, rodada, 17, 11);
+		addMatch(clubs, rod37, "América-RN", "América-MG", "Nazarenão", -1, -1, rodada, 17, 11);
+		addMatch(clubs, rod37, "Boa Esporte", "ABC", "Melão", -1, -1, rodada, 17, 11);
+		addMatch(clubs, rod37, "CRB", "Guarani", "Rei Pelé", -1, -1, rodada, 17, 11);
+		tm.put(rodada, rod37);
+		
+		rodada++;
+		ArrayList<Match> rod38 = new ArrayList<Match>();
+		addMatch(clubs, rod38, "Goiás", "Joinville", "Serra Dourada", -1, -1, rodada, 24, 11);
+		addMatch(clubs, rod38, "Avaí", "Criciúma", "Ressacada", -1, -1, rodada, 24, 11);
+		addMatch(clubs, rod38, "Guarani", "São Caetano", "Brinco de Ouro", -1, -1, rodada, 24, 11);
+		addMatch(clubs, rod38, "Guaratinguetá", "Grêmio Barueri", "Dario Rodrigues Leite", -1, -1, rodada, 24, 11);
+		addMatch(clubs, rod38, "América-MG", "Ipatinga", "Arena do Jacaré", -1, -1, rodada, 24, 11);
+		addMatch(clubs, rod38, "Vitória", "Ceará", "Barradão", -1, -1, rodada, 24, 11);
+		addMatch(clubs, rod38, "Atlético-PR", "Paraná", "Durival de Britto", -1, -1, rodada, 24, 11);
+		addMatch(clubs, rod38, "ABC", "América-RN", "Frasqueirão", -1, -1, rodada, 24, 11);
+		addMatch(clubs, rod38, "Bragantino", "Boa Esporte", "Nabi Abi Chedid", -1, -1, rodada, 24, 11);
+		addMatch(clubs, rod38, "Asa", "CRB", "Municipal Arapiraca", -1, -1, rodada, 24, 11);
+		tm.put(rodada, rod38);
+		
+		return tm;
+	}	
+
+	@Override
+	public void setMatches(TreeMap<Integer, ArrayList<Match>> matches){
+		TableDivision2Activity.matches = matches;
+	}
+	
+	@Override
+	public TreeMap<Integer, ArrayList<Match>> getMatches() {
+		return matches;
+	}
+	
+	@Override
+	public void setClubs(TreeMap<String, Club> clubs){
+		TableDivision2Activity.clubs = clubs;
+	}
+	
+	@Override
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	@Override
+	protected int getDivision(){
+		return 2;
+	}
+}

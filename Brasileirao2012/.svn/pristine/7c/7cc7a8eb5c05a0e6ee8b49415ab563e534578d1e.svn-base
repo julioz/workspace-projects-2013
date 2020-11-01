@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+	<string name="actionbar_update">Update</string>
+	<string name="actionbar_zoom">Zoom</string>
+	<string name="drawerlayout_open">Open drawer</string>
+	<string name="drawerlayout_close">Close drawer</string>
+	<string name="pulltorefresh_pull">Pull to refresh</string>
+	
+	<string name="divisions">Divisions</string>
+	<string name="firstdivision">First Division</string>
+	<string name="seconddivision">Second Division</string>
+	
+	<string name="rate">Rate</string>
+	<string name="share">Share</string>
+	<string name="fanpage">Fanpage</string>
+	
+	<string name="homeactivity_updateall_title">Do you want to update everything?</string>
+	<string name="homeactivity_updateall_message">Not recommended if connected via mobile network</string>
+
+	<string name="aboutactivity_title">About</string>
+	<string name="aboutactivity_viewflow_title_theapp">The app</string>
+	<string name="aboutactivity_viewflow_title_moreinfo">More information</string>
+	<string name="aboutactivity_viewflow_title_thanks">Acknowledgement</string>
+	<string name="aboutactivity_version">Version</string>
+	<string name="aboutactivity_developedby">developed by:</string>
+	<string name="aboutactivity_juliozynger">Júlio Zynger</string>
+	<string name="aboutactivity_mailandrights">Thank you for choosing this app!\n\nIf there is any cumpliment, suggestion, criticism or message you would like to share with me, feel free to send me an email to my address (on the next screen), I will be happy to read your message!\n\n\nNOTE: Every image, badge, or multimedia resource in this app are copyrighted to their legal owners.</string>
+	<string name="aboutactivity_email">juliozapps@gmail.com</string>
+
+	<string name="aprovactivity_title">Stats</string>
+	<string name="aprovactivity_home">Home</string>
+	<string name="aprovactivity_visitor">Away</string>
+	<string name="aprovactivity_played">M</string>
+	<string name="aprovactivity_win">W</string>
+	<string name="aprovactivity_draw">D</string>
+	<string name="aprovactivity_percent">%</string>
+
+	<string name="facebookconnect_loginfail">Login failed!</string>
+	<string name="facebookconnect_logoutsuccess">Logout successful!</string>
+	<string name="facebookconnect_graphapistatus">https://lh5.ggpht.com/KM5Z185xBqp3ZYs6Pt9FQ-8YIJh3yiLpypKJsZDSeVTAz3ReSY2TDkhaz9KfX9kCOnU=w124
+	</string>
+	<string name="facebookconnect_messagesent">Message sent!</string>
+	<string name="facebookconnect_messagefail">It was not possible to send the message.</string>
+
+	<string name="guideactivity_title">Guide</string>
+
+	<string name="movetomoveactivity_title">Move to move</string>
+	<string name="movetomoveactivity_erroropening">An error occurred.\nIt was not posible to read the moves for this match.</string>
+	<string name="movetomoveactivity_holdtoshare">Hold to share…</string>
+	<string name="movetomoveactivity_follow">Follow</string>
+	<string name="movetomoveactivity_dontfollow">Unfollow</string>
+	<string name="movetomoveactivity_squad">Squad</string>
+	<string name="movetomoveactivity_nolongerfollowing">You are no longer following the match.</string>
+	<string name="movetomoveactivity_watchvideo">Watch video</string>
+	<string name="movetomoveactivity_videos">Videos</string>
+	<string name="movetomoveactivity_novideostoshow">There are no videos to show at the moment.</string>
+	<string name="movetomoveactivity_matchwithnomoves">The are no moves to show at the moment.</string>
+	<string name="movetomoveactivity_matchwithnovideos">There are no videos for this match at the moment.</string>
+	
+	<string name="movetomovevideocentralactivity_title">Video central</string>
+	<string name="movetomovevideocentralactivity_parsingvideo">Searching for video…</string>
+	<string name="movetomovevideocentralactivity_novideoscouldbeparsed">The video could not be listed. Please try again later.</string>
+
+	<string name="myteamactivity_title">My Club</string>
+	<string name="myteamactivity_strikers">Top Scorers</string>
+	<string name="myteamactivity_rivalries">Rivalries</string>
+	<string name="myteamactivity_norivalriestoshow">There are no rival matches for this club.</string>
+	<string name="myteamactivity_players">Players</string>
+	<string name="myteamactivity_matches">Matches</string>
+	<string name="myteamactivity_matches_all">All</string>
+	<string name="myteamactivity_trophies">Trophy Room</string>
+	<string name="myteamactivity_more">More</string>
+	<string name="myteamactivity_changeteam">Change Club</string>
+	<string name="myteamactivity_pointsandposition" formatted="false">%d
+		points - %d° position</string>
+
+	<string name="newsdetailsactivity_reading">Reading…</string>
+	<string name="readnewsfromdomain_errorreading">It was not possible to read this news</string>
+
+	<string name="newsviewflowactivity_title">News</string>
+	<string name="newsviewflowactivity_errorreading">An error occurred while reading the news for this club.</string>
+
+	<string name="partnersactivity_title">Partners</string>
+
+	<string name="clubselectoractivity_title">My Club</string>
+	
+	<string name="rankingactivity_title">Ranking</string>
+	<string name="rankingactivity_footer_libertadores">Libertadores</string>
+	<string name="rankingactivity_footer_access">Promotion</string>
+	<string name="rankingactivity_footer_sulamericana">Sul-Americana</string>
+	<string name="rankingactivity_footer_punishment">Degradation</string>
+	<string name="rankingactivity_points">P</string>
+	<string name="rankingactivity_games">M</string>
+	<string name="rankingactivity_win">V</string>
+	<string name="rankingactivity_draw">D</string>
+	<string name="rankingactivity_lose">L</string>
+	<string name="rankingactivity_goalspro">GP</string>
+	<string name="rankingactivity_goalsagainst">GA</string>
+	<string name="rankingactivity_balance">Dif</string>
+
+	<string name="realtimematchesactivity_title">Real Time</string>
+	<string name="realtimematchesactivity_nomatchestoshow">There are no matches to be shown at the moment.</string>
+
+	<string name="realtimematchservice_notification_goal">GOOOOAAALLL</string>
+	<string name="realtimematchservice_notification_following">Following</string>
+	<string name="realtimematchservice_notification_matchstarted">Match started</string>
+	<string name="realtimematchservice_notification_matchended">Match\'s end</string>
+	<string name="realtimematchservice_error">There was a problem while following the match, please try again later.</string>
+
+	<string name="settingsactivity_title">Settings</string>
+
+	<string name="stadiumsactivity_stadiumnotfound">It was not possible to find the stadium.</string>
+	<string name="stadiumsactivity_title">Stadiums</string>
+	<string name="stadiumsactivity_name">Name</string>
+	<string name="stadiumsactivity_nick">Nick</string>
+	<string name="stadiumsactivity_city">City</string>
+	<string name="stadiumsactivity_capacity">Capacity</string>
+	<string name="stadiumsactivity_measures">Measures</string>
+	<string name="stadiumsactivity_foundation">Inaugurated on</string>
+
+	<string name="strikerslistactivity_title">Scorers</string>
+	<string name="strikerslistactivity_goals">Goals</string>
+	<string name="strikerslistactivity_player">Player</string>
+	<string name="strikerslistactivity_team">Team</string>
+	<string name="strikerslistactivity_emptydataset">There are no scorers to show. What about updating the list?</string>
+
+	<string name="tableflowactivity_title">Fixture</string>
+	<string name="tableflowactivity_selectfixture">Select round</string>
+	<string name="tableflowactivity_ok">OK</string>
+	<string name="tableflowactivity_cancel">Cancel</string>
+
+	<string name="thirddivisionactivity_title">Third Division</string>
+	<string name="thirddivisionactivity_footer_classified">Promoted</string>
+	<string name="thirddivisionactivity_footer_punishment">Degradation</string>
+
+	<string name="torcidometeractivity_title">Torcidometer</string>
+	<string name="torcidometeractivity_share">Share</string>
+	<string name="torcidometeractivity_sharemessage" formatted="false">%s
+		is in %d place at the torcidometer of %s with %d fans!\n\nDownload the app on Google Play right now and let\'s increase the count!
+		http://bit.ly/IpBPUV</string>
+
+	<string name="trophiesactivity_generalupdateerror">An error occurred, perform a global update before you proceed.</string>
+	<string name="trophiesselectoractivity_title">Trophy Room</string>
+	<string name="trophiesselectoractivity_selectteam">Choose team</string>
+	<string name="trophiesselectoractivity_myteam">My team</string>
+	<string name="newsviewflowadapter_read">Read</string>
+	<string name="newsviewflowadapter_openpage">Open website</string>
+	<string name="newsviewflowadapter_share">Share</string>
+	<string name="newsviewflowadapter_interneterrorreading">Connect to the internet to read the news.</string>
+	<string name="thirddivisionviewflowadapter_group">Group</string>
+	<string name="thirddivisionactivity_emptydataset">There are no data to show.</string>
+	<string name="trophiesarrayadapter_time">time</string>
+	<string name="trophiesarrayadapter_times">times</string>
+
+	<string name="model_club_points">points</string>
+	<string name="model_club_place">º place</string>
+
+	<string name="views_matchviewlayout_fixture">ª round</string>
+	<string name="matchviewlayout_rivalry">★ Rivalry ★</string>
+	<string name="actionmode_addtocalendar">Add to calendar</string>
+	<string name="actionmode_stadium">Stadium</string>
+	<string name="actionmode_movetomove">Move to move</string>
+	<string name="views_matchviewlayout_unavailabletime">Unknown time</string>
+	<string name="views_matchviewlayout_unavailableplace">Unknown stadium</string>
+	<string name="views_matchviewlayout_ordinalendingtoposition">º</string>
+	<string name="views_matchviewlayout_stadium">Stadium</string>
+	<string name="views_matchviewlayout_erroraddingcalendar">An error occurred!\nIt was not possible to add the match to your calendar</string>
+
+	<string name="views_partnerlayout_contact">Contact: juliozapps@gmail.com</string>
+
+	<string name="getrealtimesquadtask_fail">It was not possible to get the squads for this match.</string>
+
+	<string name="sendmyteamtask_success">Your team was updated at the torcidometer\'s count!</string>
+	<string name="sendmyteamtask_fail">It was not possible to update your time at the torcidometer\'s count, try again later.</string>
+
+	<string name="realtimematch_tostart">To start</string>
+	<string name="realtimematch_inprogress">In progress</string>
+	<string name="realtimematch_ended">Ended</string>
+
+	<string name="share_send">Send</string>
+	<string name="share_cancel">Cancel</string>
+	<string name="share_addmoretexthint">Add more text here</string>
+	
+	<string name="preferences_category_internet">Internet</string>
+	<string name="preferences_category_realtime">Real Time</string>
+	<string name="preferences_category_updates">Updates</string>
+	<string name="preferences_title_updateatstart">Check for updates on startup</string>
+	<string name="preferences_summary_updateatstart">Look for app updates on Google Play</string>
+	<string name="preferences_title_showinternetimages">Show internet images</string>
+	<string name="preferences_summary_showinternetimages">Downloading images consumes bandwidth</string>
+	<string name="preferences_title_alwaysupdate">Always update</string>
+	<string name="preferences_summary_alwaysupdate">Auto update data on opening screens</string>
+	<string name="preferences_title_vibrate">Vibrate</string>
+	<string name="preferences_summary_vibrate">Available only for devices with that capability</string>
+	<string name="preferences_title_audio">Audio</string>
+	<string name="preferences_title_updateinterval">Update interval</string>
+	<string name="preferences_title_showclubsranking">Show clubs ranking</string>
+	<string name="preferences_title_lastglobalupdate">Last global update</string>
+	<string name="preferences_summary_lastglobalupdate">Not yet done</string>
+	
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+
+	<string name="ribbonmenuview_firstdivision">1st Division</string>
+	<string name="ribbonmenuview_seconddivision">2nd Division</string>
+	<string name="ribbonmenuview_thirddivision">3rd Division</string>
+	<string name="message_errormovetomovefail">It was not possible to read the moves for this match.\nTry again later.</string>
+	<string name="message_updatedatatoshow">Perform an update to show the data.</string>
+	<string name="message_verifyconnection">Verify the network connection.</string>
+	<string name="message_errorupdatefail">It was not possible to update. Try again later.</string>
+	<string name="message_errortryagain">An error occurred. Try again later.</string>
+	<string name="message_dataupdated">Data updated</string>
+	<string name="app_name">Brasileirão</string>
+	<string name="maps_api_key">0DMBHxWLZMvAn0X4f1HnfPD6974-1Y4PSsgPR4A</string>
+	<string name="debug_maps_api_key">0DMBHxWLZMvBJgFzSKZ6fLJ23VoqAPp9HufbdpA</string>
+	<string name="guide_url">file:///android_asset/guide.html</string>
+	<string name="facebook_id">278893338872977</string>
+	<string name="share_home">I\'m using Brasileirão as my app to follow information about the Brazilian soccer championship, and I can find everything about fixtures, news, top scorers and all the clubs from the main divisions!\n\nSearch on Google Play for "Brasileirão", or click here from your android phone: http://bit.ly/IpBPUV</string>
+	<string name="updating">Updating…</string>
+</resources>

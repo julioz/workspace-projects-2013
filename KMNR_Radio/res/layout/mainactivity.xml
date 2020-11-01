@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
+	
+    <TextView
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_above="@+mainactivity/ll_info"
+        android:id="@+mainactivity/tv_nointernet"
+        android:gravity="center"
+        android:padding="20dp"
+        android:textSize="22sp"
+        android:text="@string/mainactivity_warning_nointernet"/>
+	
+    <ListView
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent"
+		android:id="@+id/android:list"
+		android:visibility="gone"
+		android:layout_above="@+mainactivity/ll_info"
+		android:paddingLeft="3dp"
+		android:paddingRight="3dp"
+		android:cacheColorHint="#00000000"
+		android:background="@null"/>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:orientation="vertical"
+        android:id="@+mainactivity/ll_info"
+        android:layout_above="@+mainactivity/ll_play">
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:id="@+mainactivity/tv_radioname"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/kmnr"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"/>
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:id="@+mainactivity/tv_dj"
+            android:text="@string/mainactivity_musicnotplaying"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:id="@+mainactivity/ll_play"
+        android:layout_alignParentBottom="true">
+        
+        <ImageButton
+            android:id="@+mainactivity/ib_play"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_play"
+            android:layout_gravity="center"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="3dp" />
+        
+        <SeekBar
+            android:id="@+mainactivity/seekbar"
+		    android:indeterminate="true"
+		    android:progressDrawable="@android:drawable/progress_horizontal"
+		    android:indeterminateDrawable="@android:drawable/progress_indeterminate_horizontal"
+		    android:indeterminateBehavior="cycle"
+		    android:visibility="invisible"
+		    android:thumb="@null"
+		    android:layout_gravity="center"
+		    android:indeterminateOnly="true"
+		    android:layout_height="wrap_content"
+		    android:layout_width="match_parent" />       
+    </LinearLayout>
+</RelativeLayout>

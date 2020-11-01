@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:id="@+squad/ll_actbg"
+	android:background="@color/green_background">	
+	
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="40dp"
+		android:orientation="horizontal"
+		android:id="@+squad/actionbar"
+		android:background="@drawable/actionbar_bg">
+		
+		<ImageView
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			android:src="@drawable/icon"
+			android:layout_gravity="center_vertical"/>
+		
+		<TextView
+			android:text="Elenco"
+			android:textColor="#FFFFFF"
+			android:gravity="center_vertical"
+			android:layout_gravity="center_vertical"
+			android:textSize="18dp"
+			android:textStyle="bold"
+			android:paddingLeft="10dp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+	</LinearLayout>
+	
+	<ExpandableListView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="4dp"
+		android:id="@+squad/expandablelv"/>
+	
+	<LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:id="@+squad/ll_ad"
+		android:layout_above="@+squad/ll_info"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f107da2e8de1"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>	
+</LinearLayout>

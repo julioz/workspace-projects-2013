@@ -1,0 +1,179 @@
+package br.com.zynger.brasileirao2012.model;
+
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class Match implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	
+	private Club home, away;
+	private String stadium;
+	private int scr_h, scr_a;
+	private int rod;
+	private GregorianCalendar date;
+	private boolean finished = false;
+	
+	public Match(Club home, Club away, String stadium, int scr_h, int scr_a, int rodada, GregorianCalendar date) {
+		setHome(home);
+		setAway(away);
+		setStadium(stadium);
+		setRodada(rodada);
+		setDate(date);
+		setScore_home(scr_h);
+		setScore_away(scr_a);
+		setFinished(false);
+	}
+	
+	public Match(Club home, Club away, String stadium, int scr_h, int scr_a, int rodada, GregorianCalendar date, boolean finished) {
+		setHome(home);
+		setAway(away);
+		setStadium(stadium);
+		setRodada(rodada);
+		setDate(date);
+		setScore_home(scr_h);
+		setScore_away(scr_a);
+		setFinished(finished);
+		setScore(getScore_home(), getScore_away());
+	}
+
+	public Club getHome() {
+		return home;
+	}
+	
+	public void setHome(Club home) {
+		this.home = home;
+	}
+	
+	public Club getAway() {
+		return away;
+	}
+	
+	public void setAway(Club away) {
+		this.away = away;
+	}
+	
+	public String getStadium() {
+		return stadium;
+	}
+	
+	public void setStadium(String stadium) {
+		this.stadium = stadium;
+	}
+	
+	public int getScore_home() {
+		return scr_h;
+	}
+	
+	public void setScore_home(int scr_h) {
+		this.scr_h = scr_h;
+	}
+	
+	public int getScore_away() {
+		return scr_a;
+	}
+	
+	public void setScore(int home, int away){
+		setScore_home(home);
+		setScore_away(away);
+		
+		if(getScore_home() > -1 && getScore_away() > -1){
+			if(getScore_home() > getScore_away()){
+				getHome().getMand().put(getRodada(), 1);
+				getAway().getVisit().put(getRodada(), -1);
+			}else if(getScore_home() == getScore_away()){
+				getHome().getMand().put(getRodada(), 0);
+				getAway().getVisit().put(getRodada(), 0);
+			}else{
+				getHome().getMand().put(getRodada(), -1);
+				getAway().getVisit().put(getRodada(), 1);
+			}
+		}
+		
+	}
+	
+	public void setScore_away(int scr_a) {
+		this.scr_a = scr_a;
+	}
+	
+	public int getRodada() {
+		return rod;
+	}
+	
+	public void setRodada(int rod) {
+		this.rod = rod;
+	}
+	
+	public String getDate() {
+		if(date == null) return null;
+		
+		Calendar temp = new GregorianCalendar();
+		temp.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH)-1, date.get(Calendar.DAY_OF_MONTH));
+		
+		String s = "";
+		
+		if(date.get(Calendar.DAY_OF_MONTH)<10) s += "0"+date.get(Calendar.DAY_OF_MONTH);
+		else s += String.valueOf(date.get(Calendar.DAY_OF_MONTH));
+		
+		s += "/";
+		
+		if(date.get(Calendar.MONTH) < 1) s += "12" + " - ";
+		else{
+			if(date.get(Calendar.MONTH) < 10) s += "0" + date.get(Calendar.MONTH) + " - ";
+			else s += date.get(Calendar.MONTH) + " - ";			
+		}
+		
+		switch(temp.get(Calendar.DAY_OF_WEEK)){
+		case Calendar.SUNDAY:
+			s += "Domingo";
+			break;
+		case Calendar.MONDAY:
+			s += "Segunda-feira";
+			break;
+		case Calendar.TUESDAY:
+			s += "Terça-feira";
+			break;
+		case Calendar.WEDNESDAY:
+			s += "Quarta-feira";
+			break;
+		case Calendar.THURSDAY:
+			s += "Quinta-feira";
+			break;
+		case Calendar.FRIDAY:
+			s += "Sexta-feira";
+			break;
+		case Calendar.SATURDAY:
+			s += "Sábado";
+			break;
+		}
+		
+		if(date.get(Calendar.HOUR_OF_DAY) != 0){			
+			s += " - " + date.get(Calendar.HOUR_OF_DAY) + ":";
+			if(date.get(Calendar.MINUTE) < 10){
+				s += "0" + date.get(Calendar.MINUTE);
+			}else{
+				s += date.get(Calendar.MINUTE);
+			}
+		}
+		
+		return s;
+	}
+	
+	public void setDate(GregorianCalendar date) {
+		this.date = date;
+	}
+	
+	public GregorianCalendar getCalendar(){
+		return date;
+	}
+
+	public boolean isFinished() {
+		return finished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.finished = finished;
+	}
+
+}

@@ -1,0 +1,219 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.MatchesListAdapter;
+import br.com.zynger.libertadores.adapters.StandingsAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetMatchesGroupTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.data.GroupsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Group;
+import br.com.zynger.libertadores.model.Match;
+import br.com.zynger.libertadores.util.GroupEnum;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.util.JsonUtil;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.view.LogoProgressBar;
+import br.com.zynger.libertadores.view.UpdateImageView;
+import br.com.zynger.libertadores.web.MatchesParser;
+
+public class GroupActivity extends ListActivity implements AsyncTaskListener {
+
+	public final static String INTENT_GROUPNUM = "INTENT_GROUPNUM";
+	
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	private GroupsDB groupsDB;
+	private InternalStorageHandler internalStorage;
+	
+	private MatchesParser matchesParser;
+	
+	private ArrayList<Match> matches;
+	
+	private Group group;
+	
+	private GroupEnum gEnum;
+	private boolean areMatchesShowing;
+	
+	private HelveticaTextView tv_title;
+	private HelveticaTextView tv_toggle_standings_matches;
+	private TableRow tr_standings_header;
+	private RelativeLayout rl_loading;
+	private LogoProgressBar lpb_updating;
+	private UpdateImageView uiv_update;
+	private TextView tv_updating;
+	private LinearLayout ll_toggle_standings_matches;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.groupsactivity);
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		groupsDB = GroupsDB.getSingletonObject(clubsDB);
+		internalStorage = new InternalStorageHandler(this);
+		matchesParser = new MatchesParser(this, clubs);
+		
+		gEnum = (GroupEnum) getIntent().getSerializableExtra(INTENT_GROUPNUM);
+		this.group = groupsDB.getGroups().get(gEnum);
+		
+		loadViews();
+		
+		areMatchesShowing = true;
+		
+		tv_title.setText(gEnum.toString().replace('_', ' '));
+		toggleListContent();
+		
+		uiv_update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				uiv_update.rotateView();
+				new GetMatchesGroupTask(matchesParser, GroupActivity.this, group.getAbsoluteNumber()).execute();
+			}
+		});
+	}
+
+	private void loadViews() {
+		tv_title = (HelveticaTextView) findViewById(R.groupsactivity.titlebar_tvtitle);
+		rl_loading = (RelativeLayout) findViewById(R.groupsactivity.rl_loading);
+		lpb_updating = (LogoProgressBar) rl_loading.findViewById(R.relativelayout_loading.lpb_updating);
+		tv_updating = (TextView) rl_loading.findViewById(R.relativelayout_loading.tv_updating);
+		uiv_update = (UpdateImageView) findViewById(R.groupsactivity.titlebar_ivupdate);
+		tv_toggle_standings_matches = (HelveticaTextView) findViewById(R.groupsactivity.tv_toggle_standings_matches);
+		ll_toggle_standings_matches = (LinearLayout) findViewById(R.groupsactivity.ll_toggle_standings_matches);
+		tr_standings_header = (TableRow) findViewById(R.groupsactivity.tr_toggle_standings);
+		
+		ll_toggle_standings_matches.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				areMatchesShowing = !areMatchesShowing;
+				toggleListContent();
+			}
+		});
+	}
+	
+	private void toggleListContent() {
+		if(!areMatchesShowing){
+			uiv_update.setVisibility(View.INVISIBLE);
+			uiv_update.setClickable(false);
+			tv_toggle_standings_matches.setText(getString(R.string.homedashboard_standings).toUpperCase());
+			tr_standings_header.setVisibility(View.VISIBLE);
+			ArrayList<Club> listClubs = new ArrayList<Club>();
+			for (Club club : clubs.values()) {
+				if(club.getGroup() == gEnum) listClubs.add(club);
+			}
+			Collections.sort(listClubs, new ByGroupPositionComparator());
+			setListAdapter(new StandingsAdapter(this, listClubs));
+		}else{
+			tr_standings_header.setVisibility(View.GONE);
+			uiv_update.setVisibility(View.VISIBLE);
+			uiv_update.setClickable(true);
+			tv_toggle_standings_matches.setText(getString(R.string.homedashboard_matches).toUpperCase());
+			
+			matches = restoreBackup();
+			if(null != matches) setAdapterFromMatches();
+			else new GetMatchesGroupTask(matchesParser, this, group.getAbsoluteNumber()).execute();
+		}
+	}
+	
+	private ArrayList<Match> restoreBackup() {
+		String matchesJsonString = (String) internalStorage.openMatchesArray(this, gEnum.toString());
+		if(null != matchesJsonString){
+			try{
+				ArrayList<Match> matches = new ArrayList<Match>();
+				JSONArray jsonMatches = new JSONArray(matchesJsonString);
+				
+				for (int i = 0; i < jsonMatches.length(); i++) {
+					JSONArray data = jsonMatches.getJSONArray(i);
+					Match match = new Match(data, clubs);
+					matches.add(match);
+				}
+				
+				return matches;
+			}catch(JSONException e){
+				e.printStackTrace();
+				return null;
+			}
+		} else return null;
+	}
+	
+	private void setAdapterFromMatches() {
+		Collections.sort(matches);
+		setListAdapter(new MatchesListAdapter(this, matches));
+	}
+
+	public class ByGroupPositionComparator implements Comparator<Club> {
+		@Override
+		public int compare(Club lhs, Club rhs) {
+			if(lhs.getGroupPosition() != null && rhs.getGroupPosition() != null)
+				return lhs.getGroupPosition() - rhs.getGroupPosition();
+			else return lhs.getName().compareTo(rhs.getName());
+		}
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		lpb_updating.setVisibility(View.VISIBLE);
+		tv_updating.setText(getString(R.string.updating));
+		RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		p.addRule(RelativeLayout.BELOW, R.relativelayout_loading.lpb_updating);
+		p.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		tv_updating.setLayoutParams(p);		
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		ArrayList<Match> matches = (ArrayList<Match>) result;
+		
+		JSONArray json = JsonUtil.createMatchesJson(matches);
+		internalStorage.saveMatchesArray(this, gEnum.toString(), json.toString());
+		
+		this.matches = matches;
+		setAdapterFromMatches();
+		hideUpdatingLayout();
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		if(null != matches){
+			setAdapterFromMatches();
+			hideUpdatingLayout();
+		}else{
+			lpb_updating.setVisibility(View.GONE);
+			tv_updating.setText(getString(R.string.error_nodatabase));
+			tv_updating.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT));
+			tv_updating.setGravity(Gravity.CENTER);
+		}
+	}
+}

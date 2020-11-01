@@ -1,0 +1,234 @@
+package br.com.zynger.brasileirao2012.base;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerHeader;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerItem;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerLayoutAdapter;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerListItem;
+
+import com.actionbarsherlock.view.MenuItem;
+
+public abstract class DrawerActivity<T> extends UpdateableActivity<T> {
+
+	public interface DrawerButtonable {
+		String getDrawerButtonText();
+		void onDrawerButtonClick(Button drawerButton);
+	}
+	
+	private RelativeLayout mDrawer;
+	private ListView mDrawerList;
+	private Button mDrawerButton;
+	private DrawerLayout mDrawerLayout;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private List<DrawerItem> drawerItems;
+	private FrameLayout contentFrame;
+	private DrawerLayoutAdapter adapter;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.drawerlayout);
+
+		beforeDrawerIsSet();
+		instantiateViews();
+		setDrawerViews();
+		setDrawerToggle();
+
+		unlockDrawer();
+		
+		View activityView = getActivityView(LayoutInflater.from(this).inflate(getLayoutResource(), null));
+		contentFrame.addView(activityView);
+	}
+	
+	public void beforeDrawerIsSet(){}
+	
+	public void lockDrawer() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		getSupportActionBar().setHomeButtonEnabled(false);
+		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+	}
+	
+	public void unlockDrawer() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+	}
+	
+	public abstract int getLayoutResource();
+
+	private void instantiateViews() {
+		mDrawer = (RelativeLayout) findViewById(R.drawerlayout_base.left_drawer);
+		mDrawerList = (ListView) findViewById(R.drawerlayout_base.drawer_listview);
+		mDrawerButton = (Button) findViewById(R.drawerlayout_base.drawer_button);
+		mDrawerLayout = (DrawerLayout) findViewById(R.drawerlayout_base.drawer_layout);
+		contentFrame = (FrameLayout) findViewById(R.drawerlayout_base.content_frame);
+	}
+	
+	private void setDrawerViews() {
+		refreshDrawerListView();
+		
+		mDrawerList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Object item = mDrawerList.getAdapter().getItem(position);
+				if(item instanceof DrawerListItem){
+					onDrawerListItemClick(parent, view, position, id, (DrawerListItem) item);
+				}
+				setItemSelected(position);
+				if(shouldCloseDrawerAfterItemSelection()){
+					closeDrawer();
+				}
+			}
+		});
+
+		if (this instanceof DrawerButtonable) {
+			final DrawerButtonable interfacedActivity = (DrawerButtonable) this;
+			mDrawerButton.setText(interfacedActivity.getDrawerButtonText());
+			mDrawerButton.setVisibility(View.VISIBLE);
+			mDrawerButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					interfacedActivity.onDrawerButtonClick(mDrawerButton);
+				}
+			});
+		}
+	}
+
+	protected void refreshDrawerListView() {
+		drawerItems = new ArrayList<DrawerItem>();
+		setDrawerListViewAdapter(getDrawerListViewAdapter(drawerItems));
+	}
+	
+	public abstract boolean shouldCloseDrawerAfterItemSelection();
+
+	private void setDrawerToggle() {
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, R.string.drawerlayout_open,
+				R.string.drawerlayout_close) {
+
+			/** Called when a drawer has settled in a completely closed state. */
+			public void onDrawerClosed(View view) {
+				onDrawerCloses();
+			}
+
+			/** Called when a drawer has settled in a completely open state. */
+			public void onDrawerOpened(View drawerView) {
+				onDrawerOpens();
+			}
+		};
+
+		// Set the drawer toggle as the DrawerListener
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+	}
+
+	private void setDrawerListViewAdapter(List<DrawerItem> items) {
+		adapter = new DrawerLayoutAdapter(this, items);
+		mDrawerList.setAdapter(adapter);
+	}
+	
+	public void replaceDrawerListItem(DrawerListItem remove, DrawerListItem replace) {
+		for (int position = 0; position < adapter.getCount(); position++) {
+			if(adapter.getItem(position).equals(remove)){
+				adapter.remove(remove);
+				adapter.insert(replace, position);
+			}
+		}
+	}
+	
+	public void closeDrawer(){
+		if (mDrawerLayout.isDrawerOpen(mDrawer)) {
+            mDrawerLayout.closeDrawer(mDrawer);
+        }
+	}
+	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// ActionbarSherlock still does not support DrawerLayout
+		// with this workaround we can still get the icon click
+		switch (item.getItemId()) {
+	    case android.R.id.home:
+	        if (mDrawerLayout.isDrawerOpen(mDrawer)) {
+	            mDrawerLayout.closeDrawer(mDrawer);
+	        } else {
+	            mDrawerLayout.openDrawer(mDrawer);
+	        }
+	        return true;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
+	
+	private View getActivityView(View activityView){
+		loadViews(activityView);
+		setDataUpdateLayout(activityView);
+		setPullToRefresh(activityView);
+		
+		initializeActivityEnvironment(activityView);
+		
+		if(!shouldAutoUpdate()){
+			didNotAutoUpdate();
+		}
+		return activityView;
+	}
+	
+	public abstract void initializeActivityEnvironment(View activityView);
+	
+	public abstract void didNotAutoUpdate();
+	
+	public abstract void loadViews(View activityView);
+
+	public abstract List<DrawerItem> getDrawerListViewAdapter(List<DrawerItem> items);
+	
+	public void addDrawerHeaderToList(int titleRes){
+		drawerItems.add(new DrawerHeader(this, getString(titleRes).toUpperCase(Locale.getDefault())));
+	}
+	
+	public void addDrawerItemToList(int iconRes, int titleRes) {
+		drawerItems.add(new DrawerListItem(this, iconRes, titleRes));
+	}
+	
+	public void onDrawerCloses() {}
+	
+	public void onDrawerOpens() {}
+
+	public abstract void onDrawerListItemClick(AdapterView<?> parent, View view,
+			int position, long id, DrawerListItem item);
+
+	public void setItemSelected(int selected) {
+		for (int position = 0; position < adapter.getCount(); position++) {			
+			DrawerItem item = adapter.getItem(position);
+			item.setSelected(position == selected);
+		}
+		adapter.notifyDataSetChanged();
+	}
+}

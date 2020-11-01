@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#FF00372a"
+    android:id="@+nextgame/ll_actback">
+	
+	<RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="40dp"
+		android:id="@+nextgame/actionbar"
+		android:background="@drawable/actionbar_bg">
+		
+		<ImageView
+			android:layout_width="36dp"
+		    android:layout_height="36dp"
+			android:src="@drawable/icon"
+			android:layout_centerVertical="true"
+			android:id="@+nextgame/action_badge"/>
+		
+		<TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:layout_toRightOf="@+nextgame/action_badge"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="10dp"
+		    android:text="Próximo Jogo"
+		    android:textColor="#FFFFFF"
+		    android:textSize="18dp"
+		    android:textStyle="bold" />
+		
+		<LinearLayout
+		    android:layout_alignParentRight="true"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:orientation="horizontal">
+		
+			<ImageButton
+			    android:layout_width="36dp"
+			    android:layout_height="36dp"
+			    android:scaleType="fitCenter"
+			    android:adjustViewBounds="true"
+			    android:layout_alignParentLeft="true"
+			    android:layout_centerVertical="true"
+			    android:id="@+nextgame/ib_actionbar_plus"
+			    android:background="@null"
+			    android:src="@drawable/ic_actionbar_plus"/>
+			
+			<ImageButton
+			    android:layout_width="36dp"
+			    android:layout_height="36dp"
+			    android:scaleType="fitCenter"
+			    android:adjustViewBounds="true"
+			    android:layout_alignParentRight="true"
+			    android:layout_centerVertical="true"
+			    android:id="@+nextgame/ib_actionbar_update"
+			    android:layout_marginRight="4dp"
+			    android:background="@null"
+			    android:src="@drawable/ic_actionbar_update"/>
+		</LinearLayout>
+
+	</RelativeLayout>
+	
+	<ScrollView
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<TableLayout
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+			
+			<TableRow
+				android:layout_marginTop="5dp"
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:background="#FF024234"
+				android:id="@+nextgame/tr_comp"
+				android:orientation="horizontal">
+				
+				<TextView
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:textColor="#FFFFFF"
+					android:padding="3dp"
+					android:textStyle="italic"
+					android:id="@+nextgame/competition"/>
+			</TableRow>
+			
+			<TableRow
+				android:layout_margin="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="#FF024234"
+				android:id="@+nextgame/tr_teamnames"
+				android:orientation="horizontal"
+				android:weightSum="3">
+				
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:layout_alignParentLeft="true"
+					android:layout_weight="1.3"
+					android:gravity="center">
+					
+					<TableRow
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content">
+				
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content">
+							
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:textColor="#FFFFFF"
+								android:padding="3dp"
+								android:textSize="20dp"
+								android:textStyle="bold"
+								android:id="@+nextgame/homeName"/>
+						</LinearLayout>
+					
+					</TableRow>
+				</TableLayout>
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:gravity="center"
+					android:layout_weight="0.4"
+					android:paddingLeft="2dp">
+					
+					<TableRow
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:gravity="center">
+					
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:gravity="center">
+							
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:textColor="#FFFFFF"
+								android:padding="3dp"
+								android:layout_gravity="center"
+								android:text="X"
+								android:textStyle="bold"
+								android:textSize="22dp"/>
+						</LinearLayout>
+					</TableRow>
+				</TableLayout>
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:gravity="right|center_vertical"
+					android:layout_alignParentRight="true"
+					android:paddingRight="3dp"
+					android:layout_weight="1.3">
+					
+					<TableRow
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:gravity="right">
+							
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_gravity="right|center_vertical">
+							
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:textColor="#FFFFFF"
+								android:textSize="20dp"
+								android:layout_gravity="right|center_vertical"
+								android:textStyle="bold"
+								android:id="@+nextgame/awayName"/>
+						</LinearLayout>
+					</TableRow>
+				</TableLayout>
+			</TableRow>
+			
+			<TableRow
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="#FF024234"
+				android:orientation="horizontal"
+				android:weightSum="3"
+				android:id="@+nextgame/badgesRow">
+				
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:layout_alignParentLeft="true"
+					android:layout_weight="1"
+					android:paddingTop="3dp"
+					android:paddingBottom="3dp">
+					
+					<TableRow
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:gravity="left">
+				
+						<LinearLayout
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							
+							<ImageView
+								android:layout_width="wrap_content"
+								android:layout_height="fill_parent"
+								android:id="@+nextgame/homeBadge"/>
+						</LinearLayout>
+					
+					</TableRow>
+				</TableLayout>
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:gravity="center"
+					android:layout_weight="1">
+					
+					<TableRow
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center">
+					
+						<LinearLayout
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:gravity="center">
+						</LinearLayout>
+					</TableRow>
+				</TableLayout>
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:gravity="right|center_vertical"
+					android:layout_alignParentRight="true"
+					android:layout_weight="1">
+					
+					<TableRow
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:gravity="right">
+							
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_gravity="right|center_vertical">
+							
+							<ImageView
+								android:layout_width="wrap_content"
+								android:layout_height="fill_parent"
+								android:id="@+nextgame/awayBadge"/>
+						</LinearLayout>
+					</TableRow>
+				</TableLayout>
+			</TableRow>
+			
+			<TableRow
+				android:layout_margin="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:background="#FF024234"
+				android:id="@+nextgame/tr_stadium"
+				android:orientation="horizontal"
+				android:weightSum="4">
+				
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:layout_alignParentLeft="true"
+					android:layout_weight="2">
+					
+					<TableRow
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content">
+				
+						<LinearLayout
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content">
+							
+							<TextView
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content"
+								android:textColor="#FFFFFF"
+								android:padding="3dp"
+								android:id="@+nextgame/stadium"/>
+						</LinearLayout>
+					
+					</TableRow>
+				</TableLayout>
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:gravity="center"
+					android:layout_marginLeft="25dp"
+					android:layout_weight="1.3">
+					
+					<TableRow
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center">
+					
+						<LinearLayout
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:gravity="center">
+							
+							<TextView
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content"
+								android:textColor="#FFFFFF"
+								android:padding="3dp"
+								android:layout_gravity="center"
+								android:id="@+nextgame/date"/>
+						</LinearLayout>
+					</TableRow>
+				</TableLayout>
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:gravity="right|center_vertical"
+					android:layout_alignParentRight="true"
+					android:layout_weight="0.7">
+					
+					<TableRow
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:gravity="right">
+							
+						<LinearLayout
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:layout_gravity="right|center_vertical">
+							
+							<TextView
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content"
+								android:paddingRight="4dp"
+								android:textColor="#FFFFFF"
+								android:layout_gravity="right|center_vertical"
+								android:id="@+nextgame/hour"/>
+						</LinearLayout>
+					</TableRow>
+				</TableLayout>
+			</TableRow>
+			
+			<TableRow
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:background="#FF024234"
+				android:id="@+nextgame/tr_ref"
+				android:orientation="horizontal"
+				android:gravity="center">
+				
+				<TextView
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:textColor="#FFFFFF"
+					android:padding="3dp"
+					android:layout_gravity="center"
+					android:id="@+nextgame/referee"/>
+			</TableRow>
+			
+			<TableRow
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="5dp"
+				android:layout_marginBottom="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:background="#FF024234"
+				android:id="@+nextgame/tr_aux"
+				android:orientation="horizontal"
+				android:weightSum="3">
+				
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:layout_alignParentLeft="true"
+					android:layout_weight="1.4">
+					
+					<TableRow
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content">
+						<HorizontalScrollView
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content">
+							<LinearLayout
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content">
+								
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content"
+									android:textColor="#FFFFFF"
+									android:padding="3dp"
+									android:id="@+nextgame/aux1"/>
+							</LinearLayout>
+						</HorizontalScrollView>
+					</TableRow>
+				</TableLayout>
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:gravity="center"
+					android:layout_weight="0.2">
+					
+					<TableRow
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center">
+					
+						<LinearLayout
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:gravity="center">
+						</LinearLayout>
+					</TableRow>
+				</TableLayout>
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:gravity="right|center_vertical"
+					android:layout_alignParentRight="true"
+					android:layout_weight="1.4">
+					
+					<TableRow
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:gravity="right">
+						
+						<HorizontalScrollView
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content">	
+							<LinearLayout
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content">
+								
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="wrap_content"
+									android:textColor="#FFFFFF"
+									android:layout_marginRight="2dp"
+									android:layout_gravity="right|center_vertical"
+									android:id="@+nextgame/aux2"/>
+							</LinearLayout>
+						</HorizontalScrollView>
+					</TableRow>
+				</TableLayout>
+			</TableRow>
+			
+			
+			<TableRow
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:background="#FF024234"
+				android:id="@+nextgame/tr_squads"
+				android:orientation="horizontal"
+				android:weightSum="3"
+				android:layout_marginBottom="6dp"
+				android:minHeight="100dp">
+				
+				<ScrollView
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:layout_weight="1.3">
+					
+					<TableLayout
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent"
+						android:orientation="horizontal"
+						android:layout_alignParentLeft="true"
+						android:paddingLeft="2dp"
+						android:paddingTop="3dp"
+						android:paddingBottom="3dp">
+						
+						<TableRow
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent"
+							android:gravity="left">
+							
+							<LinearLayout
+								android:layout_width="fill_parent"
+								android:layout_height="fill_parent">
+								
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="fill_parent"
+									android:textColor="#FFFFFF"
+									android:id="@+nextgame/club1"/>
+							</LinearLayout>
+						</TableRow>
+					</TableLayout>
+				</ScrollView>
+				<TableLayout
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:orientation="horizontal"
+					android:gravity="center"
+					android:layout_weight="0.4">
+					
+					<TableRow
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent"
+						android:gravity="center">
+					
+						<LinearLayout
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent"
+							android:gravity="center">
+						</LinearLayout>
+					</TableRow>
+				</TableLayout>
+				<ScrollView
+					android:layout_width="0dp"
+					android:layout_height="fill_parent"
+					android:layout_gravity="right"
+					android:layout_weight="1.3">
+					<TableLayout
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent"
+						android:orientation="horizontal"
+						android:paddingTop="3dp"
+						android:paddingRight="2dp"
+						android:paddingBottom="3dp">
+						
+						<TableRow
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent"
+							android:gravity="right">
+								
+							<LinearLayout
+								android:layout_width="fill_parent"
+								android:layout_height="fill_parent">
+								
+								<TextView
+									android:layout_width="fill_parent"
+									android:layout_height="fill_parent"
+									android:textColor="#FFFFFF"
+									android:gravity="right"
+									android:id="@+nextgame/club2"/>
+							</LinearLayout>
+						</TableRow>
+					</TableLayout>
+				</ScrollView>
+			</TableRow>
+			
+			<LinearLayout
+				xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:gravity="bottom|center_horizontal">
+		 
+				<com.google.ads.AdView
+				    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+			       	android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        ads:adUnitId="a14f107da2e8de1"
+			        ads:adSize="BANNER"
+			        ads:loadAdOnCreate="true"/>
+	 
+			</LinearLayout>
+		
+		</TableLayout>
+	</ScrollView>
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat" >
+
+    <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+        android:id="@+newsactivity/dul_loading"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+newsactivity/ll_ad"
+        android:visibility="gone" />
+
+    <com.viewpagerindicator.TitlePageIndicator
+        android:id="@+newsactivity/pagerindicator"
+        style="@style/ViewPagerIndicator"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+newsactivity/viewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+newsactivity/ll_ad"
+        android:layout_below="@+newsactivity/pagerindicator"
+        android:duplicateParentState="true" />
+
+    <LinearLayout
+        android:id="@+newsactivity/ll_ad"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom|center_horizontal" >
+
+        <com.google.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="a14f4bbc3448afb"
+            ads:loadAdOnCreate="true" />
+    </LinearLayout>
+
+</RelativeLayout>

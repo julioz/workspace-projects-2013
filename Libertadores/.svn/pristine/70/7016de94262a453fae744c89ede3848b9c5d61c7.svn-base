@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+	<string name="maps_api_key">0DMBHxWLZMvAJcm8dMhxIjWwq5c3bzGvr72TwOQ</string>
+	<string name="maps_api_debug_key">0DMBHxWLZMvD0FvtCL-LscGm-R0NnDOwPwJgHVg</string>
+
+    <string name="homedashboard_standings">Standings</string>
+    <string name="homedashboard_groups">Groups</string>
+    <string name="homedashboard_strikers">Strikers</string>
+    <string name="homedashboard_teams">Teams</string>
+    <string name="homedashboard_map">Map</string>
+    <string name="homedashboard_fans">Fans</string>
+    
+    
+    
+    <string name="app_name">Libertadores</string>
+</resources>

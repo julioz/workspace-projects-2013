@@ -1,0 +1,32 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.web.WebServiceClient;
+
+public class StrikersREST {
+
+	private static final String URL_WS = "http://aqueous-oasis-8080.herokuapp.com/services/";
+
+	public ArrayList<Striker> getStrikers(int division) throws Exception {
+		String[] resposta = new WebServiceClient().get(URL_WS + "strikers/Gdivision=" + division + "/");
+		
+		if (resposta[0].equals("200")) {
+			ArrayList<Striker> alStrikers = new ArrayList<Striker>();
+			JSONArray array = new JSONArray(resposta[1]);
+			
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				alStrikers.add(new Striker(obj.getString("name"), obj.getString("team"), obj.getInt("goals")));
+			}
+
+			return alStrikers;
+		} else {
+			throw new Exception(resposta[1]);
+		}
+	}
+}

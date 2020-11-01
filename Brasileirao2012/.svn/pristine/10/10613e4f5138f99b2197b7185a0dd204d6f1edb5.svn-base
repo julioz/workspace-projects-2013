@@ -1,0 +1,59 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.Calendar;
+
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+	
+	@SuppressWarnings("unused")
+	private SharedPreferences prefs;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.xml.preferences);
+		setContentView(R.layout.settings);
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		Calendar lastupdate = (Calendar) FileHandler.openBackup(this, FileHandler.LASTDATE_UPDATEALL);
+		if(lastupdate != null){
+			String str_dayofmonth = getZeroedStringIfNeeded(lastupdate.get(Calendar.DAY_OF_MONTH));
+			String str_month = getZeroedStringIfNeeded(lastupdate.get(Calendar.MONTH)+1);
+			String str_hourofday = getZeroedStringIfNeeded(lastupdate.get(Calendar.HOUR_OF_DAY));
+			String str_minute = getZeroedStringIfNeeded(lastupdate.get(Calendar.MINUTE));
+			
+			String str_date = str_dayofmonth + "/" + str_month + " - " + str_hourofday + ":" + str_minute;
+			findPreference("pref_lastupdateall").setSummary(str_date);
+		}
+	}
+	
+	private String getZeroedStringIfNeeded(int value){
+		String str = String.valueOf(value);
+		if(str.length() == 1) str = "0" + str;
+		return str;
+	}
+	
+	@Override
+	protected void onPause() {
+		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+		super.onPause();
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		// example
+		/*Preference pref = findPreference(key);
+	    if (pref instanceof EditTextPreference) {
+	        EditTextPreference etp = (EditTextPreference) pref;
+	        pref.setSummary(etp.getText());
+	    }*/
+		
+	}
+}

@@ -1,0 +1,203 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.MoveToMoveAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetMoveToMoveTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Match;
+import br.com.zynger.libertadores.model.Move;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.view.LogoProgressBar;
+import br.com.zynger.libertadores.web.MoveToMoveParser;
+
+public class MoveToMoveActivity extends ListActivity implements AsyncTaskListener {
+
+	public final static String INTENT_MATCH = "INTENT_MATCH";
+	private final static int TIME_ASYNCTASK_EXECUTION = 60;
+
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	private MoveToMoveParser moveToMoveParser;
+	private Match match;
+	
+	private Timer asyncTimer;
+	
+	private HelveticaTextView tv_title;
+	private RelativeLayout rl_loading;
+	private LogoProgressBar lpb_updating;
+	private TextView tv_updating;
+	private ImageView iv_clipboard;
+	private TextView tv_score_home, tv_score_away;
+	private ImageView iv_badge_home, iv_badge_away;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.movetomoveactivity);
+
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+
+		loadViews();
+
+		try{			
+			String jsonMatch = getIntent().getStringExtra(INTENT_MATCH);
+			match = new Match(new JSONArray(jsonMatch), clubs);
+
+			setHeader(match);
+			
+			moveToMoveParser = new MoveToMoveParser(this, match, clubs);
+			
+			iv_clipboard.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent i = new Intent(v.getContext(), MatchDetailsActivity.class);
+					i.putExtra(MatchDetailsActivity.INTENT_MATCH, match.toJson().toString());
+					v.getContext().startActivity(i);
+				}
+			});
+
+			startAsyncTask();
+		}catch(JSONException e){
+			lpb_updating.setVisibility(View.GONE);
+			tv_updating.setText(getString(R.string.error_datadownload));
+			tv_updating.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
+					RelativeLayout.LayoutParams.FILL_PARENT));
+			tv_updating.setGravity(Gravity.CENTER);
+		}
+	}
+
+	private void loadViews() {
+		rl_loading = (RelativeLayout) findViewById(R.movetomoveactivity.rl_loading);
+		lpb_updating = (LogoProgressBar) rl_loading.findViewById(R.relativelayout_loading.lpb_updating);
+		tv_updating = (TextView) rl_loading.findViewById(R.relativelayout_loading.tv_updating);
+		tv_title = (HelveticaTextView) findViewById(R.movetomoveactivity.titlebar_tvtitle);
+		iv_clipboard = (ImageView) findViewById(R.movetomoveactivity.titlebar_ivclipboard);
+		iv_badge_home = (ImageView) findViewById(R.movetomoveactivity.iv_badge_home);
+		iv_badge_away = (ImageView) findViewById(R.movetomoveactivity.iv_badge_away);
+		tv_score_home = (TextView) findViewById(R.movetomoveactivity.tv_score_home);
+		tv_score_away = (TextView) findViewById(R.movetomoveactivity.tv_score_away);
+
+		tv_title.setText(getString(R.string.homedashboard_matches).toUpperCase());
+	}
+	
+	public void startAsyncTask() {
+	    final Handler handler = new Handler();
+	    asyncTimer = new Timer();
+	    TimerTask doAsynchronousTask = new TimerTask() {       
+	        @Override
+	        public void run() {
+	            handler.post(new Runnable() {
+	                public void run() {       
+	                	new GetMoveToMoveTask(moveToMoveParser, MoveToMoveActivity.this).execute();
+	                }
+	            });
+	        }
+	    };
+	    asyncTimer.schedule(doAsynchronousTask, 0, TIME_ASYNCTASK_EXECUTION * 1000);
+	}
+	
+	@Override
+	protected void onStop() {
+		asyncTimer.cancel();
+		super.onStop();
+	}
+	
+	private void setHeader(final Match match) {
+		iv_badge_home.setImageResource(match.getHome().getBadgeResource(this));
+		iv_badge_home.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), match.getHome().getName(), Toast.LENGTH_SHORT).show();
+			}
+		});
+		iv_badge_away.setImageResource(match.getAway().getBadgeResource(this));
+		iv_badge_away.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), match.getAway().getName(), Toast.LENGTH_SHORT).show();
+			}
+		});
+		try{			
+			tv_score_home.setText(String.valueOf(match.getScoreHome()));
+		}catch(Exception e){
+			e.printStackTrace();
+			tv_score_home.setText("");
+		}
+		
+		try{			
+			tv_score_away.setText(String.valueOf(match.getScoreAway()));
+		}catch(Exception e){
+			e.printStackTrace();
+			tv_score_away.setText("");
+		}
+	}
+
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		lpb_updating.setVisibility(View.VISIBLE);
+		tv_updating.setText(getString(R.string.updating));
+		RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		p.addRule(RelativeLayout.BELOW, R.relativelayout_loading.lpb_updating);
+		p.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		tv_updating.setLayoutParams(p);		
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		ArrayList<Move> moves = (ArrayList<Move>) result;
+
+		if(moves.size() > 0){
+			setListAdapter(new MoveToMoveAdapter(this, moves));
+			hideUpdatingLayout();
+		}else{
+			lpb_updating.setVisibility(View.GONE);
+			tv_updating.setText(getString(R.string.error_emptydatabase));
+			tv_updating.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
+					RelativeLayout.LayoutParams.FILL_PARENT));
+			tv_updating.setGravity(Gravity.CENTER);
+		}
+	}
+
+	@Override
+	public void onFail(String message) {
+		lpb_updating.setVisibility(View.GONE);
+		tv_updating.setText(message);
+		tv_updating.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
+				RelativeLayout.LayoutParams.FILL_PARENT));
+		tv_updating.setGravity(Gravity.CENTER);
+	}
+}

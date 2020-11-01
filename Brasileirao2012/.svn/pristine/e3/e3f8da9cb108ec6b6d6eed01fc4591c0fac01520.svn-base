@@ -1,0 +1,194 @@
+package br.com.zynger.brasileirao2012.movetomove;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.actionmode.ActionModeCallback;
+import br.com.zynger.brasileirao2012.actionmode.ActionModeCallback.ActionModeListener;
+import br.com.zynger.brasileirao2012.adapters.MoveToMoveArrayAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.GetVideoUrlTask;
+import br.com.zynger.brasileirao2012.base.UpdateableActivity;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.util.Constants;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+
+import com.actionbarsherlock.view.ActionMode;
+
+public class MoveToMoveVideoCentralActivity extends
+		UpdateableActivity<String[]> implements OnMoveThumbClickListener,
+		ActionModeListener<Move> {
+
+	private ShareHelper shareHelper;
+	private TreeMap<String, Club> clubs;
+	private ArrayList<Move> moves;
+
+	private ListView lvContent;
+
+	private ActionModeCallback<Move> mActionMode;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView();
+		clubs = ClubsDB.getInstance(this).getClubs();
+		moves = getMovesFromIntent();
+		shareHelper = new ShareHelper(this);
+		mActionMode = new ActionModeCallback<Move>(this, lvContent);
+
+		setListAdapter(new MoveToMoveVideoCentralAdapter(this, moves));
+	}
+
+	private void setContentView() {
+		View layout = LayoutInflater.from(this).inflate(
+				R.layout.movetomovevideocentralactivity, null);
+		setContentView(layout);
+		loadViews(layout);
+		setDataUpdateLayout(layout);
+		setDataUpdateLayoutMessage(R.string.movetomovevideocentralactivity_parsingvideo);
+	}
+
+	@SuppressWarnings("unchecked")
+	private ArrayList<Move> getMovesFromIntent() {
+		return (ArrayList<Move>) getIntent().getSerializableExtra(
+				Constants.INTENT_MOVES);
+	}
+
+	private void setListAdapter(MoveToMoveArrayAdapter adapter) {
+		lvContent.setAdapter(adapter);
+	}
+
+	private MoveToMoveVideoCentralAdapter getListAdapter() {
+		return (MoveToMoveVideoCentralAdapter) lvContent.getAdapter();
+	}
+
+	private void loadViews(View activityView) {
+		lvContent = (ListView) activityView
+				.findViewById(R.movetomovevideocentralactivity.lv_content);
+	}
+
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_realtime;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.movetomovevideocentralactivity_title;
+	}
+
+	@Override
+	public Integer getPullToRefreshViewId() {
+		return null;
+	}
+
+	@Override
+	public View[] getDataUpdateViewsToToggle(View activityView) {
+		return new View[] { lvContent };
+	}
+
+	@Override
+	protected boolean showUpdateButton() {
+		return false;
+	}
+
+	@Override
+	public Integer getDataUpdateLayoutId() {
+		return R.movetomovevideocentralactivity.dul_loading;
+	}
+
+	@Override
+	public AsyncTask<Void, Void, String[]> getAsyncTask() {
+		throw new RuntimeException(
+				"getAsynctask must not be called on this activity");
+	}
+
+	@Override
+	public boolean onAsyncSuccess(String[] videoData) {
+		MoveToMoveVideoCentralAdapter adapter = getListAdapter();
+		Integer videoId = Integer.valueOf(videoData[0]);
+		String videoUrl = videoData[1];
+		adapter.setVideoUrl(videoId, videoUrl);
+
+		executeUrlAction(videoUrl);
+		return true;
+	}
+
+	@Override
+	public void onAsyncFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onThumbClick(Move move) {
+		new GetVideoUrlTask(this, clubs, move).execute();
+	}
+
+	@Override
+	public Context getContext() {
+		return this;
+	}
+
+	@Override
+	public void executeUrlAction(String videoUrl) {
+		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl)));
+	}
+
+	@Override
+	public void onPrepareActionMode() {
+	}
+
+	@Override
+	public int getMenuResource() {
+		return R.menu.contextual_menu_move;
+	}
+
+	@Override
+	public boolean onActionModeItemClick(Move move, ActionMode mode, int itemId) {
+		switch (itemId) {
+		case R.contextual_menu_move.menu_video:
+			if (move.getVideoUrl() == null) {
+				onThumbClick(move);
+			} else {
+				String videoUrl = move.getVideoUrl();
+				if(videoUrl != null) {
+					executeUrlAction(videoUrl);
+				} else {
+					Toast.makeText(getContext(), R.string.message_errortryagain, Toast.LENGTH_SHORT).show();
+				}
+			}
+			return true;
+		case R.contextual_menu_move.menu_share:
+			shareHelper.share(move.getShareableContent());
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public void changeMenuItems(Move move) {
+		mActionMode.setItemVisibility(
+				R.contextual_menu_move.menu_video, move.getVideoId() != null);
+	}
+
+	@Override
+	public Move getItemAtPosition(int position) {
+		MoveToMoveVideoCentralAdapter adapter = getListAdapter();
+		if (adapter != null) {
+			return adapter.getItem(position);
+		}
+		return null;
+	}
+}

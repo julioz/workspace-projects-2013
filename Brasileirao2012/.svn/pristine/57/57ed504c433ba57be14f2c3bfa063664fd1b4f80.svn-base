@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stadiums>
+  <stadium>
+    <lat>-16.698889</lat>
+    <lng>-49.233889</lng>
+    <name>Estádio do Governo do Estado de Goiás</name>
+    <nick>Serra Dourada</nick>
+    <city>Goiânia, GO</city>
+    <imgurl>http://www.ogol.com.br/img/estadios/905/7905_ori_serra_dourada.jpg</imgurl>
+    <description>O Estádio do Governo do Estado de Goiás, popularmente conhecido como Estádio Serra Dourada, é um estádio desportivo localizado em Goiânia, Goiás, Brasil.######No estádio realizam-se as partidas dos principais times de futebol da cidade – Atlético Goianiense, Goiás, Vila Nova e Goiânia –, além de outros eventos em geral, tais como shows musicais.######Foi projetado por Paulo Mendes da Rocha, arquiteto vencedor do Prémio Pritzker de 2006. A sua inauguração ocorreu em 9 de março de 1975. É o sétimo maior e o sétimo melhor estádio do país. Possui um amplo estacionamento para carros, com uma capacidade estimada de 10 mil vagas. A área do estádio é cercada por importantes vias de trânsito, como a rodovia BR-153, Avenida Fuad José Sebba.</description>
+    <foundation>
+      <date>9</date>
+      <month>2</month>
+      <year>1975</year>
+    </foundation>
+    <capacity>50049</capacity>
+    <width>111</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-19.908333</lat>
+    <lng>-43.917778</lng>
+    <name>Estádio Raimundo Sampaio</name>
+    <nick>Arena Independência</nick>
+    <city>Belo Horizonte, MG</city>
+    <imgurl>http://turmadochapeu.com.br/wp-content/uploads/2012/02/independencia1.jpg?e6d64f</imgurl>
+    <description>O Estádio Raimundo Sampaio, mais conhecido como Independência, fica no bairro do Horto, em Belo Horizonte, Minas Gerais, Brasil e foi inaugurado em 1950 para a Copa do Mundo de futebol realizada no Brasil. Inicialmente com capacidade para 30.000 pessoas, hoje possui capacidade para 23.000 pessoas. Pertencia ao licenciado Sete de Setembro Futebol Clube, razão pela qual o estádio é chamado de Independência. O nome original é uma homenagem a um ex-presidente do Sete de Setembro.######Em dezembro de 2008, o Governo de Minas Gerais anunciou a reforma no estádio em um convênio celebrado com o América, que transfere a administração do estádio para a Ademg por 20 anos. O investimento inicial anunciado, foi de R$13 milhões de reais por parte do governo do estado e R$ 31 milhões do governo federal. Em agosto de 2009 o Conselho do Meio Ambiente de Belo Horizonte concedeu a licença ambiental para a reforma.######As obras de reforma tiveram início em 22 de janeiro de 2010, com quase um ano de atraso. A data de entrega da obra, que deveria ser até setembro de 2010, também foi alterada, passando para março de 2011. Todo o estádio foi demolido, com exceção dos vestiários.######Em 25 de novembro de 2010, foram firmados os primeiros pilares do estádio. O custo da obra aumentou para 70 milhões de reais. Em 2011, problemas do financiamento - com o orçamento inflado para R$ 125 milhões - começaram a ser resolvidos, e a reinauguração prevista para dezembro de 2011. Segundo o projeto, o estádio teria capacidade para 25 mil torcedores, entretanto, o número foi reduzido para aproximadamente 23.000 lugares.######Para manutenção do novo estádio, o Governo do Estado abriu licitação à iniciativa privada, que foi vencida em dezembro de 2011 pelo grupo paulista BWA. No dia 14 de fevereiro de 2012, no entanto, a empresa assinou contrato de parceria com o Atlético válido por dez anos, garantindo 45% da receita comercial do estádio. Após questionamentos do Ministério Público, no dia 24 foram realizadas alterações no texto do contrato para que não ocorram duplas interpretações, de maneira a garantir que a administração seja realizada exclusivamente pela BWA. Desta forma, o Clube Atlético Mineiro continua a receber 45% de todos os valores arrecadados pela arena. Os demais 55% pertencem a BWA (45%), América (5%) e governo de Minas (5%).######O estádio foi reinaugurado no dia 25 de abril de 2012 durante cerimônia em que o governador de Minas Gerais, Antonio Anastasia, entregou a chave simbólica do Independência à Bruno Balsimelli, do consórcio BWA, que passou a administrar o local. A partida inaugural, um amistoso entre América-MG e o Argentinos Juniors, que fez parte das comemorações do centenário do time mineiro, marcou também a ultima partida da carreira do atacante Euller. O pontapé inicial foi dado pelo ex-atacante Jair Bala para 5.998 torcedores presentes. A partida terminou com a vitória do time da casa, por 2 a 1, de virada.</description>
+    <foundation>
+      <date>25</date>
+      <month>5</month>
+      <year>1950</year>
+    </foundation>
+    <capacity>23018</capacity>
+    <width>110</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-12.946636</lat>
+    <lng>-38.417019</lng>
+    <name>Estádio Roberto Santos</name>
+    <nick>Pituaçu</nick>
+    <city>Salvador, BA</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Est%C3%A1dio_Roberto_Santos_%28Pitua%C3%A7u%29.jpg/320px-Est%C3%A1dio_Roberto_Santos_%28Pitua%C3%A7u%29.jpg</imgurl>
+    <description>O Estádio Governador Roberto Santos, ou Estádio Roberto Santos, é um estádio de futebol localizado no bairro de Pituaçu, em Salvador, de propriedade do Estado da Bahia. Possui uma capacidade para 31.677 espectadores (depois da reforma e ampliação) e já foi palco de grandes jogos. É mais conhecido como Estádio Metropolitano de Pituaçu, ou simplesmente Estádio de Pituaçu.######O Estádio ganhou o prêmio de melhor gramado da Série B de 2010 concedido pela Confederação Brasileira de Futebol.######O Estádio de Pituaçu é um dos estádios baianos candidatos a centro oficial de treinamento durante a Copa do Mundo FIFA de 2014, uma vez que a Arena Fonte Nova receberá os jogos.</description>
+    <foundation>
+      <date>11</date>
+      <month>2</month>
+      <year>1979</year>
+    </foundation>
+    <capacity>31677</capacity>
+    <width>110</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-22.893172</lat>
+    <lng>-43.292269</lng>
+    <name>Estádio Olímpico João Havelange</name>
+    <nick>Engenhão</nick>
+    <city>Rio de Janeiro, RJ</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Stitched_003.jpg/640px-Stitched_003.jpg</imgurl>
+    <description>O Estádio Olímpico João Havelange, também denominado, a partir de 2010, Stadium Rio, e conhecido popularmente por Engenhão, é um estádio poliesportivo localizado no antigo terreno da Rede Ferroviária Federal, localizado no bairro do Engenho de Dentro, na cidade do Rio de Janeiro. Construído no governo Cesar Maia e de propriedade municipal, mas arrendado pelo Botafogo F.R. no ano de sua inauguração até 2027, com possibilidade de renovação de maneira unilateral por mais 20 anos, portanto até 2047, o local foi levantado para sediar as competições de atletismo e futebol dos Jogos Pan-americanos de 2007. Atualmente, tem capacidade total para mais de 46 mil pessoas sentadas, porém, sofrerá ampliação para 60 mil espectadores visando a realização da Olimpíada de 2016.######Considerado o estádio mais moderno da América Latina à época de sua construção, seu gramado tem dimensões de 105 x 68 m, onde o Botafogo manda suas partidas.</description>
+    <foundation>
+      <date>30</date>
+      <month>5</month>
+      <year>2007</year>
+    </foundation>
+    <capacity>46931</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-23.54855</lat>
+    <lng>-46.665242</lng>
+    <name>Estádio Municipal Paulo Machado de Carvalho</name>
+    <nick>Pacaembu</nick>
+    <city>São Paulo, SP</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Pacaembu_em_jogo_do_santos.JPG/320px-Pacaembu_em_jogo_do_santos.JPG</imgurl>
+    <description>O Estádio Municipal Paulo Machado de Carvalho, mais conhecido por Estádio do Pacaembu, é um estádio desportivo localizado na praça Charles Miller, no final da avenida Pacaembu, no bairro do Pacaembu, na região central da cidade de São Paulo, no Brasil. Pertence à prefeitura da capital paulista e pode ser utilizado nas partidas de futebol pela maioria das equipes do município, por meio de pagamento de aluguel. O Sport Club Corinthians Paulista é o time que joga com maior frequência no local.</description>
+    <foundation>
+      <date>27</date>
+      <month>3</month>
+      <year>1940</year>
+    </foundation>
+    <capacity>40199</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-3.806944</lat>
+    <lng>-38.521944</lng>
+    <name>Estádio Governador Plácido Castelo</name>
+    <nick>Castelão</nick>
+    <city>Fortaleza, CE</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/3/32/Castelao_Stadium.jpg</imgurl>
+    <description>O Estádio Governador Plácido Castelo, mais conhecido como Castelão, é um estádio de futebol brasileiro localizado em Fortaleza, Ceará, e inaugurado em 1973. É o maior e mais moderno estádio da Região Nordeste do Brasil, sendo o 4º maior do país, superado apenas pelo Maracanã, Mineirão e Morumbi. O estádio foi reformulado em 2002, e totalmente reformulado novamente em 2012, visando a Copa do Mundo FIFA de 2014, para a Copa o castelão receberá seis jogos, entre ele dois jogos da Seleção Brasileira.######O conceito do projeto de reconstrução foi transformar o estádio Castelão em um dos grandes centros olímpicos do País e também um enorme complexo turístico. A nova arena que foi reinaugurada em 16 de dezembro de 2012, conta com shopping, cinemas, restaurantes e um hotel. O estádio foi fechado, oficialmente, no dia 31 de março de 2011 para a reforma visando a Copa do Mundo de 2014. O último jogo foi válido pela Copa do Brasil de 2011, quando o Ceará levou 35 mil torcedores contra o Brasiliense.######Em 16 de dezembro de 2012, o estádio foi reinaugurado. A cerimonia contou com presença da presidente Dilma Rousseff, que chegou na capital cearense vindo de Moscou, e também contou com um show do cantor Fagner. Além da presidente e do Fagner, participaram da solenidade de entrega de obras o ministro Aldo Rebelo, o governador do Ceará, Cid Gomes, o prefeito eleito de Fortaleza, Roberto Cláudio, e o secretário da Copa no estado, Ferruccio Feitosa.</description>
+    <foundation>
+      <date>11</date>
+      <month>11</month>
+      <year>1973</year>
+    </foundation>
+    <capacity>64846</capacity>
+    <width>110</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-27.104161</lat>
+    <lng>-52.606928</lng>
+    <name>Arena Condá</name>
+    <nick>Arena Condá</nick>
+    <city>Chapecó, SC</city>
+    <imgurl>http://www.ogol.com.br/img/estadios/692/45692_ori_arena_conda.jpg</imgurl>
+    <description>A Arena Condá é um estádio de futebol pertencente à prefeitura da cidade de Chapecó, em Santa Catarina, no Brasil. Em 2008, o Estádio Regional Índio Condá foi demolido para a construção da arena, no mesmo local. Terá capacidade para 25.000 pessoas quando totalmente concluído. A Arena Condá será um dos maiores estádios de futebol de Santa Catarina. O custo da arena será de 30 milhões de reais.</description>
+    <foundation>
+      <date>1</date>
+      <month>2</month>
+      <year>2009</year>
+    </foundation>
+    <capacity>25000</capacity>
+    <width>105</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-12.978611</lat>
+    <lng>-38.504167</lng>
+    <name>Arena Fonte Nova</name>
+    <nick>Fonte Nova</nick>
+    <city>Salvador, BA</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/1/10/Copa-do-mundo-2014-todas-as-obras-dos-estadios-estao-dentro-do-cronograma.jpg</imgurl>
+    <description>Utilizando o mesmo modelo de gestão multiuso de sucesso na Europa, o do Amsterdam Arena, um dos maiores centros de lazer do mundo, casa do Ajax e parceiro na operação da nova arena baiana, o empreendimento colocará a Bahia no circuito do entretenimento mundial. Para construção da nova arena, a antiga estrutura foi implodida em 29 de agosto de 2010 para dar lugar à Arena Fonte Nova, que, entre os projetos já confirmados, será a sede baiana para a Copa do Mundo de 2014.######Quando ficar pronta, a arena terá a capacidade para 50 mil pessoas em três níveis de arquibancadas com assentos cobertos, camarotes, restaurante panorâmico com vista para o estádio e para o Dique do Tororó, e cerca de duas mil vagas de estacionamento. Sua estrutura abrigará também sala de imprensa, quiosques, elevadores, sanitários, museu, lojas e um centro de negócios que funcionará independentemente dos jogos. Além de partidas de futebol, a Arena Fonte Nova permitirá a realização de outros eventos como shows musicais de artistas de renome nacional e internacional, congressos e encontros de negócios. Sua estrutura verticalizada, com três anéis de arquibancada, colocará o público mais próximo do espetáculo promovendo um maior envolvimento e favorecendo a acústica.######A Arena Fonte Nova está sendo construída pela Fonte Nova Negócios e Participações (FNP), concessionárias formadas pelas empresas OAS e Odebrecht, que cuidará da administração, operação e manutenção da nova arena pelos próximos 35 anos, conforme contrato de Parceria Pública Privada (PPP) celebrada entre a concessionária e o Governo do Estado da Bahia. Ao longo desse período, a FNP vai viabilizar a organização, produção e execução de eventos dos mais variados tipos e tamanhos, tornando a Arena Fonte Nova um projeto rentável e que promova o desenvolvimento sustentável da região.</description>
+    <foundation>
+      <date>7</date>
+      <month>4</month>
+      <year>2013</year>
+    </foundation>
+    <capacity>55000</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-22.912144</lat>
+    <lng>-43.23019</lng>
+    <name>Estádio Jornalista Mário Filho</name>
+    <nick>Maracanã</nick>
+    <city>Rio de Janeiro, RJ</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/New_Maracana_Stadium.jpg/800px-New_Maracana_Stadium.jpg</imgurl>
+    <description>A construção do Maracanã foi muito criticada por Carlos Lacerda, na época deputado federal e inimigo político do prefeito da cidade, o general Ângelo Mendes de Morais, pelos gastos e, também, devido à localização escolhida para o estádio, defendendo que o mesmo fosse construído em Jacarepaguá. Ainda assim, apoiado pelo jornalista Mário Rodrigues Filho, Mendes de Morais conseguiu levar o projeto para frente. Na área escolhida, situava-se uma arena destinada à corrida de cavalos. A concorrência para as obras foi aberta pela prefeitura do Rio de Janeiro em 1947. As obras iniciaram-se em 2 de agosto de 1948, data do lançamento da pedra fundamental. Trabalharam na construção cerca de 1500 homens, tendo se somado a estes mais 2000 nos últimos meses de trabalho. Apesar de ter entrado em uso em 1950, as obras só ficaram completas em 1965.######Sua inauguração deu-se com a realização de uma partida de futebol amistosa entre seleções do Rio de Janeiro e São Paulo no dia 16 de junho de 1950, vencida pelos paulistas por 3 a 1. O meio-campista da equipe carioca Didi, do Fluminense, foi o primeiro autor de um gol no estádio.######O Maracanã é uma das sedes da Copa do Mundo de 2014 que será realizada no Brasil. O estádio irá receber alguns jogos e a final do evento. Sendo assim o segundo estádio do mundo a receber duas finais de Copa — o primeiro tendo sido o Estádio Azteca, no México, o qual recebeu as decisões das Copas de 1970 e 86 — e o primeiro a sediar tanto uma final da Copa do Mundo e as Cerimônias dos Jogos Olímpicos.######Para a Copa do Mundo de 2014, está em execução um projeto que aumenta a expansão da cobertura do estádio, que estará cobrindo a totalidade dos assentos, o que não acontece atualmente, onde a proteção se dá a partir das cadeiras da arquibancada acima do portão de acesso de cada setor. Além disso, o tom acinzentado voltará a ser a principal cor do estádio, o atual setor de cadeiras azuis será demolido, dando lugar a uma nova "arquibancada inferior". Os camarotes, instalados acima da atual arquibancada para o Mundial de Clubes de 2000, também serão demolidos e darão lugar a uma nova arquibancada, e suas dimensões passarão a ter 105 por 68 m de forma definitva.######O mesmo projeto irá também reformar o estádio para ser sede das cerimônias de abertura e encerramento das Olimpíadas de 2016.######O Maracanã teve Zico como seu maior artilheiro, jogador que atuou a maioria das vezes no estádio pelo Flamengo. Ele marcou 333 gols nas 435 partidas que disputou no estádio. Já Pelé é o jogador que mais marcou gols no Maracanã com a camisa da Seleção Brasileira, 30 gols em 22 partidas.######Zico também foi o jogador que mais marcou gols em uma única partida no Maracanã, foram 6 gols, na goleada de 7 a 1 do Flamengo sobre o Goytacaz, pelo campeonato carioca de 1979.######A maior goleada da história do Maracanã foi Flamengo 12 a 2 São Cristóvão, pelo Campeonato Carioca de 1956.######O Maracanã foi palco do milésimo gol da carreira de Pelé (Vasco 1 a 2 Santos, em 19 de novembro de 1969) e também da despedida do Rei do Futebol da Seleção Brasileira (Brasil 2 a 2 Iugoslávia, em 18 de julho de 1971).######O maior público-visitante de uma equipe de fora da cidade do Rio de Janeiro foi registrado na semifinal do Campeonato Brasileiro de 1976 entre Fluminense e Corinthians, no episódio que ficou conhecido por "A Invasão Conrintiana". Aproximadamente 70.000 dos 146.043 pagantes torciam para o Corinthians, que venceu o confronto nos pênaltis.</description>
+    <foundation>
+      <date>16</date>
+      <month>6</month>
+      <year>1950</year>
+    </foundation>
+    <capacity>78838</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-7.224114</lat>
+    <lng>-39.31743</lng>
+    <name>Estádio Mauro Sampaio</name>
+    <nick>Romeirão</nick>
+    <city>Juazeiro do Norte, CE</city>
+    <imgurl>http://cache.images.globalsportsmedia.com/soccer/venues/600x450/2431.jpg</imgurl>
+    <description>Construído pelo então prefeito Mauro Sampaio, o Romeirão foi inaugurado em meio às comemorações do dia do trabalho de 1970, num jogo entre Fortaleza e Cruzeiro, vencido pelo time mineiro pelo placar de 3 a 0. O primeiro gol do estádio foi marcado pelo cruzeirense Natal.######Como Juazeiro do Norte não possuía nenhum time profissional, o Romeirão era utilizado pela Liga Desportiva Juazeirense para realização do Campeonato Juazeirense (torneio amador). Somente em 1973, com a profissionalização do Icasa, o Romeirão passou a sediar jogos oficiais. No ano seguinte foi a vez do Guarani se profissionalizar.######O recorde de público no Romeirão foi registrado em 27 de novembro de 1977, num amistoso entre um combinado das equipes locais (Icasa e Guarani), e a equipe carioca Fluminense. 24 mil pessoas compareceram ao estádio para assistir a partida que terminou empatada em 2 a 2.######O maior artilheiro da história do Romeirão é Geraldino Saravá com 72 gols marcados.###Garrincha atuou no Romeirão no dia no dia 21 de abril de 1972, defendendo a equipe do Olaria, já em fase final de carreira.###Pelé no dia 3 de abril de 1974 pelo Santos atuou no Estádio Romeirão em partida amistosa.###Em 3 de junho de 1984, o Romeirão foi palco do jogo de despedida de Sócrates do futebol brasileiro, visto que o atleta estava se transferindo para o Fiorentina, da Itália. Foi um amistoso entre Corinthians e Vasco com o atacante Roberto Dinamite que terminou com a vitória do clube paulista por 3 a 0.</description>
+    <foundation>
+      <date>1</date>
+      <month>5</month>
+      <year>1970</year>
+    </foundation>
+    <capacity>16000</capacity>
+    <width>105</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-21.591973</lat>
+    <lng>-48.805964</lng>
+    <name>Estádio Municipal dos Amaros</name>
+    <nick>Estádio dos Amaros</nick>
+    <city>Itápolis, SP</city>
+    <imgurl>http://guiadoscuriosos.com.br/blog/wp-content/uploads/2011/04/estadio-dos-amaros.jpg</imgurl>
+    <description>O Estádio Municipal dos Amaros mais conhecido como Estádio dos Amaros, é o estádio de futebol pertencente à cidade de Itápolis, no interior do estado de São Paulo. Abriga os jogos do Oeste Futebol Clube.######Possui espaço aberto, arquibancada com capacidade de 14.074 pessoas, assentamento de cimento, quatro banheiros, saída de emergência, três entradas e saídas. Foi inaugurado em 1928 com a nomenclaratura atual, porém uma Lei Municipal de 1989 alterou o nome para Estádio Ideonor Picardi Semeghini ou Picardão, nome que perdurou até o ano de 2010, quando a prefeitura resolveu resgatar a nomenclatura original.</description>
+    <foundation>
+      <date>20</date>
+      <month>10</month>
+      <year>1928</year>
+    </foundation>
+    <capacity>14074</capacity>
+    <width>100</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-1.443889</lat>
+    <lng>-48.462778</lng>
+    <name>Estádio Leônidas Sodré de Castro</name>
+    <nick>Curuzu</nick>
+    <city>Belém, PA</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Estadio_Curuzu_2013.jpg/800px-Estadio_Curuzu_2013.jpg</imgurl>
+    <description>O estádio Leônidas Sodré de Castro (popularmente conhecido por Curuzu) é um estádio de futebol brasileiro de propriedade do Paysandu Sport Club. Neste estádio o clube foi campeão duas vezes do Campeonato Brasileiro de Futebol - Série B, em 1991 e 2001, por isso que a diretoria do Clube de Suíço não abre mão, de mandar jogos em sua praça esportiva sempre que possível.######Em 2010, fora modernizado o banco de reservas do Estádio Leônidas Sodré de Castro. Foram instaladas poltronas modernas para fornecer máximo de conforto aos atletas e árbitros que ali estiverem atuando, o toldo superior também foi trocado, antes era de metal e foi trocado por um toldo de acrílico.######Uma das maiores façanhas no mundo do futebol em todos os tempos aconteceu no Estádio Leônidas Castro, o gol mais rápido do mundo, foi realizado por um atleta do Paysandu. Após apenas 2 segundos do primeiro tempo, o atleta camisa 9 do time do Paysandu, Vital Filho, marcou um gol histórico. O jogo foi realizado no dia 04 de junho de 1997. Apesar da súmula oficial do jogo constar 2 segundo, a televisão mostrou que o gol foi realizado em 4 segundos, o que não impede de ser, de fato, o gol mais rápido do mundo. O jogo era entre Paysandu x Santa Rosa, válido pelo campeonato paraense de 1997.</description>
+    <foundation>
+      <date>27</date>
+      <month>7</month>
+      <year>1918</year>
+    </foundation>
+    <capacity>16200</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-25.421389</lat>
+    <lng>-49.259444</lng>
+    <name>Estádio Major Antônio Couto Pereira</name>
+    <nick>Couto Pereira</nick>
+    <city>Curitiba, PR</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/CP2.jpg/320px-CP2.jpg</imgurl>
+    <description>O Estádio Major Antônio Couto Pereira, mais conhecido simplesmente por Couto Pereira, é o maior estádio de futebol do estado do Paraná, e pertence ao Coritiba Foot Ball Club. Está localizado no bairro Alto da Glória em Curitiba. Seus torcedores o chamam carinhosamente de Couto, Alto da Glória ou Gigante de Concreto Armado.######Fundado em 15 de novembro de 1932, no jogo inaugural o Coritiba venceu o America-RJ por 4 a 2. Atualmente o estádio conta com capacidade para 37.182 pessoas.</description>
+    <foundation>
+      <date>15</date>
+      <month>10</month>
+      <year>1932</year>
+    </foundation>
+    <capacity>37182</capacity>
+    <width>109</width>
+    <height>72</height>
+  </stadium>
+  <stadium>
+    <lat>-19.865833</lat>
+    <lng>-43.970833</lng>
+    <name>Estádio Governador Magalhães Pinto</name>
+    <nick>Mineirão</nick>
+    <city>Belo Horizonte, MG</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Mineir%C3%A3o_2014_-_2.jpg/800px-Mineir%C3%A3o_2014_-_2.jpg</imgurl>
+    <description>Com a escolha do Brasil como país-sede da Copa do Mundo FIFA de 2014, Belo Horizonte, juntamente com Rio de Janeiro, São Paulo, Brasília e Porto Alegre, foi uma das cidades pré-selecionadas para sediar os jogos. Em 2 de fevereiro de 2009 o governo de Minas Gerais apresentou o projeto de modernização do Mineirão. O projeto apresentado assegurou a preservação da fachada original (nos mesmo moldes em que foi realizada a reforma do Estádio Olímpico de Berlim). Em 31 de maio, a Fifa anunciou as 12 cidades sedes da Copa do Mundo de 2014, confirmando a capital mineira como uma delas.######Depois de quase três anos de obras, o estádio foi reaberto ao público no dia 21 de dezembro de 2012 e tornou-se o segundo estádio da Copa do Mundo de 2014 a ser entregue. O evento oficial contou com a participação da presidente Dilma Rousseff. A reinauguração foi celebrada com um show da banda mineira Jota Quest, realizado em um palco montado na recém construída esplanada do estádio. Cerca de 20 mil pessoas estiveram presentes.######Os dois maiores rivais do Estado, Atlético-MG e Cruzeiro, foram responsáveis pela primeira partida organizada no estádio depois das obras, em 3 de fevereiro de 2013, na estreia do Campeonato Mineiro. O cruzeirense Anselmo Ramon, aos 22 minutos da etapa inicial, foi, na vitória por 2 a 1 de sua equipe, o autor do primeiro gol do "novo" Mineirão. O público presente na partida foi de 59.968 e o público pagante, aproximadamente 53 mil pessoas, o que gerou a maior renda da história do Mineirão: R$ 3.677.635,00. Apesar de recém-entregue, contudo, o primeiro clássico abrigado pelo estádio foi alvo de queixas dos torcedores, que sofreram com falta de luz e água.</description>
+    <foundation>
+      <date>5</date>
+      <month>7</month>
+      <year>1965</year>
+    </foundation>
+    <capacity>62170</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-29.165</lat>
+    <lng>-51.196667</lng>
+    <name>Estádio Francisco Stédile</name>
+    <nick>Centenário</nick>
+    <city>Caxias do Sul, RS</city>
+    <imgurl>http://www.sercaxias.com.br/sistema/_modulos/galeria/images/611.jpg</imgurl>
+    <description>O Estádio Francisco Stédile, mais conhecido como Centenário, é um estádio de futebol localizado na cidade de Caxias do Sul, Rio Grande do Sul, Brasil. Pertence ao clube de futebol Caxias. O apelido Centenário foi uma homenagem aos cem anos de colonização italiana ocorrida em 1975.######Durante o ano de 2013, o Caxias compartilhará seu estádio com o clube da capital gaúcha, o Inter, devido à reforma do Estádio Beira-Rio que visa à Copa do Mundo FIFA de 2014.</description>
+    <foundation>
+      <date>12</date>
+      <month>9</month>
+      <year>1976</year>
+    </foundation>
+    <capacity>30822</capacity>
+    <width>107</width>
+    <height>72</height>
+  </stadium>
+  <stadium>
+    <lat>-29.974003</lat>
+    <lng>-51.195</lng>
+    <name>Arena do Grêmio</name>
+    <nick>Arena do Grêmio</nick>
+    <city>Porto Alegre, RS</city>
+    <imgurl>http://imguol.com/2012/11/23/arena-do-gremio-em-fase-final-de-construcao-na-zona-norte-de-porto-alegre-1353688317311_956x500.jpg</imgurl>
+    <description>Arena do Grêmio é um estádio multiuso localizado na cidade de Porto Alegre, Brasil e é a casa do Grêmio Foot-Ball Porto Alegrense. Foi inaugurada no dia 8 de dezembro de 2012 com um show e uma partida amistosa contra o clube alemão Hamburgo, vencida pelo Grêmio pelo placar de 2 a 1, repetindo o resultado da final de 1983, onde o clube gaúcho conquistou o Copa Europeia/Sul-Americana de 1983.######O estádio tem instalados dois telões, a distância para o gramado é de 10 metros da linha lateral até o primeiro lance de cadeiras, existe fosso, que no futuro poderá ser coberto, a capacidade é de 60.540 pessoas e as arquibancadas tem a inclinação máxima permitida pela FIFA, o que impossibilita futuras ampliações. Todos os lugares são cobertos e com cadeiras. Há quatro lances de arquibancada: a baixa com cadeiras (inferior), média baixa com poltronas (gold), média alta com camarotes (vip) e a mais alta também com cadeiras (superior). O lance de arquibancadas mais próximo ao campo fica a cerca de 10 metros do gramado, contrastando com os 40,7 do Olímpico Monumental.</description>
+    <foundation>
+      <date>8</date>
+      <month>12</month>
+      <year>2012</year>
+    </foundation>
+    <capacity>60540</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-8.04</lat>
+    <lng>-35.008056</lng>
+    <name>Arena Pernambuco</name>
+    <nick>Arena Pernambuco</nick>
+    <city>São Lourenço da Mata, PE</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/1/1c/Pernambuco_Arena.jpg</imgurl>
+    <description>A Arena Pernambuco é um estádio de futebol que está em construção para a Copa das Confederações da FIFA 2013 e para a Copa do Mundo da FIFA 2014 em Pernambuco. Com padrão internacional, a arena terá capacidade para 46.000 pessoas, distribuídas em 102 camarotes (1.600 assentos), 1.800 assentos business e 2.700 assentos premium. O espaço terá perfil multiuso. Assim, será utilizado também após o Mundial para jogos de futebol, outras competições esportivas, feiras, convenções e grandes espetáculos. Está localizado no município de São Lourenço da Mata na Região Metropolitana do Recife, estado de Pernambuco, a 19 km de Recife. Ao seu redor, uma nova centralidade urbana será criada para alavancar o desenvolvimento da zona Oeste da região metropolitana de Recife. Essa área está recebendo o nome de Cidade da Copa e será conectada à capital por várias vias que já estão sendo construídas ou estão em licitação. A arena terá capacidade para 46.000 pessoas e 4.700 vagas de estacionamento, sendo 800 cobertas. O custo é de R$ 532 milhões. Será utilizada na Copa do Mundo FIFA de 2014.</description>
+    <foundation>
+      <date>14</date>
+      <month>4</month>
+      <year>2013</year>
+    </foundation>
+    <capacity>46154</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-27.585556</lat>
+    <lng>-48.586667</lng>
+    <name>Estádio Orlando Scarpelli</name>
+    <nick>Orlando Scarpelli</nick>
+    <city>Florianópolis, SC</city>
+    <imgurl>http://www.fussballtempel.net/conmebol/BRA/Orlando_Scarpelli_A.jpg</imgurl>
+    <description>O Estádio Orlando Scarpelli é um estádio de futebol, pertence ao Figueirense Futebol Clube e está localizado no bairro Estreito, na parte continental da cidade de Florianópolis, no estado de Santa Catarina. É o maior estádio de futebol de Florianópolis.######Está localizado a 1 km do Corpo de Bombeiros, do Batalhão da Polícia Militar e do Hospital de Florianópolis. Desde 1999, o estádio vem sendo constantemente reformado e com novas instalações sendo agregadas ao patrimônio do clube. Novos vestiários para as divisões de base, alambrados novos, implantação de catracas eletrônicas e cartões indutivos de acesso, pintura das arquibancadas, novos banheiros, reforma dos bares, dos acessos internos e do sistema de iluminação, novas casamatas, são algumas das obras efetuadas.######Em 2005, foram executadas mais obras de melhorias. No início do ano houve a colocação de cadeiras em todo o estádio, e no mês de dezembro foi iniciada a substituição do gramado, assim como modernização dos sistemas de irrigação computadorizada e drenagem.######O estádio leva o nome do empresário e desportista Orlando Scarpelli, que presidiu o Figueirense Futebol Clube nos anos 1940 e doou o terreno onde o estádio está localizado.######Em 2002, a Revista Placar atribuiu o título de "Caldeirão do Brasil" ao Estádio Orlando Scarpelli devido ao maior percentual de ocupação entre todos os estádios das equipes que disputaram o Campeonato Brasileiro da Série ‘A’, com 49%.</description>
+    <foundation>
+      <date>13</date>
+      <month>8</month>
+      <year>1960</year>
+    </foundation>
+    <capacity>19069</capacity>
+    <width>100</width>
+    <height>65</height>
+  </stadium>
+  <stadium>
+    <lat>-30.060556</lat>
+    <lng>-51.213333</lng>
+    <name>Estádio Olímpico Monumental</name>
+    <nick>Olímpico</nick>
+    <city>Porto Alegre, RS</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Gremio_Stadium.JPG/320px-Gremio_Stadium.JPG</imgurl>
+    <description>O Estádio Olímpico Monumental é um estádio brasileiro de futebol situado na cidade de Porto Alegre, Rio Grande do Sul, de propriedade do Grêmio Foot-Ball Porto Alegrense. Foi inaugurado no dia 19 de setembro de 1954 em um torneio de inauguração.</description>
+    <foundation>
+      <date>19</date>
+      <month>9</month>
+      <year>1954</year>
+    </foundation>
+    <capacity>48000</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-30.065614</lat>
+    <lng>-51.236086</lng>
+    <name>Estádio José Pinheiro Borda</name>
+    <nick>Beira-Rio</nick>
+    <city>Porto Alegre, RS</city>
+    <imgurl>http://www.internacional.com.br/imagens/conteudo/beirario_aerea_2009_1.jpg</imgurl>
+    <description>O Estádio José Pinheiro Borda, também conhecido como Gigante da Beira-Rio é o estádio do clube de futebol Sport Club Internacional e está localizado às margens do Rio Guaíba, em Porto Alegre, no estado brasileiro do Rio Grande do Sul. Seu nome oficial é uma homenagem a um cidadão português que durante muitos anos comandou as obras de construção do estádio, morrendo antes que fossem terminadas. Atualmente, é o terceiro maior estádio particular do país.</description>
+    <foundation>
+      <date>6</date>
+      <month>3</month>
+      <year>1969</year>
+    </foundation>
+    <capacity>65000</capacity>
+    <width>108</width>
+    <height>72</height>
+  </stadium>
+  <stadium>
+    <lat>-8.040556</lat>
+    <lng>-34.896667</lng>
+    <name>Estádio Eládio de Barros Carvalho</name>
+    <nick>Aflitos</nick>
+    <city>Recife, PE</city>
+    <imgurl>http://www.ogol.com.br/img/estadios/970/51970_ori_eladio_de_barros_carvalho_aflitos_.jpg</imgurl>
+    <description>O Estádio Eládio de Barros Carvalho, popularmente conhecido como Estádio dos Aflitos, por estar localizado no bairro dos Aflitos, é o estádio usado pelo Clube Náutico Capibaribe. Foi inaugurado em 25 de junho de 1939. O nome é uma homenagem a Eládio de Barros Carvalho, presidente do clube durante 14 mandatos.</description>
+    <foundation>
+      <date>25</date>
+      <month>5</month>
+      <year>1939</year>
+    </foundation>
+    <capacity>19800</capacity>
+    <width>105</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-23.513186</lat>
+    <lng>-46.899436</lng>
+    <name>Dr. Orlando Batista Novelli</name>
+    <nick>Arena Barueri</nick>
+    <city>Barueri, SP</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Arena_Barueri.jpg/320px-Arena_Barueri.jpg</imgurl>
+    <description>A Arena Barueri, é uma arena multiuso, localizada na cidade de Barueri, Região Metropolitana de São Paulo. A arena pertence a prefeitura municipal de Barueri, e tem como equipe mandante o Sport Club Barueri e agora conta com a volta do Grêmio Barueri. A arena serve também como alternativa para os grandes clubes da capital, devido aos baixo custo de aluguel cobrado pela prefeitura, pelo excelente estado do gramado e o fácil acesso a cidade.</description>
+    <foundation>
+      <date>26</date>
+      <month>4</month>
+      <year>2007</year>
+    </foundation>
+    <capacity>35000</capacity>
+    <width>107</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-22.913611</lat>
+    <lng>-47.051389</lng>
+    <name>Estádio Moisés Lucarelli</name>
+    <nick>Moisés Lucarelli</nick>
+    <city>Campinas, SP</city>
+    <imgurl>http://classicoeclassico.sites.uol.com.br/templos/sp/PontePreta8.jpg</imgurl>
+    <description>O Estádio Moisés Lucarelli é o estádio pertencente à Associação Atlética Ponte Preta. Localiza-se na cidade de Campinas, no interior do estado de São Paulo, Brasil. Foi inaugurado em 12 de setembro de 1948 com capacidade para 35 mil espectadores, tendo sido construído com doações de material feitas por aficionados do clube. A construção levou seis anos.######Atualmente, teve a capacidade diminuída para cerca de 20 mil pessoas, a fim de proporcionar maior conforto e obedecer às novas determinações legais.######É possível que o seu recorde de público tenha sido no jogo entre Ponte Preta e Santos, em 16 de agosto de 1970, quando 33 500 espectadores pagaram ingressos para ver a vitória dos visitantes por 1 a 0. Porém, segundo historiadores, havia cerca de 40 mil torcedores dentro do estádio e mais quatro mil pessoas do lado de fora, sem conseguir entrar. No final desse campeonato paulista, a Ponte Preta conquistou o vice-campeonato.######Oficialmente, o maior público é da derrota por 3 a 1 da Ponte Preta para o São Paulo, em 1.º de fevereiro de 1978: 37 274 (34 985 pagantes).</description>
+    <foundation>
+      <date>12</date>
+      <month>8</month>
+      <year>1948</year>
+    </foundation>
+    <capacity>19728</capacity>
+    <width>107</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-23.520525</lat>
+    <lng>-46.618708</lng>
+    <name>Estádio Doutor Osvaldo Teixeira Duarte</name>
+    <nick>Canindé</nick>
+    <city>São Paulo, SP</city>
+    <imgurl>http://www.ogol.com.br/img/estadios/750/39750_ori_dr_osvaldo_teixeira_duarte_caninde_.jpg</imgurl>
+    <description>O Estádio do Canindé (oficialmente Estádio Doutor Osvaldo Teixeira Duarte) é um estádio de futebol localizado às margens do Rio Tietê, na cidade de São Paulo e cuja propriedade é da Associação Portuguesa de Desportos, clube social-poliesportivo ligado à colônia portuguesa da capital paulista.######O Canindé recebeu sua primeira partida oficial em 11 de janeiro de 1956, quando a Portuguesa venceu uma seleção formada pelos rivais Palmeiras/São Paulo por 3 a 2. Nelsinho do São Paulo fez o primeiro gol desta partida no estádio ainda de madeira. Com o nome de Estádio Independência, o Estádio do Canindé foi inaugurado oficialmente em 9 de Janeiro de 1972, com a partida Portuguesa 1 a 3 Benfica. Nessa inauguração oficial, já contou com arquibancadas de concreto mas sua capacidade ainda era de apenas dez mil espectadores. Em 1979 o presidente Manuel Mendes Gregório rebatizou o estádio com o atual nome de Estádio Dr. Osvaldo Teixeira Duarte. A capacidade total foi ampliada para 28.500 espectadores sentados. Anteriormente à construção deste estádio, porém, foi encomendado ao arquiteto João Batista Vilanova Artigas (o qual já havia projetado o Estádio do Morumbi na década anterior) um estudo para o estádio-sede do clube, no mesmo local. Este estudo - caracterizado por arquibancadas triagulares e por estar aberto às marginais -, porém, foi descartado em favor do projeto que constitui o atual estádio.</description>
+    <foundation>
+      <date>11</date>
+      <month>10</month>
+      <year>1956</year>
+    </foundation>
+    <capacity>21004</capacity>
+    <width>106</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-22.890833</lat>
+    <lng>-43.228056</lng>
+    <name>Estádio Vasco da Gama</name>
+    <nick>São Januário</nick>
+    <city>Rio de Janeiro, RJ</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Est%C3%A1dio_do_Vasco_da_Gama.jpg/800px-Est%C3%A1dio_do_Vasco_da_Gama.jpg</imgurl>
+    <description>O Estádio Vasco da Gama, mais conhecido como São Januário, devido à parte de sua localização estar na rua de mesmo nome, é o estádio de futebol pertencente ao Club de Regatas Vasco da Gama. Foi inaugurado em 21 de abril de 1927, sendo até hoje o maior estádio particular do estado do Rio de Janeiro. Sua fachada, em estilo neocolonial, é tombada pelo Instituto do Patrimônio Histórico e Artístico Nacional. Além disso há um Projeto de Lei 1563/96 na Câmara Municipal do Rio de Janeiro, apresentado em 29 de maio de 1996, com o fim de tombar o estádio e seu complexo esportivo e social, por seu valor histórico, cultural, esportivo e social.######Até a inauguração do Maracanã o Vasco jogava os clássicos contra seus rivais da cidade em São Januário. Após o surgimento do estádio Mário Filho os jogos passaram a ser jogados ali, salvo raras exceções, a maioria ocorridas quando o estádio estava em obras. O último clássico disputado em São Januário ocorreu em 2005 contra o Flamengo, válido pelo Campeonato Brasileiro de Futebol de 2005, com vitória cruzmaltina por 2x1.######No Estádio São Januário a Seleção Brasileira de Futebol já disputou 23 jogos, sendo 19 vitórias, 1 empate e 3 derrotas. Desde a sua inauguração em 1927 até 1950 a Seleção disputava a maioria de seus jogos que fossem no Rio de Janeiro em São Januário, mas após a inauguração do Maracanã este estádio passou a ser o escolhido pela CBF. Trinta e nove anos após o último jogo, a Seleção voltou a disputar uma partida em São Januário. Em 1989 enfrentou a Seleção Japonesa, vencendo por 1 x 0. Em 1993, o confronto com a Seleção Paraguaia marcou a última partida disputada pela Seleção Brasileira em São Januário.</description>
+    <foundation>
+      <date>21</date>
+      <month>4</month>
+      <year>1927</year>
+    </foundation>
+    <capacity>24584</capacity>
+    <width>115</width>
+    <height>85</height>
+  </stadium>
+  <stadium>
+    <lat>-5.641987</lat>
+    <lng>-35.422245</lng>
+    <name>Estádio Manoel Barreto de Menezes</name>
+    <nick>Barretão</nick>
+    <city>Ceará Mirim, RN</city>
+    <imgurl>http://www.novojornal.jor.br/_midias/jpg/2013/01/08/2-3253-50ec242fd8a47.jpg</imgurl>
+    <description>Uma mini cidade está sendo construída em Ceará-Mirim, município localizado a 28 quilômetros de Natal. Em uma área de mais de 250 hectares, o Estádio Manoel Barreto, já chamado de Barretão, está sendo construído e será o "coração" do complexo que ainda conta com mais de 6.000 casas populares, além de cinco campos de treinamento, pista de kart e arrancada.######Iniciado no dia 1º de outubro do ano passado, o Estádio Barretão irá receber 6.400 espectadores num primeiro momento. A previsão é de que até o final de março os 10 mil lugares planejados para essa primeira etapa estejam concluídos, atendendo às exigências da Confederação Brasileira de Futebol. Mas há outro interessado nessa conclusão, o América-RN, que devido à demolição do Estádio Machadão, em Natal, precisou adotar outra cidade para sediar seus jogos e acabou seguindo para Goianinha, onde vinha jogando. No entanto, o alto custo para a instalação de arquibancadas metálicas fez o clube repensar a parceria, até que surgiu o estádio em Ceará-Mirim, que está sendo bem-vindo para as pretensões alvirrubras.</description>
+    <foundation>
+      <date>15</date>
+      <month>3</month>
+      <year>2013</year>
+    </foundation>
+    <capacity>10000</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-23.951111</lat>
+    <lng>-46.338889</lng>
+    <name>Estádio Urbano Caldeira</name>
+    <nick>Vila Belmiro</nick>
+    <city>Santos, SP</city>
+    <imgurl>http://rennan.files.wordpress.com/2007/05/vilabelmiro7.jpg</imgurl>
+    <description>O Estádio Urbano Caldeira, mais conhecido como Vila Belmiro, é o maior estádio de futebol da Baixada Santista e abriga o Santos FC, um clube de futebol no Brasil, que foi fundado em 14 de abril de 1912 e revelou o Edson Arantes do Nascimento, conhecido mundialmente por Pelé.######O estádio na Vila Belmiro foi construído em 1916 e é um dos estádios mais antigos do Brasil e tem capacidade atual para 21.256 torcedores, após uma ampla reforma. Está localizado na Rua Princesa Isabel, 77, perto de onde encontra-se o Estádio Ulrico Mursa, da Portuguesa Santista.</description>
+    <foundation>
+      <date>22</date>
+      <month>9</month>
+      <year>1916</year>
+    </foundation>
+    <capacity>21256</capacity>
+    <width>105</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-23.600114</lat>
+    <lng>-46.720094</lng>
+    <name>Estádio Cícero Pompeu de Toledo</name>
+    <nick>Morumbi</nick>
+    <city>São Paulo, SP</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/0/0d/Sao_paulo_e_juventude_-_campeonato_brasileiro_de_2006_-_01.jpg</imgurl>
+    <description>O Estádio Cícero Pompeu de Toledo, também chamado de Estádio do Morumbi, é um estádio construído para receber jogos de futebol, sendo a sede oficial do time brasileiro de futebol São Paulo Futebol Clube, já tendo recebido a Seleção Brasileira em várias ocasiões. O Morumbi é o terceiro maior estádio do Brasil - superado apenas pelo Maracanã e pelo Mineirão - e o maior estádio particular do país.</description>
+    <foundation>
+      <date>2</date>
+      <month>9</month>
+      <year>1960</year>
+    </foundation>
+    <capacity>72809</capacity>
+    <width>108</width>
+    <height>72</height>
+  </stadium>
+  <stadium>
+    <lat>-8.062778</lat>
+    <lng>-34.902778</lng>
+    <name>Estádio Adelmar da Costa Carvalho</name>
+    <nick>Ilha do Retiro</nick>
+    <city>Recife, PE</city>
+    <imgurl>http://ibxk.com.br/materias/39110949/42230.jpg</imgurl>
+    <description>O Estádio Adelmar da Costa Carvalho, mais conhecido como Ilha do Retiro, é um estádio destinado à prática de futebol, e sede oficial do Sport Club do Recife. Localiza-se no bairro da Ilha do Retiro, cidade do Recife, capital de Pernambuco.######Foi inaugurada no dia 4 de julho de 1937, num amistoso entre Sport e Santa Cruz, com vitória do clube rubro-negro pelo placar de 6x5, tendo como autor do primeiro gol o leonino Artur Danzi.######Atualmente, a Ilha tem capacidade máxima para abrigar 35.000 pessoas e é conhecida pela forte pressão causada pela torcida rubro-negra pernambucana em suas arquibancadas, consideradas de boa acústica.######O maior público registrado no Caldeirão da Ilha foi na final do Pernambucano de 1998, entre Sport e Porto, com resultado final de 2x0 para o Papai da Cidade e um número recorde de 56.875 torcedores.######A Ilha Mais Famosa do Brasil destaca-se por ser o primeiro estádio do Norte-Nordeste do país a sediar uma partida de Copa do Mundo, realizada em 1950, entre as seleções do Chile e dos Estados Unidos, e vencida pelos chilenos por 5x2.</description>
+    <foundation>
+      <date>4</date>
+      <month>6</month>
+      <year>1937</year>
+    </foundation>
+    <capacity>35000</capacity>
+    <width>105</width>
+    <height>78</height>
+  </stadium>
+  <stadium>
+    <lat>-19.478513</lat>
+    <lng>-44.221827</lng>
+    <name>Estádio Joaquim Henrique Nogueira</name>
+    <nick>Arena do Jacaré</nick>
+    <city>Sete Lagoas, MG</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/pt/5/52/Arena_do_jacar%C3%A9.jpg</imgurl>
+    <description>Antigamente o Democrata usava o Estádio José Duarte de Paiva com capacidade para 2.000 pessoas. Com a posse de Humberto Timo em 2003, o antigo sonho se tornou realidade. Com pouco dinheiro, o Democrata conseguiu construir o estádio para 18.000 pessoas em um ano, ficando pronto para o segundo jogo do Campeonato Mineiro de 2006.######O estádio foi inaugurado em 28 de janeiro de 2006 na vitória de 3 a 0 sobre o Atlético Mineiro. O primeiro gol foi marcado pelo jogador do Democrata, Paulo César, aos 15 minutos do primeiro tempo.######O jogo com maior público foi Democrata Futebol Clube x Clube Atlético Mineiro, válido pela 1ª rodada do Campeonato Mineiro de 2008. O resultado foi de 1 a 0 (gol de Tuta) para o Democrata, com público de 20.500 pessoas.######Em 2010, com a reforma do Estádio do Mineirão para a Copa do Mundo de 2014, a Arena do Jacaré passou a receber os jogos dos times da capital mineira. Para tanto, o estádio passou por um período de reformas, que tiveram início ainda em 2009. Cadeiras foram instaladas em todo estádio, a capacidade foi aumentada, o estacionamento expandido, construídas novas cabines de imprensa, portões de entrada e saída, iluminação que permitiu jogos noturnos. A reinauguração aconteceu no dia 15 de Julho de 2010, com a vitória do Atlético-MG sobre o Atlético-GO por 3 a 2.</description>
+    <foundation>
+      <date>28</date>
+      <month>1</month>
+      <year>2006</year>
+    </foundation>
+    <capacity>18850</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-5.889170</lat>
+    <lng>-35.179499</lng>
+    <name>Estádio Maria Lamas Farache</name>
+    <nick>Frasqueirão</nick>
+    <city>Natal, RN</city>
+    <imgurl>http://profsezimar.com/wp-content/uploads/2011/09/frasqueirao-campo-do-abc.jpg</imgurl>
+    <description>O Estádio Maria Lamas Farache, apelidado de Frasqueirão, está localizado na Rota do Sol em Natal, capital do Rio Grande do Norte, Brasil. É o estádio oficial do ABC Futebol Clube sendo inaugurado em 22 de janeiro de 2006, no jogo ABC 1 x 1 Alecrim. O estádio ocupa 25.000 m² de um total de 110.000 m² da Vila Olímpica Vicente Farache.######O projeto setoriza a Vila Olímpica em quatro: o estádio com 25.000 m², o estacionamento com 25.000 m², uma área comercial com 14.500 m² e o clube com 45.500 m².</description>
+    <foundation>
+      <date>22</date>
+      <month>1</month>
+      <year>2006</year>
+    </foundation>
+    <capacity>18000</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-6.281643</lat>
+    <lng>-35.205082</lng>
+    <name>Estádio José Nazareno do Nascimento</name>
+    <nick>Nazarenão</nick>
+    <city>Goianinha, RN</city>
+    <imgurl>http://blog.tudonahora.com.br/amigaodagalera/files/2011/09/NAZARENAO12.jpg</imgurl>
+    <description>O Estádio José Nazareno do Nascimento, mais conhecido como Nazarenão, é o principal estádio de futebol da cidade de Goianinha, cidade do estado do Rio Grande do Norte. Recebe partidas do time da cidade pelo Campeonato Potiguar e Campeonato Brasileiro de Futebol.######Com a escolha da Cidade de Natal pra sediar a Copa do mundo de 2014 o Estádio José Nazareno do Nascimento Recebeu as Partidas do América de Natal na Série C 2011 onde o América conseguiu o acesso pra Série B e Receberá os jogos do América de Natal na Série B 2012.######O estádio está passando por várias reformas e haverá uma ampliação para 10.000 pessoas.</description>
+    <foundation>
+      <date>19</date>
+      <month>6</month>
+      <year>2007</year>
+    </foundation>
+    <capacity>6500</capacity>
+    <width>105</width>
+    <height>74</height>
+  </stadium>
+  <stadium>
+    <lat>-9.748172</lat>
+    <lng>-36.666237</lng>
+    <name>Estádio Municipal Coaracy da Mata Fonseca</name>
+    <nick>Fumeirão</nick>
+    <city>Arapiraca, AL</city>
+    <imgurl>http://www.safern.com/imgs/110729-110001.jpg</imgurl>
+    <description>O Estádio Coaracy da Mata Fonseca, também chamado de Fumeirão, é um estádio de futebol da cidade de Arapiraca, no Estado de Alagoas, que atende ao ASA. Sua capacidade é de 15.000 pessoas.######Sua construção remonta à década de 50 e na qual recebeu seu nome em homenagem ao prefeito de Arapiraca daquela época, o Dr. Coaracy da Mata Fonseca. Este, por sinal, foi o fundador do ASA, time da crescente Arapiraca e que posteriormente iria competir com os grandes times do Estado de Alagoas, principalmente com os da capital, Maceió.######Em 2010, com a ascensão do time à Série B do Campeonato Brasileiro, o estádio foi devidamente reformado para atender às exigências da competição. Seu projeto de ampliação e modernização foi executado com recursos da prefeitura de Arapiraca mediante repasse da verba de 1,5 milhão de reais.</description>
+    <foundation>
+      <date>5</date>
+      <month>8</month>
+      <year>1953</year>
+    </foundation>
+    <capacity>15000</capacity>
+    <width>110</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-25.439540</lat>
+    <lng>-49.255679</lng>
+    <name>Estádio Durival Britto e Silva</name>
+    <nick>Vila Capanema</nick>
+    <city>Curitiba, PR</city>
+    <imgurl>http://www.paranaclube.com.br/img/vilacapanema.jpg</imgurl>
+    <description>O Estádio Durival Britto e Silva, também conhecido como Estádio Durival Britto, Estádio Durival de Britto ou Vila Capanema, é um estádio de futebol brasileiro localizado em Curitiba e inaugurado em 1947. Foi uma das sedes da Copa do Mundo de 1950, relizada no Brasil, e ao longo de seus mais de 60 anos pertenceu ao Ferroviário, Colorado, e atualmente pertence ao Paraná Clube. Seu nome é uma homenagem ao então Superintendente da Rede Ferroviária do Paraná na época da sua construção, e o apelido vem da sua localização.######Em 2011 o "Durival Britto" poderá passar de mãos e fazer parte do patrimônio do Governo do Estado do Paraná, pois desde 1971 existe uma ação judicial pela posse da área pertencente a antiga Rede Ferroviária Federal S.A., aonde encontra-se o estádio. Através de um acordo, esta ação poderá ter fim e o estádio ser entregue, do Governo Federal para o Estadual e assim ser utilizado pela Paraná Clube, por ser o sucessor do Clube Atlético Ferroviário, que foi responsável pela construção do estádio em 1947.</description>
+    <foundation>
+      <date>23</date>
+      <month>1</month>
+      <year>1947</year>
+    </foundation>
+    <capacity>20083</capacity>
+    <width>110</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-27.665927</lat>
+    <lng>-48.532464</lng>
+    <name>Estádio Aderbal Ramos da Silva</name>
+    <nick>Ressacada</nick>
+    <city>Florianópolis, SC</city>
+    <imgurl>http://www.fernandodoesse.com.br/wp-content/uploads/2012/02/Foto-ressacada.jpg</imgurl>
+    <description>O Estádio Aderbal Ramos da Silva, popularmente conhecido como Estádio da Ressacada, de propriedade do Avaí Futebol Clube, é um estádio de futebol localizado em Florianópolis, capital do estado brasileiro de Santa Catarina. Foi inaugurado em 15 de novembro de 1983, e sua iluminação, em 31 de maio de 1986. Tem capacidade atual para 17.800 pessoas, segundo estimativas recentes, e seu recorde de público é de 25.735 pagantes.######Desde sua inauguração, a Ressacada foi palco de três jogos da Seleção Brasileira e oito finais de campeonatos oficiais.</description>
+    <foundation>
+      <date>15</date>
+      <month>11</month>
+      <year>1983</year>
+    </foundation>
+    <capacity>17800</capacity>
+    <width>110</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-21.569688</lat>
+    <lng>-45.415356</lng>
+    <name>Estádio Municipal Prefeito Dilzon Luiz de Melo</name>
+    <nick>Melão</nick>
+    <city>Varginha, MG</city>
+    <imgurl>http://www.ogol.com.br/img/estadios/614/67614_ori_municipal_prefeito_dilzon_luiz_de_melo_melao_.jpg</imgurl>
+    <description>Estádio construído, às pressas, em 1988. Popularmente conhecido como Melão (em decorrência do sobrenome Melo), tem o objetivo de sediar jogos e campeonatos realizados em Varginha, consequentemente projetando o nome dos jogadores varginhenses e suas equipes.######O Melão foi palco do primeiro jogo que a seleção brasileira realizou se preparando para a Copa de 1994, uma vitória sobre a Iugoslávia por 3 x 1. A campanha vitoriosa a partir deste jogo culminou com a conquista do Tetracampeonato Mundial de Futebol.######O Estádio foi construído durante a gestão do Prefeito Dilzon Luiz de Melo, de 1983 a 1988, e em sua homenagem ostenta o seu nome. Este, desde 1991 ocupa o cargo de deputado estadual em Minas Gerais, sendo o atual primeiro secretário da Assembléia Legislativa de Minas Gerais.######Foi construído com um projeto inicial que chegaria a 45.000 lugares, mas após terminado sua capacidade ficou registrada com 20.000 lugares. Pelas atuais normas de segurança sua capacidade é de 15.471 torcedores, e com o Mineirão fechado para reformas ele fica na 5ª posição entre os maiores estádios de Minas Gerais, estando atrás apenas dos estádios Parque do Sabiá em Uberlândia com 50.000 lugares, do Helenão em Juiz de Fora com 40.000 lugares, do Ipatingão em Ipatinga com 27.500 lugares e da Arena do Jacaré em Sete Lagoas com 20.063 lugares.</description>
+    <foundation>
+      <date>7</date>
+      <month>10</month>
+      <year>1988</year>
+    </foundation>
+    <capacity>15471</capacity>
+    <width>110</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-22.965536</lat>
+    <lng>-46.536970</lng>
+    <name>Estádio Nabi Abi Chedid</name>
+    <nick>Nabi Abi Chedid</nick>
+    <city>Bragança Paulista, SP</city>
+    <imgurl>http://farm3.static.flickr.com/2757/4380036987_62d68aa73b.jpg</imgurl>
+    <description>O Estádio Nabi Abi Chedid é um estádio de futebol localizado na cidade de Bragança Paulista, São Paulo, Brasil. Sua capacidade atual é de 13.212 pessoas. Foi construído em 1949, mas a inauguração oficial deu-se apenas em janeiro de 1965. O estádio é de propriedade do Bragantino.######Até 6 de janeiro de 2009 seu nome era Estádio Marcelo Stéfani (1914—1985), ex-jogador e ex-presidente do clube. No entanto, em janeiro de 2009 a direção do Bragantino decidiu mudá-lo para Estádio Nabi Abi Chedid. Nabi Abi Chedid era o pai do presidente do clube, Marquinho Chedid. A área esportiva que abriga o estádio, então, passou a chamar-se Marcelo Stéfani. A troca de nome foi reprovada por boa parte da população da cidade.</description>
+    <foundation>
+      <date>18</date>
+      <month>1</month>
+      <year>1965</year>
+    </foundation>
+    <capacity>21209</capacity>
+    <width>110</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-3.745978</lat>
+    <lng>-38.536837</lng>
+    <name>Estádio Presidente Vargas</name>
+    <nick>Presidente Vargas</nick>
+    <city>Fortaleza, CE</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/EstadioPesidenteVargas.JPG/799px-EstadioPesidenteVargas.JPG</imgurl>
+    <description>O Estádio Presidente Vargas, mais conhecido como PV, é um estádio de futebol brasileiro localizado em Fortaleza, capital do Estado do Ceará, Brasil. Sedia principalmente os jogos de Ceará, Ferroviário e Fortaleza. Está localizado na rua Marechal Deodoro da Fonseca, 1187, no Benfica.</description>
+    <foundation>
+      <date>14</date>
+      <month>9</month>
+      <year>1941</year>
+    </foundation>
+    <capacity>20166</capacity>
+    <width>105</width>
+    <height>71</height>
+  </stadium>
+  <stadium>
+    <lat>-9.671637</lat>
+    <lng>-35.759235</lng>
+    <name>Estádio Rei Pelé</name>
+    <nick>Trapichão</nick>
+    <city>Maceió, AL</city>
+    <imgurl>http://www.educacao.al.gov.br/configuracao/trapichao/campo_do_Trapichao.JPG/image_preview</imgurl>
+    <description>O Estádio Rei Pelé, vulgarmente chamado de Trapichão, foi inaugurado no dia 25 de outubro de 1970 com o jogo amistoso entre Seleção Alagoana e Santos e é utilizado habitualmente pelas equipes alagoanas do CSA e do CRB. Pelé atuou neste jogo e o primeiro gol do Trapichão foi de autoria do santista Douglas. O jogo foi ganho pelo Santos por 5 a 0, com público de 45.865 espectadores, que permanece sendo o recorde de público deste estádio até os dias atuais. Atualmente o estádio tem capacidade para 20.801 pessoas, de acordo com o CNEF editado pela CBF em 14 de agosto de 2009.</description>
+    <foundation>
+      <date>25</date>
+      <month>10</month>
+      <year>1970</year>
+    </foundation>
+    <capacity>18500</capacity>
+    <width>110</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-28.683999</lat>
+    <lng>-49.367838</lng>
+    <name>Estádio Heriberto Hülse</name>
+    <nick>Majestoso</nick>
+    <city>Criciúma, SC</city>
+    <imgurl>http://futebolsc.com/imagens/item_7899.jpg</imgurl>
+    <description>O estádio do Criciúma Esporte Clube, um dos principais do estado de Santa Catarina, já abrigou competições de nível internacional como a Copa Libertadores da América, época na qual foi completamente adaptado para competição, destaque entre os principais estádios do estado, é o uníco completamente coberto.######O primeiro proprietário do estádio foi o Comerciário Esporte Clube que no ano de 1978 veio se tornar o Criciuma Esporte Clube, atual proprietário do Majestoso.######O estádio atualmente tem capacidade para 22.000 torcedores, pois a capacidade foi adequada para cumprir as normas do estatuto do torcedor.######O maior publico registrado foi em 6 de agosto de 1995 no jogo Criciúma 1 X 0 Chapecoense-SC pelo campeonato catarinense. O jogo teve um público de 31.123 pessoas e uma renda de R$115.815,00.######O nome do estádio é uma homenagem ao ex-governador do estado de Santa Catarina, Heriberto Hülse, por ser uma figura política que representou o sul Catarinense, onde se situa a cidade de Criciúma e por vez o Majestoso.######O apelido de Majestoso foi dado carinhosamente pela torcida do Tigre, pelo devido formato do estádio em tamanho regular e por ter uma aparência imponente, digno do apelido Majestoso.</description>
+    <foundation>
+      <date>16</date>
+      <month>10</month>
+      <year>1955</year>
+    </foundation>
+    <capacity>22000</capacity>
+    <width>105</width>
+    <height>68</height>
+  </stadium>
+  <stadium>
+    <lat>-22.909355</lat>
+    <lng>-47.043704</lng>
+    <name>Estádio Brinco de Ouro da Princesa</name>
+    <nick>Brinco de Ouro</nick>
+    <city>Campinas, SP</city>
+    <imgurl>http://www.blogtorcida.com.br/wp-content/uploads/2010/06/brinco-de-outro.jpg</imgurl>
+    <description>O Estádio Brinco de Ouro da Princesa, ou apenas Brinco de Ouro, é o estádio do Guarani Futebol Clube, de Campinas, no interior do estado de São Paulo, Brasil. É o maior estádio da cidade, inaugurado em 31 de maio de 1953. A denominação do estádio ocorreu quando um determinado jornalista presente à apresentação de sua maquete, surpreendeu a todos comparando seu formato a um brinco e associou ao "apelido carinhoso" da cidade de Campinas (Princesa D'Oeste).######A iluminação foi inaugurada em 11 de janeiro de 1964, com um jogo amistoso no qual o Guarani venceu o Flamengo por 2 a 1.######Sua capacidade atual segundo o CNEF (Cadastro Nacional de Estádios de Futebol) editado pela CBF em 15 de setembro de 2009 é de 32 453 pessoas. O recorde de público do estádio é de 52 002 pessoas, no jogo Guarani versus Flamengo em 1982 (a capacidade divulgada naquela época era de 53 mil pessoas, diminuída para efeito de proporcionar maior conforto e segurança para os espectadores), sendo que até 1978, não possuía o Tobogã (a arquibancada superior), possuindo capacidade para 32 mil pessoas segundo os padrões de medição daquela época, embora, em 26 de novembro de 1975 tenha recebido 34 513 espectadores em partida contra o Fluminense pelo Campeonato Brasileiro.######As dimensões do gramado de jogo foram aumentadas de 105 x 70m para 110m de comprimento, por 75m de largura, na última reforma do gramado em 2002.</description>
+    <foundation>
+      <date>1</date>
+      <month>6</month>
+      <year>1953</year>
+    </foundation>
+    <capacity>32453</capacity>
+    <width>110</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-19.470861</lat>
+    <lng>-42.541358</lng>
+    <name>Estádio Municipal João Lamego Netto</name>
+    <nick>Lamegão</nick>
+    <city>Ipatinga, MG</city>
+    <imgurl>http://www.galonautas.com.br/wp-content/uploads/Lameg%C3%A3o.jpg</imgurl>
+    <description>O Estádio Municipal João Lamego Netto, o Lamegão, é um estádio do estado de Minas Gerais, com capacidade para 16.000 espectadores. Atualmente, é utilizado pelo Ipatinga Futebol Clube.######Em 2010, com o a reforma do Estádio do Mineirão para a Copa do Mundo de 2014, o Ipatingão passou a sediar alguns dos jogos das equipes da capital mineira.######Em 2011, teve seu nome alterado de Estádio Municipal Epaminondas Mendes Brito para Estádio Municipal João Lamego Netto em homenagem a João Lamego Netto, falecido em 4 de abril desse ano, que foi prefeito de Ipatinga de 1977 a 1982, cujo mandato ocorreram várias obras de melhorias na infraestrutura da cidade, além de ter acontecido a construção do Ipatingão e a viabilização do Parque Ipanema</description>
+    <foundation>
+      <date>23</date>
+      <month>11</month>
+      <year>1982</year>
+    </foundation>
+    <capacity>16000</capacity>
+    <width>110</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-22.807695</lat>
+    <lng>-45.185544</lng>
+    <name>Estádio Municipal Professor Dario Rodrigues Leite</name>
+    <nick>Dario Rodrigues Leite</nick>
+    <city>Guaratinguetá, SP</city>
+    <imgurl>http://www.ceroacero.es/img/estadios/535/7535_ori_prof_dario_rodrigues_leite_ninho_da_garca_.jpg</imgurl>
+    <description>O Estádio Municipal Professor Dario Rodrigues Leite, também conhecido como Ninho da Garça, está localizado na Praça da Bíblia, na cidade de Guaratinguetá, no estado de São Paulo.######Inaugurado em 7 de Setembro de 1965 com a partida entre Associação Esportiva Guaratinguetá e Esporte Clube Taubaté, com resultado final de 0x0.######Suas dimensões são de 108 x 66m. Tem capacidade para 15.769 pessoas</description>
+    <foundation>
+      <date>7</date>
+      <month>9</month>
+      <year>1965</year>
+    </foundation>
+    <capacity>15769</capacity>
+    <width>108</width>
+    <height>66</height>
+  </stadium>
+  <stadium>
+    <lat>-26.316027</lat>
+    <lng>-48.833596</lng>
+    <name>Estádio Arena Joinville</name>
+    <nick>Arena Joinville</nick>
+    <city>Joinville, SC</city>
+    <imgurl>http://mavalem.sites.uol.com.br/sc/Arena.jpg</imgurl>
+    <description>A Arena Joinville, localizada na cidade de Joinville, é uma arena multiuso municipal e maior estádio de futebol de Santa Catarina além de estar sendo utilizado pelo Joinville Esporte Clube. Localizado no bairro Bucarein, a construção tem design inspirado em várias arenas de futebol européias, como a Amsterdam Arena.Tendo uma grande semelhança com a Arena da Baixada em Curitiba e com a Arena da Floresta em Rio Branco no Acre.######Teve sua primeira etapa inaugurada em 25 de setembro de 2004, na partida entre Joinville e Seleção Masters. A segunda etapa foi inaugurada em 26 de julho de 2007, na partida Joinville 4-3 Atlético Paranaense. Com isso, a capacidade, que inicialmente era de 15.000 pessoas, foi expandida para 22.400, e será novamente expandida para 30 mil pessoas (24 mil sentadas). O custo estimado para a expansão é de R$ 7 milhões. O projeto final prevê que a Arena contará ainda com lojas comerciais, praça de alimentação, estacionamento e parque público anexo.######Por ser um estádio público e não propriedade do Joinville Esporte Clube, ele deverá ter retomadas as obras assim que o governo municipal angariar verbas junto ao governos estadual e federal para conclusão da terceira etapa.</description>
+    <foundation>
+      <date>24</date>
+      <month>9</month>
+      <year>2004</year>
+    </foundation>
+    <capacity>22400</capacity>
+    <width>105</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-23.630671</lat>
+    <lng>-46.560756</lng>
+    <name>Estádio Municipal Anacleto Campanella</name>
+    <nick>Anacleto Campanella</nick>
+    <city>São Caetano do Sul, SP</city>
+    <imgurl>http://www.ogol.com.br/img/estadios/831/7831_ori_estadio_municipal_anacleto_campanella.jpg</imgurl>
+    <description>O Estádio Municipal Anacleto Campanella é um estádio de futebol brasileiro que pertence à prefeitura de São Caetano do Sul, São Paulo. É utilizado pela Associação Desportiva São Caetano e atualmente tem capacidade para 16.744 pessoas.</description>
+    <foundation>
+      <date>2</date>
+      <month>1</month>
+      <year>1955</year>
+    </foundation>
+    <capacity>22124</capacity>
+    <width>110</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-12.918671</lat>
+    <lng>-38.428116</lng>
+    <name>Estádio Manoel Barradas</name>
+    <nick>Barradão</nick>
+    <city>Salvador, BA</city>
+    <imgurl>http://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Est%C3%A1dio_Manoel_Barradas_Vit%C3%B3ria.jpg/800px-Est%C3%A1dio_Manoel_Barradas_Vit%C3%B3ria.jpg</imgurl>
+    <description>O Estádio Manoel Barradas, o Barradão, é um estádio de futebol de Salvador (Bahia), de propriedade do Esporte Clube Vitória. Foi inaugurado em 11 de novembro de 1986, com a partida Vitória 1 a 1 Santos e reinaugurado em 25 de agosto de 1991, com o jogo Vitória 1 a 1 Olimpia, do Paraguai, campeão da Libertadores do ano anterior. Sua capacidade atual é de pouco mais de 35 mil espectadores.######Em 30 de outubro de 2010, na vitória sobre o Vasco da Gama por 4 a 2, o Vitória completou 500 jogos em seu estádio, com histórico de 316 vitórias, 104 empates e 80 derrotas, tendo marcado 1.117 gols e sofrido 520, com saldo de 581 gols, e aproveitamento superior a 70%. O público médio da história do estádio é de cerca de 10.000 torcedores por jogo ou mais de 13.000 se considerados apenas públicos em Campeonatos Brasileiros.######Na Série C de 2006, a média de público do Vitória foi de 15.062 pagantes por partida. Já na Série B de 2007, foi de mais de 18.000 pagantes. Na edição de 2008, quase 16.000 pessoas estavam no estádio por partida, enquanto que em 2009, com o aumento do preço dos ingressos, a média caiu para pouco menos de 13.400.</description>
+    <foundation>
+      <date>11</date>
+      <month>11</month>
+      <year>1986</year>
+    </foundation>
+    <capacity>35632</capacity>
+    <width>106</width>
+    <height>70</height>
+  </stadium>
+  <stadium>
+    <lat>-25.524798</lat>
+    <lng>-48.508308</lng>
+    <name>Estádio Fernando Charbub Farah</name>
+    <nick>Gigante do Itiberê</nick>
+    <city>Paranaguá, PR</city>
+    <imgurl>http://www.esporte.pr.gov.br/modules/galeria/uploads/406/normal_Estadio_Paranagua.JPG</imgurl>
+    <description>O Estádio Fernando Charbub Farah, conhecido como Gigante do Itiberê, é um estádio poliesportivo localizado na cidade de Paranaguá, no estado do Paraná, tem capacidade para mais de 12.000 pessoas. Possui pista de atletismo. Foi inaugurado em 2004 no jogo Paraná x Vasco da Gama, com o resultado de 2 x 1 para o Paraná. está localizado na região do centro histórico de Paranaguá.######O primeiro gol na história do estádio foi marcado pelo meio-campista sérvio Dejan Petković, então defendendo o Vasco da Gama.</description>
+    <foundation>
+      <date>29</date>
+      <month>9</month>
+      <year>2004</year>
+    </foundation>
+    <capacity>12218</capacity>
+    <width>100</width>
+    <height>75</height>
+  </stadium>
+  <stadium>
+    <lat>-25.431125</lat>
+    <lng>-49.345453</lng>
+    <name>Estádio Janguito Malucelli</name>
+    <nick>Janguito Malucelli</nick>
+    <city>Curitiba, PR</city>
+    <imgurl>http://redacaoemcampo.com/wp-content/uploads/2012/01/Ecoestadio-Janguito-Malucelli-Foto-Eduardo-Bispo-Reda%C3%A7%C3%A3o-em-Campo.jpg</imgurl>
+    <description>O Estádio Janguito Malucelli, conhecido como Eco-Estádio, é um estádio brasileiro de futebol, localizado na cidade de Curitiba, no estado do Paraná. É propriedade do Grupo JMalucelli - JMalucelli Futebol S/A.######Tornou-se famoso por ser o primeiro "estádio ecológico" do Brasil, pois sua arquibancada foi construída com cadeiras colocada em cima de um morro, sem a utilização de concreto. Por isso, o estádio também é denominado Eco-Estádio Janguito Malucelli.######Antigo CT do clube, o novo estádio situado em frente do Parque Barigüi foi totalmente remodelado, e uma das atrações do novo espaço - a arquibancada, que foi aproveitada em cima do morro localizado no local. Além da grama plantada em todos os degraus, foram colocadas cadeiras/assentos em toda a extensão, fora o assento continua a grama. Vale lembrar que é uma tipo de arquibancada inédita com a idéia da grama que segurou por algum tempo o molde dos degraus, agora arquibancada ecológica, assim como foi batizado o novo espaço, o Eco-Estádio Janguito Malucelli.</description>
+    <foundation>
+      <date>7</date>
+      <month>7</month>
+      <year>2007</year>
+    </foundation>
+    <capacity>4200</capacity>
+    <width>110</width>
+    <height>75</height>
+  </stadium>
+</stadiums>

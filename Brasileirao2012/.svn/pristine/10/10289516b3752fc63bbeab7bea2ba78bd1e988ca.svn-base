@@ -1,0 +1,147 @@
+package br.com.zynger.brasileirao2012.view;
+
+import java.util.Locale;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.R;
+
+public class CustomActionBar extends RelativeLayout {
+	
+	private ImageView iv_logo;
+	private ImageView iv_clickablelogo;
+	private TextView tv_title;
+	private LinearLayout ll_box;
+	private TextView tv_box;
+	private RelativeLayout rl_update;
+	private UpdateImageView uiv_update;
+	private RelativeLayout rl_zoom;
+	private ImageButton ib_zoom;
+	private LinearLayout ll_image;
+	private ImageButton ib_image;
+	
+	public CustomActionBar(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init();
+		if(!isInEditMode()) setCharacteristicsBasedOnAttributes(attrs);
+	}
+
+	public CustomActionBar(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init();
+		if(!isInEditMode()) setCharacteristicsBasedOnAttributes(attrs);
+	}
+
+	private void init() {
+		LayoutInflater  mInflater = (LayoutInflater)
+				getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater.inflate(R.layout.customactionbar, this, true);
+        
+    	iv_logo = (ImageView) findViewById(R.customactionbar.iv_logo);
+    	iv_clickablelogo = (ImageView) findViewById(R.customactionbar.iv_clickablelogo);
+    	tv_title = (TextView) findViewById(R.customactionbar.tv_title);
+    	tv_box = (TextView) findViewById(R.customactionbar.tv_division);
+    	ll_box = (LinearLayout) findViewById(R.customactionbar.ll_division);
+    	rl_update = (RelativeLayout) findViewById(R.customactionbar.rl_update);
+    	uiv_update = (UpdateImageView) findViewById(R.customactionbar.uiv_update);
+    	rl_zoom = (RelativeLayout) findViewById(R.customactionbar.rl_zoom);
+    	ib_zoom = (ImageButton) findViewById(R.customactionbar.ib_zoom);
+    	ll_image = (LinearLayout) findViewById(R.customactionbar.ll_image);
+    	ib_image = (ImageButton) findViewById(R.customactionbar.ib_image);
+	}
+	
+	private void setCharacteristicsBasedOnAttributes(AttributeSet attrs) {
+		if (attrs != null) {
+			TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CustomActionBar);
+			
+			String title = a.getString(R.styleable.CustomActionBar_titleText);
+			if(title != null) tv_title.setText(title.toUpperCase(Locale.getDefault()));
+			
+			if(a.hasValue(R.styleable.CustomActionBar_titleSize)){
+				DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+				float dp = 15f;
+				float fpixels = metrics.density * dp;
+				float textSize = a.getDimension(R.styleable.CustomActionBar_titleSize, fpixels);
+				tv_title.setTextSize(textSize);
+			}
+			
+			int logosrc = a.getResourceId(R.styleable.CustomActionBar_logosrc, R.drawable.ic_launcher);
+			iv_logo.setImageResource(logosrc);
+			
+			boolean showUpdate = a.getBoolean(R.styleable.CustomActionBar_showUpdate, false);
+			if(showUpdate) rl_update.setVisibility(View.VISIBLE);
+
+			boolean showBox = a.getBoolean(R.styleable.CustomActionBar_showTextBox, false);
+			if(showBox){
+				ll_box.setVisibility(View.VISIBLE);
+				if(!showUpdate){
+					RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ll_box.getLayoutParams();
+					params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+				}
+			}
+			
+			boolean showZoom = a.getBoolean(R.styleable.CustomActionBar_showZoom, false);
+			if(showZoom) rl_zoom.setVisibility(View.VISIBLE);
+			
+			boolean showBadge = a.getBoolean(R.styleable.CustomActionBar_showImage, false);
+			if(showBadge) ll_image.setVisibility(View.VISIBLE);
+			
+			a.recycle();
+		}
+	}
+	
+	public void setTitleText(String title) {
+		tv_title.setText(title);
+	}
+	
+	public void setLogoResource(int resId){
+		iv_logo.setImageResource(resId);
+	}
+	
+	public void setImageOnRoundLayoutResource(int resId){
+		ib_image.setImageResource(resId);
+	}
+	
+	public void setBoxText(String text){
+		tv_box.setText(text);
+	}
+	
+	public void setBoxOnClickListener(OnClickListener listener){
+		ll_box.setOnClickListener(listener);
+	}
+	
+	public void setUpdateOnClickListener(OnClickListener listener){
+		uiv_update.setOnClickListener(listener);
+	}
+	
+	public void setZoomOnClickListener(OnClickListener listener){
+		ib_zoom.setOnClickListener(listener);
+	}
+	
+	public void setImageOnClickListener(OnClickListener listener){
+		ib_image.setOnClickListener(listener);
+		ll_image.setOnClickListener(listener);
+	}
+	
+	public void setLogoClickListener(OnClickListener listener){
+		iv_clickablelogo.setVisibility(View.VISIBLE);
+		iv_logo.setOnClickListener(listener);
+	}
+
+	public void getBoxLayoutVisibility(int visibility) {
+		ll_box.setVisibility(visibility);
+	}
+
+	public View getLogoView() {
+		return iv_logo;
+	}
+}

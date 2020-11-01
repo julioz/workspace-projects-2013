@@ -1,0 +1,50 @@
+package br.com.zynger.brasileirao2012.asynctasks;
+
+import java.util.TreeMap;
+
+import android.content.Context;
+import android.os.AsyncTask;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.rest.FansREST;
+
+public class UpdateFansTask extends AsyncTask<Void, Void, TreeMap<String, Club>> {
+	private Context c;
+	private AsyncTaskListener listener;
+	private TreeMap<String, Club> clubs;
+	private String myClub;
+	
+	public UpdateFansTask(Context c, TreeMap<String, Club> clubs,
+			String myClub, AsyncTaskListener listener){
+		setContext(c);
+		this.listener = listener;
+		this.clubs = clubs;
+		this.myClub = myClub;
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		listener.preExecution();
+		super.onPreExecute();
+	}
+	
+	@Override
+	protected TreeMap<String, Club> doInBackground(Void... params) {
+		return new FansREST().updateFansData(getContext(), clubs, myClub);
+	}
+
+	@Override
+	protected void onPostExecute(TreeMap<String, Club> result) {
+		if(result != null){
+			listener.onComplete(result);
+		}else listener.onFail("Não foi possível atualizar os dados, tente mais tarde"); //TODO move to strings.xml
+		super.onPostExecute(result);
+	}
+
+	public Context getContext() {
+		return c;
+	}
+
+	public void setContext(Context c) {
+		this.c = c;
+	}
+}

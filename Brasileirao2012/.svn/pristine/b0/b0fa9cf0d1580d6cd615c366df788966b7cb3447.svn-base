@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:background="@drawable/backrepeat"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical">
+	
+    <RelativeLayout
+        android:background="@drawable/actionbar_gradient2"
+        android:id="@+newsdetailsactivity/rl_actionbar"
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:id="@+newsdetailsactivity/iv_badge"
+            android:layout_centerVertical="true" />
+        
+        <br.com.zynger.brasileirao2012.view.TertreTextView
+            android:id="@+newsdetailsactivity/tv_name"
+            android:layout_marginLeft="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_toRightOf="@+newsdetailsactivity/iv_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="30dp" />
+        
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal" >
+            
+            <View
+                android:layout_height="45dp"
+                android:layout_width="1px"
+                android:layout_alignParentLeft="true"
+                android:background="#88FFFFFF" />
+
+            <ImageButton
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:id="@+newsdetailsactivity/ib_zoomtext"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_actionbar_zoom" />
+        </RelativeLayout>
+    </RelativeLayout>
+    
+    <ImageView
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:id="@+newsdetailsactivity/iv_image"
+        android:visibility="gone"
+        android:layout_below="@+newsdetailsactivity/rl_actionbar"
+        android:layout_centerHorizontal="true"/>
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+newsdetailsactivity/iv_image"
+        android:id="@+newsdetailsactivity/tv_title"
+        android:textStyle="bold"
+        android:textColor="#FFFFFFFF"
+        android:gravity="center"
+        android:textSize="16dp"/>
+    
+    <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+        android:layout_height="fill_parent"
+	    android:layout_width="fill_parent"
+        android:layout_below="@+newsdetailsactivity/tv_title"
+		android:layout_above="@+newsdetailsactivity/ll_ad"
+		android:id="@+newsdetailsactivity/dul_loading"/>
+	
+    <ScrollView
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:visibility="gone"
+        android:id="@+newsdetailsactivity/sv_tv_text"
+        android:layout_below="@+newsdetailsactivity/tv_title"
+		android:layout_above="@+newsdetailsactivity/ll_ad">
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+newsdetailsactivity/tv_articletext"
+            android:padding="3dp"
+            android:textColor="#FFFFFFFF"/>
+        
+    </ScrollView>
+	
+	<LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+newsdetailsactivity/ll_ad"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>
+</RelativeLayout>

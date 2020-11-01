@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 c5648a0a0e51adaf322a288968c4c6e2f620e0b1 Júlio Zynger <julioz92@gmail.com> 1381090478 -0300	branch: Created from HEAD
+c5648a0a0e51adaf322a288968c4c6e2f620e0b1 0ebfbdc569115dfd8a3c32d48931ef66f086dd32 Júlio Zynger <julioz92@gmail.com> 1381093661 -0300	commit: Replaces MapFragment by static map in EventActivity; Adds message to when there is no network.

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="2dp"
+    android:paddingBottom="1dp"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:id="@+matcheslistrow/ll_match_title"
+        android:weightSum="3">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/layout_roundedges"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:id="@+matcheslistrow/tv_match_title"
+            android:textColor="#FF3B3B3B"
+            android:textStyle="bold"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:weightSum="3">
+        
+        <View
+	        android:layout_width="0dp"
+	        android:layout_height="1dp"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:background="#40000000"/>
+        
+		<TextView
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:layout_gravity="center"
+	        android:gravity="center"
+	        android:textColor="@android:color/black"
+	        android:id="@+matcheslistrow/tv_date"/>
+        
+        <View
+	        android:layout_width="0dp"
+	        android:layout_height="1dp"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:background="#40000000"/>
+    </LinearLayout>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+matcheslistrow/tv_stadium"
+        android:textColor="@android:color/black"/>
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="horizontal">
+        
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:id="@+matcheslistrow/iv_home"/>
+        
+        <RelativeLayout
+            android:layout_width="48dp"
+	        android:layout_height="48dp">
+	        
+            <TextView
+		        android:layout_width="48dp"
+		        android:layout_height="48dp"
+		        android:textSize="36dp"
+		        android:id="@+matcheslistrow/tv_score_home"
+		        android:gravity="center"
+		        android:textColor="@android:color/black"/>
+            
+            <TextView
+		        android:layout_width="36dp"
+		        android:layout_height="36dp"
+		        android:textSize="16dp"
+		        android:layout_alignParentRight="true"
+		        android:layout_alignParentBottom="true"
+		        android:visibility="gone"
+		        android:id="@+matcheslistrow/tv_penalty_home"
+		        android:gravity="right"
+		        android:textColor="@android:color/black"/>
+            
+        </RelativeLayout>
+        
+        <TextView
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
+	        android:textSize="36dp"
+	        android:gravity="center"
+	        android:textColor="@android:color/black"
+	        android:text="X"/>
+        
+        <RelativeLayout
+            android:layout_width="48dp"
+	        android:layout_height="48dp">
+            
+            <TextView
+		        android:layout_width="48dp"
+		        android:layout_height="48dp"
+		        android:id="@+matcheslistrow/tv_score_away"
+		        android:textSize="36dp"
+		        android:gravity="center"
+		        android:textColor="@android:color/black"/>
+            
+            <TextView
+		        android:layout_width="36dp"
+		        android:layout_height="36dp"
+		        android:textSize="16dp"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentBottom="true"
+		        android:visibility="gone"
+		        android:id="@+matcheslistrow/tv_penalty_away"
+		        android:gravity="left"
+		        android:textColor="@android:color/black"/>
+            
+        </RelativeLayout>
+        
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+matcheslistrow/iv_away"
+            android:layout_gravity="center"/>
+        
+    </LinearLayout>
+</LinearLayout>

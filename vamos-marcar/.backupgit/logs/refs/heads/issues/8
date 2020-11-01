@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 f1337f427d7de9c93f20032c3e1d0754b83482aa Júlio Zynger <julioz92@gmail.com> 1379259289 -0300	branch: Created from HEAD
+f1337f427d7de9c93f20032c3e1d0754b83482aa c7907b667baf3bd6ea964ea631882ae13abffadb Júlio Zynger <julioz92@gmail.com> 1379274556 -0300	commit: Adds CommentsActivity with ListView and Adapter.

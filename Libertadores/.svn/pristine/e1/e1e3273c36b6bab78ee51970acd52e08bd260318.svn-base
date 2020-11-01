@@ -1,0 +1,41 @@
+package br.com.zynger.libertadores.view;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+import br.com.zynger.libertadores.R;
+
+public class UpdateImageView extends ImageView {
+	
+	private RotateAnimation rot;
+	
+	public UpdateImageView(Context context) {
+		super(context);
+		init();
+	}
+	
+	public UpdateImageView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init();
+	}
+	
+	public UpdateImageView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init();
+	}
+	
+	private void init() {
+		setImageResource(R.drawable.ic_update);
+		rot = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rot.setInterpolator(new LinearInterpolator());
+		rot.setDuration(900L);
+		rot.setStartTime(200L);
+	}
+	
+	public void rotateView(){
+		this.startAnimation(rot);
+	}
+}

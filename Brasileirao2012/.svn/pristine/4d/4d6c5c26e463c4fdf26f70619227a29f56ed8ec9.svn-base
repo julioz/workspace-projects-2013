@@ -1,0 +1,161 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.app.TabActivity;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+@SuppressWarnings("deprecation")
+public class NewsTabActivity extends TabActivity {
+	
+	public static final String INTENT_CLUB = "INTENT_CLUB";
+	private static final int INTENT_SEE_OTHER_CLUB_NEWS = 42;
+	public static final String INTENT_RETURN_FROM_CLUBSELECTOR = "INTENT_RETURN_FROM_CLUBSELECTOR";
+	
+	public static final int GLOBOESPORTE = 1;
+	public static final int UOL = 3;
+	public static final int GOOGLE = 4;
+	public static final int NETFLU = 5;
+	public static final int PARANAUTAS = 6;
+	
+	private ImageButton ib_team;
+	private TextView tv;
+	private Typeface typeface;
+	
+	private TreeMap<String, Club> clubs;
+	private Club club;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.news_tabs);
+		
+		clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		club = (Club) getIntent().getSerializableExtra(INTENT_CLUB);
+		if(club == null) club = clubs.get((String) FileHandler.openBackup(this, FileHandler.MYCLUB));
+		
+		typeface = Typeface.createFromAsset(getAssets(), "tertre-xbol.otf");
+		
+		tv = (TextView) findViewById(R.newstabs.tv_name);
+		tv.setTypeface(typeface);
+		
+		ib_team = (ImageButton) findViewById(R.newstabs.launcher_actionbar_ib_team);
+		
+		tv.setText(club.getName().toUpperCase());
+		ib_team.setImageDrawable(getResources().getDrawable(club.getBadge()));
+		
+		ib_team.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), MyClubSelectorActivity.class);
+				it.putExtra(MyClubSelectorActivity.INTENT_TITLE, "NOTÍCIAS");
+				it.putExtra(MyClubSelectorActivity.INTENT_IMAGELOGO, R.drawable.ic_news);
+				startActivityForResult(it, INTENT_SEE_OTHER_CLUB_NEWS);
+			}
+		});
+		
+		
+		/** TabHost will have Tabs */
+		TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
+
+		/** TabSpec used to create a new tab.
+		 * By using TabSpec only we can able to setContent to the tab.
+		 * By using TabSpec setIndicator() we can set name to tab. */
+
+		/** tid1 is firstTabSpec Id. Its used to access outside. */
+		TabSpec firstTab = tabHost.newTabSpec("tid1");
+		TabSpec secondTab = tabHost.newTabSpec("tid2");
+		TabSpec thirdTab = tabHost.newTabSpec("tid3");
+		
+		
+		/** TabSpec setIndicator() is used to set name for the tab. */
+		/** TabSpec setContent() is used to set content for a particular tab. */
+		firstTab.setIndicator(createTabView("Globo", -1)).setContent(getIntent(GLOBOESPORTE));
+		secondTab.setIndicator(createTabView("UOL", -1)).setContent(getIntent(UOL));
+		thirdTab.setIndicator(createTabView("Google", -1)).setContent(getIntent(GOOGLE));
+		
+
+		/** Add tabSpec to the TabHost to display. */
+		if(club.getName().equals("Fluminense")) tabHost.addTab(getCustomTab(tabHost, "tid4", "NetFLU", NETFLU, -1));
+		else if(club.getName().equals("Paraná")) tabHost.addTab(getCustomTab(tabHost, "tid5", "Paranautas", PARANAUTAS, 14));
+		tabHost.addTab(firstTab);
+		tabHost.addTab(secondTab);
+		tabHost.addTab(thirdTab);
+	}
+	
+	private TabSpec getCustomTab(TabHost tabhost, String tabId, String tabName, int intentId, int textSize){
+		TabSpec tab = tabhost.newTabSpec(tabId);
+		tab.setIndicator(createTabView(tabName, textSize)).setContent(getIntent(intentId));
+		return tab;
+	}
+	
+	private View createTabView(String text, int textSize) {
+		View view = LayoutInflater.from(this).inflate(R.layout.tabs_bg, null);
+		TextView tv = (TextView) view.findViewById(R.id.tabsText);
+		tv.setTypeface(typeface);
+		tv.setText(text);
+		if(textSize > 1) tv.setTextSize(textSize);
+		return view;
+	}
+	
+	private Intent getIntent(int site){
+		Intent it = new Intent(this, NewsActivity.class);
+	    
+	    if(site == GLOBOESPORTE){	    	
+	    	it.putExtra("encoding", "utf-8");
+	    	it.putExtra("CLUB_NAME", club.getName());
+	    	it.putExtra("url", club.getNews().get(0));
+	    }else if(site == UOL){
+	    	it.putExtra("encoding", "iso-8859-1");
+	    	it.putExtra("CLUB_NAME", club.getName());
+	    	it.putExtra("url", club.getNews().get(1));
+	    }else if(site == GOOGLE){
+	    	it.putExtra("encoding", "utf-8");
+	    	it.putExtra("CLUB_NAME", club.getName());
+	    	it.putExtra("url", club.getNews().get(2));
+	    }else if(site == NETFLU){
+	    	it.putExtra("encoding", "iso-8859-1");
+	    	it.putExtra("CLUB_NAME", club.getName());
+	    	it.putExtra("url", "http://www.netflu.com.br/noticias_rss.php");
+	    }else if(site == PARANAUTAS){
+	    	it.putExtra("encoding", "iso-8859-1");
+	    	it.putExtra("CLUB_NAME", club.getName());
+	    	it.putExtra("url", "http://paranautas.com/index.php?pg=todas_noticias");
+	    }
+	    
+	    it.putExtra("domain", site);
+	    return it;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {     
+		super.onActivityResult(requestCode, resultCode, data);
+		switch(requestCode) {
+			case (INTENT_SEE_OTHER_CLUB_NEWS):
+				if (resultCode == Activity.RESULT_OK) {
+					String clubName = data.getStringExtra(INTENT_RETURN_FROM_CLUBSELECTOR);
+					Club c = clubs.get(clubName);
+					Intent it = new Intent(this, NewsTabActivity.class);
+					it.putExtra(INTENT_CLUB, c);
+					startActivity(it);
+					finish();
+				}
+				break;
+			default:
+				break;
+		}
+	}
+}

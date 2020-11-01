@@ -1,0 +1,33 @@
+package br.com.zynger.brasileirao2012.adapters.pager;
+
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
+import br.com.zynger.brasileirao2012.fragment.HomeFragment;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+public class HomePagerAdapter extends FragmentStatePagerAdapter {
+	private SparseArray<HomeFragment> cache;
+	
+	public HomePagerAdapter(SherlockFragmentActivity activity) {
+        super(activity.getSupportFragmentManager());
+        cache = new SparseArray<HomeFragment>();
+    }
+
+    @Override
+    public SherlockFragment getItem(int position) {
+    	if(cache.get(position) != null){
+    		return cache.get(position);
+    	}else{
+    		HomeFragment fragment = HomeFragment.create(position);
+    		cache.put(position, fragment);
+    		return fragment;
+    	}
+    }
+
+    @Override
+    public int getCount() {
+        return 2;
+    }
+}

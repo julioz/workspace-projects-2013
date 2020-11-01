@@ -1,0 +1,75 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.TreeMap;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.view.MatchViewLayout;
+
+public class TableViewFlowAdapter extends BaseAdapter {
+
+	private final int[] ids = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37 };
+	private HashMap<Integer, View> map;
+	private LayoutInflater mInflater;
+	private TreeMap<Integer, Fixture> matches;
+	private Context context;
+	
+	public TableViewFlowAdapter(Context context, TreeMap<Integer, Fixture> matches) {
+		this.context = context;
+		mInflater = LayoutInflater.from(context);
+		this.matches = matches;
+		this.map = new HashMap<Integer, View>();
+		
+		for (int rod = 1; rod <= 38; rod++) {
+			populateMap(rod);			
+		}
+	}
+
+	@Override
+	public int getCount() {
+		return ids.length;
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return ids[position];
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {        
+        int rodada = position+1;
+        
+        if(map.containsKey(rodada)) return map.get(rodada);
+        else return populateMap(rodada);
+	}
+	
+	private View populateMap(int rodada){
+		View fixture = mInflater.inflate(R.layout.tablesupportviewrow, null, false);
+
+		LinearLayout ll = (LinearLayout) fixture.findViewById(R.tablesupport.ll);
+		
+		ArrayList<Match> al = matches.get(rodada).getMatches();
+		Collections.sort(al);
+		for (Match match : al) {
+			ll.addView(new MatchViewLayout(context, match, false));
+		}
+		
+		map.put(rodada, fixture);
+		return fixture;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+}

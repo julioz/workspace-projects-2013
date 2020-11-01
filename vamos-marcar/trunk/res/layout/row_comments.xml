@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:font="http://schemas.android.com/apk/res/br.com.zynger.vamosmarcar"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="4dp"
+    android:paddingLeft="2dp"
+    android:paddingTop="4dp" >
+
+    <br.com.zynger.vamosmarcar.view.FacebookImageView
+        android:id="@+commentsadapter/iv_user_picture"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:id="@+commentsadapter/ll_commentwrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@+commentsadapter/iv_user_picture"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <br.com.zynger.vamosmarcar.view.RobotoTextView
+            android:id="@+commentsadapter/tv_comment_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textColor="@color/mediumgray"
+            font:typeface="roboto_medium" />
+
+        <br.com.zynger.vamosmarcar.view.RobotoTextView
+            android:id="@+commentsadapter/tv_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="3dp"
+            android:maxLines="1"
+            android:textColor="@color/lightgray"
+            android:textSize="10sp"
+            font:typeface="roboto_regular" />
+    </LinearLayout>
+
+</RelativeLayout>

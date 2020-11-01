@@ -1,0 +1,70 @@
+package br.com.zynger.libertadores.model;
+
+import java.util.ArrayList;
+
+import br.com.zynger.libertadores.util.GroupEnum;
+
+public class Group {
+
+	private GroupEnum number;
+	private ArrayList<Club> clubs;
+	
+	public Group(GroupEnum number) {
+		setNumber(number);
+		setClubs(new ArrayList<Club>());
+		completeWithNulls();
+	}
+	
+	public void addClub(Club club){
+		ArrayList<Club> temp = new ArrayList<Club>();
+		for (Club oldClub : getClubs()) {
+			if(null != oldClub) temp.add(oldClub);
+		}
+		temp.add(club);
+		setClubs(temp);
+		completeWithNulls();
+	}
+	
+	public GroupEnum getNumber() {
+		return number;
+	}
+	
+	private void setNumber(GroupEnum number) {
+		this.number = number;
+	}
+	
+	public Integer getAbsoluteNumber() {
+		Integer count = 1;
+		for (GroupEnum gEnum : GroupEnum.values()) {
+			if(getNumber() == gEnum) return count;
+			else count++;
+		}
+		return count;
+	}
+	
+	public ArrayList<Club> getClubs() {
+		return clubs;
+	}
+	
+	private void setClubs(ArrayList<Club> clubs) {
+		this.clubs = clubs;
+	}
+	
+	private void completeWithNulls(){
+		while(getClubs().size() < 4){
+			getClubs().add(null);
+		}
+	}
+	
+	@Override
+	public String toString() {
+		String string = new String(getNumber().toString());
+		for (Club club : getClubs()) {
+			if(null != club){
+				string = string.concat('\n' + club.getName());
+			}
+		}
+		return string;
+	}
+	
+}

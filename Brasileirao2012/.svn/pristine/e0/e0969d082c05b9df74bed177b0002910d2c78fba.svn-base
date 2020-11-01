@@ -1,0 +1,693 @@
+package br.com.zynger.brasileirao2012.web;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import android.content.Context;
+import android.util.Log;
+import br.com.zynger.brasileirao2012.HomeActivity;
+import br.com.zynger.brasileirao2012.TableDivision1Activity;
+import br.com.zynger.brasileirao2012.TableDivision2Activity;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.model.RealTimePlayer;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.rest.RankingREST;
+import br.com.zynger.brasileirao2012.rest.RealTimeREST;
+import br.com.zynger.brasileirao2012.rest.StrikersREST;
+import br.com.zynger.brasileirao2012.util.DeviceUUIDFactory;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+public class HTMLManager {
+
+	private static final int MAX_RODADA = 38;
+
+	public static TreeMap<String, Club> getRanking(TreeMap<String, Club> clubs, int division) {
+		try {
+			RankingREST cliREST = new RankingREST();
+			ArrayList<Club> al = cliREST.getRanking(division);
+			for (Club club : al) {
+				Club c = clubs.get(club.getName());
+				club.setFullName(c.getFullName());
+				club.setWiki(c.getWiki());
+				c.clone(club);
+			}
+			return clubs;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static ArrayList<Striker> getStrikers(int division) {
+		try {
+			StrikersREST cliREST = new StrikersREST();
+			return cliREST.getStrikers(division);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private static final Map<Integer, GregorianCalendar> rod_dates_a; //TODO isso não deveria estar em tableactivity?
+    static {
+    	HashMap<Integer, GregorianCalendar> aMap = new HashMap<Integer, GregorianCalendar>();
+    	aMap.put(1, new GregorianCalendar(2012, 4, 19, 18, 30));
+    	aMap.put(2, new GregorianCalendar(2012, 4, 26, 18, 30));
+    	aMap.put(3, new GregorianCalendar(2012, 5, 6, 19, 30));
+    	aMap.put(4, new GregorianCalendar(2012, 5, 9, 18, 30));
+    	aMap.put(5, new GregorianCalendar(2012, 5, 16, 18, 30));
+    	aMap.put(6, new GregorianCalendar(2012, 5, 23, 18, 30));
+    	aMap.put(7, new GregorianCalendar(2012, 5, 30, 16, 20));
+    	aMap.put(8, new GregorianCalendar(2012, 6, 7, 18, 30));
+    	aMap.put(9, new GregorianCalendar(2012, 6, 14, 18, 30));
+    	aMap.put(10, new GregorianCalendar(2012, 6, 18, 19, 30));
+    	aMap.put(11, new GregorianCalendar(2012, 6, 21, 18, 30));
+    	aMap.put(12, new GregorianCalendar(2012, 6, 25, 19, 30));
+    	aMap.put(13, new GregorianCalendar(2012, 6, 28, 18, 30));
+    	aMap.put(14, new GregorianCalendar(2012, 7, 4, 18, 30));
+    	aMap.put(15, new GregorianCalendar(2012, 7, 8, 19, 30));
+    	aMap.put(16, new GregorianCalendar(2012, 7, 11, 18, 30));
+    	aMap.put(17, new GregorianCalendar(2012, 7, 15, 19, 30));
+    	aMap.put(18, new GregorianCalendar(2012, 7, 18, 18, 30));
+    	aMap.put(19, new GregorianCalendar(2012, 7, 25, 18, 30));
+    	aMap.put(20, new GregorianCalendar(2012, 7, 29, 19, 30));
+    	aMap.put(21, new GregorianCalendar(2012, 8, 1, 18, 30));
+    	aMap.put(22, new GregorianCalendar(2012, 8, 5, 19, 30));
+    	aMap.put(23, new GregorianCalendar(2012, 8, 9, 18, 30));
+    	aMap.put(24, new GregorianCalendar(2012, 8, 12, 19, 30));
+    	aMap.put(25, new GregorianCalendar(2012, 8, 15, 18, 30));
+    	aMap.put(26, new GregorianCalendar(2012, 8, 22, 18, 30));
+    	aMap.put(27, new GregorianCalendar(2012, 8, 29, 18, 30));
+    	aMap.put(28, new GregorianCalendar(2012, 9, 4, 21, 00));
+    	aMap.put(29, new GregorianCalendar(2012, 9, 10, 19, 30));
+    	aMap.put(30, new GregorianCalendar(2012, 9, 13, 18, 30));
+    	aMap.put(31, new GregorianCalendar(2012, 9, 17, 19, 30));
+    	aMap.put(32, new GregorianCalendar(2012, 9, 20, 18, 30));
+    	aMap.put(33, new GregorianCalendar(2012, 9, 25, 22, 00));
+    	aMap.put(34, new GregorianCalendar(2012, 10, 3, 19, 30));
+    	aMap.put(35, new GregorianCalendar(2012, 10, 10, 19, 30));
+    	aMap.put(36, new GregorianCalendar(2012, 10, 17));
+    	aMap.put(37, new GregorianCalendar(2012, 10, 25, 17, 00));
+    	aMap.put(38, new GregorianCalendar(2012, 11, 2, 17, 00));
+        
+        rod_dates_a = Collections.unmodifiableMap(aMap);
+    }
+    
+    private static final Map<Integer, GregorianCalendar> rod_dates_b; //TODO isso não deveria estar em tableactivity?
+    static {
+    	HashMap<Integer, GregorianCalendar> aMap = new HashMap<Integer, GregorianCalendar>();
+    	aMap.put(1, new GregorianCalendar(2012, 4, 18, 21, 00));
+    	aMap.put(2, new GregorianCalendar(2012, 4, 22, 21, 00));
+    	aMap.put(3, new GregorianCalendar(2012, 4, 29, 19, 30));
+    	aMap.put(4, new GregorianCalendar(2012, 5, 1, 21, 00));
+    	aMap.put(5, new GregorianCalendar(2012, 5, 5, 21, 00));
+    	aMap.put(6, new GregorianCalendar(2012, 5, 12, 21, 00));
+    	aMap.put(7, new GregorianCalendar(2012, 5, 19, 21, 00));
+    	aMap.put(8, new GregorianCalendar(2012, 5, 26, 21, 00));
+    	aMap.put(9, new GregorianCalendar(2012, 6, 3, 21, 00));
+    	aMap.put(10, new GregorianCalendar(2012, 6, 10, 16, 20));
+    	aMap.put(11, new GregorianCalendar(2012, 6, 17, 19, 30));
+    	aMap.put(12, new GregorianCalendar(2012, 6, 20, 21, 00));
+    	aMap.put(13, new GregorianCalendar(2012, 6, 24, 21, 00));
+    	aMap.put(14, new GregorianCalendar(2012, 6, 31, 19, 30));
+    	aMap.put(15, new GregorianCalendar(2012, 7, 3, 21, 00));
+    	aMap.put(16, new GregorianCalendar(2012, 7, 7, 21, 00));
+    	aMap.put(17, new GregorianCalendar(2012, 7, 14, 19, 30));
+    	aMap.put(18, new GregorianCalendar(2012, 7, 17, 21, 00));
+    	aMap.put(19, new GregorianCalendar(2012, 7, 21, 21, 00));
+    	aMap.put(20, new GregorianCalendar(2012, 7, 28, 19, 30));
+    	aMap.put(21, new GregorianCalendar(2012, 7, 31, 19, 30));
+    	aMap.put(22, new GregorianCalendar(2012, 8, 4, 15, 00));
+    	aMap.put(23, new GregorianCalendar(2012, 8, 7, 19, 30));
+    	aMap.put(24, new GregorianCalendar(2012, 8, 11, 15, 00));
+    	aMap.put(25, new GregorianCalendar(2012, 8, 14, 19, 30));
+    	aMap.put(26, new GregorianCalendar(2012, 8, 18, 21, 00));
+    	aMap.put(27, new GregorianCalendar(2012, 8, 25, 19, 30));
+    	aMap.put(28, new GregorianCalendar(2012, 9, 2, 19, 30));
+    	aMap.put(29, new GregorianCalendar(2012, 9, 9, 21, 00));
+    	aMap.put(30, new GregorianCalendar(2012, 9, 16, 15, 00));
+    	aMap.put(31, new GregorianCalendar(2012, 9, 19, 19, 30));
+    	aMap.put(32, new GregorianCalendar(2012, 9, 23, 15, 00));
+    	aMap.put(33, new GregorianCalendar(2012, 9, 26, 19, 30));
+    	aMap.put(34, new GregorianCalendar(2012, 9, 30, 21, 00));
+    	aMap.put(35, new GregorianCalendar(2012, 10, 6));
+    	aMap.put(36, new GregorianCalendar(2012, 10, 10));
+    	aMap.put(37, new GregorianCalendar(2012, 10, 17));
+    	aMap.put(38, new GregorianCalendar(2012, 10, 24));
+        
+        rod_dates_b = Collections.unmodifiableMap(aMap);
+    }
+	
+	@SuppressWarnings("unchecked")
+	public static TreeMap<Integer, ArrayList<Match>> getTableData(Context c, int division) throws IOException{
+		TreeMap<Integer, ArrayList<Match>> tm = new TreeMap<Integer, ArrayList<Match>>();
+		
+		TreeMap<Integer, ArrayList<Match>> matches = null;
+		boolean forceupdate = false;
+		Map<Integer, GregorianCalendar> rod_dates = null;
+		if(division == Club.SEGUNDADIVISAO){
+			rod_dates = rod_dates_b;
+			String versionmatches = (String) FileHandler.openBackup(c, FileHandler.VERSION_MATCHES_B);
+			if(!HomeActivity.getAppVersion(c).equals(versionmatches)) forceupdate = true;
+			if(!forceupdate) matches = (TreeMap<Integer, ArrayList<Match>>) FileHandler.openBackup(c, FileHandler.MATCHES_B);
+
+			if(matches == null || forceupdate) matches = TableDivision2Activity.matchesDatabase((TreeMap<String, Club>) FileHandler.openBackup(c, FileHandler.CLUBS));
+		}else{
+			rod_dates = rod_dates_a;
+			String versionmatches = (String) FileHandler.openBackup(c, FileHandler.VERSION_MATCHES_A);
+			if(!HomeActivity.getAppVersion(c).equals(versionmatches)) forceupdate = true;
+			if(!forceupdate) matches = (TreeMap<Integer, ArrayList<Match>>) FileHandler.openBackup(c, FileHandler.MATCHES_A);
+			
+			if(matches == null || forceupdate) matches = TableDivision1Activity.matchesDatabase((TreeMap<String, Club>) FileHandler.openBackup(c, FileHandler.CLUBS));
+		}
+		
+		Calendar today = new GregorianCalendar();
+		
+		for (int rodada = MAX_RODADA; rodada >= 1; rodada--) {
+			Calendar date = rod_dates.get(rodada);
+			
+			if(today.compareTo(date) == -1 || today.compareTo(date) == 0){ // nao preciso tentar atualizar as partidas que ainda nao aconteceram
+				tm.put(rodada, matches.get(rodada));
+				continue;
+			}
+			
+			ArrayList<Match> test_score = matches.get(rodada);
+			int counter = 0;
+			for (Match m : test_score) {
+				if(m.isFinished()) counter++;
+			}
+			
+			if(counter == 10){ //se a rodada ja passou e ja tenho no banco o resultado das partidas, nao preciso atualizar novamente
+				tm.put(rodada, matches.get(rodada));
+				continue;
+			}
+			
+			tm.remove(rodada);
+			tm.put(rodada, parseTableOfMatches(matches.get(rodada), division, rodada, today)); //so vou atualizar a rodada se existem partidas nao jogadas ainda
+		}
+		
+		for (int i = 38; i > tm.size(); i--) {
+			tm.put(i, matches.get(i)); //adicionar ao TreeMap as rodadas que nao precisaram ser atualizadas
+		}
+		
+		if(tm.size() == 38) return tm;
+		else return null;
+	}
+
+	private static ArrayList<Match> parseTableOfMatches(ArrayList<Match> oldMatches, int division, int rodada, Calendar today) throws IOException {
+		Document doc;
+		if(division == Club.SEGUNDADIVISAO) doc = Jsoup.connect("http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2012/serie-b/tabela-de-jogos/tabela-de-jogos-"+rodada+"a-rodada.htm").timeout(30*1000).get();
+		else doc = Jsoup.connect("http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2012/serie-a/tabela-de-jogos/tabela-de-jogos-"+rodada+"a-rodada.htm").timeout(30*1000).get();
+		
+		Element div  = doc.getElementsByClass("tabelajogo").get(0);
+		Elements tr_full = div.getElementsByTag("tr");
+		Elements tr = new Elements();
+		for (Element el : tr_full) {
+			if(!el.className().equals("rodada") && !el.className().equals("dados")) tr.add(el);
+		}
+		
+		ArrayList<Match> al = new ArrayList<Match>();
+		for (int i = 0; i < 10; i++) {
+			Element newMatch = tr.get(i);
+			String time = newMatch.getElementsByClass("hora").get(0).text();
+			String team_home = newMatch.getElementsByClass("time1").get(0).text();
+			String resultado = newMatch.getElementsByClass("resultado").get(0).text();
+			String stadium = newMatch.getElementsByClass("estadio").get(0).text();
+			
+			if(team_home.equals("Boa")) team_home = "Boa Esporte";
+			else if(team_home.equals("Boa Esporte Clube")) team_home = "Boa Esporte";
+			else if(team_home.equals("Barueri")) team_home = "Grêmio Barueri";
+			else if(team_home.equals("Ipatinga-MG")) team_home = "Ipatinga";
+			else if(team_home.equals("Paraná Clube")) team_home = "Paraná";
+			else if(team_home.equals("ASA")) team_home = "Asa";
+			else if(team_home.equals("ASA AL")) team_home = "Asa";
+			
+			Match oldM = null;
+			for (Match m : oldMatches) {
+				if(m.getClubHome().getName().equals(team_home)){
+					oldM = m;
+					break;
+				}
+			}
+			
+			try{
+				try{					
+					int scr_h = Integer.parseInt(resultado.substring(0, resultado.toLowerCase().indexOf("x")-1));
+					int scr_a = Integer.parseInt(resultado.substring(resultado.toLowerCase().indexOf("x")+2));
+					oldM.setScore(scr_h, scr_a); //TODO aqui é feita a atualização dos mapas para a AprovActivity, quando alterar o método de atualização, não esqueça de atualizar isso também
+				}catch (StringIndexOutOfBoundsException e) {} //se o placar ainda nao estiver preenchido
+				
+				oldM.setStadium(stadium);
+				try{
+					oldM.setDate(new GregorianCalendar(oldM.getCalendar().get(Calendar.YEAR), oldM.getCalendar().get(Calendar.MONTH), oldM.getCalendar().get(Calendar.DAY_OF_MONTH), Integer.parseInt(time.substring(0, time.indexOf("h"))), Integer.parseInt(time.substring(time.indexOf("h")+1))));
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				
+				GregorianCalendar cal = oldM.getCalendar();
+				
+				if(checkIfIsFinished(today, cal)) oldM.setFinished(true);
+				else oldM.setFinished(false);
+				
+				al.add(oldM);
+			}catch(NullPointerException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return al;
+	}
+
+	private static boolean checkIfIsFinished(Calendar today, GregorianCalendar cal) {
+		GregorianCalendar modified = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)-1, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY)+2, cal.get(Calendar.MINUTE));
+		
+		if(today.compareTo(modified) > -1) return true;
+		
+		return false;
+	}
+
+	public static String getVersionAtMarket() throws IOException{
+		Document document = Jsoup.connect("https://play.google.com/store/apps/details?id=br.com.zynger.brasileirao2012").get();
+		
+		Elements els = document.getElementsByAttributeValue("itemprop", "softwareVersion");
+		
+		return els.get(0).text();
+	}
+
+	public static String getNewsContent(String newsurl, int domain) {
+		System.gc();
+		
+		try{
+			if(domain == Article.GLOBO){
+				Connection connect = Jsoup.connect(newsurl);
+				Connection.Response response = connect.execute();
+				String html = response.body();
+				int closureNode = html.indexOf("<div class=\"barra-ferramentas\">");
+				html = html.substring(0, closureNode);
+				html += "</body></head>";
+				
+				Document doc = Jsoup.parse(html);
+				Element div = doc.getElementById("materia-letra");
+				
+				Elements paragraph = div.getElementsByTag("p");
+				
+				String ret = "";
+				for (Element el : paragraph) {
+					ret += el.html()+"<br /><br />";
+				}
+				ret = ret.substring(0, ret.length()-"<br /><br />".length());
+				
+				return ret;
+			}else if(domain == Article.UOL){
+				String url = "http://electric-stream-5784.herokuapp.com/news?domain=" + "uol" + "&url=" + newsurl;
+				JSONObject json = new JSONObject(readJsonFeed(url));
+				Log.e("bras2012", json.getString("imgsrc"));
+				return json.getString("content");
+			}else if (domain == Article.GOOGLE){
+				//Nao deveria entrar aqui em hipotese alguma, se entrou, tivemos algum erro
+				return "Não foi possível ler a notícia";
+			}
+			return "Não foi possível ler a notícia";
+		}catch(Exception e){
+			Log.e("bras2012", e.toString());
+			e.printStackTrace();
+			return "Não foi possível ler a notícia, abra-a no browser clicando em \"Abrir Página\".";
+		}catch(OutOfMemoryError oom){
+			System.gc();
+			Log.e("bras2012", oom.toString());
+			oom.printStackTrace();
+			return "Não foi possível ler a notícia, abra-a no browser clicando em \"Abrir Página\".";
+		}
+	}	
+
+	@SuppressWarnings("unchecked")
+	public static boolean updateFansData(Context context, String myteam){
+		try{
+			String url = "http://electric-stream-5784.herokuapp.com/users/get_statistics";
+			JSONObject json = new JSONObject(readJsonFeed(url));
+			
+			TreeMap<String, Club> clubs = (TreeMap<String, Club>) FileHandler.openBackup(context, FileHandler.CLUBS);
+			
+			for (Club club : clubs.values()) {
+				try{
+					int fans = json.getInt(club.getAcronym());
+					club.setFans(fans);
+				}catch(JSONException e){
+					club.setFans(0);
+				}
+			}
+			
+			FileHandler.saveBackup(context, FileHandler.CLUBS, clubs);
+			
+			sendMyTeamToServer(context, myteam);
+			return true;
+		}catch(JSONException jse){
+			Log.e("bras2012", jse.toString());
+			jse.printStackTrace();
+			return false;
+		}catch(Exception e){
+			return false;
+		}
+	}
+	
+	public static JSONObject sendMyTeamToServer(Context context, String myteam){
+		String sentClub = (String) FileHandler.openBackup(context, FileHandler.TORCIDOMETER_SENT_CLUB);
+		
+		if(sentClub == null || !sentClub.equals(myteam)){
+			try{
+				String uuid = new DeviceUUIDFactory(context).getDeviceUuid().toString();
+				String url = "http://electric-stream-5784.herokuapp.com/users/set_team?user[uid]="+uuid+"&user[team]="+myteam;
+				
+				JSONObject json = new JSONObject(readJsonFeed(url));
+				FileHandler.saveBackup(context, FileHandler.TORCIDOMETER_SENT_CLUB, myteam);
+				return json;
+			}catch(JSONException jse){
+				Log.e("bras2012", jse.toString());
+				jse.printStackTrace();
+				return null;
+			}catch(Exception e){
+				return null;
+			}catch(OutOfMemoryError e){
+				e.printStackTrace();
+				return null;
+			}
+		}else{
+			return new JSONObject();
+		}
+	}
+	
+	public static String readJsonFeed(String url) {
+		StringBuilder builder = new StringBuilder();
+		HttpClient client = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet(url);
+		try {
+			HttpResponse response = client.execute(httpGet);
+			StatusLine statusLine = response.getStatusLine();
+			int statusCode = statusLine.getStatusCode();
+			if (statusCode == 200) {
+				HttpEntity entity = response.getEntity();
+				InputStream content = entity.getContent();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+			} else {
+				Log.e("bras2012", "Failed to download file");
+			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return builder.toString();
+	}
+	
+	public static ArrayList<RealTimeMatch> getRealTimeMatches(int division){
+		try {
+			RealTimeREST cliREST = new RealTimeREST();
+			ArrayList<RealTimeMatch> al = cliREST.getRealTimeMatches(division);
+			return al;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static LinkedHashMap<String, ArrayList<RealTimePlayer>> getRealTimeSquad(Context c, RealTimeMatch rtm) throws IOException{
+		String url = rtm.getUrlDetails();
+		
+		LinkedHashMap<String, ArrayList<RealTimePlayer>> map = new LinkedHashMap<String, ArrayList<RealTimePlayer>>();
+		
+		Document doc = Jsoup.connect(url).timeout(15*1000).get();
+		Element div_escalacao = doc.getElementById("escalacao");
+		
+		Elements times = div_escalacao.getElementsByClass("time");
+		
+		try{			
+			Element timeHome = times.get(0);
+			Element timeAway = times.get(1);
+			
+			ArrayList<RealTimePlayer> home = parseRealTimeSquad(timeHome.getElementsByTag("tbody").get(0));
+			ArrayList<RealTimePlayer> away = parseRealTimeSquad(timeAway.getElementsByTag("tbody").get(0));
+			map.put(timeHome.getElementsByTag("p").get(0).text(), home);
+			map.put(timeAway.getElementsByTag("p").get(0).text(), away);
+			
+			if(home.size() == 0 || away.size() == 0) return null;
+		} catch(IndexOutOfBoundsException e){
+			map = null;
+		}
+		
+		return map;
+	}
+
+	private static ArrayList<RealTimePlayer> parseRealTimeSquad(Element tbody) {
+		Elements trs = tbody.getElementsByTag("tr");
+		ArrayList<RealTimePlayer> al = new ArrayList<RealTimePlayer>();
+		
+		for (Element tr : trs) {
+			String typeClass = tr.className();
+			
+			int type = RealTimePlayer.TIPO_TITULAR;
+			if(typeClass.equals("tr-titulares")) type = RealTimePlayer.TIPO_TITULAR;
+			else if(typeClass.equals("tr-substituicao")) type = RealTimePlayer.TIPO_SUBSTITUICAO;
+			else if(typeClass.equals("tr-reservas")) type = RealTimePlayer.TIPO_RESERVA;
+			else if(typeClass.equals("tr-expulso")) type = RealTimePlayer.TIPO_EXPULSO;
+			
+			Elements td = tr.getElementsByTag("td");
+			
+			String subst = null;
+			int subst_type = RealTimePlayer.NULL;
+			if(td.get(0).children().size() > 0){
+				subst = td.get(0).getElementsByTag("img").get(0).attr("alt");
+				if(subst.toLowerCase().equals("saiu")) subst_type = RealTimePlayer.SUBST_SAIU;
+				else if(subst.toLowerCase().equals("entrou")) subst_type = RealTimePlayer.SUBST_ENTROU;
+				else if(subst.toLowerCase().equals("expulso")) subst_type = RealTimePlayer.SUBST_EXPULSO;
+			}
+			
+			String name = td.get(1).text();
+			
+			String cartao = null;
+			int card_type = RealTimePlayer.NULL;
+			if(td.get(2).children().size() > 0){
+				cartao = td.get(2).getElementsByTag("img").get(0).attr("alt");
+				if(cartao.toLowerCase().equals("cartão amarelo")) card_type = RealTimePlayer.CARTAO_AMAR;
+				else if(cartao.toLowerCase().equals("cartão vermelho")) card_type = RealTimePlayer.CARTAO_VERM;
+			}
+			
+			String gp = td.get(3).text();
+			String gc = td.get(4).text();
+			
+			int goalspro;
+			try{				
+				goalspro = Integer.parseInt(gp);
+			}catch(NumberFormatException e){
+				goalspro = RealTimePlayer.NULL;
+			}
+			
+			int goalsagainst;
+			try{				
+				goalsagainst = Integer.parseInt(gc);
+			}catch(NumberFormatException e){
+				goalsagainst = RealTimePlayer.NULL;
+			}
+			
+			RealTimePlayer rtp = new RealTimePlayer(name, type, subst_type, card_type, goalspro, goalsagainst);
+			al.add(rtp);
+		}
+		
+		return al;
+	}
+
+	private static Move parseMove(JSONObject obj) throws JSONException{
+		String operacao = obj.getString("operacao");
+		String str_tipo = obj.getString("tipo");
+		int tipo = getMoveToMoveTipo(str_tipo);
+        String nome_time = obj.getString("nome_time");
+		String periodo = obj.getString("periodo");
+		String video_id = obj.getString("video_id");
+		String url_thumb = obj.getString("url_thumb_playlist");
+		int periodo_id = obj.getInt("periodo_id");
+		String texto = obj.getString("texto");
+		String momento = obj.getString("momento");
+		int id = obj.getInt("id");
+		
+		String video_url = null;
+		if(!video_id.trim().equals("")) video_url = getMoveVideoUrl(video_id);
+		
+		int cartao = Move.CARTAO_NULL;
+		try{					
+			JSONObject objCard = obj.getJSONObject("cartao");
+			if(objCard.getString("tipo").toUpperCase().equals("A")) cartao = Move.CARTAO_AMARELO;
+			else if(objCard.getString("tipo").toUpperCase().equals("V")) cartao = Move.CARTAO_VERMELHO;
+		}catch(JSONException e){
+			cartao = Move.CARTAO_NULL;;
+		}
+		
+		texto = texto.replaceAll("<p>", "");
+		texto = texto.replaceAll("</p>", "");
+		
+		Move move = new Move(operacao, tipo, nome_time, periodo, video_id, url_thumb, periodo_id, texto, momento, id, video_url, cartao);
+		return move;
+	}
+	
+	public static LinkedHashMap<String, Move> getRealTimeMatchMoveToMove(Context context, Match m) throws JSONException{
+		String url = getRealTimeMatchUrl(m);
+		JSONArray jsonarray = new JSONArray(readJsonFeed(url));
+		LinkedHashMap<String, Move> map = new LinkedHashMap<String, Move>();
+		for (int i = 0; i < jsonarray.length(); i++) {
+			JSONObject obj = jsonarray.getJSONObject(i);
+			try{
+				Move move = parseMove(obj);
+				map.put(String.valueOf(move.getId()), move);
+			}catch(JSONException e){
+				Log.e("bras2012", obj.toString());
+				e.printStackTrace();
+				continue;
+			}
+		}
+		
+		LinkedHashMap<String, Move> inverseOrderMap = new LinkedHashMap<String, Move>(); //TODO encontrar um jeito melhor de inverter a ordem do mapa
+		Set<String> keySet = map.keySet(); 
+		Object[] tempArray = keySet.toArray(); 
+
+		int length = tempArray == null ? 0 : tempArray.length; 
+		for(int i = length-1; i >= 0 ; i--){
+			Move move = map.get(tempArray[i]);
+			inverseOrderMap.put(String.valueOf(move.getId()), move);
+		}
+		return inverseOrderMap;
+	}
+	
+	public static ArrayList<Move> getUpdatedMoves(Context c, String lastId, Match match) throws JSONException{
+		String url = getRealTimeMatchUrl(match);
+		JSONArray jsonarray = new JSONArray(readJsonFeed(url));
+		ArrayList<Move> al = new ArrayList<Move>();
+		for (int i = jsonarray.length() - 1; i >= 0; i--){
+			JSONObject obj = jsonarray.getJSONObject(i);
+			try{
+				Move move = parseMove(obj);
+				
+				if(move.getOperacao().equals("ALTERACAO")) continue;
+				if(String.valueOf(move.getId()).equals(lastId)) break;
+				
+				al.add(move);
+			}catch(JSONException e){
+				Log.e("bras2012", obj.toString());
+				e.printStackTrace();
+				continue;
+			}catch(Exception e){
+				Log.e("bras2012", obj.toString());
+				e.printStackTrace();
+				continue;
+			}
+		}
+		return al;
+	}
+	
+	private static int getMoveToMoveTipo(String str_tipo) {
+		str_tipo = str_tipo.toUpperCase();
+		if(str_tipo.equals("LANCE")) return Move.TIPO_LANCE;
+		else if(str_tipo.equals("LANCE_IMPORTANTE")) return Move.TIPO_LANCEIMPORTANTE;
+		else if(str_tipo.equals("LANCE_CARTAO")) return Move.TIPO_LANCECARTAO;
+		else if(str_tipo.equals("LANCE_GOL")) return Move.TIPO_LANCEGOL;
+		else if(str_tipo.equals("LANCE_SUBSTITUICAO")) return Move.TIPO_LANCESUBSTITUICAO;
+
+		return Move.TIPO_LANCE;
+	}
+
+	private static String getMoveVideoUrl(String video_id) {
+		String url = "http://api.globovideos.com/videos/" + video_id + "/playlist";
+		try {
+			JSONObject json = new JSONObject(readJsonFeed(url));
+			JSONArray tmp = json.getJSONArray("videos");
+			JSONObject videos = tmp.getJSONObject(0);
+			JSONArray resources = videos.getJSONArray("resources");
+			for (int i = 0; i < resources.length(); i++) {
+				try{
+					JSONObject videoObj = resources.getJSONObject(i);
+					
+					if(videoObj.getString("kind").equals("M4")) return videoObj.getString("url");
+					else continue;
+				}catch(JSONException e){
+					continue;
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+
+	private static String getRealTimeMatchUrl(Match m){
+		String home = fixRealTimeNames(m.getHome());
+		home = home.toLowerCase();
+		home = home.replace(" ", "-");
+		String away = fixRealTimeNames(m.getAway());
+		away = away.toLowerCase();
+		away = away.replace(" ", "-");
+		
+		String day = String.valueOf(m.getCalendar().get(Calendar.DATE));
+		if(day.length() < 2) day = "0" + day;
+		String month = String.valueOf(m.getCalendar().get(Calendar.MONTH));
+		if(month.length() < 2) month = "0" + month;
+		String year = String.valueOf(m.getCalendar().get(Calendar.YEAR));
+		String date = day + "-" + month + "-" + year;
+		return "http://globoesporte.globo.com/temporeal/futebol/" + date + "/" + home + "-" + away + "/mensagens.json";
+	}
+	
+	private static String fixRealTimeNames(String original){
+		if(original.toLowerCase().equals("atlético-go")) return "Atletico-GO";
+		else if(original.toLowerCase().equals("são paulo")) return "Sao Paulo";
+		else if(original.toLowerCase().equals("náutico")) return "Nautico";
+		else if(original.toLowerCase().equals("atlético-mg")) return "Atletico-MG";
+		else if(original.toLowerCase().equals("grêmio")) return "Gremio";
+		else if(original.toLowerCase().equals("grêmio barueri")) return "Barueri";
+		else if(original.toLowerCase().equals("américa-mg")) return "America-MG";
+		else if(original.toLowerCase().equals("goiás")) return "Goias";
+		else if(original.toLowerCase().equals("ceará")) return "Ceara";
+		else if(original.toLowerCase().equals("américa-rn")) return "America-RN";
+		else if(original.toLowerCase().equals("atlético-pr")) return "Atletico-PR";
+		else if(original.toLowerCase().equals("criciúma")) return "Criciuma";
+		else if(original.toLowerCase().equals("boa esporte")) return "Boa";
+		else if(original.toLowerCase().equals("guaratinguetá")) return "Guaratingueta";
+		else if(original.toLowerCase().equals("são caetano")) return "Sao Caetano";
+		else if(original.toLowerCase().equals("paraná")) return "Parana";
+		else if(original.toLowerCase().equals("vitória")) return "Vitoria";
+		else if(original.toLowerCase().equals("avaí")) return "Avai";
+		return original;
+	}
+
+}

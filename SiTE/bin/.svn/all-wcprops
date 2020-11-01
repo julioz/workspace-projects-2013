@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/3/trunk/SiTE/bin
+END
+SiTE.apk
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/23/trunk/SiTE/bin/SiTE.apk
+END
+resources.ap_
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/23/trunk/SiTE/bin/resources.ap_
+END
+classes.dex
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/23/trunk/SiTE/bin/classes.dex
+END

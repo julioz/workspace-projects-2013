@@ -1,0 +1,24 @@
+package br.com.zynger.brasileirao2012.util;
+
+import android.app.Activity;
+import android.view.View;
+import br.com.zynger.brasileirao2012.R;
+
+import com.darvds.ribbonmenu.RibbonMenuView;
+
+public class ShowCaseViewInterface {
+	
+	public static void executeHintsConditional(Activity activity,
+			RibbonMenuView rbmView, View actionbarLogo) {
+		if(PreferenceEditor.shouldShowHints(activity)
+				|| PreferenceEditor.hasNotSeenActionLogoClickHint(activity)){
+			PreferenceEditor.setSeenActionLogoClickHint(activity);
+			if(rbmView != null) rbmView.toggleMenu();
+			ShowCaseViewHelper.setOnShowCaseEventListener(actionbarLogo,
+					activity,
+					activity.getString(R.string.showcaseview_moreoptions),
+					activity.getString(R.string.showcaseview_description));
+		}
+	}
+
+}

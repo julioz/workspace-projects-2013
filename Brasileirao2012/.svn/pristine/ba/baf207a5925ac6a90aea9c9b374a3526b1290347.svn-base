@@ -1,0 +1,43 @@
+package br.com.zynger.brasileirao2012.adapters.pager;
+
+import java.util.ArrayList;
+
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
+import br.com.zynger.brasileirao2012.fragment.ThirdDivisionFragment;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.Constants;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+public class ThirdDivisionPagerAdapter extends FragmentStatePagerAdapter {
+	private SparseArray<ThirdDivisionFragment> cache;
+	private final SparseArray<ArrayList<Club>> sparseArray;
+
+	public ThirdDivisionPagerAdapter(SherlockFragmentActivity activity,
+			SparseArray<ArrayList<Club>> sparseArray) {
+		super(activity.getSupportFragmentManager());
+		this.sparseArray = sparseArray;
+		cache = new SparseArray<ThirdDivisionFragment>();
+	}
+
+	@Override
+	public SherlockFragment getItem(int position) {
+		if (cache.get(position) != null) {
+			return cache.get(position);
+		} else {
+			ThirdDivisionFragment fragment = new ThirdDivisionFragment();
+			fragment.setClubs(sparseArray
+					.get(position == 0 ? Constants.THIRDDIVISION_GROUP_A
+							: Constants.THIRDDIVISION_GROUP_B));
+			cache.put(position, fragment);
+			return fragment;
+		}
+	}
+
+	@Override
+	public int getCount() {
+		return sparseArray.size();
+	}
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:zynger="http://schemas.android.com/apk/res/br.com.zynger.libertadores"
+    android:visibility="gone" >
+    
+	<br.com.zynger.libertadores.view.LogoProgressBar
+		android:layout_width="64dp"
+     	android:layout_height="64dp"
+     	zynger:size="1"
+     	android:id="@+relativelayout_loading/lpb_updating"
+     	android:layout_centerInParent="true"/>
+    
+    <TextView
+     	android:layout_below="@+relativelayout_loading/lpb_updating"
+     	android:layout_width="wrap_content"
+     	android:layout_height="wrap_content"
+     	android:text="@string/updating"
+     	android:id="@+relativelayout_loading/tv_updating"
+     	android:layout_centerHorizontal="true"
+     	android:layout_marginTop="2dp"
+     	android:textColor="@android:color/black" />
+    
+</RelativeLayout>

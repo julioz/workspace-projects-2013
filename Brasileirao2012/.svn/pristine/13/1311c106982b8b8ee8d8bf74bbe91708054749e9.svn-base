@@ -1,0 +1,93 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.view.MoveToMoveLayout;
+
+public class MoveToMoveAdapter extends BaseAdapter {
+	private Context context;
+	private TreeMap<String, MoveToMoveLayout> cache;
+	private LayoutInflater layoutInflater;
+	private LinkedHashMap<String, Move> moves;
+	
+	public MoveToMoveAdapter(Context context, LinkedHashMap<String, Move> moves) {
+		this.context = context;
+		this.moves = moves;
+		layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		cache = new TreeMap<String, MoveToMoveLayout>();
+	}
+	
+	@Override
+	public int getCount() {
+		return moves.size();
+	}
+	
+	public LinkedHashMap<String, Move> getMoves() {
+		return moves;
+	}
+	
+	public String getLastIdEntered(){
+		Move move = (Move) getItem(0);
+		if(move != null) return String.valueOf(move.getId());
+		else return null;
+	}
+
+	public void updateMove(Move move){
+		cache.put(String.valueOf(move.getId()), new MoveToMoveLayout(context, layoutInflater, move));
+		moves.put(String.valueOf(move.getId()), move);
+		notifyDataSetChanged();
+	}
+	
+	public ArrayList<Move> getMovesWithVideos(){
+		ArrayList<Move> al_moves = new ArrayList<Move>();
+		for (Iterator<Move> iter = moves.values().iterator(); iter.hasNext();) {
+			Move move = (Move) iter.next();
+			String video = move.getVideo_url();
+			if(video != null){
+				al_moves.add(move);
+			}
+		}
+		
+		return al_moves;
+	}
+
+	@Override
+	public Object getItem(int position) {
+		int i = 0;
+		for (Iterator<Move> it = moves.values().iterator(); it.hasNext();) {
+			Move move = (Move) it.next();
+			if(position == i) return move;
+			else i++;
+		}
+		return null;
+	}
+	
+	public Move getMove(int id){
+		return moves.get(String.valueOf(id));
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return 0;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		Move move = (Move) getItem(position);
+		MoveToMoveLayout mtmlt = cache.get(String.valueOf(move.getId()));
+		if(mtmlt == null){
+			mtmlt = new MoveToMoveLayout(context, layoutInflater, move);
+			cache.put(String.valueOf(move.getId()), mtmlt);
+		}
+		return mtmlt;
+	}
+}

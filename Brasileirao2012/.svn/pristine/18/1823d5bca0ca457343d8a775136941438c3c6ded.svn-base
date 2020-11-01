@@ -1,0 +1,46 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.web.WebServiceClient;
+
+public class RankingREST {
+	
+	private static final String URL_WS = "http://aqueous-oasis-8080.herokuapp.com/services/";
+
+	public ArrayList<Club> getRanking(int division) throws Exception {
+		String[] resposta = new WebServiceClient().get(URL_WS + "ranking/Gdivision=" + division + "/");
+		
+		if (resposta[0].equals("200")) {
+			ArrayList<Club> al = new ArrayList<Club>();
+			JSONArray array = new JSONArray(resposta[1]);
+			
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				Club c = new Club();
+				c.setName(obj.getString("name"));
+				c.setPosition(obj.getInt("position"));
+				c.setPlayed(obj.getInt("played"));
+				c.setPoints(obj.getInt("pointsGained"));
+				c.setWin(obj.getInt("victories"));
+				c.setDraw(obj.getInt("draws"));
+				c.setLose(obj.getInt("losses"));
+				c.setBalance(obj.getInt("balance"));
+				c.setGoalsPro(obj.getInt("goalsPro"));
+				c.setGoalsAgainst(obj.getInt("goalsAgainst"));
+				c.setPosDif(obj.getInt("posDif"));
+				
+				al.add(c);
+			}
+
+			return al;
+		} else {
+			throw new Exception(resposta[1]);
+		}
+	}
+
+}

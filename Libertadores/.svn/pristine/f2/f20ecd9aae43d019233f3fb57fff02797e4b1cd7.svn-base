@@ -1,0 +1,117 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.Locale;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import br.com.zynger.libertadores.adapters.NewsAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetNewsTask;
+import br.com.zynger.libertadores.model.Article;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.view.LogoProgressBar;
+import br.com.zynger.libertadores.web.NewsParser;
+
+public class NewsActivity extends ListActivity implements AsyncTaskListener {
+
+	private NewsParser newsParser;
+	
+	private HelveticaTextView tv_title;
+	private RelativeLayout rl_loading;
+	private LogoProgressBar lpb_updating;
+	private TextView tv_updating;
+	
+	private SharedPreferences sharedPrefs;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.newsactivity);
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		loadViews();
+		
+		String language = Locale.getDefault().getLanguage();
+		
+		String alternateLang = sharedPrefs.getString("list_newslanguage", null);
+		if(alternateLang != null) language = alternateLang;
+		
+		newsParser = new NewsParser(this, language);
+		
+		new GetNewsTask(newsParser, this).execute();
+	}
+	
+	private void loadViews() {
+		tv_title = (HelveticaTextView) findViewById(R.newsactivity.titlebar_tvtitle);
+		rl_loading = (RelativeLayout) findViewById(R.newsactivity.rl_loading);
+		lpb_updating = (LogoProgressBar) rl_loading.findViewById(R.relativelayout_loading.lpb_updating);
+		tv_updating = (TextView) rl_loading.findViewById(R.relativelayout_loading.tv_updating);
+
+		tv_title.setText(getString(R.string.homedashboard_news).toUpperCase());
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		Article article = (Article) l.getAdapter().getItem(position);
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setData(Uri.parse(article.getLink()));
+		v.getContext().startActivity(i);
+		super.onListItemClick(l, v, position, id);
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		lpb_updating.setVisibility(View.VISIBLE);
+		tv_updating.setText(getString(R.string.updating));
+		RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		p.addRule(RelativeLayout.BELOW, R.relativelayout_loading.lpb_updating);
+		p.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		tv_updating.setLayoutParams(p);		
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		ArrayList<Article> articles = (ArrayList<Article>) result;
+		
+		if(articles.size() > 0){
+			setListAdapter(new NewsAdapter(this, articles, sharedPrefs.getBoolean("cb_imgsdownload", true)));
+			hideUpdatingLayout();
+		}else{
+			showNoNewsText(getString(R.string.error_emptynews));
+		}
+	}
+
+	@Override
+	public void onFail(String message) {
+		showNoNewsText(getString(R.string.error_nonews));
+	}
+	
+	private void showNoNewsText(String message) {
+		lpb_updating.setVisibility(View.GONE);
+		tv_updating.setText(message);
+		tv_updating.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT));
+		tv_updating.setGravity(Gravity.CENTER);
+	}
+}

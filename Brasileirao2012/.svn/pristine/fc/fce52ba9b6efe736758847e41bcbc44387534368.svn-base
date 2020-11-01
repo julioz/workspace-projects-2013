@@ -1,0 +1,9 @@
+package br.com.zynger.brasileirao2012.asynctasks;
+
+public interface AsyncTaskListener {
+	
+	public void preExecution();
+	public void onComplete(Object result);
+	public void onFail(String message);
+
+}

@@ -1,0 +1,45 @@
+package br.com.zynger.brasileirao2012.adapters.pager;
+
+import java.util.ArrayList;
+
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
+import br.com.zynger.brasileirao2012.fragment.NewsFragment;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.NewsSource;
+import br.com.zynger.brasileirao2012.util.WebDatabaseMapper;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+public class NewsPagerAdapter extends FragmentStatePagerAdapter {
+
+	private SparseArray<NewsFragment> cache;
+	private ArrayList<NewsSource> newsSources;
+	private final Club club;
+
+	public NewsPagerAdapter(SherlockFragmentActivity activity, Club club) {
+		super(activity.getSupportFragmentManager());
+		cache = new SparseArray<NewsFragment>();
+		this.club = club;
+		this.newsSources = new WebDatabaseMapper(null, null).getNewsUrls(club);
+	}
+
+	@Override
+	public SherlockFragment getItem(int position) {
+		if (cache.get(position) != null) {
+			return cache.get(position);
+		} else {
+			NewsFragment fragment = NewsFragment.create(
+					newsSources.get(position), club.getAcronym());
+			cache.put(position, fragment);
+			return fragment;
+		}
+	}
+
+	@Override
+	public int getCount() {
+		return newsSources.size();
+	}
+
+}

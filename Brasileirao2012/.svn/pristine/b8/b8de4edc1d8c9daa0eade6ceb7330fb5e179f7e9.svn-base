@@ -1,0 +1,137 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.taptwo.android.widget.TitleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.ThirdDivisionViewFlowAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.GetThirdDivisionRankingTask;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.view.CustomActionBar;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+
+public class ThirdDivisionActivity extends Activity implements AsyncTaskListener {
+	
+	private HashMap<Integer, ArrayList<Club>> clubsMap;
+	
+	private CustomActionBar actionbar;
+	private DataUpdateLayout dul_loading;
+	private RelativeLayout rl_data;
+	private ViewFlow viewFlow;
+	private TitleFlowIndicator indicator;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.thirddivisionactivity);
+		
+		clubsMap = restoreBackup();
+		
+		loadViews();
+		if(clubsMap == null) dul_loading.setOnlyText(getString(R.string.message_updatedatatoshow));
+		else setViewFlowAdapter();
+	}
+
+	@SuppressLint("UseSparseArrays")
+	private HashMap<Integer, ArrayList<Club>> restoreBackup() {
+		Object jsonStringThirdDivRanking = FileHandler.openBackup(this, FileHandler.JSON_THIRDDIVISIONRANKING);
+		if(null != jsonStringThirdDivRanking){
+			try{				
+				HashMap<Integer, ArrayList<Club>> map = new HashMap<Integer, ArrayList<Club>>();
+				JSONArray jsonRanking = new JSONArray(jsonStringThirdDivRanking.toString());
+				for (int i = 0; i < jsonRanking.length(); i++) {
+					JSONArray group = jsonRanking.getJSONArray(i);
+					ArrayList<Club> alGroup = new ArrayList<Club>();
+					for (int j = 0; j < group.length(); j++) {
+						JSONArray clubJson = group.getJSONArray(j);
+						Club club = new Club();
+						club.setRankingFromJson(clubJson);
+						alGroup.add(club);
+					}
+					map.put((i == 0 ? ThirdDivisionViewFlowAdapter.GROUP_A
+							: ThirdDivisionViewFlowAdapter.GROUP_B), alGroup);
+				}
+				
+				System.gc();
+				return map;
+			}catch(JSONException je){
+				je.printStackTrace();
+				return null;
+			}
+		}else return null;
+	}
+
+	private void loadViews() {
+		actionbar = (CustomActionBar) findViewById(R.thirddivisionactivity.actionbar);
+		viewFlow = (ViewFlow) findViewById(R.thirddivisionactivity.viewflow);
+		indicator = (TitleFlowIndicator) findViewById(R.thirddivisionactivity.viewflowindic);
+		dul_loading = (DataUpdateLayout) findViewById(R.thirddivisionactivity.dul_loading);
+		rl_data = (RelativeLayout) findViewById(R.thirddivisionactivity.rl_data);
+		dul_loading.addViewToToggle(rl_data);
+		
+		actionbar.setUpdateOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(ConnectionHelper.isConnected(v.getContext())){
+					new GetThirdDivisionRankingTask(v.getContext(), ThirdDivisionActivity.this).execute();
+				}else{
+					Toast.makeText(v.getContext(),
+						R.string.message_verifyconnection,
+						Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+	}
+	
+	private void setViewFlowAdapter() {
+		ThirdDivisionViewFlowAdapter adapter = new ThirdDivisionViewFlowAdapter(this, clubsMap);
+		viewFlow.setAdapter(adapter);
+
+		indicator.setTitleProvider(adapter);
+		viewFlow.setFlowIndicator(indicator);
+	}
+
+	@Override
+	public void preExecution() {
+		dul_loading.showFullLayout();
+	}
+
+	@Override
+	public void onComplete(Object result) {
+		@SuppressWarnings("unchecked")
+		HashMap<Integer, ArrayList<Club>> clubsMap =
+			(HashMap<Integer, ArrayList<Club>>) result;
+		
+		this.clubsMap = clubsMap;
+		
+		FileHandler.saveBackup(this, FileHandler.JSON_THIRDDIVISIONRANKING,
+				JsonUtil.createThirdDivisionRankingJson(clubsMap).toString());
+		Toast.makeText(this, R.string.message_dataupdated, Toast.LENGTH_SHORT).show();
+		
+		setViewFlowAdapter();
+		dul_loading.hide();
+	}
+
+	@Override
+	public void onFail(String message) {
+		if(clubsMap != null){
+			dul_loading.hide();
+			Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		} else dul_loading.setOnlyText(message);
+	}
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+myteamactivity/bt_strikers" android:title="@string/myteamactivity_strikers"
+        android:icon="@drawable/ic_striker" />
+    <item android:id="@+myteamactivity/bt_rivals" android:title="@string/myteamactivity_rivalries"
+        android:icon="@drawable/img_rivals"/>
+    <item android:id="@+myteamactivity/bt_trophies" android:title="@string/myteamactivity_trophies"
+        android:icon="@drawable/ic_trophies" />
+    <item android:id="@+myteamactivity/bt_wiki" android:title="@string/myteamactivity_more"
+        android:icon="@drawable/ic_plus_quickaction" />
+</menu>

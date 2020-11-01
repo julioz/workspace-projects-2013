@@ -1,0 +1,167 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.widget.ImageView;
+import br.com.zynger.brasileirao2012.asynctasks.CheckAppStoreForUpdateTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.MatchesDB;
+import br.com.zynger.brasileirao2012.data.StrikersDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+
+public class SplashScreen extends Activity {
+	
+	private ClubsDB clubsDB;
+	private MatchesDB matchesDB;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		clubsDB = ClubsDB.getInstance(this);
+		matchesDB = MatchesDB.getInstance(this, clubsDB.getClubs());
+		
+		new SplashScreenTask(this).execute();
+	}
+	
+	private void setBackedUpData(TreeMap<String, Club> clubs, MatchesDB matchesDB) throws JSONException {
+		Object jsonStringRanking = FileHandler.openBackup(this, FileHandler.JSON_RANKING);
+		if(null != jsonStringRanking){
+			JSONObject jsonRanking = new JSONObject(jsonStringRanking.toString());
+			for (Iterator<String> it = clubs.keySet().iterator(); it.hasNext();) {
+				String acronym = (String) it.next();
+				if(jsonRanking.has(acronym)){					
+					JSONArray ja = jsonRanking.getJSONArray(acronym);
+					clubs.get(acronym).setRankingFromJson(ja);
+				}
+			}
+		}
+		
+		Object jsonStringStrikers = FileHandler.openBackup(this, FileHandler.JSON_STRIKERS);
+		if(null != jsonStringStrikers){
+			JSONObject jsonStrikers = new JSONObject(jsonStringStrikers.toString());
+			JSONArray strikersA = jsonStrikers.getJSONArray(Division.FIRSTDIVISION.toString());
+			JSONArray strikersB = jsonStrikers.getJSONArray(Division.SECONDDIVISION.toString());
+			ArrayList<Striker> alStrikersA = new ArrayList<Striker>();
+			ArrayList<Striker> alStrikersB = new ArrayList<Striker>();
+			
+			for (int i = 0; i < strikersA.length(); i++) {
+				JSONArray arr = strikersA.getJSONArray(i);
+				alStrikersA.add(new Striker(arr, clubsDB.getClubs()));
+			}
+			
+			for (int i = 0; i < strikersB.length(); i++) {
+				JSONArray arr = strikersB.getJSONArray(i);
+				alStrikersB.add(new Striker(arr, clubsDB.getClubs()));
+			}
+			
+			StrikersDB.getInstance().setStrikers(Division.FIRSTDIVISION, alStrikersA);
+			StrikersDB.getInstance().setStrikers(Division.SECONDDIVISION, alStrikersB);
+		}
+		
+		Object jsonStringFans = FileHandler.openBackup(this, FileHandler.JSON_FANS);
+		if(null != jsonStringFans){
+			JSONObject jsonFans = new JSONObject(jsonStringFans.toString());
+			for (Iterator<String> it = clubs.keySet().iterator(); it.hasNext();) {
+				String acronym = (String) it.next();
+				if(jsonFans.has(acronym)){					
+					JSONArray ja = jsonFans.getJSONArray(acronym);
+					clubs.get(acronym).setFansFromJson(ja);
+				}
+			}
+		}
+		
+		Object jsonStringAprov = FileHandler.openBackup(this, FileHandler.JSON_APROV);
+		if(null != jsonStringAprov){
+			JSONObject jsonAprov = new JSONObject(jsonStringAprov.toString());
+			for (Iterator<String> it = clubs.keySet().iterator(); it.hasNext();) {
+				String acronym = (String) it.next();
+				if(jsonAprov.has(acronym)){					
+					JSONArray ja = jsonAprov.getJSONArray(acronym);
+					AprovData aprovData = new AprovData(ja);
+					clubs.get(acronym).setAprov(aprovData);
+				}
+			}
+		}
+
+		restoreMatchesDB(matchesDB, clubs, Division.FIRSTDIVISION);
+		restoreMatchesDB(matchesDB, clubs, Division.SECONDDIVISION);
+	}
+	
+	private void restoreMatchesDB(MatchesDB matchesDB, TreeMap<String, Club> clubs,
+			Division division) throws JSONException {
+		TreeMap<Integer, Fixture> map = matchesDB.getMatches(division);
+		Object jsonStringMatches = FileHandler.openBackup(this, FileHandler.JSON_MATCHES, division);
+		if(null != jsonStringMatches){
+			JSONObject jsonMatches = new JSONObject(jsonStringMatches.toString());
+			Iterator<?> keys = jsonMatches.keys();
+			while(keys.hasNext()){
+				String key = (String) keys.next();
+				JSONObject jsonFixture = jsonMatches.getJSONObject(key);
+				Fixture fixture = map.get(Integer.valueOf(key));
+				fixture.restoreFixtureData(jsonFixture, clubs);
+			}
+		}
+	}
+	
+	class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
+		
+		private Context context;
+		
+		public SplashScreenTask(Context context) {
+			this.context = context;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			setContentView(R.layout.splash);
+
+			try{				
+				ImageView ivSplash = (ImageView) findViewById(R.splash.iv_splash);
+				ivSplash.setImageResource(R.drawable.splash_screen);
+			}catch(OutOfMemoryError error){
+				error.printStackTrace();
+			}
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			try {
+				if(PreferenceEditor.shouldUpdateApp(context)){
+		        	new CheckAppStoreForUpdateTask(context).execute();
+		        }
+				
+				setBackedUpData(clubsDB.getClubs(), matchesDB);
+				return true;
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+				return false;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			finish();
+			startActivity(new Intent(context, HomeActivity.class));
+			overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+			super.onPostExecute(result);
+		}
+	}
+}

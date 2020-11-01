@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- <item android:id="@+id/mnMao"
+          android:icon="@drawable/ic_mao"
+          android:title="Mão" />
+    <item android:id="@+id/mnDesenho"
+          android:icon="@drawable/ic_desenho"
+          android:title="Desenho" />-->
+    <item android:id="@+id/mnPDI"
+          android:icon="@drawable/ic_pdi"
+          android:title="Novo" >
+          <menu>
+            <item android:id="@+id/mnVeiculo"
+                  android:title="Veículo" />
+            <item android:id="@+id/mnEstrutura"
+                  android:title="Estrutura" />
+            <item android:id="@+id/mnEquipamento"
+                  android:title="Equipamento" />
+            <item android:id="@+id/mnEquipe"
+                  android:title="Equipe" />
+            <item android:id="@+id/mnPerigo"
+                  android:title="Perigo" />
+            <item android:id="@+id/mnVitima"
+                  android:title="Vítima" />
+            <item android:id="@+id/mnInstituicao"
+                  android:title="Instituição" />
+            <item android:id="@+id/mnUnidade"
+                  android:title="Unidade" />
+        </menu>
+        </item>
+    <item android:id="@+id/mnExibicao"
+          	android:icon="@drawable/ic_exibicao"
+          	android:title="Exibição" >
+        </item>
+</menu>

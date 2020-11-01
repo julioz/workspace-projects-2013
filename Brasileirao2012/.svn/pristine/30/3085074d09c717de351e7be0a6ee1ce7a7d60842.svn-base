@@ -1,0 +1,90 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.Locale;
+
+import org.taptwo.android.widget.TitleProvider;
+
+import android.content.Context;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import android.widget.TextView.BufferType;
+import br.com.zynger.brasileirao2012.R;
+
+public class AboutViewFlowAdapter extends BaseAdapter implements TitleProvider {
+
+	private static final int YELLOW = 0xFFF6B900;
+	private static final int GREEN = 0xFF1D7A3E;
+	private LayoutInflater mInflater;
+	private Context context;
+	
+	private int[] titles = { R.string.aboutactivity_viewflow_title_theapp,
+			R.string.aboutactivity_viewflow_title_moreinfo, R.string.aboutactivity_viewflow_title_thanks };
+	private String[] thanks;
+	
+	private String appVersion;
+	
+	public AboutViewFlowAdapter(Context context, String appVersion) {
+		this.context = context;
+		this.mInflater = LayoutInflater.from(context);
+		this.appVersion = appVersion;
+		this.thanks = context.getResources().getStringArray(R.array.aboutactivity_thanks);
+	}
+	
+	@Override
+	public int getCount() {
+		return titles.length;
+	}
+	
+	@Override
+	public Object getItem(int position) {
+		return null;
+	}
+	
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		if(position == 0){
+			View view = mInflater.inflate(R.layout.aboutactivity_theapp_layout, null);
+			TextView tv_appname = (TextView) view.findViewById(R.aboutactivity.tv_appname);
+			SpannableString appname = new SpannableString(context.getString(R.string.app_name).toUpperCase(Locale.getDefault()));
+			appname.setSpan(new ForegroundColorSpan(GREEN), 0, 6, 0);
+			appname.setSpan(new ForegroundColorSpan(YELLOW), 6, appname.length(), 0);
+			tv_appname.setText(appname, BufferType.SPANNABLE);
+			
+			TextView tv_version = (TextView) view.findViewById(R.aboutactivity.tv_version);
+			tv_version.setText(context.getString(R.string.aboutactivity_version) + " " + appVersion);
+			return view;
+		}else{
+			TextView tv = new TextView(context);
+			String text = new String();
+			
+			if(position == 1){
+				text = context.getString(R.string.aboutactivity_mailandrights);
+				tv.setText(text);
+			}else if(position == 2){				
+				for (String item : thanks) {
+					text += "&#8226; " + item + "<br/>";
+				}
+				tv.setText(Html.fromHtml(text));
+			}
+			tv.setTextColor(context.getResources().getColor(android.R.color.white));
+			tv.setTextSize(20);
+			return tv;
+		}
+	}
+	
+	@Override
+	public String getTitle(int position) {
+		return context.getString(titles[position]);
+	}
+}

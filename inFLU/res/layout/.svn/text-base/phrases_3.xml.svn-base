@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:orientation="vertical">
+
+	<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="40dp"
+		android:orientation="horizontal"
+		android:layout_alignParentTop="true"
+		android:id="@+phrases/actionbar3"
+		android:background="@drawable/actionbar_bg">
+		
+		<ImageView
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			android:scaleType="fitCenter"
+			android:adjustViewBounds="true"
+			android:src="@drawable/icon"
+			android:layout_centerVertical="true"
+			android:id="@+phrases/action_badge"/>
+		
+		<TextView
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:layout_toRightOf="@+phrases/action_badge"
+		    android:gravity="center_vertical"
+		    android:paddingLeft="10dp"
+		    android:id="@+phrases/numPhrase3"
+		    android:tag="phrase_id"
+		    android:text="ID"
+		    android:textColor="#FFFFFF"
+		    android:textSize="18dp"
+		    android:textStyle="bold" />
+		
+		<ImageButton
+		    android:layout_width="36dp"
+		    android:layout_height="36dp"
+		    android:scaleType="fitCenter"
+		    android:adjustViewBounds="true"
+		    android:layout_alignParentRight="true"
+		    android:layout_centerVertical="true"
+		    android:id="@+phrases/ib_actionbar_search3"
+		    android:layout_marginRight="4dp"
+		    android:background="@null"
+		    android:src="@drawable/ic_search"/>
+
+	</RelativeLayout>
+	
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="vertical"
+		android:weightSum="3">
+		<ScrollView
+			android:layout_width="fill_parent"
+			android:layout_height="0dp"
+			android:layout_weight="2.5">
+			<RelativeLayout
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent">
+					
+				<TextView
+					android:id="@+phrases/phrase3"
+					android:textColor="#FFFFFFFF"
+					android:text="algum texto de teste"
+					android:layout_alignParentTop="true"
+					android:textSize="28dp"
+					android:gravity="center_horizontal"
+					android:paddingLeft="5dp"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"/>
+			
+			</RelativeLayout>
+		</ScrollView>
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="0dp"
+			android:gravity="right"
+			android:layout_weight="0.5">
+			<TextView
+				android:id="@+phrases/author3"
+				android:textColor="#FFFFFFFF"
+				android:text="sahfaodhf"
+				android:paddingRight="6dp"
+				android:gravity="center_vertical|right"
+				android:textSize="30dp"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"/>	
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

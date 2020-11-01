@@ -1,0 +1,94 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.model.Club;
+
+public class TorcidometerAdapter extends ArrayAdapter<Club>{
+
+	private final LayoutInflater mInflater;
+	private static final int LAYOUTRESOURCEID = R.layout.torcidometerrow;
+	private static final Comparator<Club> fansComparator = new FansComparator();
+	private List<Club> objects;
+	private Integer totalFans = 0;
+	
+	public TorcidometerAdapter(Context context, List<Club> objects, Integer totalFans) {
+		super(context, LAYOUTRESOURCEID, objects);
+		this.mInflater = LayoutInflater.from(context);
+		this.objects = objects;
+		this.totalFans = totalFans;
+		
+		Collections.sort(objects, fansComparator);
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public Club getItem(int position) {
+		return objects.get(position);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+        TorcidometerHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+            
+            holder = new TorcidometerHolder();
+            holder.ivBadge = (ImageView) row.findViewById(R.torcidometerrow.iv_badge);
+            holder.tvName = (TextView) row.findViewById(R.torcidometerrow.tv_name);
+            holder.tvDataTop = (TextView) row.findViewById(R.torcidometerrow.tv_fansdata_top);
+            holder.tvDataBottom = (TextView) row.findViewById(R.torcidometerrow.tv_fansdata_bottom);
+            
+            row.setTag(holder);
+        }else{
+            holder = (TorcidometerHolder) row.getTag();
+        }
+
+        Club club = getItem(position);
+
+        int badgeRes = club.getBadgeResource(getContext());
+        String clubName = club.getName().toUpperCase();
+        holder.ivBadge.setImageResource(badgeRes);
+        holder.tvName.setText(Integer.valueOf(position+1) + "º  " + clubName);
+        holder.tvDataTop.setText(String.valueOf(club.getFans().intValue()));
+        float percentage = (100 * club.getFans().intValue()) / totalFans;
+        holder.tvDataBottom.setText(Math.round(percentage) + "%");
+
+        return row;
+	}
+}
+
+class FansComparator implements Comparator<Club> {
+
+	@Override
+	public int compare(Club lhs, Club rhs) {
+		int comparison = lhs.getFans() - rhs.getFans();
+		if(comparison == 0) return lhs.compareTo(rhs);
+		return -1*comparison;
+	}
+	
+}
+
+class TorcidometerHolder
+{
+    ImageView ivBadge;
+    TextView tvName;
+    TextView tvDataTop;
+    TextView tvDataBottom;
+}

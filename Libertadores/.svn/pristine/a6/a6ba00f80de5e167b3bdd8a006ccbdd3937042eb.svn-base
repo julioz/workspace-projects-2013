@@ -1,0 +1,255 @@
+package br.com.zynger.libertadores.model;
+
+import java.util.ArrayList;
+
+public class MatchDetails {
+	
+	private String stadium;
+	private String referee;
+	private String homeCoach;
+	private String awayCoach;
+	private ArrayList<MatchFact> homeGoals;
+	private ArrayList<MatchFact> awayGoals;
+	private ArrayList<MatchFact> yellowCards;
+	private ArrayList<MatchFact> redCards;
+	private ArrayList<MatchSubstitution> substitutions;
+	private ArrayList<MatchPlayer> homeFormation;
+	private ArrayList<MatchPlayer> awayFormation;
+	private ArrayList<MatchPlayer> homeAlternate;
+	private ArrayList<MatchPlayer> awayAlternate;
+	
+	public void setStadium(String stadium) {
+		this.stadium = stadium;
+	}
+	
+	public String getStadium() {
+		return stadium;
+	}
+	
+	public void setReferee(String referee) {
+		this.referee = referee;
+	}
+	
+	public String getReferee() {
+		return referee;
+	}
+	
+	public String getHomeCoach() {
+		return homeCoach;
+	}
+	
+	public void setHomeCoach(String homeCoach) {
+		this.homeCoach = homeCoach;
+	}
+	
+	public String getAwayCoach() {
+		return awayCoach;
+	}
+	
+	public void setAwayCoach(String awayCoach) {
+		this.awayCoach = awayCoach;
+	}
+	
+	public void setHomeGoals(ArrayList<MatchFact> homeGoals) {
+		this.homeGoals = homeGoals;
+	}
+	
+	public ArrayList<MatchFact> getHomeGoals() {
+		return homeGoals;
+	}
+	
+	public void setAwayGoals(ArrayList<MatchFact> awayGoals) {
+		this.awayGoals = awayGoals;
+	}
+	
+	public ArrayList<MatchFact> getAwayGoals() {
+		return awayGoals;
+	}
+	
+	public void setYellowCards(ArrayList<MatchFact> cards) {
+		this.yellowCards = cards;
+	}
+	
+	public ArrayList<MatchFact> getYellowCards() {
+		return yellowCards;
+	}
+	
+	public void setRedCards(ArrayList<MatchFact> cards) {
+		this.redCards = cards;
+	}
+	
+	public ArrayList<MatchFact> getRedCards() {
+		return redCards;
+	}
+	
+	public ArrayList<MatchSubstitution> getSubstitutions() {
+		return substitutions;
+	}
+	
+	public void setSubstitutions(ArrayList<MatchSubstitution> substitutions) {
+		this.substitutions = substitutions;
+	}
+	
+	public ArrayList<MatchPlayer> getHomeFormation() {
+		return homeFormation;
+	}
+	
+	public void setHomeFormation(ArrayList<MatchPlayer> homeFormation) {
+		this.homeFormation = homeFormation;
+	}
+	
+	public ArrayList<MatchPlayer> getAwayFormation() {
+		return awayFormation;
+	}
+	
+	public void setAwayFormation(ArrayList<MatchPlayer> awayFormation) {
+		this.awayFormation = awayFormation;
+	}
+	
+	public ArrayList<MatchPlayer> getHomeAlternate() {
+		return homeAlternate;
+	}
+	
+	public void setHomeAlternate(ArrayList<MatchPlayer> homeAlternate) {
+		this.homeAlternate = homeAlternate;
+	}
+	
+	public ArrayList<MatchPlayer> getAwayAlternate() {
+		return awayAlternate;
+	}
+	
+	public void setAwayAlternate(ArrayList<MatchPlayer> awayAlternate) {
+		this.awayAlternate = awayAlternate;
+	}
+	
+	@Override
+	public String toString() {
+		return getStadium() + " - " + getReferee() + "\n" + getHomeFormation().toString()
+				+ "\n" + getAwayFormation().toString() + getHomeGoals().toString()
+				+ "\n" + getAwayGoals().toString() + "\n" + getYellowCards().toString()
+				+ "\n" + getRedCards().toString() + "\n" + getSubstitutions().toString();
+	}
+	
+	public static class MatchFact {
+		public static final Integer SIDE_HOME = 0;
+		public static final Integer SIDE_AWAY = 1;
+		
+		private String time;
+		private String name;
+		private Integer side;
+		
+		public String getTime() {
+			return time;
+		}
+		
+		public void setTime(String time) {
+			this.time = time;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public void setName(String name) {
+			this.name = name;
+		}
+		
+		public Integer getSide() {
+			return side;
+		}
+		
+		public void setSide(Integer side) {
+			this.side = side;
+		}
+
+		@Override
+		public String toString() {
+			return getSide() + ": " + getTime() + " -> " + getName();
+		}
+	}
+	
+	public static class MatchPlayer {
+		public static final Integer CARD_YELLOW = 1;
+		public static final Integer CARD_RED = 2;
+		
+		private Integer number;
+		private String name;
+		private Integer card;
+		
+		public String getName() {
+			return name;
+		}
+		
+		public void setName(String name) {
+			this.name = name;
+		}
+		
+		public void setNumber(Integer number) {
+			this.number = number;
+		}
+		
+		public Integer getNumber() {
+			return number;
+		}
+		
+		public void setCard(Integer card) {
+			this.card = card;
+		}
+		
+		public Integer getCard() {
+			return card;
+		}
+
+		@Override
+		public String toString() {
+			return getNumber() + " -> " + getName();
+		}
+	}
+	
+	public static class MatchSubstitution {
+		public static final Integer SIDE_HOME = 0;
+		public static final Integer SIDE_AWAY = 1;
+		
+		private String time;
+		private String nameIn;
+		private String nameOut;
+		private Integer side;
+		
+		public String getTime() {
+			return time;
+		}
+		
+		public void setTime(String time) {
+			this.time = time;
+		}
+		
+		public String getNameIn() {
+			return nameIn;
+		}
+		
+		public void setNameIn(String nameIn) {
+			this.nameIn = nameIn;
+		}
+		
+		public String getNameOut() {
+			return nameOut;
+		}
+		
+		public void setNameOut(String nameOut) {
+			this.nameOut = nameOut;
+		}
+		
+		public Integer getSide() {
+			return side;
+		}
+		
+		public void setSide(Integer side) {
+			this.side = side;
+		}
+
+		@Override
+		public String toString() {
+			return getSide() + ": " + getTime() + " -> " + getNameIn() + ", " + getNameOut();
+		}
+	}
+}

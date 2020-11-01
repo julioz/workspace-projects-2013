@@ -1,0 +1,310 @@
+<clubs>
+	<club>
+		<name>Fluminense</name>
+		<acronym>FLU</acronym>
+		<badge>fluminense</badge>
+		<headquarters>
+			<name>Laranjeiras</name>
+			<city>Rio de Janeiro</city>
+			<latitude>-22936912</latitude>
+			<longitude>-43184523</longitude>
+		</headquarters>
+	</club>
+	<club>
+	    <name>León</name>
+	    <acronym>LEO</acronym>
+	    <badge>leon</badge>
+	    <headquarters>
+	        <name>Estadio León</name>
+	        <city>León de Los Aldama</city>
+	        <latitude>21115540</latitude>
+	        <longitude>-101657602</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Emelec</name>
+	    <acronym>EME</acronym>
+	    <badge>emelec</badge>
+	    <headquarters>
+	        <name>Estadio George Capwell</name>
+	        <city>Guayaquil</city>
+	        <latitude>-2206612</latitude>
+	        <longitude>-79893845</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Universidade César Vallejo</name>
+	    <acronym>UCV</acronym>
+	    <badge>vallejo</badge>
+	    <headquarters>
+	        <name>Estadio Mansiche</name>
+	        <city>Trujillo</city>
+	        <latitude>-8106084</latitude>
+	        <longitude>-79030604</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Arsenal de Sarandí</name>
+	    <acronym>ARS</acronym>
+	    <badge>arsenal</badge>
+	    <headquarters>
+	        <name>Arsenal Futbol Club</name>
+	        <city>Sarandí</city>
+			<latitude>-34677935</latitude>
+	        <longitude>-58341525</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>São Paulo</name>
+	    <acronym>SPO</acronym>
+	    <badge>saopaulo</badge>
+	    <headquarters>
+	        <name>Morumbi</name>
+	        <city>São Paulo</city>
+	        <latitude>-23600103</latitude>
+	        <longitude>-46720098</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Deportivo Anzoátegui</name>
+	    <acronym>DAZ</acronym>
+	    <badge>anzoategui</badge>
+	    <headquarters>
+	        <name>Estadio Olimpico José Antonio Anzoátegui</name>
+	        <city>Puerto de La Cruz</city>
+	        <latitude>10179865</latitude>
+	        <longitude>-64655979</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Defensor</name>
+	    <acronym>DFS</acronym>
+	    <badge>defensor</badge>
+	    <headquarters>
+	        <name>Defensor Sporting Club</name>
+	        <city>Montevideo</city>
+	        <latitude>-34912160</latitude>
+	        <longitude>-56164612</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>The Strongest</name>
+	    <acronym>STG</acronym>
+	    <badge>strongest</badge>
+	    <headquarters>
+	        <name>Estadio Hernando Siles</name>
+	        <city>La Paz</city>
+	        <latitude>-16499479</latitude>
+	        <longitude>-68122697</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Corinthians</name>
+	    <acronym>COR</acronym>
+	    <badge>corinthians</badge>
+	    <headquarters>
+	        <name>Parque São Jorge</name>
+	        <city>São Paulo</city>
+	        <latitude>-23526555</latitude>
+	        <longitude>-46568658</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Palmeiras</name>
+	    <acronym>PAL</acronym>
+	    <badge>palmeiras</badge>
+	    <headquarters>
+	        <name>Academia de Futebol</name>
+	        <city>Barra Funda</city>
+	        <latitude>-23516706</latitude>
+	        <longitude>-46683785</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Universidad de Chile</name>
+	    <acronym>UCH</acronym>
+	    <badge>lau</badge>
+	    <headquarters>
+	        <name>U. de Chile</name>
+	        <city>La Cisterna</city>
+	        <latitude>-33528130</latitude>
+	        <longitude>-70650998</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Santa Fe</name>
+	    <acronym>SFE</acronym>
+	    <badge>santafe</badge>
+	    <headquarters>
+	        <name>El Campín</name>
+	        <city>Bogotá</city>
+	        <latitude>4645819</latitude>
+	        <longitude>-74077453</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Nacional</name>
+	    <acronym>NAC</acronym>
+	    <badge>nacional</badge>
+	    <headquarters>
+	        <name>Estadio Gran Parque Central</name>
+	        <city>Montevideo</city>
+	        <latitude>-34884417</latitude>
+	        <longitude>-56158821</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Peñarol</name>
+	    <acronym>PEN</acronym>
+	    <badge>penarol</badge>
+	    <headquarters>
+	        <name>Estadio Centenario</name>
+	        <city>Montevideo</city>
+	        <latitude>-34894643</latitude>
+	        <longitude>-56152800</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Deportivo Lara</name>
+	    <acronym>LAR</acronym>
+	    <badge>deplara</badge>
+	    <headquarters>
+	        <name>Estadio Metropolitano</name>
+	        <city>Cabudare</city>
+	        <latitude>9993534</latitude>
+	        <longitude>-69219629</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Caracas</name>
+	    <acronym>CAR</acronym>
+	    <badge>caracas</badge>
+	    <headquarters>
+	        <name>Cocodrilos Sport Park</name>
+	        <city>Caracas</city>
+	        <latitude>10474957</latitude>
+	        <longitude>-66940991</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Tigre</name>
+	    <acronym>TIG</acronym>
+	    <badge>tigre</badge>
+	    <headquarters>
+	        <name>Estadio Monumental de Victoria</name>
+	        <city>Buenos Aires</city>
+	        <latitude>-34449299</latitude>
+	        <longitude>-58542260</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>San José</name>
+	    <acronym>SJO</acronym>
+	    <badge>sanjose</badge>
+	    <headquarters>
+	        <name>Estadio Jesús Bermúdez</name>
+	        <city>Oruro</city>
+	        <latitude>-17946368</latitude>
+	        <longitude>-67111311</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Grêmio</name>
+	    <acronym>GRE</acronym>
+	    <badge>gremio</badge>
+	    <headquarters>
+	        <name>Estádio Olímpico Monumental</name>
+	        <city>Porto Alegre</city>
+	        <latitude>-30060514</latitude>
+	        <longitude>-51213307</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Atlético-MG</name>
+	    <acronym>CAM</acronym>
+	    <badge>atleticomineiro</badge>
+	    <headquarters>
+	        <name>Sede de Lourdes</name>
+	        <city>Belo Horizonte</city>
+	        <latitude>-19927530</latitude>
+	        <longitude>-43946630</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Iquique</name>
+	    <acronym>IQU</acronym>
+	    <badge>iquique</badge>
+	    <headquarters>
+	        <name>Estadio Tierra de Campeones</name>
+	        <city>Iquique</city>
+	        <latitude>-20242212</latitude>
+	        <longitude>-70133227</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Barcelona</name>
+	    <acronym>BSC</acronym>
+	    <badge>barcelona</badge>
+	    <headquarters>
+	        <name>Estadio Monumental Banco del Pichincha</name>
+	        <city>Guayaquil</city>
+	        <latitude>-2178802</latitude>
+	        <longitude>-79894275</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Cerro Porteño</name>
+	    <acronym>CPO</acronym>
+	    <badge>cerroporteno</badge>
+	    <headquarters>
+	        <name>La Olla Monumental</name>
+	        <city>Asunción</city>
+	        <latitude>-25299803</latitude>
+	        <longitude>-57637556</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Sporting Cristal</name>
+	    <acronym>SCR</acronym>
+	    <badge>sportingcristal</badge>
+	    <headquarters>
+	        <name>Estadio Alberto Gallardo</name>
+	        <city>Lima</city>
+	        <latitude>-12037943</latitude>
+	        <longitude>-77045148</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Toluca</name>
+	    <acronym>TOL</acronym>
+	    <badge>toluca</badge>
+	    <headquarters>
+	        <name>Estadio Nemesio Díez</name>
+	        <city>Toluca</city>
+	        <latitude>19287306</latitude>
+	        <longitude>-99666808</longitude>
+	    </headquarters>
+	</club>
+	<club>
+	    <name>Tijuana</name>
+	    <acronym>TIJ</acronym>
+	    <badge>tijuana</badge>
+	    <headquarters>
+	        <name>Estadio Caliente</name>
+	        <city>Tijuana</city>
+	        <latitude>32506027</latitude>
+	        <longitude>-116993004</longitude>
+	    </headquarters>
+	</club>
+	<club>
+		<name>Real Garcilaso</name>
+		<acronym>RGA</acronym>
+		<badge>garcilaso</badge>
+		<headquarters>
+			<name>Estadio Inca Garcilaso de La Vega</name>
+			<city>Cuzco</city>
+			<latitude>-13525385</latitude>
+			<longitude>-71966405</longitude>
+		</headquarters>
+	</club>
+</clubs>

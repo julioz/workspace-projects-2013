@@ -1,0 +1,261 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.view.RankingRow;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class RankingDivision2Activity extends Activity {
+	
+	private TreeMap<String, Club> clubs;
+	
+	private TableLayout tl;
+	private TextView actionbar_tt, tv_points, tv_played, tv_win, tv_draw, tv_lose, tv_goalspro, tv_goalsagainst, tv_balance, tv_selected;
+	private View view_footer_center;
+	private TextView tv_division, tv_footer_left, tv_footer_center;
+	private LinearLayout ll_division;
+	private RelativeLayout rl_loading, rl_data;
+	@SuppressWarnings("unused")
+	private LinearLayout ll_footer;
+	private ImageButton update;
+	private RotateAnimation rot;
+	
+	private ArrayList<RankingRow> al;
+	private static int clickCounter = 1;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.ranking);
+		
+		this.clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		if(clubs == null){
+			clubs = HomeActivity.getMapClubs();
+			FileHandler.saveBackup(this, FileHandler.CLUBS, clubs);
+		}
+		
+		al = new ArrayList<RankingRow>();
+		
+		loadViews();
+		setHeaders();
+		
+		tv_division.setText("B");
+		view_footer_center.setVisibility(View.GONE);
+		tv_footer_center.setVisibility(View.GONE);
+		tv_footer_left.setText("Acesso");
+		ll_division.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+				Intent it = new Intent(v.getContext(), RankingDivision1Activity.class);
+				startActivity(it);
+			}
+		});
+		
+		clickCounter = 1;
+		tv_selected = tv_points;
+		
+		orderTable(RankingDivision1Activity.ORDER_POINTS);
+		tv_points.setBackgroundColor(RankingRow.BLUE);
+		
+		
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				v.startAnimation(rot);
+				if(ConnectionHelper.isConnected(v.getContext())) new UpdateRankingTask(v.getContext()).execute();
+				else Toast.makeText(v.getContext(), "Não foi possível atualizar. Verifique a conexão à internet.", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_actsupdates", false)) new UpdateRankingTask(this).execute();
+	}
+
+	private void loadViews() {
+		actionbar_tt = (TextView) findViewById(R.ranking.tv_name);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		tl = (TableLayout) findViewById(R.ranking.tablelayout);
+		
+		tv_points = (TextView) findViewById(R.ranking.tv_points);
+		tv_played = (TextView) findViewById(R.ranking.tv_played);
+		tv_win = (TextView) findViewById(R.ranking.tv_win);
+		tv_draw = (TextView) findViewById(R.ranking.tv_draw);
+		tv_lose = (TextView) findViewById(R.ranking.tv_lose);
+		tv_goalspro = (TextView) findViewById(R.ranking.tv_goalspro);
+		tv_goalsagainst = (TextView) findViewById(R.ranking.tv_goalsagainst);
+		tv_balance = (TextView) findViewById(R.ranking.tv_balance);
+		
+		ll_footer = (LinearLayout) findViewById(R.ranking.ll_footer);
+		
+		rl_loading = (RelativeLayout) findViewById(R.ranking.rl_loading);
+		rl_data = (RelativeLayout) findViewById(R.ranking.rl_data);
+		
+		rot = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rot.setInterpolator(new LinearInterpolator());
+		rot.setDuration(900L);
+		rot.setStartTime(200L);
+		
+		view_footer_center = findViewById(R.ranking.view_footer_center);
+		
+		tv_footer_left = (TextView) findViewById(R.ranking.tv_footer_left);
+		tv_footer_center = (TextView) findViewById(R.ranking.tv_footer_center);
+		
+		ll_division = (LinearLayout) findViewById(R.ranking.actionbar_ll);
+		tv_division = (TextView) findViewById(R.ranking.tv_actionbar_division);
+		
+		update = (ImageButton) findViewById(R.ranking.ib_update);
+	}
+	
+	private void setHeaders() {
+		setOnClickHeader(tv_points, RankingDivision1Activity.ORDER_POINTS);
+		setOnClickHeader(tv_played, RankingDivision1Activity.ORDER_PLAYED);
+		setOnClickHeader(tv_win, RankingDivision1Activity.ORDER_WIN);
+		setOnClickHeader(tv_draw, RankingDivision1Activity.ORDER_DRAW);
+		setOnClickHeader(tv_lose, RankingDivision1Activity.ORDER_LOSE);
+		setOnClickHeader(tv_goalspro, RankingDivision1Activity.ORDER_GOALSPRO);
+		setOnClickHeader(tv_goalsagainst, RankingDivision1Activity.ORDER_GOALSAGAINST);
+		setOnClickHeader(tv_balance, RankingDivision1Activity.ORDER_BALANCE);
+	}
+	
+	private void setOnClickHeader(TextView tv, final int order){
+		tv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if((TextView) v == tv_selected){
+					clickCounter *= -1;
+					orderTable(order);
+					if(clickCounter == -1) v.setBackgroundColor(RankingRow.RED);
+					else if(clickCounter == 1) v.setBackgroundColor(RankingRow.BLUE);
+				}else{
+					clickCounter = 1;
+					orderTable(order);
+					v.setBackgroundColor(RankingRow.BLUE);
+					tv_selected = (TextView) v;
+				}
+			}
+		});
+	}
+	
+	private void clearHeadersBackground() {
+		tv_points.setBackgroundResource(0);
+		tv_played.setBackgroundResource(0);
+		tv_win.setBackgroundResource(0);
+		tv_draw.setBackgroundResource(0);
+		tv_lose.setBackgroundResource(0);
+		tv_goalspro.setBackgroundResource(0);
+		tv_goalsagainst.setBackgroundResource(0);
+		tv_balance.setBackgroundResource(0);
+	}
+	
+	private void orderTable(int option){
+		al.clear();
+		clearHeadersBackground();
+		
+		for (Club c : this.clubs.values()) {
+			if(c.getDivision() == Club.SEGUNDADIVISAO){				
+				RankingRow rr = new RankingRow(this, c);
+				al.add(rr);
+			}
+		}
+		
+		if(option == RankingDivision1Activity.ORDER_POINTS) Collections.sort(al, new RankingDivision1Activity.ByPointsComparator(clickCounter));
+		else if(option == RankingDivision1Activity.ORDER_PLAYED) Collections.sort(al, new RankingDivision1Activity.ByPlayedComparator(clickCounter));
+		else if(option == RankingDivision1Activity.ORDER_WIN) Collections.sort(al, new RankingDivision1Activity.ByWinComparator(clickCounter));
+		else if(option == RankingDivision1Activity.ORDER_DRAW) Collections.sort(al, new RankingDivision1Activity.ByDrawComparator(clickCounter));
+		else if(option == RankingDivision1Activity.ORDER_LOSE) Collections.sort(al, new RankingDivision1Activity.ByLoseComparator(clickCounter));
+		else if(option == RankingDivision1Activity.ORDER_GOALSPRO) Collections.sort(al, new RankingDivision1Activity.ByGoalsProComparator(clickCounter));
+		else if(option == RankingDivision1Activity.ORDER_GOALSAGAINST) Collections.sort(al, new RankingDivision1Activity.ByGoalsAgainstComparator(clickCounter));
+		else if(option == RankingDivision1Activity.ORDER_BALANCE) Collections.sort(al, new RankingDivision1Activity.ByBalanceComparator(clickCounter));
+		
+		populateTableLayout(al);
+	}
+	
+	private void populateTableLayout(ArrayList<RankingRow> al){
+		tl.removeAllViews();
+		for (RankingRow rankingRow : al) {
+			tl.addView(rankingRow.getTablerow());
+		}
+		tl.invalidate();
+	}
+	
+	private class UpdateRankingTask extends AsyncTask<Void, Void, TreeMap<String, Club>> {
+		private Context c;
+		
+		public UpdateRankingTask(Context c){
+			this.setContext(c);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			rl_data.setVisibility(View.GONE);
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected TreeMap<String, Club> doInBackground(Void... arg0) {
+			try{
+				return HTMLManager.getRanking(clubs, Club.SEGUNDADIVISAO);
+			}catch(Exception e){
+				Log.e("bras2012", e.toString(), e);
+				return null;
+			}catch(OutOfMemoryError e){
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(TreeMap<String, Club> result) {
+			if(result != null){
+				for (Club c : clubs.values()) {
+					if(c.getDivision() == Club.PRIMEIRADIVISAO) result.put(c.getName(), c);
+				}
+				clubs = result;
+				FileHandler.saveBackup(getContext(), FileHandler.CLUBS, result);
+				orderTable(RankingDivision1Activity.ORDER_POINTS);
+				Toast.makeText(getContext(), "Dados atualizados", Toast.LENGTH_SHORT).show();
+				
+			}else{
+				Toast.makeText(getContext(), "Não foi possível atualizar os dados. Tente novamente.", Toast.LENGTH_SHORT).show();
+			}
+			rl_loading.setVisibility(View.GONE);
+			rl_data.setVisibility(View.VISIBLE);
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+	
+}

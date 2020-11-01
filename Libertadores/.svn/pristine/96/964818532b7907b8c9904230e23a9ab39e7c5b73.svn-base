@@ -1,0 +1,242 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.taptwo.android.widget.CircleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.widget.ImageView;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.StandingsActivityViewFlowAdapter;
+import br.com.zynger.libertadores.adapters.StandingsAdapter;
+import br.com.zynger.libertadores.adapters.StandingsExpandableListViewAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetAllMatchesTask;
+import br.com.zynger.libertadores.asynctasks.GetStandingsStatsTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.data.GroupsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Group;
+import br.com.zynger.libertadores.model.Match;
+import br.com.zynger.libertadores.util.GroupEnum;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.util.JsonUtil;
+import br.com.zynger.libertadores.view.DataUpdateLayout;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.view.SwipeHintLayout;
+import br.com.zynger.libertadores.view.UpdateImageView;
+import br.com.zynger.libertadores.web.MatchesParser;
+import br.com.zynger.libertadores.web.StandingsParser;
+
+public class StandingsActivity extends Activity implements AsyncTaskListener {
+
+	public final static String PREF_SHOWSWIPEHINT = "standingsactivity_swipehint";
+	
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	private GroupsDB groupsDB;
+	private InternalStorageHandler internalStorage;
+	
+	private ViewFlow viewFlow;
+	private CircleFlowIndicator indic;
+	
+	private StandingsParser standingsParser;
+	private MatchesParser matchesParser;
+	
+	private SharedPreferences sharedPrefs;
+	
+	private SwipeHintLayout swipehintlayout;
+	private DataUpdateLayout dul_update;
+	private HelveticaTextView tv_title;
+	private UpdateImageView uiv_update;
+	private ImageView iv_calculator;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.standingsactivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		groupsDB = GroupsDB.getSingletonObject(clubsDB);
+		internalStorage = new InternalStorageHandler(this);
+		
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		standingsParser = new StandingsParser(clubs, groupsDB.getGroups(), internalStorage);
+		matchesParser = new MatchesParser(this, clubs);
+		
+		loadViews();
+		setClickListeners();
+		
+		if(sharedPrefs.getBoolean("cb_actsupdates", false)) uiv_update.performClick();
+        else setAdapterFromClubs();
+	}
+
+	private void loadViews() {
+		tv_title = (HelveticaTextView) findViewById(R.standingsactivity.titlebar_tvtitle);
+		iv_calculator = (ImageView) findViewById(R.standingsactivity.titlebar_ivcalculator);
+		uiv_update = (UpdateImageView) findViewById(R.standingsactivity.titlebar_ivupdate);
+		
+		swipehintlayout = (SwipeHintLayout) findViewById(R.standingsactivity.ll_swipehint);
+		if(sharedPrefs.getBoolean(PREF_SHOWSWIPEHINT, true)
+				|| sharedPrefs.getBoolean("cb_showhints", false)){
+			swipehintlayout.setViewToShowWhenHidden(findViewById(R.standingsactivity.ll_ad), true);
+			swipehintlayout.setPrefKey(PREF_SHOWSWIPEHINT);
+			swipehintlayout.setText(getString(R.string.standingsactivity_swipehint));
+			swipehintlayout.setImageForGesture(SwipeHintLayout.GESTURE_SWIPE);
+		}else swipehintlayout.hide();
+		
+		tv_title.setText(getString(R.string.homedashboard_standings).toUpperCase());
+		
+		viewFlow = (ViewFlow) findViewById(R.standingsactivity.viewflow);
+		viewFlow.setAdapter(new StandingsActivityViewFlowAdapter(this));
+		indic = (CircleFlowIndicator) findViewById(R.standingsactivity.viewflowindicator);
+		viewFlow.setFlowIndicator(indic);
+		
+		dul_update = (DataUpdateLayout) findViewById(R.standingsactivity.dul_update);
+		dul_update.addViewToToggle(viewFlow);
+		dul_update.addViewToToggle(indic);
+	}
+	
+	private void setClickListeners() {
+		uiv_update.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uiv_update.rotateView();
+                Calendar lastMatchesUpdate =
+        				(Calendar) internalStorage.openBackup(InternalStorageHandler.LAST_MATCHES_UPDATE);
+                
+                if(isOneHourAway(lastMatchesUpdate)){
+                	new GetAllMatchesTask(matchesParser, StandingsActivity.this).execute();
+                }else{
+                	new GetStandingsStatsTask(v.getContext(), standingsParser,
+                			StandingsActivity.this).execute();
+                }
+            }
+        });
+		
+		iv_calculator.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				Toast.makeText(v.getContext(),
+						getString(R.string.roundofsixteensimulatoractivity_title),
+						Toast.LENGTH_SHORT).show();
+				return true;
+			}
+		});
+		
+		iv_calculator.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), RoundOfSixteenSimulatorActivity.class);
+				startActivity(it);
+			}
+		});
+	}
+	
+	private boolean isOneHourAway(Calendar saved) {
+		if(saved == null) return true;
+		
+		Calendar now = Calendar.getInstance();
+		
+		long diff = now.getTimeInMillis() - saved.getTimeInMillis();
+		//long diffSeconds = diff / 1000 % 60;
+		//long diffMinutes = diff / (60 * 1000) % 60;
+        long diffHours = diff / (60 * 60 * 1000);
+        
+        if(diffHours >= 1) return true;
+        else return false;
+	}
+	
+	private void setAdapterFromClubs() {
+		ArrayList<Club> listClubs = new ArrayList<Club>();
+		for (Club club : clubs.values()) {
+			if(club.getGroup() != null) listClubs.add(club);
+		}
+		ArrayList<Group> groups = new ArrayList<Group>(groupsDB.getGroups().values());
+		
+		StandingsActivityViewFlowAdapter adapter = (StandingsActivityViewFlowAdapter) viewFlow.getAdapter();
+		adapter.setListViewAdapter(new StandingsAdapter(this, listClubs));
+		
+		StandingsExpandableListViewAdapter exAdpt = new StandingsExpandableListViewAdapter(this, groups);
+		adapter.setExpandableListViewAdapter(exAdpt);
+	}
+
+	@Override
+	public void preExecution() {
+		dul_update.show();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		if(result instanceof HashMap<?, ?>){
+			HashMap<Integer, ArrayList<Match>> matches =
+					(HashMap<Integer, ArrayList<Match>>) result;
+			
+			Integer[] keys = { MatchesListActivity.PHASE_PRELIB, MatchesListActivity.PHASE_ROUNDOF16,
+					MatchesListActivity.PHASE_QUARTERFINAL, MatchesListActivity.PHASE_SEMIFINAL,
+					MatchesListActivity.PHASE_FINAL };
+			
+			for (Integer phase : keys) {
+				saveMatches(phase, matches.get(phase));
+			}
+			
+			saveMatches(GroupEnum.GROUP_1, matches.get(1));
+			saveMatches(GroupEnum.GROUP_2, matches.get(2));
+			saveMatches(GroupEnum.GROUP_3, matches.get(3));
+			saveMatches(GroupEnum.GROUP_4, matches.get(4));
+			saveMatches(GroupEnum.GROUP_5, matches.get(5));
+			saveMatches(GroupEnum.GROUP_6, matches.get(6));
+			saveMatches(GroupEnum.GROUP_7, matches.get(7));
+			saveMatches(GroupEnum.GROUP_8, matches.get(8));
+			
+			internalStorage.saveBackup(this, InternalStorageHandler.LAST_MATCHES_UPDATE, Calendar.getInstance());
+			
+			Toast.makeText(this, getString(R.string.success_datadownload), Toast.LENGTH_SHORT).show();
+			
+			new GetStandingsStatsTask(this, standingsParser, this).execute();
+		}else{
+			JSONObject json = JsonUtil.createStandingsJson(clubs);
+			internalStorage.saveBackup(this, InternalStorageHandler.STANDINGS_JSON, json.toString());
+			
+			Toast.makeText(this, getString(R.string.standingsactivity_warning_updatematches),
+					Toast.LENGTH_LONG).show();
+		}
+		
+		dul_update.hide();
+		setAdapterFromClubs();
+	}
+	
+	private void saveMatches(Integer phase, ArrayList<Match> matches) {
+		JSONArray json = JsonUtil.createMatchesJson(matches);
+		internalStorage.saveMatchesArray(MatchesListActivity.PREFIX_PHASE + phase.toString(), json.toString());
+	}
+	
+	private void saveMatches(GroupEnum gEnum, ArrayList<Match> matches){
+		JSONArray json = JsonUtil.createMatchesJson(matches);
+		internalStorage.saveMatchesArray(gEnum.toString(), json.toString());
+	}
+
+	@Override
+	public void onFail(String message) {
+		setAdapterFromClubs();
+		dul_update.hide();
+		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+	}
+	
+}

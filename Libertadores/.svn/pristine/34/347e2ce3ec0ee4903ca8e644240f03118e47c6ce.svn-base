@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white" >
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_above="@+standingsactivity/ll_ad"
+	    android:orientation="vertical" >
+	    
+	    <Button 
+	        android:id="@+standingsactivity/bt_execute"
+	        android:text="Execute!"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"/>
+	    
+	    <include layout="@layout/relativelayout_loading"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:id="@+standingsactivity/rl_loading"/>
+	    
+	    <ListView
+			android:layout_height="0dp"
+			android:layout_width="fill_parent"
+			android:id="@+id/android:list"
+			android:paddingLeft="3dp"
+			android:paddingRight="3dp"
+			android:cacheColorHint="#00000000"
+			android:divider="#20000000"
+			android:background="@null"
+			android:layout_weight="1"/>
+	
+	</LinearLayout>
+    
+    <include layout="@layout/admob_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+standingsactivity/ll_ad"
+        android:layout_alignParentBottom="true"
+		android:gravity="bottom|center_horizontal"/>
+</RelativeLayout>

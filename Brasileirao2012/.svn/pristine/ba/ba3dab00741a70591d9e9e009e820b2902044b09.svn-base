@@ -1,0 +1,131 @@
+package br.com.zynger.brasileirao2012.util;
+
+import java.util.concurrent.ExecutionException;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+
+import com.easy.facebook.android.apicall.GraphApi;
+import com.easy.facebook.android.error.EasyFacebookError;
+import com.easy.facebook.android.facebook.FBLoginManager;
+import com.easy.facebook.android.facebook.Facebook;
+import com.easy.facebook.android.facebook.LoginListener;
+
+public class FacebookConnect extends Activity implements LoginListener {
+
+	public static final String INTENT_MESSAGE = "FACEBOOK_MESSAGE";
+	
+	private FBLoginManager fbManager;
+
+	private String message = null;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		message = getIntent().getStringExtra(INTENT_MESSAGE);
+		
+		if(ConnectionHelper.isConnected(this)){			
+			shareFacebook();
+		}else{
+			Toast.makeText(this,
+					getString(R.string.message_verifyconnection),
+					Toast.LENGTH_SHORT).show();
+			finish();
+		}
+	}
+
+	public void shareFacebook() {
+		String permissions[] = {"read_stream", "publish_stream", "offline_access"};		
+				
+		fbManager = new FBLoginManager(this,
+				0, getResources().getString(R.string.facebook_id), permissions);
+
+		if (fbManager.existsSavedFacebook()) fbManager.loadFacebook();
+		else fbManager.login();
+	}
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if(data == null) finish();
+    	new LoginSuccessOnActivityResultTask(data).execute();
+    }
+    
+	public void loginFail() {
+		fbManager.displayToast(getString(R.string.facebookconnect_loginfail));
+	}
+	
+	public void logoutSuccess() {
+		fbManager.displayToast(getString(R.string.facebookconnect_logoutsuccess));
+	}
+
+	public void loginSuccess(Facebook facebook) {
+		try {
+			new LoginSuccessTask(facebook).execute().get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		finish();
+	}
+	
+	private class LoginSuccessTask extends AsyncTask<Void, Void, Boolean> {
+		private Facebook facebook;
+		
+		public LoginSuccessTask(Facebook facebook){
+			this.facebook = facebook;
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			GraphApi graphApi = new GraphApi(facebook);
+
+			String response = "";
+			
+			try {
+				if(message != null){
+					response = graphApi.setStatus(message,
+							getString(R.string.facebookconnect_graphapistatus));
+					return true;
+				}
+			} catch (EasyFacebookError e) {
+				e.printStackTrace();
+				return false;
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+				return false;
+			}
+			
+			Log.d(Constants.TAG, response);
+			return false;
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean success) {
+			if(success) fbManager.displayToast(
+					getString(R.string.facebookconnect_messagesent));
+			else fbManager.displayToast(
+					getString(R.string.facebookconnect_messagefail));
+			super.onPostExecute(success);
+		}
+	}
+	
+	private class LoginSuccessOnActivityResultTask extends AsyncTask<Void, Void, Void> {
+		private Intent data;
+		
+		public LoginSuccessOnActivityResultTask(Intent data){
+			this.data = data;
+		}
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			if(data != null) fbManager.loginSuccess(data);
+			return null;
+		}
+	}
+}

@@ -1,0 +1,137 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.util.WebDatabaseMapper;
+
+public class StrikersREST {
+	
+	private final String STRIKERS_DIVISION_A_URL =
+			"http://globoesporte.globo.com/futebol/brasileirao-serie-a/#/artilharia";
+			//"http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2012/serie-a/artilheiros.jhtm";
+	private final String STRIKERS_DIVISION_B_URL =
+			"http://globoesporte.globo.com/futebol/brasileirao-serie-b/#/artilharia";
+	//"http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2012/serie-b/artilheiros.jhtm";
+
+	private static final int STRIKER_MINGOALS = 1; //TODO
+	
+	private WebDatabaseMapper webDatabaseMapper;
+	
+	public StrikersREST(TreeMap<String, Club> clubs) {
+		this.webDatabaseMapper = new WebDatabaseMapper(clubs, WebDatabaseMapper.SOURCE_STRIKERS);
+	}
+	
+	public ArrayList<Striker> getStrikers(Division division){
+		ArrayList<Striker> al = new ArrayList<Striker>();
+		try{
+			String url = division == Division.FIRSTDIVISION ? STRIKERS_DIVISION_A_URL : STRIKERS_DIVISION_B_URL;
+			Document doc = Jsoup.connect(url).get();
+			
+			Element listaArtilharia = doc.getElementsByClass("lista-artilharia").get(0);
+			
+			int goals = 0;
+			for (Element child : listaArtilharia.children()) {
+				try{					
+					Element header = child.getElementsByClass("golsTotal").get(0);
+					goals = Integer.valueOf(header.text().trim());
+					
+					if(goals < STRIKER_MINGOALS) break;
+					
+					Elements listaArtilheiro = child.getElementsByClass("lista-artilheiro");
+					for (Element divArtilheiro : listaArtilheiro) {
+						String name = divArtilheiro.getElementsByTag("h3").text().trim();
+						String clubName = divArtilheiro.getElementsByClass("escudo").get(0).text();
+						Club club = webDatabaseMapper.getClubByName(clubName);
+						if(club != null && goals > 0) al.add(new Striker(name, club, goals));
+					}					
+				}catch(ArrayIndexOutOfBoundsException aiob){
+					continue;
+				}catch(NumberFormatException nfe){
+					continue;
+				}
+			}			
+		}catch(IOException ioexc){
+			ioexc.printStackTrace();
+		}
+		
+		return al;
+	}
+
+	/*public ArrayList<Striker> getStrikers(Division division){
+		ArrayList<Striker> al = new ArrayList<Striker>();
+		
+		try{
+			Document doc = null;
+			if(division == Division.FIRSTDIVISION) doc = Jsoup.connect(STRIKERS_DIVISION_A_URL).get();
+			else doc = Jsoup.connect(STRIKERS_DIVISION_B_URL).get();
+			
+			Element table = doc.getElementById("marcados");
+			Element tbody = table.getElementsByTag("tbody").get(0);
+			Elements tr = tbody.getElementsByTag("tr");
+			
+			int goals = 0;
+			String team = null;
+			Element names = null;
+			
+			for (Element el : tr) {
+				Elements td = el.getElementsByTag("td");
+				for (Element el_td : td) {
+					if(el_td.className().equals("col2")) continue;
+					else if(el_td.className().equals("col3")) team = el_td.html();
+					else if(el_td.className().equals("col4")) names = el_td;
+					else if(el_td.className().equals("col5")) goals = Integer.parseInt(el_td.html());
+				}
+				if(goals == STRIKER_MINGOALS-1) break;
+				
+				addStrikersToArray(al, names, team, goals);
+			}
+		}catch(IOException ioexc){ }
+		
+		return al;
+	}
+	
+	private void addStrikersToArray(ArrayList<Striker> al, Element td_names, String team, int goals) {
+		for (Element striker : td_names.getElementsByTag("p")) {			
+			team = team.replaceAll("&eacute;", "é");
+			team = team.replaceAll("&oacute;", "ó");
+			team = team.replaceAll("&iacute;", "í");
+			team = team.replaceAll("&uacute;", "ú");
+			team = team.replaceAll("&aacute;", "á");
+			team = team.replaceAll("&atilde;", "ã");
+			team = team.replaceAll("&ecirc;", "ê");
+			
+			Club club = this.webDatabaseMapper.getClubByName(team);
+			if(null != club) al.add(new Striker(striker.text(), club, goals));
+		}
+	}*/
+	
+	/*private static final String URL_WS = "http://aqueous-oasis-8080.herokuapp.com/services/";
+
+	public ArrayList<Striker> getStrikers(int division) throws Exception {
+		String[] resposta = new WebServiceClient().get(URL_WS + "strikers/Gdivision=" + division + "/");
+		
+		if (resposta[0].equals("200")) {
+			ArrayList<Striker> alStrikers = new ArrayList<Striker>();
+			JSONArray array = new JSONArray(resposta[1]);
+			
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				alStrikers.add(new Striker(obj.getString("name"), obj.getString("team"), obj.getInt("goals")));
+			}
+
+			return alStrikers;
+		} else {
+			throw new Exception(resposta[1]);
+		}
+	}*/
+}

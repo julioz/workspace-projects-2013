@@ -1,0 +1,165 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.GetRealTimeMatchesTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+import br.com.zynger.brasileirao2012.view.CustomActionBar;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+import br.com.zynger.brasileirao2012.view.MatchViewLayout;
+
+public class RealTimeMatchesActivity extends Activity implements AsyncTaskListener {
+	
+	private static final String SERVICE_PATH = "br.com.zynger.brasileirao2012.RealTimeMatchService";
+	public final static String INTENT_DIVISION = "DIVISION";
+	
+	private TreeMap<String, Club> clubs;
+	private Division division;
+	private boolean showRanking;
+	
+	private CustomActionBar actionbar;
+	private LinearLayout ll_rtm;
+	private ScrollView sv_matches;
+	private DataUpdateLayout dul_loading;
+	
+	private Timer timer;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.realtimematchesactivity);
+		
+		showRanking = PreferenceEditor.shouldShowRealTimeRanking(this);
+		Division intentDivision = (Division) getIntent().getSerializableExtra(INTENT_DIVISION);
+		clubs = ClubsDB.getInstance(this).getClubs();
+		
+		loadViews();
+		
+		this.division = (intentDivision == null ? Division.FIRSTDIVISION : intentDivision);
+		actionbar.setDivisionText(division.getStringNotation());
+		
+		actionbar.setDivisionOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Division oppDivision = division.getOppositeDivision();
+				division = oppDivision;
+				actionbar.setDivisionText(oppDivision.getStringNotation());
+				new GetRealTimeMatchesTask(v.getContext(),
+						division, clubs, RealTimeMatchesActivity.this).execute();
+			}
+		});
+	}
+	
+	private void loadViews() {
+		actionbar = (CustomActionBar) findViewById(R.realtimematchesactivity.actionbar);
+		ll_rtm = (LinearLayout) findViewById(R.realtimematchesactivity.ll_matches);
+		sv_matches = (ScrollView) findViewById(R.realtimematchesactivity.sv_matches);
+		dul_loading = (DataUpdateLayout) findViewById(R.realtimematchesactivity.dul_loading);
+		dul_loading.addViewToToggle(sv_matches);
+	}
+	
+	@Override
+	protected void onResume() {
+		if(timer != null) timer.cancel();
+		startRecorrentTask();
+		super.onResume();
+	}
+	
+	private void startRecorrentTask() {
+		TimerTask doAsynchronousTask;
+		final Handler handler = new Handler();
+		timer = new Timer();
+
+		doAsynchronousTask = new TimerTask() {
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					public void run() {
+						new GetRealTimeMatchesTask(RealTimeMatchesActivity.this,
+								division, clubs,
+								RealTimeMatchesActivity.this).execute();
+					}
+				});
+			}
+		};
+		
+		String strInterval = PreferenceEditor.getRealTimeUpdateInterval(this);
+		int interval = Integer.parseInt(strInterval);
+		
+		timer.schedule(doAsynchronousTask, 0, interval);
+	}
+	
+	@Override
+	protected void onStop() {
+		if(timer != null) timer.cancel();
+		super.onStop();
+	}
+
+	private void populateLayout(ArrayList<RealTimeMatch> matches){
+		Collections.sort(matches, new Comparator<RealTimeMatch>() {
+			@Override
+			public int compare(RealTimeMatch lhs, RealTimeMatch rhs) {
+				try{								
+					return lhs.getDate().compareTo(rhs.getDate());
+				}catch(NullPointerException npe){ //se uma das partidas nao tiver calendario (null)
+					return 0;
+				}
+			}
+		});
+		ll_rtm.removeAllViews();
+		for (RealTimeMatch rtm : matches) {
+			ll_rtm.addView(new MatchViewLayout(this, rtm.getHome(), rtm.getAway(), rtm, showRanking));
+		}
+	}
+	
+	public static boolean isMyServiceRunning(Context context) {
+	    ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	        if (SERVICE_PATH.equals(service.service.getClassName())) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+
+	@Override
+	public void preExecution() {
+		dul_loading.showFullLayout();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		ArrayList<RealTimeMatch> matches = (ArrayList<RealTimeMatch>) result;
+		
+		if(matches.size() > 0){
+			populateLayout(matches);
+			dul_loading.hide();
+		}else dul_loading.setOnlyText(getString(R.string.realtimematchesactivity_nomatchestoshow));
+	}
+
+	@Override
+	public void onFail(String message) {
+		dul_loading.setOnlyText(message);
+	}
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="Internet">
+		<CheckBoxPreference
+		    android:key="cb_updatecheck"
+		    android:title="Checar atualizações ao iniciar"
+		    android:summary="Procura por atualizações do aplicativo no Google Play"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_imgsdownload"
+		    android:title="Exibir imagens da internet"
+		    android:summary="Download de imagens consome banda de internet"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_actsupdates"
+		    android:title="Atualizar sempre"
+		    android:summary="Atualiza automaticamente todos os dados ao abrir cada tela"
+		    android:defaultValue="false"/>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Tempo real">
+		<ListPreference
+		    android:key="list_realtimeinterval"
+		    android:title="Intervalo de atualização"
+		    android:entries="@array/preferenceRealTimeIntervalEntries"
+  			android:entryValues="@array/preferenceRealTimeIntervalValues"/>
+  		<CheckBoxPreference
+		    android:key="cb_realtimevibrate"
+		    android:title="Vibrar"
+		    android:summary="Notificação somente para dispositivos com esta capacidade"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_realtimeaudio"
+		    android:title="Áudio"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_realtimeranking"
+		    android:title="Exibir colocação dos clubes"
+		    android:defaultValue="false"/>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Atualizações">
+		<Preference
+		    android:key="pref_lastupdateall"
+		    android:title="Última atualização geral"
+		    android:summary="Ainda não realizada"/>
+	</PreferenceCategory>
+</PreferenceScreen>

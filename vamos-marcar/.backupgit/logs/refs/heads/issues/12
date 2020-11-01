@@ -1,0 +1,11 @@
+0000000000000000000000000000000000000000 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380398759 -0300	branch: Created from HEAD
+56eeca49e250a61bb69689defc0fbeab62fd4095 aef99508eef6e867cd45e808446fd75f41476db3 Júlio Zynger <julioz92@gmail.com> 1380481079 -0300	commit: Adds NewEventActivity with some fields and FlowLayout.
+aef99508eef6e867cd45e808446fd75f41476db3 e87c66d74a6463c3d8ccdcaefb56fdc5c83371f4 Júlio Zynger <julioz92@gmail.com> 1380483025 -0300	commit: Uncouple FriendPicker and LocationPicker by adding interfaces.
+e87c66d74a6463c3d8ccdcaefb56fdc5c83371f4 0cb15f13f4dd225e8e954e3d4e0e0d73a86de2bc Júlio Zynger <julioz92@gmail.com> 1380515831 -0300	commit: Adds ImageView subclass to download static Google Maps images.
+0cb15f13f4dd225e8e954e3d4e0e0d73a86de2bc 3b12219f8c8d0bf4974e359a2dca4ba7bb87197b Júlio Zynger <julioz92@gmail.com> 1380516802 -0300	commit: LocationPicker will need to pass the Address' information in a textual way, besides the location in LatLng.
+3b12219f8c8d0bf4974e359a2dca4ba7bb87197b c4072112a3e0aec76e99b80c924743c40d5f22f6 Júlio Zynger <julioz92@gmail.com> 1380753603 -0300	merge issues/13: Fast-forward
+c4072112a3e0aec76e99b80c924743c40d5f22f6 3d1a23d6ebf02df3984ff268036fdbbdca624500 Júlio Zynger <julioz92@gmail.com> 1380754123 -0300	commit: Adds a FlowRadioGroup to the right location in NewEventActivity
+3d1a23d6ebf02df3984ff268036fdbbdca624500 8f3a4cb646374c8d9a4ba6eba7f0e8a09971be63 Júlio Zynger <julioz92@gmail.com> 1380772490 -0300	merge issues/15: Fast-forward
+8f3a4cb646374c8d9a4ba6eba7f0e8a09971be63 d644a119815fe756d51591886f147e2a9e3ffb6d Júlio Zynger <julioz92@gmail.com> 1380815337 -0300	commit: Adds validation to new events title and nice little image to when there are no friends selected
+d644a119815fe756d51591886f147e2a9e3ffb6d 53eb74c7b34b718ff31f3b8b04b74d2fd30e4160 Júlio Zynger <julioz92@gmail.com> 1380828391 -0300	commit: Adds new TODOs
+53eb74c7b34b718ff31f3b8b04b74d2fd30e4160 8166e576ed7ba83b9829bdf91f9f4d32c1c7866e Júlio Zynger <julioz92@gmail.com> 1380945676 -0300	commit: Adds public/private audiences to events and related RadioGroup on NewEventActivity

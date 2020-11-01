@@ -1,0 +1,126 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.model.Striker;
+import br.com.zynger.libertadores.view.ExpandAnimation;
+
+public class StrikersAdapter extends ArrayAdapter<Striker> implements OnClickListener {
+
+	private final LayoutInflater mInflater;
+	private static final int LAYOUTRESOURCEID = R.layout.strikerrow;
+	private ArrayList<Striker> objects;
+	
+	public StrikersAdapter(Context context, ArrayList<Striker> objects) {
+		super(context, LAYOUTRESOURCEID, objects);
+		this.mInflater = LayoutInflater.from(context);
+		this.objects = objects;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public Striker getItem(int position) {
+		return objects.get(position);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+        StrikerRowHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+            
+            holder = new StrikerRowHolder();
+            holder.tvStrikerName = (TextView) row.findViewById(R.strikerrow.tv_name_striker);
+            holder.ivClubBadge = (ImageView) row.findViewById(R.strikerrow.iv_badge);
+            holder.tvClubName = (TextView) row.findViewById(R.strikerrow.tv_name_club);
+            holder.tvGoalsMove = (TextView) row.findViewById(R.strikerrow.tv_goals_move);
+            holder.tvGoalsHeader = (TextView) row.findViewById(R.strikerrow.tv_goals_header);
+            holder.tvGoalsFoul = (TextView) row.findViewById(R.strikerrow.tv_goals_foul);
+            holder.tvGoalsPenalty = (TextView) row.findViewById(R.strikerrow.tv_goals_penalty);
+            holder.tvGoalsTotal = (TextView) row.findViewById(R.strikerrow.tv_goals_total);
+            
+            holder.toolbar = (LinearLayout) row.findViewById(R.strikerrow.toolbar);
+            
+            row.setTag(holder);
+        }else{
+            holder = (StrikerRowHolder) row.getTag();
+        }
+        
+        row.setClickable(true);
+        row.setFocusable(true);
+        row.setOnClickListener(this);
+        
+        if(View.VISIBLE == holder.toolbar.getVisibility()) showDetailsToolbar(row);
+
+        Striker striker = getItem(position);
+
+        int badgeRes = striker.getClub().getBadgeResource(getContext());
+        String clubName = striker.getClub().getName().toUpperCase();
+        
+        holder.tvStrikerName.setText(striker.getName());
+        holder.ivClubBadge.setImageResource(badgeRes);
+        holder.tvClubName.setText(clubName);
+        holder.tvGoalsMove.setText(String.valueOf(striker.getMove()));
+        holder.tvGoalsHeader.setText(String.valueOf(striker.getHeader()));
+        holder.tvGoalsFoul.setText(String.valueOf(striker.getFoul()));
+        holder.tvGoalsPenalty.setText(String.valueOf(striker.getPenalty()));
+        holder.tvGoalsTotal.setText(String.valueOf(striker.getTotalGoals()));
+
+        return row;
+	}
+	
+	private void showDetailsToolbar(View parent) {
+		View toolbar = parent.findViewById(R.strikerrow.toolbar);
+
+        // Criando a animacao de expansao para o item
+        ExpandAnimation expandAni = new ExpandAnimation(toolbar, 0);
+        
+        // Iniciar a animacao
+        toolbar.startAnimation(expandAni);
+	}
+	
+	private void showDetailsToolbar(View parent, int duration) {
+		View toolbar = parent.findViewById(R.strikerrow.toolbar);
+
+        // Criando a animacao de expansao para o item
+        ExpandAnimation expandAni = new ExpandAnimation(toolbar, duration);
+        
+        // Iniciar a animacao
+        toolbar.startAnimation(expandAni);
+	}
+
+	@Override
+	public void onClick(View v) {
+		showDetailsToolbar(v, 350);
+	}
+}
+
+class StrikerRowHolder
+{
+	TextView tvStrikerName;
+    ImageView ivClubBadge;
+    TextView tvClubName;
+    TextView tvGoalsMove;
+    TextView tvGoalsHeader;
+    TextView tvGoalsFoul;
+    TextView tvGoalsPenalty;
+    TextView tvGoalsTotal;
+    
+    View toolbar;
+}

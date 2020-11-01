@@ -1,0 +1,71 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Striker;
+
+public class StrikersListAdapter extends ArrayAdapter<Striker>{
+	private final static int LAYOUT_RESOURCE = R.layout.striker_row;
+	
+	private final LayoutInflater mInflater;
+	private ArrayList<Striker> objects;
+	
+	public StrikersListAdapter(Context context, ArrayList<Striker> objects) {
+		super(context, LAYOUT_RESOURCE, objects);
+		this.mInflater = LayoutInflater.from(context);
+		this.objects = objects;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	public ArrayList<Striker> getList() {
+		return objects;
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+		StrikerHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUT_RESOURCE, parent, false);
+            
+            holder = new StrikerHolder();
+            holder.badge = (ImageView) row.findViewById(R.strikerrow.badge);
+            holder.name = (TextView) row.findViewById(R.strikerrow.name);
+            holder.goals = (TextView) row.findViewById(R.strikerrow.goals);
+            holder.team = (TextView) row.findViewById(R.strikerrow.team);
+            
+            row.setTag(holder);
+        }else{
+            holder = (StrikerHolder) row.getTag();
+        }
+
+        Striker striker = getItem(position);
+
+        holder.badge.setImageResource(striker.getClub().getBadgeResource(getContext())); //TODO pode vir nulo para jogadores sem time
+        holder.name.setText(striker.getName());
+        holder.goals.setText(String.valueOf(striker.getGoals()));
+        holder.team.setText(striker.getClub().getName());
+
+        return row;
+	}
+}
+
+class StrikerHolder {
+	ImageView badge;
+	TextView name;
+	TextView goals;
+	TextView team;
+}

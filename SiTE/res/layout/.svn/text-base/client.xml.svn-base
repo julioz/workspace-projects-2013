@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:gravity="center"
+  android:orientation="vertical">
+  
+  	<LinearLayout
+  		android:layout_width="fill_parent"
+  		android:layout_height="32dp"
+  		android:background="#FF068ED4"
+  		android:orientation="horizontal">
+  		
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:text="Módulo Cliente"
+			android:textColor="#FFFFFFFF" 
+			android:gravity="center"
+			android:textSize="18dp"
+			android:textStyle="bold" />
+	  
+	</LinearLayout>
+	
+	<ScrollView
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:scrollbars="horizontal|vertical">
+	
+	<TableLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:background="#FFFFFFFF"
+	  android:padding="10dp">
+	  
+	  	<TableRow
+	  		android:layout_width="fill_parent"
+			android:layout_height="wrap_content" >
+	  	
+			<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:textColor="#FF000000"
+				android:textStyle="bold"
+				android:text="IP do Servidor:"/>
+	
+		</TableRow><TableRow
+	  		android:layout_width="fill_parent"
+			android:layout_height="wrap_content" >
+	
+			<EditText
+				android:id="@+id/server_ip"
+				android:hint="IP do Servidor"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:scrollHorizontally="true"
+				android:singleLine="true"/>
+		
+		</TableRow><TableRow
+	  		android:layout_width="fill_parent"
+			android:layout_height="wrap_content" >
+			
+			<Button
+				android:id="@+id/connect_phones"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:textColor="#FF000000"
+				android:textStyle="bold"
+				android:text="Conectar" />
+				
+		</TableRow>
+			
+	
+	
+	</TableLayout>
+	</ScrollView>
+</LinearLayout>

@@ -1,0 +1,54 @@
+package br.com.zynger.libertadores.asynctasks;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.os.AsyncTask;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.model.Match;
+import br.com.zynger.libertadores.web.MatchesParser;
+
+public class GetMatchesTask extends AsyncTask<Void, Void, ArrayList<Match>> {
+
+	private Context context;
+	private AsyncTaskListener listener;
+	private MatchesParser parser;
+	private Integer phase;
+	
+	public GetMatchesTask(MatchesParser parser, AsyncTaskListener listener){
+		this.parser = parser;
+		this.listener = listener;
+		this.context = parser.getContext();
+		this.phase = null;
+	}
+	
+	public GetMatchesTask(MatchesParser parser, AsyncTaskListener listener, Integer phase){
+		this.parser = parser;
+		this.listener = listener;
+		this.context = parser.getContext();
+		this.phase = phase;
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		listener.preExecution();
+		super.onPreExecute();
+	}
+
+	@Override
+	protected ArrayList<Match> doInBackground(Void... params) {
+		return parser.getMatches(phase);
+	}
+	
+	@Override
+	protected void onPostExecute(ArrayList<Match> result) {
+		if(result != null) listener.onComplete(result);
+		else listener.onFail(getContext().getString(R.string.error_datadownload));
+		super.onPostExecute(result);
+	}
+	
+	public Context getContext() {
+		return context;
+	}
+	
+}

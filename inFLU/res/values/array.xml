@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="preferenceWidgetsThemeEntries">
+		<item>Padrão</item>
+		<item>Glass</item>
+	</string-array>
+	<string-array name="preferenceWidgetsThemeValues">
+		<item>Padrão</item>
+		<item>Glass</item>
+	</string-array>
+</resources>

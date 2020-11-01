@@ -1,0 +1,689 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TreeMap;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+public class TableDivision1Activity extends TableActivity {
+
+	private static TreeMap<String, Club> clubs;
+	private static TreeMap<Integer, ArrayList<Match>> matches;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.table);
+		
+		clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		if(clubs == null){
+			clubs = HomeActivity.getMapClubs();
+			FileHandler.saveBackup(this, FileHandler.CLUBS, clubs);
+		}
+		matches = (TreeMap<Integer, ArrayList<Match>>) FileHandler.openBackup(this, FileHandler.MATCHES_A);
+		if(matches == null){
+			matches = matchesDatabase(clubs);
+			FileHandler.saveBackup(this, FileHandler.MATCHES_A, matches);
+			FileHandler.saveBackup(this, FileHandler.CLUBS, clubs);
+		}
+		
+		boolean usingViewFlow = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_highperformance", true);
+		setUsingViewFlow(usingViewFlow);
+		
+		loadViews();
+		
+		((TextView) findViewById(R.table.tv_actionbar_div)).setText("A");
+		findViewById(R.table.actionbar_ll_div).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+				Intent it = new Intent(v.getContext(), TableDivision2Activity.class);
+				startActivity(it);
+			}
+		});
+		
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_actsupdates", false)) new UpdateTableTask(this, getDivision()).execute();
+		else{
+			if(isUsingViewFlow()) new ShowTableUsingViewFlowTask(this, matches).execute();
+			else setTable(getRodBasedOnCalendar());
+		}
+	}
+	
+	@Override
+	protected int getRodBasedOnCalendar(){
+		Calendar c = Calendar.getInstance(); 
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		int month = c.get(Calendar.MONTH)+1;
+		
+		if(month < 5) return 1;
+		else if(month == 5){
+			if(day < 20 +1) return 1;
+			else if(day < 27 +1) return 2;
+			else return 3;
+		}else if (month == 6){
+			if(day < 6 +1) return 3;
+			else if(day < 10 +1) return 4;
+			else if(day < 17 +1) return 5;
+			else if(day < 24 +1) return 6;
+			else return 7;
+		}else if (month == 7){
+			if(day < 1 +1) return 7;
+			else if(day < 8 +1) return 8;
+			else if(day < 15 +1) return 9;
+			else if(day < 18 +1) return 10;
+			else if(day < 22 +1) return 11;
+			else if(day < 25 +1) return 12;
+			else if(day < 29 +1) return 13;
+			else return 14;
+		}else if (month == 8){
+			if(day < 1 +1) return 14;
+			else if(day < 5 +1) return 15;
+			else if(day < 12 +1) return 16;
+			else if(day < 15 +1) return 17;
+			else if(day < 19 +1) return 18;
+			else if(day < 26 +1) return 19;
+			else if(day < 29 +1) return 20;
+			else return 21;
+		}else if (month == 9){
+			if(day < 2 +1) return 21;
+			else if(day < 5 +1) return 22;
+			else if(day < 9 +1) return 23;
+			else if(day < 12 +1) return 24;
+			else if(day < 15 +1) return 25;
+			else if(day < 22 +1) return 26;
+			else if(day < 29 +1) return 27;
+			else return 28;
+		}else if (month == 10){
+			if(day < 4 +1) return 28;
+			else if(day < 10 +1) return 29;
+			else if(day < 13 +1) return 30;
+			else if(day < 17 +1) return 31;
+			else if(day < 20 +1) return 32;
+			else if(day < 25 +1) return 33;
+			else return 34;
+		}else if (month == 11){
+			if(day < 4 +1) return 34;
+			else if(day < 11 +1) return 35;
+			else if(day < 18 +1) return 36;
+			else if(day < 25 +1) return 37;
+			else return 38;
+		}else if (month == 12){
+			return 38;
+		}else return 1;
+	}
+	
+	public static TreeMap<Integer, ArrayList<Match>> matchesDatabase(TreeMap<String, Club> clubs){
+		TreeMap<Integer, ArrayList<Match>> tm = new TreeMap<Integer, ArrayList<Match>>();
+		
+		int rodada = 1;
+		
+		ArrayList<Match> rod1 = new ArrayList<Match>();
+		addMatch(clubs, rod1, "Palmeiras", "Portuguesa", "Pacaembu", 1, 1, rodada, 19, 5, 18, 30, true);
+		addMatch(clubs, rod1, "Sport", "Flamengo", "Ilha do Retiro", 1, 1, rodada, 19, 5, 18, 30, true);
+		addMatch(clubs, rod1, "Figueirense", "Náutico", "Orlando Scarpelli", 2, 1, rodada, 19, 5, 21, 00, true);
+		addMatch(clubs, rod1, "Botafogo", "São Paulo", "Engenhão", 4, 2, rodada, 20, 5, 16, 00, true);
+		addMatch(clubs, rod1, "Corinthians", "Fluminense", "Pacaembu", 0, 1, rodada, 20, 5, 16, 00, true);
+		addMatch(clubs, rod1, "Internacional", "Coritiba", "Beira-Rio", 2, 0, rodada, 20, 5, 16, 00, true);
+		addMatch(clubs, rod1, "Ponte Preta", "Atlético-MG", "Moisés Lucarelli", 0, 1, rodada, 20, 5, 16, 00, true);
+		addMatch(clubs, rod1, "Vasco", "Grêmio", "São Januário", 2, 1, rodada, 20, 5, 18, 30, true);
+		addMatch(clubs, rod1, "Cruzeiro", "Atlético-GO", "Parque do Sabiá", 0, 0, rodada, 20, 5, 18, 30, true);
+		addMatch(clubs, rod1, "Bahia", "Santos", "Pituaçu", 0, 0, rodada, 20, 5, 18, 30, true);
+		tm.put(rodada, rod1);
+		
+		rodada++;
+		ArrayList<Match> rod2 = new ArrayList<Match>();
+		addMatch(clubs, rod2, "Atlético-GO", "Ponte Preta", "Serra Dourada", 1, 1, rodada, 26, 5, 18, 30, true);
+		addMatch(clubs, rod2, "Flamengo", "Internacional", "Engenhão", 3, 3, rodada, 26, 5, 18, 30, true);
+		addMatch(clubs, rod2, "Portuguesa", "Vasco", "Canindé", 0, 1, rodada, 26, 5, 18, 30, true);
+		addMatch(clubs, rod2, "Náutico", "Cruzeiro", "Aflitos", 0, 0, rodada, 26, 5, 21, 00, true);
+		addMatch(clubs, rod2, "Santos", "Sport", "Vila Belmiro", 0, 0, rodada, 27, 5, 16, 00, true);
+		addMatch(clubs, rod2, "São Paulo", "Bahia", "Morumbi", 1, 0, rodada, 27, 5, 16, 00, true);
+		addMatch(clubs, rod2, "Atlético-MG", "Corinthians", "Arena Independência", 1, 0, rodada, 27, 5, 16, 00, true);
+		addMatch(clubs, rod2, "Coritiba", "Botafogo", "Couto Pereira", 2, 3, rodada, 27, 5, 16, 00, true);
+		addMatch(clubs, rod2, "Fluminense", "Figueirense", "Engenhão", 2, 2, rodada, 27, 5, 18, 30, true);
+		addMatch(clubs, rod2, "Grêmio", "Palmeiras", "Olímpico", 1, 0, rodada, 27, 5, 18, 30, true);
+		tm.put(rodada, rod2);
+		
+		rodada++;
+		ArrayList<Match> rod3 = new ArrayList<Match>();
+		addMatch(clubs, rod3, "Atlético-GO", "Grêmio", "Serra Dourada", 0, 1, rodada, 6, 6, 19, 30, true);
+		addMatch(clubs, rod3, "Sport", "Palmeiras", "Ilha do Retiro", 2, 1, rodada, 6, 6, 19, 30, true);
+		addMatch(clubs, rod3, "Vasco", "Náutico", "São Januário", 4, 2, rodada, 6, 6, 20, 30, true);
+		addMatch(clubs, rod3, "Atlético-MG", "Bahia", "Arena Independência", 1, 1, rodada, 6, 6, 20, 30, true);
+		addMatch(clubs, rod3, "Coritiba", "Portuguesa", "Couto Pereira", 2, 0, rodada, 6, 6, 20, 30, true);
+		addMatch(clubs, rod3, "Internacional", "São Paulo", "Beira-Rio", 1, 0, rodada, 6, 6, 21, 50, true);
+		addMatch(clubs, rod3, "Santos", "Fluminense", "Vila Belmiro", 1, 1, rodada, 6, 6, 21, 50, true);
+		addMatch(clubs, rod3, "Ponte Preta", "Flamengo", "Moisés Lucarelli", 2, 2, rodada, 6, 6, 21, 50, true);
+		addMatch(clubs, rod3, "Corinthians", "Figueirense", "Pacaembu", 1, 1, rodada, 7, 6, 20, 30, true);
+		addMatch(clubs, rod3, "Botafogo", "Cruzeiro", "Engenhão", 2, 3, rodada, 7, 6, 20, 30, true);
+		tm.put(rodada, rod3);
+		
+		rodada++;
+		ArrayList<Match> rod4 = new ArrayList<Match>();
+		addMatch(clubs, rod4, "Flamengo", "Coritiba", "Engenhão", 3, 1, rodada, 9, 6, 18, 30, true);
+		addMatch(clubs, rod4, "Palmeiras", "Atlético-MG", "Pacaembu", 0, 1, rodada, 9, 6, 21, 00, true);
+		addMatch(clubs, rod4, "Portuguesa", "Atlético-GO", "Canindé", 2, 0, rodada, 10, 6, 16, 00, true);
+		addMatch(clubs, rod4, "Bahia", "Vasco", "Pituaçu", 1, 2, rodada, 10, 6, 17, 00, true);
+		addMatch(clubs, rod4, "Fluminense", "Internacional", "Engenhão", 0, 0, rodada, 10, 6, 17, 00, true);
+		addMatch(clubs, rod4, "Grêmio", "Corinthians", "Olímpico", 2, 0, rodada, 10, 6, 17, 00, true);
+		addMatch(clubs, rod4, "Figueirense", "Ponte Preta", "Orlando Scarpelli", 0, 0, rodada, 10, 6, 18, 30, true);
+		addMatch(clubs, rod4, "São Paulo", "Santos", "Morumbi", 1, 0, rodada, 10, 6, 18, 30, true);
+		addMatch(clubs, rod4, "Cruzeiro", "Sport", "Melão", 1, 0, rodada, 10, 6, 18, 30, true);
+		addMatch(clubs, rod4, "Náutico", "Botafogo", "Aflitos", 3, 2, rodada, 10, 6, 18, 30, true);
+		tm.put(rodada, rod4);
+		
+		rodada++;
+		ArrayList<Match> rod5 = new ArrayList<Match>();
+		addMatch(clubs, rod5, "Internacional", "Botafogo", "Beira-Rio", 1, 2, rodada, 16, 6, 18, 30, true);
+		addMatch(clubs, rod5, "Cruzeiro", "Figueirense", "Arena Independência", 1, 0, rodada, 16, 6, 18, 30, true);
+		addMatch(clubs, rod5, "Fluminense", "Portuguesa", "Engenhão", 4, 1, rodada, 16, 6, 21, 00, true);
+		addMatch(clubs, rod5, "Flamengo", "Santos", "Engenhão", 1, 0, rodada, 17, 6, 16, 00, true);
+		addMatch(clubs, rod5, "Palmeiras", "Vasco", "Arena Barueri", 1, 1, rodada, 17, 6, 16, 00, true);
+		addMatch(clubs, rod5, "São Paulo", "Atlético-MG", "Morumbi", 1, 0, rodada, 17, 6, 16, 00, true);
+		addMatch(clubs, rod5, "Bahia", "Sport", "Pituaçu", 2, 1, rodada, 17, 6, 16, 00, true);
+		addMatch(clubs, rod5, "Ponte Preta", "Corinthians", "Moisés Lucarelli", 1, 0, rodada, 17, 6, 18, 30, true);
+		addMatch(clubs, rod5, "Coritiba", "Atlético-GO", "Couto Pereira", 3, 0, rodada, 17, 6, 18, 30, true);
+		addMatch(clubs, rod5, "Náutico", "Grêmio", "Aflitos", 1, 0, rodada, 17, 6, 18, 30, true);
+		tm.put(rodada, rod5);
+		
+		rodada++;
+		ArrayList<Match> rod6 = new ArrayList<Match>();
+		addMatch(clubs, rod6, "Vasco", "Cruzeiro", "São Januário", 1, 3, rodada, 23, 6, 18, 30, true);
+		addMatch(clubs, rod6, "Portuguesa", "São Paulo", "Canindé", 1, 0, rodada, 23, 6, 18, 30, true);
+		addMatch(clubs, rod6, "Atlético-MG", "Náutico", "Arena Independência", 5, 1, rodada, 23, 6, 21, 00, true);
+		addMatch(clubs, rod6, "Corinthians", "Palmeiras", "Pacaembu", 2, 1, rodada, 24, 6, 16, 00, true);
+		addMatch(clubs, rod6, "Grêmio", "Flamengo", "Olímpico", 2, 0, rodada, 24, 6, 16, 00, true);
+		addMatch(clubs, rod6, "Figueirense", "Bahia", "Orlando Scarpelli", 1, 1, rodada, 24, 6, 16, 00, true);
+		addMatch(clubs, rod6, "Botafogo", "Ponte Preta", "Engenhão", 1, 2, rodada, 24, 6, 18, 30, true);
+		addMatch(clubs, rod6, "Santos", "Coritiba", "Vila Belmiro", 2, 2, rodada, 24, 6, 18, 30, true);
+		addMatch(clubs, rod6, "Sport", "Internacional", "Ilha do Retiro", 0, 2, rodada, 23, 6, 18, 30, true);
+		addMatch(clubs, rod6, "Atlético-GO", "Fluminense", "Serra Dourada", 1, 4, rodada, 24, 6, 18, 30, true);
+		tm.put(rodada, rod6);
+		
+		rodada++;
+		ArrayList<Match> rod7 = new ArrayList<Match>();
+		addMatch(clubs, rod7, "Náutico", "Fluminense", "Aflitos", 0, 2, rodada, 30, 6, 16, 20, true);
+		addMatch(clubs, rod7, "Cruzeiro", "São Paulo", "Arena Independência", 2, 3, rodada, 30, 6, 16, 20, true);
+		addMatch(clubs, rod7, "Vasco", "Ponte Preta", "São Januário", 3, 2, rodada, 30, 6, 18, 30, true);
+		addMatch(clubs, rod7, "Portuguesa", "Santos", "Canindé", 0, 0, rodada, 1, 7, 16, 00, true);
+		addMatch(clubs, rod7, "Coritiba", "Sport", "Couto Pereira", 2, 3, rodada, 1, 7, 16, 00, true);
+		addMatch(clubs, rod7, "Bahia", "Internacional", "Pituaçu", 1, 1, rodada, 1, 7, 16, 00, true);
+		addMatch(clubs, rod7, "Flamengo", "Atlético-GO", "Engenhão", 3, 2, rodada, 1, 7, 18, 30, true);
+		addMatch(clubs, rod7, "Palmeiras", "Figueirense", "Pacaembu", 3, 1, rodada, 1, 7, 18, 30, true);
+		addMatch(clubs, rod7, "Grêmio", "Atlético-MG", "Olímpico", 0, 1, rodada, 1, 7, 18, 30, true);
+		addMatch(clubs, rod7, "Corinthians", "Botafogo", "Pacaembu", 1, 3, rodada, 11, 7, 19, 30, true);
+		tm.put(rodada, rod7);
+		
+		rodada++;
+		ArrayList<Match> rod8 = new ArrayList<Match>();
+		addMatch(clubs, rod8, "Botafogo", "Bahia", "Engenhão", 3, 0, rodada, 7, 7, 18, 30, true);
+		addMatch(clubs, rod8, "Internacional", "Cruzeiro", "Beira-Rio", 2, 1, rodada, 7, 7, 18, 30, true);
+		addMatch(clubs, rod8, "Atlético-GO", "Náutico", "Serra Dourada", 0, 1, rodada, 7, 7, 21, 00, true);
+		addMatch(clubs, rod8, "Fluminense", "Flamengo", "Engenhão", 1, 0, rodada, 8, 7, 16, 00, true);
+		addMatch(clubs, rod8, "Santos", "Grêmio", "Vila Belmiro", 4, 2, rodada, 8, 7, 16, 00, true);
+		addMatch(clubs, rod8, "São Paulo", "Coritiba", "Morumbi", 3, 1, rodada, 8, 7, 16, 00, true);
+		addMatch(clubs, rod8, "Figueirense", "Vasco", "Orlando Scarpelli", 1, 1, rodada, 8, 7, 16, 00, true);
+		addMatch(clubs, rod8, "Ponte Preta", "Palmeiras", "Moisés Lucarelli", 1, 0, rodada, 8, 7, 18, 30, true);
+		addMatch(clubs, rod8, "Atlético-MG", "Portuguesa", "Arena Independência", 2, 0, rodada, 8, 7, 18, 30, true);
+		addMatch(clubs, rod8, "Sport", "Corinthians", "Ilha do Retiro", 1, 1, rodada, 8, 7, 18, 30, true);
+		tm.put(rodada, rod8);
+		
+		rodada++;
+		ArrayList<Match> rod9 = new ArrayList<Match>();
+		addMatch(clubs, rod9, "Corinthians", "Náutico", "Pacaembu", 2, 1, rodada, 14, 7, 18, 30, true);
+		addMatch(clubs, rod9, "Figueirense", "Atlético-MG", "Orlando Scarpelli", 3, 4, rodada, 14, 7, 18, 30, true);
+		addMatch(clubs, rod9, "Ponte Preta", "Coritiba", "Moisés Lucarelli", 4, 1, rodada, 14, 7, 21, 00, true);
+		addMatch(clubs, rod9, "Botafogo", "Fluminense", "Engenhão", 1, 1, rodada, 15, 7, 16, 00, true);
+		addMatch(clubs, rod9, "Internacional", "Santos", "Beira-Rio", 0, 0, rodada, 15, 7, 16, 00, true);
+		addMatch(clubs, rod9, "Cruzeiro", "Grêmio", "Arena Independência", 1, 3, rodada, 15, 7, 16, 00, true);
+		addMatch(clubs, rod9, "Bahia", "Flamengo", "Pituaçu", 1, 2, rodada, 15, 7, 16, 00, true);
+		addMatch(clubs, rod9, "Vasco", "Atlético-GO", "São Januário", 1, 0, rodada, 15, 7, 18, 30, true);
+		addMatch(clubs, rod9, "Palmeiras", "São Paulo", "Pacaembu", 1, 1, rodada, 15, 7, 18, 30, true);
+		addMatch(clubs, rod9, "Sport", "Portuguesa", "Ilha do Retiro", 2, 1, rodada, 15, 7, 18, 30, true);
+		tm.put(rodada, rod9);
+		
+		rodada++;
+		ArrayList<Match> rod10 = new ArrayList<Match>();
+		addMatch(clubs, rod10, "Santos", "Botafogo", "Vila Belmiro", 0, 0, rodada, 18, 7, 19, 30, true);
+		addMatch(clubs, rod10, "Grêmio", "Sport", "Olímpico", 3, 1, rodada, 18, 7, 19, 30, true);
+		addMatch(clubs, rod10, "Portuguesa", "Cruzeiro", "Canindé", 0, 2, rodada, 18, 7, 20, 30, true);
+		addMatch(clubs, rod10, "Náutico", "Ponte Preta", "Aflitos", 3, 0, rodada, 18, 7, 20, 30, true);
+		addMatch(clubs, rod10, "Flamengo", "Corinthians", "Engenhão", 0, 3, rodada, 18, 7, 21, 50, true);
+		addMatch(clubs, rod10, "São Paulo", "Vasco", "Morumbi", 0, 1, rodada, 18, 7, 21, 50, true);
+		addMatch(clubs, rod10, "Atlético-MG", "Internacional", "Arena Independência", 3, 1, rodada, 18, 7, 21, 50, true);
+		addMatch(clubs, rod10, "Fluminense", "Bahia", "Engenhão", 4, 0, rodada, 19, 7, 21, 00, true);
+		addMatch(clubs, rod10, "Coritiba", "Palmeiras", "Couto Pereira", 1, 1, rodada, 19, 7, 21, 00, true);
+		addMatch(clubs, rod10, "Atlético-GO", "Figueirense", "Serra Dourada", 3, 2, rodada, 19, 7, 21, 00, true);
+		tm.put(rodada, rod10);
+		
+		rodada++;
+		ArrayList<Match> rod11 = new ArrayList<Match>();
+		addMatch(clubs, rod11, "Vasco", "Santos", "São Januário", 2, 0, rodada, 21, 7, 18, 30, true);
+		addMatch(clubs, rod11, "Sport", "Atlético-MG", "Ilha do Retiro", 1, 4, rodada, 21, 7, 18, 30, true);
+		addMatch(clubs, rod11, "Corinthians", "Portuguesa", "Pacaembu", 1, 1, rodada, 21, 7, 21, 00, true);
+		addMatch(clubs, rod11, "Palmeiras", "Náutico", "Pacaembu", 3, 0, rodada, 22, 7, 16, 00, true);
+		addMatch(clubs, rod11, "Internacional", "Atlético-GO", "Beira-Rio", 4, 1, rodada, 22, 7, 16, 00, true);
+		addMatch(clubs, rod11, "Cruzeiro", "Flamengo", "Arena Independência", 1, 0, rodada, 22, 7, 16, 00, true);
+		addMatch(clubs, rod11, "Figueirense", "São Paulo", "Orlando Scarpelli", 0, 2, rodada, 22, 7, 16, 00, true);
+		addMatch(clubs, rod11, "Botafogo", "Grêmio", "Engenhão", 0, 1, rodada, 22, 7, 18, 30, true);
+		addMatch(clubs, rod11, "Ponte Preta", "Fluminense", "Moisés Lucarelli", 1, 2, rodada, 22, 7, 18, 30, true);
+		addMatch(clubs, rod11, "Bahia", "Coritiba", "Pituaçu", 2, 2, rodada, 22, 7, 18, 30, true);
+		tm.put(rodada, rod11);
+		
+		rodada++;
+		ArrayList<Match> rod12 = new ArrayList<Match>();
+		addMatch(clubs, rod12, "Ponte Preta", "Sport", "Moisés Lucarelli", 1, 1, rodada, 25, 7, 19, 30, true);
+		addMatch(clubs, rod12, "Figueirense", "Internacional", "Orlando Scarpelli", 0, 1, rodada, 25, 7, 19, 30, true);
+		addMatch(clubs, rod12, "Vasco", "Botafogo", "Engenhão", 1, 0, rodada, 25, 7, 20, 30, true);
+		addMatch(clubs, rod12, "Náutico", "Coritiba", "Aflitos", 3, 4, rodada, 25, 7, 20, 30, true);
+		addMatch(clubs, rod12, "Corinthians", "Cruzeiro", "Pacaembu", 2, 0, rodada, 25, 7, 21, 50, true);
+		addMatch(clubs, rod12, "Grêmio", "Fluminense", "Olímpico", 1, 0, rodada, 25, 7, 21, 50, true);
+		addMatch(clubs, rod12, "Atlético-GO", "São Paulo", "Serra Dourada", 4, 3, rodada, 25, 7, 21, 50, true);
+		addMatch(clubs, rod12, "Flamengo", "Portuguesa", "Engenhão", 0, 0, rodada, 26, 7, 21, 00, true);
+		addMatch(clubs, rod12, "Palmeiras", "Bahia", "Arena Barueri", 0, 2, rodada, 26, 7, 21, 00, true);
+		addMatch(clubs, rod12, "Atlético-MG", "Santos", "Arena Independência", 2, 0, rodada, 26, 7, 21, 00, true);
+		tm.put(rodada, rod12);
+		
+		rodada++;
+		ArrayList<Match> rod13 = new ArrayList<Match>();
+		addMatch(clubs, rod13, "Internacional", "Vasco", "Beira-Rio", 0, 0, rodada, 28, 7, 18, 30, true);
+		addMatch(clubs, rod13, "Coritiba", "Grêmio", "Couto Pereira", 2, 1, rodada, 28, 7, 18, 30, true);
+		addMatch(clubs, rod13, "Botafogo", "Figueirense", "Engenhão", 1, 0, rodada, 28, 7, 21, 00, true);
+		addMatch(clubs, rod13, "Fluminense", "Atlético-MG", "Engenhão", 0, 0, rodada, 29, 7, 16, 00, true);
+		addMatch(clubs, rod13, "São Paulo", "Flamengo", "Morumbi", 4, 1, rodada, 29, 7, 16, 00, true);
+		addMatch(clubs, rod13, "Sport", "Atlético-GO", "Ilha do Retiro", 0, 0, rodada, 29, 7, 16, 00, true);
+		addMatch(clubs, rod13, "Bahia", "Corinthians", "Pituaçu", 0, 0, rodada, 29, 7, 16, 00, true);
+		addMatch(clubs, rod13, "Cruzeiro", "Palmeiras", "Arena Independência", 2, 1, rodada, 29, 7, 18, 30, true);
+		addMatch(clubs, rod13, "Santos", "Ponte Preta", "Vila Belmiro", 2, 1, rodada, 29, 7, 18, 30, true);
+		addMatch(clubs, rod13, "Portuguesa", "Náutico", "Canindé", 3, 1, rodada, 29, 7, 18, 30, true);
+		tm.put(rodada, rod13);
+		
+		rodada++;
+		ArrayList<Match> rod14 = new ArrayList<Match>();
+		addMatch(clubs, rod14, "Palmeiras", "Internacional", "Pacaembu", 0, 1, rodada, 4, 8, 18, 30, true);
+		addMatch(clubs, rod14, "Atlético-GO", "Botafogo", "Serra Dourada", 1, 2, rodada, 4, 8, 18, 30, true);
+		addMatch(clubs, rod14, "Portuguesa", "Figueirense", "Canindé", 2, 0, rodada, 4, 8, 21, 00, true);
+		addMatch(clubs, rod14, "Vasco", "Corinthians", "São Januário", 0, 0, rodada, 5, 8, 16, 00, true);
+		addMatch(clubs, rod14, "São Paulo", "Sport", "Morumbi", 1, 0, rodada, 5, 8, 16, 00, true);
+		addMatch(clubs, rod14, "Grêmio", "Bahia", "Olímpico", 3, 1, rodada, 5, 8, 16, 00, true);
+		addMatch(clubs, rod14, "Coritiba", "Fluminense", "Couto Pereira", 0, 2, rodada, 5, 8, 16, 00, true);
+		addMatch(clubs, rod14, "Cruzeiro", "Ponte Preta", "Arena Independência", 1, 2, rodada, 5, 8, 18, 30, true);
+		addMatch(clubs, rod14, "Náutico", "Santos", "Aflitos", 3, 0, rodada, 5, 8, 18, 30, true);
+		addMatch(clubs, rod14, "Flamengo", "Atlético-MG", "Engenhão", -1, -1, rodada, 26, 9, 22, 00);
+		tm.put(rodada, rod14);
+		
+		rodada++;
+		ArrayList<Match> rod15 = new ArrayList<Match>();
+		addMatch(clubs, rod15, "Internacional", "Náutico", "Beira-Rio", 0, 0, rodada, 8, 8, 19, 30, true);
+		addMatch(clubs, rod15, "Sport", "Vasco", "Ilha do Retiro", 0, 2, rodada, 8, 8, 19, 30, true);
+		addMatch(clubs, rod15, "Corinthians", "Atlético-GO", "Pacaembu", 1, 1, rodada, 8, 8, 20, 30, true);
+		addMatch(clubs, rod15, "Bahia", "Portuguesa", "Pituaçu", 0, 0, rodada, 8, 8, 20, 30, true);
+		addMatch(clubs, rod15, "Botafogo", "Palmeiras", "Engenhão", 1, 2, rodada, 8, 8, 21, 50, true);
+		addMatch(clubs, rod15, "Santos", "Cruzeiro", "Vila Belmiro", 4, 2, rodada, 8, 8, 21, 50, true);
+		addMatch(clubs, rod15, "Figueirense", "Flamengo", "Orlando Scarpelli", 0, 2, rodada, 8, 8, 21, 50, true);
+		addMatch(clubs, rod15, "Fluminense", "São Paulo", "São Januário", 2, 1, rodada, 9, 8, 21, 00, true);
+		addMatch(clubs, rod15, "Atlético-MG", "Coritiba", "Arena Independência", 1, 0, rodada, 9, 8, 21, 00, true);
+		addMatch(clubs, rod15, "Ponte Preta", "Grêmio", "Moisés Lucarelli", 0, 0, rodada, 9, 8, 21, 00, true);
+		tm.put(rodada, rod15);
+		
+		rodada++;
+		ArrayList<Match> rod16 = new ArrayList<Match>();
+		addMatch(clubs, rod16, "Santos", "Atlético-GO", "Pacaembu", 2, 2, rodada, 11, 8, 18, 30, true);
+		addMatch(clubs, rod16, "Sport", "Figueirense", "Ilha do Retiro", 0, 1, rodada, 11, 8, 18, 30, true);
+		addMatch(clubs, rod16, "Bahia", "Cruzeiro", "Pituaçu", 0, 1, rodada, 11, 8, 18, 30, true);
+		addMatch(clubs, rod16, "Flamengo", "Náutico", "Raulino de Oliveira", 2, 0, rodada, 11, 8, 21, 00, true);
+		addMatch(clubs, rod16, "São Paulo", "Grêmio", "Morumbi", 1, 2, rodada, 12, 8, 16, 00, true);
+		addMatch(clubs, rod16, "Internacional", "Ponte Preta", "Beira-Rio", 2, 1, rodada, 12, 8, 16, 00, true);
+		addMatch(clubs, rod16, "Atlético-MG", "Vasco", "Arena Independência", 1, 0, rodada, 12, 8, 16, 00, true);
+		addMatch(clubs, rod16, "Coritiba", "Corinthians", "Couto Pereira", 1, 2, rodada, 12, 8, 16, 00, true);
+		addMatch(clubs, rod16, "Fluminense", "Palmeiras", "Engenhão", 1, 0, rodada, 12, 8, 18, 30, true);
+		addMatch(clubs, rod16, "Portuguesa", "Botafogo", "Canindé", 1, 1, rodada, 12, 8, 18, 30, true);
+		tm.put(rodada, rod16);
+		
+		rodada++;
+		ArrayList<Match> rod17 = new ArrayList<Match>();
+		addMatch(clubs, rod17, "Grêmio", "Portuguesa", "Olímpico", 1, 2, rodada, 15, 8, 19, 30, true);
+		addMatch(clubs, rod17, "Cruzeiro", "Fluminense", "Arena Independência", 1, 1, rodada, 15, 8, 19, 30, true);
+		addMatch(clubs, rod17, "Ponte Preta", "Bahia", "Moisés Lucarelli", 0, 2, rodada, 15, 8, 20, 30, true);
+		addMatch(clubs, rod17, "Atlético-GO", "Atlético-MG", "Serra Dourada", 1, 1, rodada, 15, 8, 20, 30, true);
+		addMatch(clubs, rod17, "Botafogo", "Sport", "Engenhão", 2, 0, rodada, 15, 8, 21, 50, true);
+		addMatch(clubs, rod17, "Palmeiras", "Flamengo", "Arena Barueri", 1, 0, rodada, 15, 8, 21, 50, true);
+		addMatch(clubs, rod17, "Náutico", "São Paulo", "Aflitos", 3, 0, rodada, 15, 8, 21, 50, true);
+		addMatch(clubs, rod17, "Vasco", "Coritiba", "São Januário", 2, 2, rodada, 16, 8, 21, 00, true);
+		addMatch(clubs, rod17, "Corinthians", "Internacional", "Pacaembu", 1, 0, rodada, 16, 8, 21, 00, true);
+		addMatch(clubs, rod17, "Figueirense", "Santos", "Orlando Scarpelli", 1, 3, rodada, 16, 8, 21, 00, true);
+		tm.put(rodada, rod17);
+		
+		rodada++;
+		ArrayList<Match> rod18 = new ArrayList<Match>();
+		addMatch(clubs, rod18, "Fluminense", "Sport", "Raulino de Oliveira", 1, 0, rodada, 18, 8, 18, 30, true);
+		addMatch(clubs, rod18, "Náutico", "Bahia", "Aflitos", 1, 0, rodada, 18, 8, 18, 30, true);
+		addMatch(clubs, rod18, "São Paulo", "Ponte Preta", "Morumbi", 3, 0, rodada, 18, 8, 21, 00, true);
+		addMatch(clubs, rod18, "Santos", "Corinthians", "Vila Belmiro", 3, 2, rodada, 19, 8, 16, 00, true);
+		addMatch(clubs, rod18, "Grêmio", "Figueirense", "Olímpico", 4, 0, rodada, 19, 8, 16, 00, true);
+		addMatch(clubs, rod18, "Atlético-MG", "Botafogo", "Arena Independência", 3, 2, rodada, 19, 8, 16, 00, true);
+		addMatch(clubs, rod18, "Coritiba", "Cruzeiro", "Couto Pereira", 4, 0, rodada, 19, 8, 16, 00, true);
+		addMatch(clubs, rod18, "Flamengo", "Vasco", "Engenhão", 1, 0, rodada, 19, 8, 18, 30, true);
+		addMatch(clubs, rod18, "Portuguesa", "Internacional", "Canindé", 1, 1, rodada, 19, 8, 18, 30, true);
+		addMatch(clubs, rod18, "Atlético-GO", "Palmeiras", "Serra Dourada", 2, 1, rodada, 19, 8, 18, 30, true);
+		tm.put(rodada, rod18);
+		
+		rodada++;
+		ArrayList<Match> rod19 = new ArrayList<Match>();
+		addMatch(clubs, rod19, "Vasco", "Fluminense", "Engenhão", 1, 2, rodada, 25, 8, 18, 30, true);
+		addMatch(clubs, rod19, "Palmeiras", "Santos", "Pacaembu", 1, 2, rodada, 25, 8, 18, 30, true);
+		addMatch(clubs, rod19, "Ponte Preta", "Portuguesa", "Moisés Lucarelli", 2, 1, rodada, 25, 8, 21, 00, true);
+		addMatch(clubs, rod19, "Botafogo", "Flamengo", "Engenhão", 0, 0, rodada, 26, 8, 16, 00, true);
+		addMatch(clubs, rod19, "Corinthians", "São Paulo", "Pacaembu", 1, 2, rodada, 26, 8, 16, 00, true);
+		addMatch(clubs, rod19, "Internacional", "Grêmio", "Beira-Rio", 0, 1, rodada, 26, 8, 16, 00, true);
+		addMatch(clubs, rod19, "Figueirense", "Coritiba", "Orlando Scarpelli", 3, 1, rodada, 26, 8, 16, 00, true);
+		addMatch(clubs, rod19, "Cruzeiro", "Atlético-MG", "Arena Independência", 2, 2, rodada, 26, 8, 16, 00, true);
+		addMatch(clubs, rod19, "Sport", "Náutico", "Ilha do Retiro", 0, 0, rodada, 26, 8, 18, 30, true);
+		addMatch(clubs, rod19, "Bahia", "Atlético-GO", "Pituaçu", 1, 1, rodada, 26, 8, 18, 30, true);
+		tm.put(rodada, rod19);
+		
+		rodada++;
+		ArrayList<Match> rod20 = new ArrayList<Match>();
+		addMatch(clubs, rod20, "Santos", "Bahia", "Vila Belmiro", 1, 3, rodada, 29, 8, 19, 30, true);
+		addMatch(clubs, rod20, "Coritiba", "Internacional", "Couto Pereira", 1, 0, rodada, 29, 8, 19, 30, true);
+		addMatch(clubs, rod20, "Atlético-MG", "Ponte Preta", "Arena Independência", 2, 2, rodada, 29, 8, 20, 30, true);
+		addMatch(clubs, rod20, "Portuguesa", "Palmeiras", "Canindé", 3, 0, rodada, 29, 8, 20, 30, true);
+		addMatch(clubs, rod20, "Náutico", "Figueirense", "Aflitos", 3, 2, rodada, 29, 8, 20, 30, true);
+		addMatch(clubs, rod20, "Fluminense", "Corinthians", "Engenhão", 1, 1, rodada, 29, 8, 22, 00, true);
+		addMatch(clubs, rod20, "Grêmio", "Vasco", "Olímpico", 2, 0, rodada, 29, 8, 22, 00, true);
+		addMatch(clubs, rod20, "Atlético-GO", "Cruzeiro", "Serra Dourada", 0, 2, rodada, 29, 8, 22, 00, true);
+		addMatch(clubs, rod20, "Flamengo", "Sport", "Raulino de Oliveira", 1, 1, rodada, 30, 8, 21, 00, true);
+		addMatch(clubs, rod20, "São Paulo", "Botafogo", "Morumbi", 4, 0, rodada, 30, 8, 21, 00, true);
+		tm.put(rodada, rod20);
+		
+		rodada++;
+		ArrayList<Match> rod21 = new ArrayList<Match>();
+		addMatch(clubs, rod21, "Palmeiras", "Grêmio", "Pacaembu", 0, 0, rodada, 1, 9, 18, 30, true);
+		addMatch(clubs, rod21, "Figueirense", "Fluminense", "Orlando Scarpelli", 2, 2, rodada, 1, 9, 18, 30, true);
+		addMatch(clubs, rod21, "Vasco", "Portuguesa", "São Januário", 2, 0, rodada, 1, 9, 21, 00, true);
+		addMatch(clubs, rod21, "Corinthians", "Atlético-MG", "Pacaembu", 1, 0, rodada, 2, 9, 16, 00, true);
+		addMatch(clubs, rod21, "Internacional", "Flamengo", "Beira-Rio", 4, 1, rodada, 2, 9, 16, 00, true);
+		addMatch(clubs, rod21, "Sport", "Santos", "Ilha do Retiro", 2, 1, rodada, 2, 9, 16, 00, true);
+		addMatch(clubs, rod21, "Bahia", "São Paulo", "Pituaçu", 1, 0, rodada, 2, 9, 16, 00, true);
+		addMatch(clubs, rod21, "Botafogo", "Coritiba", "Engenhão", 2, 0, rodada, 2, 9, 18, 30, true);
+		addMatch(clubs, rod21, "Cruzeiro", "Náutico", "Arena Independência", 3, 0, rodada, 2, 9, 18, 30, true);
+		addMatch(clubs, rod21, "Ponte Preta", "Atlético-GO", "Moisés Lucarelli", 3, 1, rodada, 2, 9, 18, 30, true);
+		tm.put(rodada, rod21);
+		
+		rodada++;
+		ArrayList<Match> rod22 = new ArrayList<Match>();
+		addMatch(clubs, rod22, "Flamengo", "Ponte Preta", "Raulino de Oliveira", 0, 1, rodada, 5, 9, 19, 30, true);
+		addMatch(clubs, rod22, "Portuguesa", "Coritiba", "Canindé", 3, 0, rodada, 5, 9, 19, 30, true);
+		addMatch(clubs, rod22, "Náutico", "Vasco", "Aflitos", 1, 1, rodada, 5, 9, 19, 30, true);
+		addMatch(clubs, rod22, "Bahia", "Atlético-MG", "Pituaçu", 0, 0, rodada, 5, 9, 19, 30, true);
+		addMatch(clubs, rod22, "Grêmio", "Atlético-GO", "Olímpico", 2, 1, rodada, 5, 9, 20, 30, true);
+		addMatch(clubs, rod22, "São Paulo", "Internacional", "Morumbi", 1, 1, rodada, 5, 9, 22, 00, true);
+		addMatch(clubs, rod22, "Cruzeiro", "Botafogo", "Arena do Jacaré", 1, 3, rodada, 5, 9, 22, 00, true);
+		addMatch(clubs, rod22, "Figueirense", "Corinthians", "Orlando Scarpelli", 1, 0, rodada, 5, 9, 22, 00, true);
+		addMatch(clubs, rod22, "Fluminense", "Santos", "Engenhão", 3, 1, rodada, 6, 9, 21, 00, true);
+		addMatch(clubs, rod22, "Palmeiras", "Sport", "Pacaembu", 3, 1, rodada, 6, 9, 21, 00, true);
+		tm.put(rodada, rod22);
+		
+		rodada++;
+		ArrayList<Match> rod23 = new ArrayList<Match>();
+		addMatch(clubs, rod23, "Ponte Preta", "Figueirense", "Moisés Lucarelli", 2, 2, rodada, 8, 9, 18, 30, true);
+		addMatch(clubs, rod23, "Coritiba", "Flamengo", "Couto Pereira", 3, 0, rodada, 8, 9, 18, 30, true);
+		addMatch(clubs, rod23, "Corinthians", "Grêmio", "Pacaembu", 3, 1, rodada, 8, 9, 21, 00, true);
+		addMatch(clubs, rod23, "Botafogo", "Náutico", "Engenhão", 3, 1, rodada, 9, 9, 16, 00, true);
+		addMatch(clubs, rod23, "Santos", "São Paulo", "Vila Belmiro", 0, 0, rodada, 9, 9, 16, 00, true);
+		addMatch(clubs, rod23, "Internacional", "Fluminense", "Beira-Rio", 0, 1, rodada, 9, 9, 16, 00, true);
+		addMatch(clubs, rod23, "Vasco", "Bahia", "São Januário", 0, 4, rodada, 9, 9, 18, 30, true);
+		addMatch(clubs, rod23, "Atlético-MG", "Palmeiras", "Arena Independência", 3, 0, rodada, 9, 9, 18, 30, true);
+		addMatch(clubs, rod23, "Sport", "Cruzeiro", "Ilha do Retiro", 2, 1, rodada, 9, 9, 18, 30, true);
+		addMatch(clubs, rod23, "Atlético-GO", "Portuguesa", "Serra Dourada", 1, 1, rodada, 9, 9, 18, 30, true);
+		tm.put(rodada, rod23);
+		
+		rodada++;
+		ArrayList<Match> rod24 = new ArrayList<Match>();
+		addMatch(clubs, rod24, "Corinthians", "Ponte Preta", "Pacaembu", 1, 1, rodada, 12, 9, 19, 30, true);
+		addMatch(clubs, rod24, "Portuguesa", "Fluminense", "Canindé", 0, 2, rodada, 12, 9, 19, 30, true);
+		addMatch(clubs, rod24, "Figueirense", "Cruzeiro", "Orlando Scarpelli", 2, 0, rodada, 12, 9, 19, 30, true);
+		addMatch(clubs, rod24, "Sport", "Bahia", "Ilha do Retiro", 1, 1, rodada, 12, 9, 20, 30, true);
+		addMatch(clubs, rod24, "Atlético-GO", "Coritiba", "Serra Dourada", 1, 2, rodada, 12, 9, 20, 30, true);
+		addMatch(clubs, rod24, "Vasco", "Palmeiras", "São Januário", 3, 1, rodada, 12, 9, 22, 00, true);
+		addMatch(clubs, rod24, "Santos", "Flamengo", "Vila Belmiro", 2, 0, rodada, 12, 9, 22, 00, true);
+		addMatch(clubs, rod24, "Atlético-MG", "São Paulo", "Arena Independência", 1, 0, rodada, 12, 9, 22, 00, true);
+		addMatch(clubs, rod24, "Botafogo", "Internacional", "Engenhão", 1, 1, rodada, 13, 9, 21, 00, true);
+		addMatch(clubs, rod24, "Grêmio", "Náutico", "Olímpico", 2, 0, rodada, 13, 9, 21, 00, true);
+		tm.put(rodada, rod24);
+		
+		rodada++;
+		ArrayList<Match> rod25 = new ArrayList<Match>();
+		addMatch(clubs, rod25, "Fluminense", "Atlético-GO", "Raulino de Oliveira", 1, 2, rodada, 15, 9, 18, 30, true);
+		addMatch(clubs, rod25, "São Paulo", "Portuguesa", "Morumbi", 3, 1, rodada, 15, 9, 18, 30, true);
+		addMatch(clubs, rod25, "Palmeiras", "Corinthians", "Pacaembu", 0, 2, rodada, 16, 9, 16, 00, true);
+		addMatch(clubs, rod25, "Cruzeiro", "Vasco", "Arena Independência", 1, 1, rodada, 16, 9, 16, 00, true);
+		addMatch(clubs, rod25, "Coritiba", "Santos", "Couto Pereira", 1, 2, rodada, 16, 9, 16, 00, true);
+		addMatch(clubs, rod25, "Náutico", "Atlético-MG", "Aflitos", 1, 0, rodada, 16, 9, 16, 00, true);
+		addMatch(clubs, rod25, "Bahia", "Figueirense", "Pituaçu", 2, 1, rodada, 16, 9, 16, 00, true);
+		addMatch(clubs, rod25, "Flamengo", "Grêmio", "Engenhão", 1, 1, rodada, 16, 9, 18, 30, true);
+		addMatch(clubs, rod25, "Internacional", "Sport", "Beira-Rio", 2, 2, rodada, 16, 9, 18, 30, true);
+		addMatch(clubs, rod25, "Ponte Preta", "Botafogo", "Moisés Lucarelli", 0, 0, rodada, 16, 9, 18, 30, true);
+		tm.put(rodada, rod25);
+		
+		rodada++;
+		ArrayList<Match> rod26 = new ArrayList<Match>();
+		addMatch(clubs, rod26, "Figueirense", "Palmeiras", "Orlando Scarpelli", 1, 3, rodada, 22, 9, 18, 30, true);
+		addMatch(clubs, rod26, "Fluminense", "Náutico", "Raulino de Oliveira", 2, 1, rodada, 22, 9, 18, 30, true);
+		addMatch(clubs, rod26, "Santos", "Portuguesa", "Pacaembu", 1, 3, rodada, 22, 9, 21, 00, true);
+		addMatch(clubs, rod26, "Ponte Preta", "Vasco", "Moisés Lucarelli", 0, 0, rodada, 23, 9, 16, 00, true);
+		addMatch(clubs, rod26, "São Paulo", "Cruzeiro", "Morumbi", 1, 0, rodada, 23, 9, 16, 00, true);
+		addMatch(clubs, rod26, "Botafogo", "Corinthians", "Engenhão", 2, 2, rodada, 23, 9, 16, 00, true);
+		addMatch(clubs, rod26, "Atlético-GO", "Flamengo", "Serra Dourada", 1, 2, rodada, 23, 9, 16, 00, true);
+		addMatch(clubs, rod26, "Internacional", "Bahia", "Beira-Rio", 3, 1, rodada, 23, 9, 18, 30, true);
+		addMatch(clubs, rod26, "Sport", "Coritiba", "Ilha do Retiro", 1, 0, rodada, 23, 9, 18, 30, true);
+		addMatch(clubs, rod26, "Atlético-MG", "Grêmio", "Arena Independência", 0, 0, rodada, 23, 9, 18, 30, true);
+		tm.put(rodada, rod26);
+		
+		rodada++;
+		ArrayList<Match> rod27 = new ArrayList<Match>();
+		addMatch(clubs, rod27, "Vasco", "Figueirense", "São Januário", 3, 1, rodada, 29, 9, 18, 30, true);
+		addMatch(clubs, rod27, "Cruzeiro", "Internacional", "Arena do Jacaré", 0, 0, rodada, 29, 9, 18, 30, true);
+		addMatch(clubs, rod27, "Portuguesa", "Atlético-MG", "Canindé", 1, 1, rodada, 29, 9, 18, 30, true);
+		addMatch(clubs, rod27, "Náutico", "Atlético-GO", "Aflitos", 2, 0, rodada, 29, 9, 18, 30, true);
+		addMatch(clubs, rod27, "Palmeiras", "Ponte Preta", "Pacaembu", 3, 0, rodada, 29, 9, 21, 00, true);
+		addMatch(clubs, rod27, "Corinthians", "Sport", "Pacaembu", 3, 0, rodada, 30, 9, 16, 00, true);
+		addMatch(clubs, rod27, "Bahia", "Botafogo", "Pituaçu", 2, 0, rodada, 30, 9, 16, 00, true);
+		addMatch(clubs, rod27, "Coritiba", "São Paulo", "Couto Pereira", 1, 1, rodada, 30, 9, 16, 00, true);
+		addMatch(clubs, rod27, "Flamengo", "Fluminense", "Engenhão", 0, 1, rodada, 30, 9, 16, 00, true);
+		addMatch(clubs, rod27, "Grêmio", "Santos", "Olímpico", 1, 1, rodada, 30, 9, 18, 30, true);
+		tm.put(rodada, rod27);
+		
+		rodada++;
+		ArrayList<Match> rod28 = new ArrayList<Match>();
+		addMatch(clubs, rod28, "Flamengo", "Bahia", "Engenhão", 0, 0, rodada, 4, 10, 21, 00, true);
+		addMatch(clubs, rod28, "Portuguesa", "Sport", "Canindé", 5, 1, rodada, 4, 10, 21, 00, true);
+		addMatch(clubs, rod28, "Coritiba", "Ponte Preta", "Couto Pereira", 1, 0, rodada, 4, 10, 21, 00, true);
+		addMatch(clubs, rod28, "Atlético-GO", "Vasco", "Serra Dourada", 0, 1, rodada, 6, 10, 16, 20, true);
+		addMatch(clubs, rod28, "Santos", "Internacional", "Vila Belmiro", 1, 1, rodada, 6, 10, 16, 20, true);
+		addMatch(clubs, rod28, "Náutico", "Corinthians", "Aflitos", 2, 1, rodada, 6, 10, 16, 20, true);
+		addMatch(clubs, rod28, "São Paulo", "Palmeiras", "Morumbi", 3, 0, rodada, 6, 10, 16, 00, true);
+		addMatch(clubs, rod28, "Atlético-MG", "Figueirense", "Arena Independência", 6, 0, rodada, 6, 10, 18, 30, true);
+		addMatch(clubs, rod28, "Fluminense", "Botafogo", "Engenhão", 1, 0, rodada, 6, 10, 18, 30, true);
+		addMatch(clubs, rod28, "Grêmio", "Cruzeiro", "Olímpico", 2, 1, rodada, 6, 10, 18, 30, true);
+		tm.put(rodada, rod28);
+		
+		rodada++;
+		ArrayList<Match> rod29 = new ArrayList<Match>();
+		addMatch(clubs, rod29, "Cruzeiro", "Portuguesa", "Arena do Jacaré", 2, 0, rodada, 10, 10, 19, 30, true);
+		addMatch(clubs, rod29, "Ponte Preta", "Náutico", "Moisés Lucarelli", 2, 1, rodada, 10, 10, 19, 30, true);
+		addMatch(clubs, rod29, "Bahia", "Fluminense", "Pituaçu", 0, 2, rodada, 10, 10, 19, 30, true);
+		addMatch(clubs, rod29, "Botafogo", "Santos", "Engenhão", 0, 2, rodada, 10, 10, 19, 30, true);
+		addMatch(clubs, rod29, "Figueirense", "Atlético-GO", "Orlando Scarpelli", 3, 1, rodada, 10, 10, 19, 30, true);
+		addMatch(clubs, rod29, "Vasco", "São Paulo", "São Januário", 0, 2, rodada, 10, 10, 22, 00, true);
+		addMatch(clubs, rod29, "Corinthians", "Flamengo", "Pacaembu", 3, 2, rodada, 10, 10, 22, 00, true);
+		addMatch(clubs, rod29, "Internacional", "Atlético-MG", "Beira-Rio", 3, 0, rodada, 10, 10, 22, 00, true);
+		addMatch(clubs, rod29, "Sport", "Grêmio", "Ilha do Retiro", 1, 3, rodada, 11, 10, 21, 00, true);
+		addMatch(clubs, rod29, "Palmeiras", "Coritiba", "Fonte Luminosa", 0, 1, rodada, 11, 10, 21, 00, true);
+		tm.put(rodada, rod29);
+		
+		rodada++;
+		ArrayList<Match> rod30 = new ArrayList<Match>();
+		addMatch(clubs, rod30, "Flamengo", "Cruzeiro", "Engenhão", 1, 1, rodada, 13, 10, 18, 30, true);
+		addMatch(clubs, rod30, "Atlético-GO", "Internacional", "Serra Dourada", 3, 1, rodada, 13, 10, 18, 30, true);		
+		addMatch(clubs, rod30, "Portuguesa", "Corinthians", "Canindé", 1, 1, rodada, 13, 10, 21, 00, true);
+		addMatch(clubs, rod30, "Santos", "Vasco", "Vila Belmiro", 2, 0, rodada, 14, 10, 16, 00, true);
+		addMatch(clubs, rod30, "Atlético-MG", "Sport", "Arena Independência", 2, 1, rodada, 14, 10, 16, 00, true);
+		addMatch(clubs, rod30, "Náutico", "Palmeiras", "Aflitos", 1, 0, rodada, 14, 10, 16, 00, true);
+		addMatch(clubs, rod30, "São Paulo", "Figueirense", "Morumbi", 2, 0, rodada, 14, 10, 16, 00, true);
+		addMatch(clubs, rod30, "Coritiba", "Bahia", "Couto Pereira", 2, 1, rodada, 14, 10, 16, 00, true);
+		addMatch(clubs, rod30, "Fluminense", "Ponte Preta", "São Januário", 2, 1, rodada, 14, 10, 18, 30, true);
+		addMatch(clubs, rod30, "Grêmio", "Botafogo", "Olímpico", 1, 1, rodada, 14, 10, 18, 30, true);
+		tm.put(rodada, rod30);
+		
+		rodada++;
+		ArrayList<Match> rod31 = new ArrayList<Match>();
+		addMatch(clubs, rod31, "Fluminense", "Grêmio", "Engenhão", 2, 2, rodada, 17, 10, 19, 30, true);
+		addMatch(clubs, rod31, "Internacional", "Figueirense", "Beira-Rio", 2, 3, rodada, 17, 10, 19, 30, true);
+		addMatch(clubs, rod31, "Coritiba", "Náutico", "Couto Pereira", 2, 1, rodada, 17, 10, 19, 30, true);
+		addMatch(clubs, rod31, "Bahia", "Palmeiras", "Pituaçu", 0, 1, rodada, 17, 10, 19, 30, true);
+		addMatch(clubs, rod31, "Santos", "Atlético-MG", "Vila Belmiro", 2, 2, rodada, 17, 10, 22, 00, true);
+		addMatch(clubs, rod31, "Cruzeiro", "Corinthians", "Dilzon Melo", 2, 0, rodada, 17, 10, 22, 00, true);
+		addMatch(clubs, rod31, "Portuguesa", "Flamengo", "Canindé", 0, 0, rodada, 17, 10, 22, 00, true);
+		addMatch(clubs, rod31, "Botafogo", "Vasco", "Engenhão", 3, 2, rodada, 18, 10, 21, 00, true);
+		addMatch(clubs, rod31, "São Paulo", "Atlético-GO", "Morumbi", 2, 0, rodada, 18, 10, 21, 00, true);
+		addMatch(clubs, rod31, "Sport", "Ponte Preta", "Ilha do Retiro", 3, 1, rodada, 18, 10, 21, 00, true);
+		tm.put(rodada, rod31);
+		
+		rodada++;
+		ArrayList<Match> rod32 = new ArrayList<Match>();
+		addMatch(clubs, rod32, "Grêmio", "Coritiba", "Olímpico", 0, 0, rodada, 20, 10, 18, 30, true);
+		addMatch(clubs, rod32, "Corinthians", "Bahia", "Pacaembu", 1, 1, rodada, 20, 10, 18, 30, true);
+		addMatch(clubs, rod32, "Palmeiras", "Cruzeiro", "Fonte Luminosa", 2, 0, rodada, 20, 10, 18, 30, true);
+		addMatch(clubs, rod32, "Náutico", "Portuguesa", "Aflitos", -1, -1, rodada, 21, 10, 16, 00);
+		addMatch(clubs, rod32, "Flamengo", "São Paulo", "Raulino de Oliveira", -1, -1, rodada, 21, 10, 16, 00);
+		addMatch(clubs, rod32, "Atlético-MG", "Fluminense", "Arena Independência", -1, -1, rodada, 21, 10, 16, 00);
+		addMatch(clubs, rod32, "Ponte Preta", "Santos", "Moisés Lucarelli", -1, -1, rodada, 21, 10, 18, 30);
+		addMatch(clubs, rod32, "Atlético-GO", "Sport", "Elmo Serejo Farias", -1, -1, rodada, 21, 10, 18, 30);
+		addMatch(clubs, rod32, "Vasco", "Internacional", "São Januário", -1, -1, rodada, 24, 10, 20, 30);
+		addMatch(clubs, rod32, "Figueirense", "Botafogo", "Orlando Scarpelli", -1, -1, rodada, 24, 10, 22, 00);
+		tm.put(rodada, rod32);
+		
+		rodada++;
+		ArrayList<Match> rod33 = new ArrayList<Match>();
+		addMatch(clubs, rod33, "Santos", "Náutico", "Vila Belmiro", -1, -1, rodada, 25, 10, 21, 00);
+		addMatch(clubs, rod33, "Fluminense", "Coritiba", "Engenhão", -1, -1, rodada, 25, 10, 21, 00);
+		addMatch(clubs, rod33, "Ponte Preta", "Cruzeiro", "Moisés Lucarelli", -1, -1, rodada, 25, 10, 21, 00);
+		addMatch(clubs, rod33, "Corinthians", "Vasco", "Pacaembu", -1, -1, rodada, 27, 10, 16, 20);
+		addMatch(clubs, rod33, "Internacional", "Palmeiras", "Beira-Rio", -1, -1, rodada, 27, 10, 16, 20);
+		addMatch(clubs, rod33, "Figueirense", "Portuguesa", "Orlando Scarpelli", -1, -1, rodada, 27, 10, 18, 30);
+		addMatch(clubs, rod33, "Sport", "São Paulo", "Ilha do Retiro", -1, -1, rodada, 27, 10, 18, 30);
+		addMatch(clubs, rod33, "Bahia", "Grêmio", "Pituaçu", -1, -1, rodada, 27, 10, 18, 30);
+		addMatch(clubs, rod33, "Botafogo", "Atlético-GO", "Engenhão", -1, -1, rodada, 27, 10, 18, 30);
+		addMatch(clubs, rod33, "Atlético-MG", "Flamengo", "Arena Independência", -1, -1, rodada, 31, 10, 21, 50);
+		tm.put(rodada, rod33);
+		
+		rodada++;
+		ArrayList<Match> rod34 = new ArrayList<Match>(); 
+		addMatch(clubs, rod34, "Palmeiras", "Botafogo", "Fonte Luminosa", -1, -1, rodada, 3, 11, 19, 30);
+		addMatch(clubs, rod34, "Cruzeiro", "Santos", "Arena Independência", -1, -1, rodada, 3, 11, 19, 30);
+		addMatch(clubs, rod34, "Flamengo", "Figueirense", "Engenhão", -1, -1, rodada, 3, 11, 21, 00);
+		addMatch(clubs, rod34, "São Paulo", "Fluminense", "Morumbi", -1, -1, rodada, 4, 11, 17, 00);
+		addMatch(clubs, rod34, "Vasco", "Sport", "São Januário", -1, -1, rodada, 4, 11, 17, 00);
+		addMatch(clubs, rod34, "Atlético-GO", "Corinthians", "Serra Dourada", -1, -1, rodada, 4, 11, 17, 00);
+		addMatch(clubs, rod34, "Coritiba", "Atlético-MG", "Couto Pereira", -1, -1, rodada, 4, 11, 19, 30);
+		addMatch(clubs, rod34, "Portuguesa", "Bahia", "Canindé", -1, -1, rodada, 4, 11, 19, 30);
+		addMatch(clubs, rod34, "Grêmio", "Ponte Preta", "Olímpico", -1, -1, rodada, 4, 11, 19, 30);
+		addMatch(clubs, rod34, "Náutico", "Internacional", "Aflitos", -1, -1, rodada, 4, 11, 19, 30);
+		tm.put(rodada, rod34);
+		
+		rodada++;
+		ArrayList<Match> rod35 = new ArrayList<Match>();
+		addMatch(clubs, rod35, "Botafogo", "Portuguesa", "Engenhão", -1, -1, rodada, 10, 11, 19, 30);
+		addMatch(clubs, rod35, "Atlético-GO", "Santos", "Serra Dourada", -1, -1, rodada, 10, 11, 19, 30);
+		addMatch(clubs, rod35, "Corinthians", "Coritiba", "Pacaembu", -1, -1, rodada, 10, 11, 21, 00);
+		addMatch(clubs, rod35, "Grêmio", "São Paulo", "Olímpico", -1, -1, rodada, 11, 11, 17, 00);
+		addMatch(clubs, rod35, "Vasco", "Atlético-MG", "São Januário", -1, -1, rodada, 11, 11, 17, 00);
+		addMatch(clubs, rod35, "Palmeiras", "Fluminense", "Fonte Luminosa", -1, -1, rodada, 11, 11, 17, 00);
+		addMatch(clubs, rod35, "Náutico", "Flamengo", "Aflitos", -1, -1, rodada, 11, 11, 19, 30);
+		addMatch(clubs, rod35, "Cruzeiro", "Bahia", "Arena Independência", -1, -1, rodada, 11, 11, 19, 30);
+		addMatch(clubs, rod35, "Ponte Preta", "Internacional", "Moisés Lucarelli", -1, -1, rodada, 11, 11, 19, 30);
+		addMatch(clubs, rod35, "Figueirense", "Sport", "Orlando Scarpelli", -1, -1, rodada, 11, 11, 19, 30);
+		tm.put(rodada, rod35);
+		
+		rodada++;
+		ArrayList<Match> rod36 = new ArrayList<Match>();
+		addMatch(clubs, rod36, "Flamengo", "Palmeiras", "Engenhão", -1, -1, rodada, 18, 11);
+		addMatch(clubs, rod36, "Fluminense", "Cruzeiro", "Engenhão", -1, -1, rodada, 18, 11);
+		addMatch(clubs, rod36, "Santos", "Figueirense", "Vila Belmiro", -1, -1, rodada, 18, 11);
+		addMatch(clubs, rod36, "São Paulo", "Náutico", "Morumbi", -1, -1, rodada, 18, 11);
+		addMatch(clubs, rod36, "Internacional", "Corinthians", "Beira-Rio", -1, -1, rodada, 18, 11);
+		addMatch(clubs, rod36, "Atlético-MG", "Atlético-GO", "Arena Independência", -1, -1, rodada, 18, 11);
+		addMatch(clubs, rod36, "Portuguesa", "Grêmio", "Canindé", -1, -1, rodada, 18, 11);
+		addMatch(clubs, rod36, "Coritiba", "Vasco", "Couto Pereira", -1, -1, rodada, 18, 11);
+		addMatch(clubs, rod36, "Sport", "Botafogo", "Ilha do Retiro", -1, -1, rodada, 18, 11);
+		addMatch(clubs, rod36, "Bahia", "Ponte Preta", "Pituaçu", -1, -1, rodada, 18, 11);
+		tm.put(rodada, rod36);
+		
+		rodada++;
+		ArrayList<Match> rod37 = new ArrayList<Match>();
+		addMatch(clubs, rod37, "Botafogo", "Atlético-MG", "Engenhão", -1, -1, rodada, 25, 11, 17, 00); //TODO estadio
+		addMatch(clubs, rod37, "Vasco", "Flamengo", "Engenhão", -1, -1, rodada, 25, 11, 17, 00); //TODO estadio
+		addMatch(clubs, rod37, "Palmeiras", "Atlético-GO", "Pacaembu", -1, -1, rodada, 25, 11, 17, 00); //TODO estadio
+		addMatch(clubs, rod37, "Corinthians", "Santos", "Pacaembu", -1, -1, rodada, 25, 11, 17, 00); //TODO estadio
+		addMatch(clubs, rod37, "Internacional", "Portuguesa", "Beira-Rio", -1, -1, rodada, 25, 11, 17, 00);
+		addMatch(clubs, rod37, "Cruzeiro", "Coritiba", "Arena Independência", -1, -1, rodada, 25, 11, 17, 00);
+		addMatch(clubs, rod37, "Ponte Preta", "São Paulo", "Moisés Lucarelli", -1, -1, rodada, 25, 11, 17, 00);
+		addMatch(clubs, rod37, "Figueirense", "Grêmio", "Orlando Scarpelli", -1, -1, rodada, 25, 11, 17, 00);
+		addMatch(clubs, rod37, "Sport", "Fluminense", "Ilha do Retiro", -1, -1, rodada, 25, 11, 17, 00);
+		addMatch(clubs, rod37, "Bahia", "Náutico", "Pituaçu", -1, -1, rodada, 25, 11, 17, 00);
+		tm.put(rodada, rod37);
+		
+		rodada++;
+		ArrayList<Match> rod38 = new ArrayList<Match>();
+		addMatch(clubs, rod38, "Flamengo", "Botafogo", "Engenhão", -1, -1, rodada, 2, 12, 17, 00); //TODO estadio
+		addMatch(clubs, rod38, "Fluminense", "Vasco", "Engenhão", -1, -1, rodada, 2, 12, 17, 00); //TODO estadio
+		addMatch(clubs, rod38, "Santos", "Palmeiras", "Vila Belmiro", -1, -1, rodada, 2, 12, 17, 00);
+		addMatch(clubs, rod38, "São Paulo", "Corinthians", "Morumbi", -1, -1, rodada, 2, 12, 17, 00);
+		addMatch(clubs, rod38, "Grêmio", "Internacional", "Olímpico", -1, -1, rodada, 2, 12, 17, 00);
+		addMatch(clubs, rod38, "Atlético-MG", "Cruzeiro", "Arena Independência", -1, -1, rodada, 2, 12, 17, 00);
+		addMatch(clubs, rod38, "Portuguesa", "Ponte Preta", "Canindé", -1, -1, rodada, 2, 12, 17, 00);
+		addMatch(clubs, rod38, "Coritiba", "Figueirense", "Couto Pereira", -1, -1, rodada, 2, 12, 17, 00);
+		addMatch(clubs, rod38, "Náutico", "Sport", "Aflitos", -1, -1, rodada, 2, 12, 17, 00);
+		addMatch(clubs, rod38, "Atlético-GO", "Bahia", "Serra Dourada", -1, -1, rodada, 2, 12, 17, 00);
+		tm.put(rodada, rod38);
+		
+		return tm;
+	}
+	
+	@Override
+	public void setMatches(TreeMap<Integer, ArrayList<Match>> matches){
+		TableDivision1Activity.matches = matches;
+	}
+	
+	@Override
+	public TreeMap<Integer, ArrayList<Match>> getMatches() {
+		return matches;
+	}
+	
+	@Override
+	public void setClubs(TreeMap<String, Club> clubs){
+		TableDivision1Activity.clubs = clubs;
+	}
+	
+	@Override
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	@Override
+	protected int getDivision(){
+		return 1;
+	}
+	
+}

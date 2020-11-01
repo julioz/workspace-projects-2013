@@ -1,0 +1,96 @@
+package br.com.zynger.brasileirao2012.xml;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import android.content.Context;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.enums.TrophyRegion;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.MatchesParticipation;
+import br.com.zynger.brasileirao2012.model.Trophy;
+import br.com.zynger.brasileirao2012.util.Raw;
+
+public class ClubsParser {
+
+	private final String CLUBS_XML = "clubs";
+	private static final String BADGE_PREFIX = "escudo_";
+
+	public ArrayList<Club> getClubs(Context context){
+		String xml = Raw.openRaw(context, CLUBS_XML);
+		ArrayList<Club> clubs = parseXML(xml);
+		return clubs;
+	}
+	
+	private static ArrayList<Club> parseXML(String xml){
+		ArrayList<Club> clubs = new ArrayList<Club>();
+		Element root = XMLUtils.getRoot(xml, "UTF-8");
+		List<Node> nodeClubs = XMLUtils.getChildren(root, "club");
+		for (Node node : nodeClubs) {
+			Club c = new Club();
+			
+			c.setName(XMLUtils.getText(node, "name"));
+			c.setFullName(XMLUtils.getText(node, "fullName"));
+			c.setWiki(XMLUtils.getText(node, "wiki"));
+			c.setAcronym(XMLUtils.getText(node, "acronym"));
+			c.setBadge(BADGE_PREFIX + XMLUtils.getText(node, "badge"));
+			String divisionText = XMLUtils.getText(node, "division");
+			c.setDivision(divisionText.equals("1") ? Division.FIRSTDIVISION : Division.SECONDDIVISION);
+			Node rivals = XMLUtils.getChild(node, "rivals");
+			c.setRivals(parseRivals(rivals));
+			Node trophies = XMLUtils.getChild(node, "trophies");
+			c.setTrophies(parseTrophies(trophies));
+			c.setAprov(new AprovData());
+			c.setMatchesParticipation(new MatchesParticipation());
+			
+			clubs.add(c);
+		}
+		return clubs;
+	}
+
+	private static HashSet<String> parseRivals(Node rivals) {
+		HashSet<String> setRivals = new HashSet<String>();
+		
+		if(rivals != null){			
+			List<Node> nodeRivals = XMLUtils.getChildren(rivals, "rival");
+			for (Node node : nodeRivals) {			
+				setRivals.add(XMLUtils.getText(node));
+			}
+		}
+		return setRivals;
+	}
+
+	private static ArrayList<Trophy> parseTrophies(Node trophies) {
+		List<Node> nodeTrophies = XMLUtils.getChildren(trophies, "trophy");
+		ArrayList<Trophy> arrTrophies = new ArrayList<Trophy>();
+		for (Node node : nodeTrophies) {
+			Trophy t = new Trophy();
+			String regionText = XMLUtils.getText(node, "region");
+			
+			TrophyRegion region = TrophyRegion.STATE;
+			if(regionText.equals("REGION")) region = TrophyRegion.REGION;
+			else if(regionText.equals("NATIONAL")) region = TrophyRegion.NATIONAL;
+			else if(regionText.equals("INTERNATIONAL")) region = TrophyRegion.INTERNATIONAL;
+			t.setRegion(region);
+			
+			t.setType(XMLUtils.getText(node, "name"));
+			
+			Node times = XMLUtils.getChild(node, "times");
+			ArrayList<Integer> arrTimes = new ArrayList<Integer>();
+			List<Node> timesChildren = XMLUtils.getChildren(times, "time");
+			for (Node nodeTime : timesChildren) {
+				String strTime = XMLUtils.getText(nodeTime);
+				arrTimes.add(Integer.valueOf(strTime));
+			}
+			t.setTimes(arrTimes);
+			
+			arrTrophies.add(t);
+		}
+		return arrTrophies;
+	}
+}

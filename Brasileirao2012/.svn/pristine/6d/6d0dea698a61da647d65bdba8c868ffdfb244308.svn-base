@@ -1,0 +1,64 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.List;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.view.EllipsizingTextView;
+
+public class NewsArrayAdapter extends ArrayAdapter<Article> {
+
+	private final LayoutInflater mInflater;
+	private int layoutResourceId;
+	private List<Article> objects;
+	
+	public NewsArrayAdapter(Context context, int layoutResourceId, List<Article> objects) {
+		super(context, layoutResourceId, objects);
+		this.mInflater = LayoutInflater.from(context);
+		this.layoutResourceId = layoutResourceId;
+		this.objects = objects;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+
+		View row = convertView;
+        ArticleHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(layoutResourceId, parent, false);
+            
+            holder = new ArticleHolder();
+            holder.txtTitle = (EllipsizingTextView) row.findViewById(R.news_row.tv_title);
+            holder.txtPubdate = (TextView) row.findViewById(R.news_row.tv_pubdate);
+            
+            row.setTag(holder);
+        }else{
+            holder = (ArticleHolder) row.getTag();
+        }
+        
+        Article art = objects.get(position);
+        
+        holder.txtTitle.setText(art.getTitle());
+        holder.txtTitle.setMaxLines(2);
+        holder.txtPubdate.setText(art.getPubCalendar());
+
+        return row;
+	}
+}
+
+class ArticleHolder {
+    EllipsizingTextView txtTitle;
+    TextView txtPubdate;
+}

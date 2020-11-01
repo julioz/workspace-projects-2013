@@ -1,0 +1,326 @@
+package br.com.zynger.brasileirao2012.movetomove;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.actionmode.ActionModeCallback.ActionModeListener;
+import br.com.zynger.brasileirao2012.actionmode.ShareActionModeCallback;
+import br.com.zynger.brasileirao2012.adapters.MoveToMoveArrayAdapter;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerItem;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerListItem;
+import br.com.zynger.brasileirao2012.asynctasks.GetMoveToMoveTask;
+import br.com.zynger.brasileirao2012.base.DrawerActivity;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.util.Constants;
+
+import com.actionbarsherlock.view.ActionMode;
+
+public class MoveToMoveActivity extends DrawerActivity<ArrayList<Move>>
+		implements IMoveToMoveFollower, ActionModeListener<Move> {
+
+	private ShareActionModeCallback<Move> mActionMode;
+	
+	protected Match match;
+	private ListView lvContent;
+	private TextView tvScoreHome;
+	private TextView tvScoreAway;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		super.onCreate(savedInstanceState);
+		mActionMode = new ShareActionModeCallback<Move>(this);
+	}
+
+	private Match loadMatchFromIntent() {
+		String jsonMatch = getIntent().getStringExtra(Constants.INTENT_MATCH);
+		if (jsonMatch != null) {
+			try {
+				return getMatchFromJsonArray(new JSONArray(jsonMatch), ClubsDB
+						.getInstance(this).getClubs());
+			} catch (JSONException je) {
+				je.printStackTrace();
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public void loadViews(View activityView) {
+		lvContent = (ListView) activityView
+				.findViewById(R.movetomoveactivity.lv_content);
+		tvScoreHome = (TextView) activityView
+				.findViewById(R.movetomoveactivity.tv_scr_h);
+		tvScoreAway = (TextView) activityView
+				.findViewById(R.movetomoveactivity.tv_scr_a);
+	}
+
+	private void setScoreToTextView(int score, TextView textView) {
+		textView.setText(score != Match.SCORE_NULL ? String.valueOf(score)
+				: new String());
+	}
+
+	protected Integer getScoreHome() {
+		try {
+			return Integer.valueOf(tvScoreHome.getText().toString());
+		} catch (NumberFormatException nfe) {
+			return null;
+		}
+	}
+
+	protected Integer getScoreAway() {
+		try {
+			return Integer.valueOf(tvScoreAway.getText().toString());
+		} catch (NumberFormatException nfe) {
+			return null;
+		}
+	}
+
+	protected void setScoreHome(Integer score) {
+		tvScoreHome.setText(String.valueOf(score));
+	}
+
+	protected void setScoreAway(Integer score) {
+		tvScoreAway.setText(String.valueOf(score));
+	}
+
+	@Override
+	public Match getMatch() {
+		return match;
+	}
+
+	@Override
+	public void onMovesParsed(ArrayList<Move> moves) {
+		MoveToMoveArrayAdapter adapter = new MoveToMoveArrayAdapter(this, moves);
+		setListAdapter(adapter);
+		if (match.isScoreNull()) {
+			setScoreFromAdapter(adapter);
+		}
+	}
+
+	private void setScoreFromAdapter(MoveToMoveArrayAdapter adapter) {
+		Integer[] score = adapter.getScore(getMatch().getHome(), getMatch()
+				.getAway());
+		setScoreHome(score[0]);
+		setScoreAway(score[1]);
+	}
+
+	@Override
+	public Match getMatchFromJsonArray(JSONArray json,
+			TreeMap<String, Club> clubs) {
+		return new Match(json, clubs);
+	}
+
+	protected void setListAdapter(MoveToMoveArrayAdapter adapter) {
+		lvContent.setAdapter(adapter);
+		setListViewListeners();
+	}
+	
+	private void setListViewListeners() {
+		lvContent.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+		lvContent.setOnScrollListener(new OnScrollListener() {
+			private int scrollState;
+
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				this.scrollState = scrollState;
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+					mActionMode.dismissActionMode();
+				}
+			}
+		});
+
+		lvContent.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> listView, View view,
+					int position, long id) {
+				mActionMode.setModel((Move) lvContent.getItemAtPosition(position));
+				mActionMode.startActionMode();
+			}
+		});
+	}
+
+	protected MoveToMoveArrayAdapter getListAdapter() {
+		return (MoveToMoveArrayAdapter) lvContent.getAdapter();
+	}
+
+	@Override
+	public Integer getPullToRefreshViewId() {
+		return null;
+	}
+
+	@Override
+	protected boolean showUpdateButton() {
+		return false;
+	}
+
+	@Override
+	public View[] getDataUpdateViewsToToggle(View activityView) {
+		return new View[] { activityView
+				.findViewById(R.movetomoveactivity.lv_content) };
+	}
+
+	@Override
+	public Integer getDataUpdateLayoutId() {
+		return R.movetomoveactivity.dul_loading;
+	}
+
+	@Override
+	public AsyncTask<Void, Void, ArrayList<Move>> getAsyncTask() {
+		return new GetMoveToMoveTask(this, match);
+	}
+
+	@Override
+	public void preExecution() {
+		if (getListAdapter() == null) {
+			lockDrawer();
+			super.preExecution();
+		}
+	}
+
+	@Override
+	public boolean onAsyncSuccess(ArrayList<Move> moves) {
+		if (!moves.isEmpty()) {
+			onMovesParsed(moves);
+		} else {
+			setEmptyDataSetMessage(getString(R.string.movetomoveactivity_matchwithnomoves));
+			return false;
+		}
+
+		unlockDrawer();
+		return true;
+	}
+
+	@Override
+	public void onAsyncFail(String message) {
+		if (message != null && getListAdapter() == null) {
+			setErrorMessage(message);
+		}
+	}
+
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_realtime;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.movetomoveactivity_title;
+	}
+
+	@Override
+	public int getLayoutResource() {
+		return R.layout.movetomoveactivity;
+	}
+
+	@Override
+	public boolean shouldCloseDrawerAfterItemSelection() {
+		return true;
+	}
+
+	@Override
+	public void beforeDrawerIsSet() {
+		match = loadMatchFromIntent();
+	}
+	
+	@Override
+	public void initializeActivityEnvironment(View activityView) {
+		if (match != null) {
+			setHeaderFromMatch(activityView);
+			getAsyncTask().execute();
+		} else {
+			setErrorMessage(getString(R.string.movetomoveactivity_erroropening));
+		}
+	}
+
+	private void setHeaderFromMatch(View activityView) {
+		((ImageView) activityView.findViewById(R.movetomoveactivity.iv_home))
+				.setImageResource(match.getHome().getBadgeResource(this));
+		((ImageView) activityView.findViewById(R.movetomoveactivity.iv_away))
+				.setImageResource(match.getAway().getBadgeResource(this));
+		setScoreToTextView(match.getScoreHome(), tvScoreHome);
+		setScoreToTextView(match.getScoreAway(), tvScoreAway);
+	}
+
+	@Override
+	public void didNotAutoUpdate() {
+	}
+
+	@Override
+	public List<DrawerItem> getDrawerListViewAdapter(List<DrawerItem> items) {
+		addDrawerHeaderToList(R.string.movetomoveactivity_title);
+		addDrawerItemToList(R.drawable.ic_video,
+				R.string.movetomovevideocentralactivity_title);
+		return items;
+	}
+
+	@Override
+	public void onDrawerListItemClick(AdapterView<?> parent, View view,
+			int position, long id, DrawerListItem item) {
+		if (position == 1) {
+			ArrayList<Move> movesWithVideos = getListAdapter()
+					.getMovesWithVideos();
+			if (!movesWithVideos.isEmpty()) {
+				Intent intent = new Intent(this,
+						MoveToMoveVideoCentralActivity.class);
+				intent.putExtra(Constants.INTENT_MOVES, movesWithVideos);
+				startActivity(intent);
+			} else {
+				Toast.makeText(this,
+						R.string.movetomoveactivity_matchwithnovideos,
+						Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+
+	@Override
+	public int getMenuResource() {
+		return mActionMode.getMenuResource();
+	}
+
+	@Override
+	public void onPrepareActionMode() {
+	}
+
+	@Override
+	public void changeMenuItems(Move model) {
+	}
+
+	@Override
+	public void onDestroyActionMode() {
+		lvContent.clearChoices();
+		lvContent.requestLayout();
+	}
+
+	@Override
+	public boolean onActionModeItemClick(Move move, ActionMode mode, int itemId) {
+		return mActionMode.onShareClicked(move.getShareableContent(), mode, itemId);
+	}
+}

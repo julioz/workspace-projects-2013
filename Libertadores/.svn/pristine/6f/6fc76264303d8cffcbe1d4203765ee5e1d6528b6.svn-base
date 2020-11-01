@@ -1,0 +1,65 @@
+package br.com.zynger.libertadores.util;
+
+import java.util.TreeMap;
+
+import android.util.Log;
+import br.com.zynger.libertadores.HomeActivity;
+import br.com.zynger.libertadores.model.Club;
+
+public class WebDatabaseMapper {
+	
+	private TreeMap<String, Club> clubs;
+	
+	private TreeMap<String, Club> nameMap;
+	private String clubName;
+	
+	public WebDatabaseMapper(TreeMap<String, Club> clubs) {
+		this.nameMap = new TreeMap<String, Club>();
+		setClubs(clubs);
+	}
+	
+	public Club getClubByName(String clubName){
+		this.clubName = clubName;
+		Club club = nameMap.get(clubName);
+		if(null != club) return club;
+		
+		addToMapIfEqual("U. de Chile", "UCH");
+		addToMapIfEqual("Defensor Sporting", "DFS");
+		//TODO complete database
+		club = nameMap.get(clubName);
+		if(null != club) return club;
+		
+		club = clubs.get(clubName.substring(0, 3).toUpperCase());
+		if(null != club){
+			nameMap.put(clubName, club);
+			return club;
+		}
+		
+		for (Club c : clubs.values()) {
+			if(c.getName().contains(clubName)){
+				club = c;
+				nameMap.put(clubName, club);
+				return club;
+			}
+		}
+		
+		Log.e(HomeActivity.TAG, "****"+clubName);
+		return clubs.get("RGA");
+	}
+	
+	private void addToMapIfEqual(String expected, String acronym){
+		if(clubName.equals(expected)){
+			Club club = clubs.get(acronym);
+			nameMap.put(clubName, club);
+		}
+	}
+	
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	public void setClubs(TreeMap<String, Club> clubs) {
+		this.clubs = clubs;
+	}
+
+}

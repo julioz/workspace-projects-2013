@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+feedactivity/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <com.fima.cardsui.views.CardUI
+            android:id="@+feedactivity/cardsview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <!-- The navigation drawer -->
+
+    <RelativeLayout
+        android:id="@+feedactivity/rl_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/holo_light_background" >
+
+        <ListView
+            android:id="@+feedactivity/lv_drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp" />
+
+        <Button
+            android:id="@+feedactivity/bt_drawer"
+            style="@style/Widget.Sherlock.ActionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/feed_drawer_logout"
+            android:textColor="@color/lightgray"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+</android.support.v4.widget.DrawerLayout>

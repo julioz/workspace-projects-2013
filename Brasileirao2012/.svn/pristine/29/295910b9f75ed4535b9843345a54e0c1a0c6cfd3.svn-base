@@ -1,0 +1,50 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.view.MoveToMoveLayout;
+
+public class VideoCentralAdapter extends BaseAdapter {
+	private Context context;
+	private LayoutInflater layoutInflater;
+	private ArrayList<Move> moves;
+	private HashMap<String, Bitmap> cache;
+	private boolean showImgs;
+
+	public VideoCentralAdapter(Context context, ArrayList<Move> moves, boolean showImgs) {
+		this.context = context;
+		this.moves = moves;
+		this.showImgs = showImgs;
+		cache = new HashMap<String, Bitmap>();
+		layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+
+	@Override
+	public int getCount() {
+		return moves.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return moves.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return 0;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		Move move = (Move) getItem(position);
+		return new MoveToMoveLayout(context, layoutInflater, move, showImgs, cache);
+	}
+}

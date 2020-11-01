@@ -1,0 +1,51 @@
+package br.com.zynger.brasileirao2012.asynctasks;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import org.json.JSONException;
+
+import android.content.Context;
+import android.os.AsyncTask;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.rest.MoveToMoveREST;
+
+public class GetMoveToMoveTask extends AsyncTask<Void, Void, ArrayList<Move>> {
+	private Context context;
+	private TreeMap<String, Club> clubs;
+	private Match match;
+	private AsyncTaskListener listener;
+
+	public GetMoveToMoveTask(Context context, TreeMap<String, Club> clubs, Match match, AsyncTaskListener listener) {
+		this.context = context;
+		this.clubs = clubs;
+		this.match = match;
+		this.listener = listener;
+	}
+
+	@Override
+	protected void onPreExecute() {
+		listener.preExecution();
+		super.onPreExecute();
+	}
+
+	@Override
+	protected ArrayList<Move> doInBackground(Void... params) {
+		try {
+			return new MoveToMoveREST(clubs).getRealTimeMatchMoveToMove(context, match);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	protected void onPostExecute(ArrayList<Move> result) {
+		if(result != null) listener.onComplete(result);
+		else listener.onFail(context.getString(R.string.message_errormovetomovefail));
+		super.onPostExecute(result);
+	}
+}

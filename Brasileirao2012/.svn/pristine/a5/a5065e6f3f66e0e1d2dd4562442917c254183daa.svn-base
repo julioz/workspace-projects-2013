@@ -1,0 +1,141 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.Calendar;
+import java.util.TreeMap;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+public class TableDivision2Activity extends TableActivity {
+
+	private static TreeMap<String, Club> clubs;
+	private static TreeMap<Integer, Fixture> matches;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.table);
+		
+		clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		if(clubs == null){
+			clubs = HomeActivity.getMapClubs();
+			FileHandler.saveBackup(this, FileHandler.CLUBS, clubs);
+		}
+		matches = (TreeMap<Integer, Fixture>) FileHandler.openBackup(this, FileHandler.MATCHES, Club.SEGUNDADIVISAO);
+
+		setUsingViewFlow(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_highperformance", true));
+		
+		loadViews();
+		
+		((TextView) findViewById(R.table.tv_actionbar_div)).setText("B");
+		findViewById(R.table.actionbar_ll_div).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+				Intent it = new Intent(v.getContext(), TableDivision1Activity.class);
+				startActivity(it);
+			}
+		});
+		
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_actsupdates", false)) new UpdateTableTask(this, getDivision()).execute();
+		else{
+			if(isUsingViewFlow()) new ShowTableUsingViewFlowTask(this, matches).execute();
+			else setTable(getRodBasedOnCalendar());
+		}
+	}
+	
+	@Override
+	protected int getRodBasedOnCalendar(){
+		Calendar c = Calendar.getInstance(); 
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		int month = c.get(Calendar.MONTH)+1;
+		
+		if(month < 5) return 1;
+		else if(month == 5){
+			if(day < 19 +1) return 1;
+			else if(day < 26 +1) return 2;
+			else if(day < 29 +1) return 3;
+			else return 4;
+		}else if (month == 6){
+			if(day < 2 +1) return 4;
+			else if(day < 9 +1) return 5;
+			else if(day < 16 +1) return 6;
+			else if(day < 23 +1) return 7;
+			else return 8;
+		}else if (month == 7){
+			if(day < 1 +1) return 8;
+			else if(day < 7 +1) return 9;
+			else if(day < 14 +1) return 10;
+			else if(day < 17 +1) return 11;
+			else if(day < 21 +1) return 12;
+			else if(day < 28 +1) return 13;
+			else return 14;
+		}else if (month == 8){
+			if(day < 1 +1) return 14;
+			else if(day < 4 +1) return 15;
+			else if(day < 11 +1) return 16;
+			else if(day < 14 +1) return 17;
+			else if(day < 18 +1) return 18;
+			else if(day < 25 +1) return 19;
+			else if(day < 28 +1) return 20;
+			else return 21;
+		}else if (month == 9){
+			if(day < 1 +1) return 21;
+			else if(day < 4 +1) return 22;
+			else if(day < 8 +1) return 23;
+			else if(day < 11 +1) return 24;
+			else if(day < 15 +1) return 25;
+			else if(day < 22 +1) return 26;
+			else return 27;
+		}else if (month == 10){
+			if(day < 6 +1) return 28;
+			else if(day < 13 +1) return 29;
+			else if(day < 16 +1) return 30;
+			else if(day < 20 +1) return 31;
+			else if(day < 23 +1) return 32;
+			else if(day < 26 +1) return 33;
+			else return 34;
+		}else if (month == 11){
+			if(day < 3 +1) return 34;
+			else if(day < 6 +1) return 35;
+			else if(day < 10 +1) return 36;
+			else if(day < 17 +1) return 37;
+			else return 38;
+		}else if (month == 12){
+			return 38;
+		}else return 1;
+	}
+
+	@Override
+	public void setMatches(TreeMap<Integer, Fixture> matches){
+		TableDivision2Activity.matches = matches;
+	}
+	
+	@Override
+	public TreeMap<Integer, Fixture> getMatches() {
+		return matches;
+	}
+	
+	@Override
+	public void setClubs(TreeMap<String, Club> clubs){
+		TableDivision2Activity.clubs = clubs;
+	}
+	
+	@Override
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	@Override
+	protected int getDivision(){
+		return Club.SEGUNDADIVISAO;
+	}
+}

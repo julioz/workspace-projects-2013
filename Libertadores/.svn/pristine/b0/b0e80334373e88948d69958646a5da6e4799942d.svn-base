@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="Internet">
+		<!-- <CheckBoxPreference
+		    android:key="cb_updatecheck"
+		    android:title="Checar atualizações ao iniciar"
+		    android:summary="Procura por atualizações do aplicativo no Google Play"
+		    android:defaultValue="true"/>-->
+		<CheckBoxPreference
+		    android:key="cb_imgsdownload"
+		    android:title="Exibir imagens da internet"
+		    android:summary="Download de imagens consome banda de internet"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_actsupdates"
+		    android:title="Atualizar sempre"
+		    android:summary="Atualiza automaticamente todos os dados ao abrir cada tela"
+		    android:defaultValue="false"/>
+	</PreferenceCategory>
+</PreferenceScreen>

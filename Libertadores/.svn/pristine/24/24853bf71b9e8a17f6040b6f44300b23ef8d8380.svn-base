@@ -1,0 +1,137 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.libertadores.MatchesListActivity;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Match;
+
+public class MatchesListAdapter extends ArrayAdapter<Match> {
+
+	private final LayoutInflater mInflater;
+	private static final int LAYOUTRESOURCEID = R.layout.matcheslistrow;
+	private ArrayList<Match> objects;
+	private Integer phase;
+	
+	public MatchesListAdapter(Context context, ArrayList<Match> matches, Integer phase) {
+		super(context, LAYOUTRESOURCEID);
+		this.mInflater = LayoutInflater.from(context);
+		objects = matches;
+		this.phase = phase;
+	}
+	
+	public MatchesListAdapter(Context context, ArrayList<Match> matches) {
+		super(context, LAYOUTRESOURCEID);
+		this.mInflater = LayoutInflater.from(context);
+		objects = matches;
+		this.phase = null;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public Match getItem(int position) {
+		return objects.get(position);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+		MatchesListHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+            
+            holder = new MatchesListHolder();
+            holder.tv_match_title = (TextView) row.findViewById(R.matcheslistrow.tv_match_title);
+            holder.ll_match_title = (LinearLayout) row.findViewById(R.matcheslistrow.ll_match_title);
+            holder.tv_date = (TextView) row.findViewById(R.matcheslistrow.tv_date);
+            holder.tv_stadium = (TextView) row.findViewById(R.matcheslistrow.tv_stadium);
+            holder.iv_home = (ImageView) row.findViewById(R.matcheslistrow.iv_home);
+            holder.iv_away = (ImageView) row.findViewById(R.matcheslistrow.iv_away);
+            holder.tv_score_home = (TextView) row.findViewById(R.matcheslistrow.tv_score_home);
+            holder.tv_score_away = (TextView) row.findViewById(R.matcheslistrow.tv_score_away);
+            
+            row.setTag(holder);
+        }else{
+            holder = (MatchesListHolder) row.getTag();
+        }
+
+        Match match = getItem(position);
+        final Club home = match.getHome();
+        final Club away = match.getAway();
+        String stadium = match.getStadium();
+        if(null == stadium) stadium = getContext().getString(R.string.matcheslistadapter_stadium_null);
+        GregorianCalendar date = match.getDate();
+        String strDate = getContext().getString(R.string.matcheslistadapter_date_null);
+        if(null != date) strDate = date.get(Calendar.DAY_OF_MONTH) + "/" + date.get(Calendar.MONTH);
+        String title = match.getTitle();
+        if(null == title) holder.ll_match_title.setVisibility(View.GONE);
+        else{
+        	String prefix = new String();
+        	if(phase == MatchesListActivity.PHASE_PRELIB) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_qualifying);
+        	else if(phase == MatchesListActivity.PHASE_ROUNDOF16) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_roundofsixteen);
+        	else if(phase == MatchesListActivity.PHASE_QUARTERFINAL) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_quarterfinal);
+        	else if(phase == MatchesListActivity.PHASE_SEMIFINAL) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_semifinal);
+        	else if(phase == null) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_round);
+        	
+        	title = prefix + " " + title;
+        	holder.tv_match_title.setText(title.trim().toUpperCase());
+        	holder.ll_match_title.setVisibility(View.VISIBLE);
+        }
+        
+        holder.tv_date.setText(strDate); //TODO formato da data pode variar de acordo com país
+        holder.tv_stadium.setText(stadium);
+        holder.iv_home.setImageResource(home.getBadgeResource(getContext()));
+        holder.iv_away.setImageResource(away.getBadgeResource(getContext()));
+        holder.iv_home.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getContext(), home.getName(), Toast.LENGTH_SHORT).show();
+			}
+		});
+        holder.iv_away.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getContext(), away.getName(), Toast.LENGTH_SHORT).show();
+			}
+		});
+        holder.tv_score_home.setText(getScoreString(match.getScoreHome()));
+        holder.tv_score_away.setText(getScoreString(match.getScoreAway()));
+        
+        return row;
+	}
+
+	private String getScoreString(Integer score) {
+		if(score == Match.SCORE_NULL) return new String();
+		return String.valueOf(score);
+	}
+	
+}
+
+class MatchesListHolder {
+	TextView tv_match_title;
+	LinearLayout ll_match_title;
+	TextView tv_date;
+	TextView tv_stadium;
+	ImageView iv_home;
+	ImageView iv_away;
+	TextView tv_score_home;
+	TextView tv_score_away;
+}

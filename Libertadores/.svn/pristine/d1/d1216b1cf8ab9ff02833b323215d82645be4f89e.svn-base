@@ -1,0 +1,28 @@
+package br.com.zynger.libertadores.view;
+
+import android.content.Context;
+import android.graphics.Typeface;
+import android.util.AttributeSet;
+import android.widget.TextView;
+
+public class HelveticaTextView extends TextView {
+	
+	public HelveticaTextView(Context context) {
+		super(context);
+		init();
+	}
+
+	public HelveticaTextView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init();
+	}
+	
+	public HelveticaTextView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init();
+	}
+
+	private void init() {
+		setTypeface(Typeface.createFromAsset(getContext().getAssets(), "helveticacdhv.ttf"));
+	}
+}

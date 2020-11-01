@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    android:background="@drawable/backrepeat"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+	<RelativeLayout
+	    android:background="@drawable/actionbar_gradient2"
+	    android:id="@+newstabsviewflowlayout/rl_actionbar"
+	    android:layout_alignParentTop="true"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content">
+	    
+	    <ImageView
+	        android:layout_width="45dp"
+	        android:layout_height="45dp"
+	        android:padding="3dp"
+	        android:src="@drawable/ic_news"
+	        android:id="@+newstabsviewflowlayout/iv_badge"
+	        android:layout_centerVertical="true" />
+	    
+	    <br.com.zynger.brasileirao2012.view.TertreTextView
+	        android:id="@+newstabsviewflowlayout/tv_name"
+	        android:layout_marginLeft="3dp"
+	        android:layout_marginBottom="3dp"
+	        android:layout_toRightOf="@+newstabsviewflowlayout/iv_badge"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:textSize="30dp" />
+	    
+	    <LinearLayout
+            android:id="@+newstabsviewflowlayout/launcher_actionbar_ll"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/layout_roundborder"
+            android:gravity="center"
+            android:layout_centerVertical="true">
+            
+            <ImageButton
+                android:id="@+newstabsviewflowlayout/launcher_actionbar_ib_team"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:background="@null"
+                android:layout_width="20dp"
+                android:layout_height="20dp"/>
+        </LinearLayout>
+	</RelativeLayout>
+	
+	<LinearLayout
+	    android:layout_width="fill_parent"
+		android:gravity="center_horizontal"
+		android:id="@+newstabsviewflowlayout/header_layout"
+		android:layout_below="@+newstabsviewflowlayout/rl_actionbar"
+		android:orientation="vertical"
+		android:layout_height="wrap_content">
+		
+		<org.taptwo.android.widget.TitleFlowIndicator
+			android:id="@+newstabsviewflowlayout/viewflowindic"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			app:footerLineHeight="1dp"
+			app:footerTriangleHeight="7dp"
+			app:textColor="#FFFFFFFF"
+			app:selectedColor="#FFFFC445"
+			app:footerColor="#FFFFFFFF"
+			app:titlePadding="10dp"
+			app:textSize="11dp"
+			app:selectedSize="12dp"
+			android:layout_marginTop="10dip"
+			app:clipPadding="5dp" />
+	</LinearLayout>
+	
+	<br.com.zynger.brasileirao2012.view.DataUpdateLayout
+	    android:id="@+newstabsviewflowlayout/dul_loading"
+	    android:visibility="gone"
+		android:layout_above="@+newstabsviewflowlayout/ll_ad"
+		android:layout_below="@+newstabsviewflowlayout/header_layout"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+	
+	<org.taptwo.android.widget.ViewFlow
+		android:duplicateParentState="true"
+		android:id="@+newstabsviewflowlayout/viewflow"
+		android:layout_above="@+newstabsviewflowlayout/ll_ad"
+		android:layout_below="@+newstabsviewflowlayout/header_layout"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+	
+	<LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+newstabsviewflowlayout/ll_ad"
+		android:gravity="bottom|center_horizontal">
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+	</LinearLayout>
+</RelativeLayout>

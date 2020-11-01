@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+	<string name="aboutactivity_title">Sobre</string>
+	<string name="aboutactivity_viewflow_title_theapp">O app</string>
+	<string name="aboutactivity_viewflow_title_moreinfo">Mais informações</string>
+	<string name="aboutactivity_viewflow_title_thanks">Agradecimentos</string>
+	<string name="aboutactivity_version">Versão</string>
+	<string name="aboutactivity_developedby">desenvolvido por:</string>
+	<string name="aboutactivity_juliozynger">Júlio Zynger</string>
+    <string name="aboutactivity_mailandrights">Obrigado por escolher este aplicativo!\n\nSe você tem algum elogio, sugestão, crítica ou mensagem que gostaria de compartilhar comigo, sinta-se a vontade para enviar um email para o meu endereço (na tela ao lado), ficarei feliz em ler sua mensagem!\n\n\nObs.: Todas as imagens, escudos, ou recursos multimídia presentes neste aplicativo são de direito de seus respectivos donos legais.</string>
+	<string name="aboutactivity_email">juliozapps@gmail.com</string>
+	
+	<string name="aprovactivity_title">Aproveitamento</string>
+	<string name="aprovactivity_home">Mandante</string>
+	<string name="aprovactivity_visitor">Visitante</string>
+	<string name="aprovactivity_played">J</string>
+	<string name="aprovactivity_win">V</string>
+	<string name="aprovactivity_draw">E</string>
+	<string name="aprovactivity_percent">%</string>
+	
+	<string name="facebookconnect_loginfail">Login falhou!</string>
+	<string name="facebookconnect_logoutsuccess">Logout realizado com sucesso!</string>
+	<string name="facebookconnect_graphapistatus">https://lh5.ggpht.com/KM5Z185xBqp3ZYs6Pt9FQ-8YIJh3yiLpypKJsZDSeVTAz3ReSY2TDkhaz9KfX9kCOnU=w124</string>
+	<string name="facebookconnect_messagesent">Mensagem enviada!</string>
+	<string name="facebookconnect_messagefail">Não foi possível enviar a mensagem</string>
+	
+	<string name="guideactivity_title">Guia</string>
+	
+	<string name="movetomoveactivity_title">Lance a Lance</string>
+	<string name="movetomoveactivity_erroropening">Um erro ocorreu.\nNão foi possível abrir o lance a lance para esta partida.</string>
+	<string name="movetomoveactivity_follow">Acompanhar</string>
+	<string name="movetomoveactivity_dontfollow">Não acompanhar</string>
+	<string name="movetomoveactivity_squad">Escalação</string>
+	<string name="movetomoveactivity_nolongerfollowing">Você não está mais acompanhando a partida.</string>
+	<string name="movetomoveactivity_videos">Vídeos</string>
+	<string name="movetomoveactivity_novideostoshow">Não há vídeos para exibição no momento.</string>
+	<string name="movetomoveactivity_matchwithnomoves">A partida ainda não tem lances registrados.</string>
+	
+	<string name="movetomovevideocentralactivity_title">Vídeos</string>
+	
+	<string name="myteamactivity_title">Meu Time</string>
+	<string name="myteamactivity_strikers">Artilheiros</string>
+	<string name="myteamactivity_rivalries">Clássicos</string>
+	<string name="myteamactivity_norivalriestoshow">Não há clássicos marcados para este clube</string>
+	<string name="myteamactivity_strikersnotfound">A lista de artilheiros ainda não foi atualizada</string>
+	<string name="myteamactivity_trophies">Troféus</string>
+	<string name="myteamactivity_more">Mais</string>
+	<string name="myteamactivity_pointsandposition" formatted="false">%d pontos - %d° lugar</string>
+	
+	<string name="newsdetailsactivity_reading">Lendo...</string>
+	<string name="readnewsfromdomain_errorreading">Não foi possível ler a notícia</string>
+	
+	<string name="newsviewflowactivity_title">Notícias</string>
+	<string name="newsviewflowactivity_errorreading">Um erro ocorreu ao ler as notícias deste time.</string>
+	
+	<string name="partnersactivity_title">Parceiros</string>
+	
+	<string name="rankingactivity_title">Classificação</string>
+	<string name="rankingactivity_footer_libertadores">Libertadores</string>
+	<string name="rankingactivity_footer_access">Acesso</string>
+	<string name="rankingactivity_footer_sulamericana">Sul-Americana</string>
+	<string name="rankingactivity_footer_punishment">Rebaixamento</string>
+	<string name="rankingactivity_points">P</string>
+	<string name="rankingactivity_games">J</string>
+	<string name="rankingactivity_win">V</string>
+	<string name="rankingactivity_draw">E</string>
+	<string name="rankingactivity_lose">D</string>
+	<string name="rankingactivity_goalspro">GP</string>
+	<string name="rankingactivity_goalsagainst">GC</string>
+	<string name="rankingactivity_balance">SG</string>
+	
+	<string name="realtimematchesactivity_title">Tempo Real</string>
+	<string name="realtimematchesactivity_nomatchestoshow">Não há nenhum jogo a ser exibido no momento.</string>
+	
+	<string name="realtimematchservice_notification_goal">GOOOOLLL</string>
+	<string name="realtimematchservice_notification_following">Acompanhando</string>
+	<string name="realtimematchservice_notification_matchstarted">Jogo iniciado</string>
+	<string name="realtimematchservice_notification_matchended">Fim de jogo</string>
+	<string name="realtimematchservice_error">Ocorreu um problema no acompanhamento da partida, tente novamente</string>
+	
+	<string name="settingsactivity_title">Configurações</string>
+	
+	<string name="stadiumsactivity_stadiumnotfound">Não foi possível encontrar o estádio</string>
+	<string name="stadiumsactivity_name">Nome</string>
+	<string name="stadiumsactivity_nick">Apelido</string>
+	<string name="stadiumsactivity_city">Cidade</string>
+	<string name="stadiumsactivity_capacity">Capacidade</string>
+	<string name="stadiumsactivity_measures">Medidas</string>
+	<string name="stadiumsactivity_foundation">Inaugurado em</string>
+	
+	<string name="strikerslistactivity_showingolddata">Exibindo dados de 2012.\n\nEm breve, atualização.</string>
+	<string name="strikerslistactivity_title">Artilharia</string>
+	<string name="strikerslistactivity_goals">Gols</string>
+	<string name="strikerslistactivity_player">Jogador</string>
+	<string name="strikerslistactivity_team">Equipe</string>
+	
+	<string name="tableflowactivity_generatingtable">Gerando tabela...</string>
+	<string name="tableflowactivity_title">Tabela</string>
+	<string name="tableflowactivity_selectfixture">Selecione a rodada</string>
+	<string name="tableflowactivity_ok">Ok</string>
+	<string name="tableflowactivity_cancel">Cancelar</string>
+	
+	<string name="thirddivisionactivity_title">Terceira Divisão</string>
+	<string name="thirddivisionactivity_footer_classified">Classificados</string>
+	<string name="thirddivisionactivity_footer_punishment">Rebaixamento</string>
+	
+	<string name="torcidometeractivity_title">Torcidômetro</string>
+	<string name="torcidometeractivity_share">Compartilhar</string>
+	<string name="torcidometeractivity_sharemessage" formatted="false">O %s está em %d° lugar no torcidômetro do %s com %d torcedores!\n\nBaixe já o aplicativo para android no Google Play e vamos aumentar a contagem! http://bit.ly/IpBPUV</string>
+	
+	<string name="trophiesactivity_generalupdateerror">Um erro ocorreu, faça uma atualização geral antes de prosseguir.</string>
+	<string name="trophiesselectoractivity_title">Sala de Troféus</string>
+	<string name="trophiesselectoractivity_selectteam">Selecione a equipe</string>
+	<string name="trophiesselectoractivity_myteam">Meu time</string>
+	
+	<string name="clubselectoradapter_division">Série</string>
+	<string name="newsviewflowadapter_read">Ler</string>
+	<string name="newsviewflowadapter_openpage">Abrir página</string>
+	<string name="newsviewflowadapter_share">Compartilhar</string>
+	<string name="newsviewflowadapter_interneterrorreading">Conecte-se à internet para ler as notícias.</string>
+	<string name="thirddivisionviewflowadapter_group">Grupo</string>
+	<string name="trophiesarrayadapter_time">vez</string>
+	<string name="trophiesarrayadapter_times">vezes</string>
+	
+	<string name="model_club_points">pontos</string>
+	<string name="model_club_place">º lugar</string>
+	
+	<string name="views_matchviewlayout_fixture">ª rodada</string>
+	<string name="matchviewlayout_rivalry">★ Clássico ★</string>
+	<string name="views_matchviewlayout_quickaction_add">Adicionar</string>
+	<string name="views_matchviewlayout_quickaction_stadium">Estádio</string>
+	<string name="views_matchviewlayout_quickaction_movetomove">Lance a lance</string>
+	<string name="views_matchviewlayout_unavailabletime">Horário indisponível</string>
+	<string name="views_matchviewlayout_unavailableplace">Local indisponível</string>
+	<string name="views_matchviewlayout_ordinalendingtoposition">º</string>
+	<string name="views_matchviewlayout_stadium">Estádio</string>
+	<string name="views_matchviewlayout_erroraddingcalendar">Um erro ocorreu!\nNão foi possível adicionar a partida ao seu calendário</string>
+	
+	<string name="views_partnerlayout_contact">Contato: juliozapps@gmail.com</string>
+	
+	<string name="getrealtimesquadtask_fail">Não foi possível obter a escalação deste jogo.</string>
+	
+	<string name="sendmyteamtask_success">Seu time foi atualizado no torcidômetro!</string>
+	<string name="sendmyteamtask_fail">Não foi possível atualizar seu time no torcidômetro, tente mais tarde.</string>
+
+	<string name="guidelayoutadapter_title_welcome">Bem-vindo</string>
+	<string name="guidelayoutadapter_title_gettingstarted">Começando</string>
+	<string name="guidelayoutadapter_title_myteam">Meu Time</string>
+	<string name="guidelayoutadapter_title_updating">Atualizando</string>
+	<string name="guidelayoutadapter_title_divisions">Divisões</string>
+	<string name="guidelayoutadapter_title_table">Tabela</string>
+	<string name="guidelayoutadapter_title_newsandrealtime">Notícias e Tempo Real</string>
+	<string name="guidelayoutadapter_title_trophiesandstadiums">Troféus e Estádios</string>
+	<string name="guidelayoutadapter_title_torcidometer">Torcidômetro</string>
+	<string name="guidelayoutadapter_title_enjoy">Desfrute!</string>
+	<string name="guidelayoutadapter_text_guide1_txt1">Seja bem-vindo e obrigado por fazer o download do \"Brasileirão\", o app número 1 para quem o futebol é mais que uma paixão.\n\nPor favor, tire um minuto e navegue por este tour guiado onde você vai encontrar informações importantes sobre como usar o melhor do aplicativo em seu Android.</string>
+	<string name="guidelayoutadapter_text_guide2_txt1">Brasileirão é um agregador de informações sobre o Campeonato Brasileiro, que oferece funcionalidades específicas para trazer sempre as últimas notícias, estatísticas, dados e curiosidades sobre o campeonato de futebol mais equilibrado do mundo.\n\nO aplicativo oferece tabelas de classificação, artilharia, aproveitamento, além de informações específicas sobre cada time e até mesmo sobre os estádios onde são disputadas as partidas.</string>
+	<string name="guidelayoutadapter_text_guide2_txt2">Além disso, o aplicativo também traz informações sobre as últimas notícias de cada clube retiradas dos principais portais de notícia do país, e dados de tempo real sobre o andamento das partidas das séries A e B.\n\nTudo isso para ser seu guia de bolso definitivo para seguir seu time e não te deixar perder nem um segundo da disputa pelo título!</string>
+	<string name="guidelayoutadapter_text_guide3_txt1">Ao iniciar o aplicativo pela primeira vez, foi solicitado que você escolhesse um \"time do coração\". Esta configuração definirá o comportamento de uma série de funcionalidades explicadas abaixo.\n\nVocê pode visualizar qual é seu time do coração diretamente pela tela principal, no quadradinho da barra de título (clicando lá você conseguirá alterá-lo).</string>
+	<string name="guidelayoutadapter_text_guide3_txt2">Uma vez com o time selecionado, você será cadastrado no torcidômetro - que mede o número de torcedores de cada equipe utilizando o aplicativo - e terá ao alcance de um clique as últimas notícias de seu time, além da tabela completa dos jogos de seu time rodada a rodada, a lista de títulos e de jogadores da equipe que se destacaram na artilharia.</string>
+	<string name="guidelayoutadapter_text_guide4_txt1">Os dados da aplicação podem ser atualizados todos de uma vez! Basta clicar no ícone de atualização à esquerda inferior da tela principal - lembre-se que atualizar tudo de uma vez é demorado e pode causar um prejuízo na sua cota de internet móvel 3G! (é recomendado atualizar sempre via WiFi)\n\nAlém disso, nas configurações do app, é possível ativar a opção \"Atualizar sempre\", para que a cada vez que você abrir a classificação, artilharia ou tabela, a mesma seja atualizada automaticamente.</string>
+	<string name="guidelayoutadapter_text_guide4_txt2">Se você quiser atualizar somente uma parte da aplicação, como a tabela de classificação ou a artilharia, cada tela tem um botão de atualização (como o abaixo) à direita da barra de título - basta clicar lá e a mágica acontece!</string>
+	<string name="guidelayoutadapter_text_guide5_txt1">Desde a versão 1.0.1, o aplicativo te informa tudo não somente sobre os vinte clubes que disputam a Série A, mas também as vinte equipes postulantes ao título da Série B!\n\nCada funcionalidade do aplicativo tem, em sua barra de título, o seguinte botão que informa a divisão sobre a qual se referem os dados exibidos:</string>
+	<string name="guidelayoutadapter_text_guide5_txt2">Para alterar está configuração, basta tocar neste botão, e você terá as informações sobre classificação, tabela, artilharia e mais sobre aquela divisão do futebol brasileiro!</string>
+	<string name="guidelayoutadapter_text_guide6_txt1">A principal funcionalidade do aplicativo é a tabela de jogos. Com um clique na tela principal do app, você terá todos os trezentos e oitenta jogos do Campeonato Brasileiro (isso para cada divisão!), com data, horário, estádio, e se o jogo já aconteceu, o placar da partida.\n\nA tabela é organizada por rodadas. Cada uma das trinta e oito rodadas tem dez jogos a serem disputados, e da mesma forma, estes dez jogos podem ser visualizados por vez na tela do app. A tabela já é aberta na rodada mais próxima a ser disputada. Para alterar a rodada em vista, existem duas maneiras: um clique no quadradinho da barra de título que informa a rodada exibida criará uma lista com as trinta e oito rodadas a serem escolhidas. Por outro lado, também é muito simples passear pelas rodadas do campeonato simplesmente deslizando as telas para esquerda e direita!</string>
+	<string name="guidelayoutadapter_text_guide6_txt2">Outro destaque da tabela são as funções de adicionar os jogos ao seu calendário, visualizar os detalhes do estádio e ver o lance-a-lance da partida.\nNinguém gostaria de esquecer a data e hora daquele jogão no meio-de-semana, não é mesmo? Por isso, com um clique nos dados da partida, é possível adicionar os dados da data, hora e local onde será disputado o jogo ao calendário pessoal do seu telefone/tablet.\nClicando na opção \"Estádio\" você será levado para o mapa de estádios, centralizado no mapa onde acontece aquela partida. Com mais dois toques é possível ver todos os detalhes do estádio, tamanho do campo, e o histórico da arena!\nClicando em \"Lance-a-lance\" você poderá visualizar todos os lances da partida, inclusive assistindo os vídeos dos lances mais importantes.\n\nE mais: Se você é usuário do Google Calendar, uma vez adicionado o jogo ao seu calendário, basta sincronizar o mesmo com a internet e ele ficará visível para você via web, seja do seu android ou do seu computador!</string>
+	<string name="guidelayoutadapter_text_guide7_txt1">Para você que não quer perder nada, o aplicativo também traz notícias atualizadas constantemente dos maiores portais do país, e o tempo real das partidas em andamento, tudo isso a um clique de distância no seu android.\n\nUma vez selecionado seu time do coração, a tela de notícias atualizará sempre trazendo-lhe as últimas notícias do seu time. Clicando sobre o título de uma notícia, opções são exibidas, desde ler a história dentro do aplicativo, visualizar no seu browser preferido, e compartilhar a notícia com seus amigos, através de variados métodos, desde redes sociais até via bluetooth.</string>
+	<string name="guidelayoutadapter_text_guide7_txt2">A tela de tempo real é outro grande atrativo do app: os resultados das partidas das série A e B atualizados constantemente, de acordo com o intervalo de tempo definido nas configurações do aplicativo. Ao tocar em uma das partidas, é possível ver o lance-a-lance da partida, além da escalação dos times participantes, e cadastrá-la para acompanhamento: você passará a receber notificações dos gols e do fim da partida, podendo também configurar a forma de notificação, com vibração do aparelho e até áudio!</string>
+	<string name="guidelayoutadapter_text_guide8_txt1">Não seria muito bom conhecer a história do estádio onde seu time vai jogar? Onde fica localizado, quais as medidas do campo? E que tal provocar os torcedores de outros times por não ter aquele título que só seu time conquistou? A sala de troféus e o mapa de estádios vão ser perfeitos para você!\n\nPartindo da sala de troféus, é possível visualizar as conquistas de seu time, além de todos os outros das séries A e B (basta deslizar o menu para direita e esquerda, como na imagem):</string>
+	<string name="guidelayoutadapter_text_guide8_txt2">Uma vez na sala de troféus da equipe, você pode descobrir também em que ano foi conquistado aquele título que causa tanta polêmica na mesa do bar... basta clicar na linha da tabela que se refere à conquista - as datas da conquista aparecerão logo abaixo!</string>
+	<string name="guidelayoutadapter_text_guide8_txt3">Já no mapa dos estádios, a navegação é muito simples e similar à utilização do Google Maps. Existem botões de zoom para aproximar o mapa e visualizar os estádios próximas, assim como distanciar-se de um ponto e procurar por outros estádios na região. O botão mapa/satélite modifica a vista do mapa para exibir justamente os dois tipos de formato do mapa:</string>
+	<string name="guidelayoutadapter_text_guide8_txt4">Por fim, clicando no ícone de um estádio, um balão se abre contendo nome e local da arena. Ao clicar neste balão, você será levado para uma tela contendo todas as informações sobre o gramado, história do estádio, data da fundação, e mais!</string>
+	<string name="guidelayoutadapter_text_guide9_txt1">O torcidômetro é um mecanismo de medição do número de torcedores de cada esquipe entre os usuários do aplicativo. Como o número de usuários já é considerável, é possível fazer uma projeção dos números reais das torcidas.\n\nQuando você cadastrou seu \'time do coração\', seu android foi registrado no torcidômetro como mais um torcedor daquele time.\n\nDivulgue o app entre os torcedores do seu time para levá-lo ao topo do ranking!</string>
+	<string name="guidelayoutadapter_text_guide10_txt1">E ainda tem muito mais! Mas eu não quero estragar a surpresa, não é mesmo? Navegue pelo aplicativo e descubra todas as funcionalidades contidas em cada tela.\n\nEspero que goste de como o app está organizado, os dados que contém, e principalmente que seja útil para manter-lhe informado de tudo que envolve o campeonato mais disputado do planeta!\nLembre-se de que posso ser contactado pelo email juliozapps@gmail.com a qualquer momento para tirar dúvidas, ouvir sugestões, elogios e críticas! Não esqueça também de avaliar o aplicativo no Google Play, e curtir nossa fanpage no Facebook para comentar sobre o que achou ou o que poderia ser incluído. Estou sempre atento aos comentários e emails, procurando sempre melhorar o aplicativo!\n\nSeja também um parceiro do app - ajude-me a divulgá-lo e você terá um espaço para sua marca e site na tela de parceiros - ou um anunciante, e divulgue sua marca diariamente para mais de 700 mil pessoas, basta enviar um email com o assunto \"Brasileirão - Anunciante\" para o endereço acima.</string>
+
+	<string name="realtimematch_tostart">A iniciar</string>
+	<string name="realtimematch_inprogress">Em andamento</string>
+	<string name="realtimematch_ended">Finalizado</string>
+
+	<string name="share_send">Enviar</string>
+    <string name="share_cancel">Cancelar</string>
+	<string name="share_addmoretexthint">Adicione mais texto aqui</string>
+
+	<string name="ribbonmenuview_firstdivision">1ª Divisão</string>
+	<string name="ribbonmenuview_seconddivision">2ª Divisão</string>
+	<string name="ribbonmenuview_thirddivision">3ª Divisão</string>
+	<string name="showcaseview_moreoptions">Mais opções</string>
+	<string name="showcaseview_description">Toda vez que o ícone da barra de título tiver esses \'tracinhos\' ao lado, um clique exibirá uma barra lateral com mais opções.</string>
+	<string name="message_errormovetomovefail">Não foi possível ler o lance-a-lance da partida. Tente novamente mais tarde.</string>
+	<string name="message_updatedatatoshow">Atualize os dados para exibí-los.</string>
+	<string name="message_verifyconnection">Verifique a conexão à internet.</string>
+	<string name="message_errorupdatefail">Não foi possível atualizar os dados. Tente novamente.</string>
+	<string name="message_errortryagain">Um erro ocorreu. Tente novamente.</string>
+	<string name="message_dataupdated">Dados atualizados</string>
+    <string name="app_name">Brasileirão</string>
+    <string name="maps_api_key">0DMBHxWLZMvAn0X4f1HnfPD6974-1Y4PSsgPR4A</string>
+    <string name="debug_maps_api_key">0DMBHxWLZMvBJgFzSKZ6fLJ23VoqAPp9HufbdpA</string>
+    <string name="guide_url">file:///android_asset/guide.html</string>
+    <string name="facebook_id">278893338872977</string>
+    <string name="share_home">Estou usando o Brasileirão como meu agregador de informações sobre o Campeonato Brasileiro, e consigo encontrar informações sobre as tabelas, notícias, dados sobre meu time, todos os outros das séries A e B, e muito mais!\n\nProcure no Google Play por "Brasileirão", ou clique neste link a partir de seu telefone android: http://bit.ly/IpBPUV</string>
+    <string name="updating">Atualizando...</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="app_name">KMNR Radio</string>
+    <string name="kmnr">KMNR</string>
+    <string name="mainactivity_musicnotplaying">Music not playing</string>
+</resources>

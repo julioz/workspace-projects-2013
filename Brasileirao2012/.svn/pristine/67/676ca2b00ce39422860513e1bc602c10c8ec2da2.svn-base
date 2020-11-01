@@ -1,0 +1,177 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.WebDatabaseMapper;
+
+public class RankingREST {
+
+	private final String RANKING_DIVISION_A_URL = "http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2013/serie-a/classificacao/fase-unica/";
+	private final String RANKING_DIVISION_B_URL = "http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2013/serie-b/classificacao/fase-unica/";
+	
+	private final String RANKING_REALTIME_DIVISION_A_URL = "http://infobola.com.br/brasileiro/2012/classificacao.aspx";
+	private final String RANKING_REALTIME_DIVISION_B_URL = "http://infobola.com.br/brasileiroserieb/2012/classificacao.aspx";
+	
+	private WebDatabaseMapper webDatabaseMapper;
+	
+	public RankingREST(TreeMap<String, Club> clubs) {
+		this.webDatabaseMapper = new WebDatabaseMapper(clubs, WebDatabaseMapper.SOURCE_RANKING);
+	}
+	
+	public ArrayList<Club> getRanking(Division division) {
+		ArrayList<Club> clubs = new ArrayList<Club>();
+		Document document = null;
+		
+		try{	
+			if(division == Division.FIRSTDIVISION) document = Jsoup.connect(RANKING_DIVISION_A_URL).get();
+			else if(division == Division.SECONDDIVISION) document = Jsoup.connect(RANKING_DIVISION_B_URL).get();			
+		}catch(IOException e){
+			return null;
+		}
+		
+		Element table = document.getElementById("classificationTable");
+		Elements tablerows = table.getElementsByTag("tr");
+		tablerows.remove(0); //Headers da tabela
+
+		int position = 1;
+		
+		for (Element e : tablerows) {
+			Club sc = new Club();
+			
+			Elements tabledata = e.getElementsByTag("td");
+			
+			for (Element element : tabledata) {
+				if(element.className().equals("tc-team")){
+					sc.setPosition(position);
+					position++;
+					
+					Elements els = element.getElementsByTag("a");
+					if(els.size() > 0) sc.setName(els.get(0).text());
+					else{
+						els = element.getElementsByTag("p");
+						if(els.size() > 0) sc.setName(els.get(0).text());
+					}
+				}
+				else if(element.className().equals("tc-pg")) sc.setPoints(Integer.parseInt(element.text()));
+				else if(element.className().equals("tc-j")) sc.setPlayed(Integer.parseInt(element.text()));
+				else if(element.className().equals("tc-v")) sc.setWin(Integer.parseInt(element.text()));
+				else if(element.className().equals("tc-e")) sc.setDraw(Integer.parseInt(element.text()));
+				else if(element.className().equals("tc-d")) sc.setLose(Integer.parseInt(element.text()));
+				else if(element.className().equals("tc-gp")) sc.setGoalsPro(Integer.parseInt(element.text()));
+				else if(element.className().equals("tc-gc")) sc.setGoalsAgainst(Integer.parseInt(element.text()));
+				else if(element.className().equals("tc-sg")) sc.setBalance(Integer.parseInt(element.text()));
+			}
+			
+			sc.setAcronym(webDatabaseMapper.getClubByName(sc.getName()).getAcronym());
+			
+			clubs.add(sc);
+		}
+		
+		return clubs;
+	}
+	
+	public ArrayList<Club> getRealTimeRanking(Division division) {
+		ArrayList<Club> clubs = new ArrayList<Club>();
+		Document document = null;
+		
+		try{	
+			if(division == Division.FIRSTDIVISION) document = Jsoup.connect(RANKING_REALTIME_DIVISION_A_URL).get();
+			else if(division == Division.SECONDDIVISION) document = Jsoup.connect(RANKING_REALTIME_DIVISION_B_URL).get();			
+		}catch(IOException e){
+			return clubs;
+		}
+		
+		Element table = document.getElementsByAttributeValue("id", "TABLE111").get(1);
+		Element tbody = table.getElementsByTag("tbody").get(0);
+		Elements tr = tbody.getElementsByTag("tr");
+		tr.remove(0); //header da tabela
+		
+		int position = 1;
+		for (Element element : tr) {
+			Club club = new Club();
+			club.setPosition(position);
+			position++;
+			
+			Elements td = element.getElementsByTag("td");
+			td.remove(0);
+			club.setName(td.get(0).text());
+			webDatabaseMapper.getClubByName(club.getName());
+			club.setPoints(Integer.parseInt(td.get(1).text()));
+			club.setWin(Integer.parseInt(td.get(2).text()));
+			club.setDraw(Integer.parseInt(td.get(3).text()));
+			club.setLose(Integer.parseInt(td.get(4).text()));
+			club.setBalance(Integer.parseInt(td.get(5).text()));
+			club.setGoalsPro(Integer.parseInt(td.get(6).text()));
+			club.setGoalsAgainst(Integer.parseInt(td.get(7).text()));
+			club.setPlayed(Integer.parseInt(td.get(8).text()));
+			
+			clubs.add(club);
+		}
+		
+		return clubs;
+	}
+
+	public ArrayList<Club> getFullRanking(Division division){
+		ArrayList<Club> al = new ArrayList<Club>();
+		
+		ArrayList<Club> oldRanking = getRanking(division);
+		ArrayList<Club> newRanking = getRealTimeRanking(division);
+		
+		for (int i = 0; i < oldRanking.size(); i++) {
+			Club c = oldRanking.get(i);
+			for (int j = 0; j < newRanking.size(); j++) {
+				Club c2 = newRanking.get(j);
+				if(c2.getAcronym().equals(c.getAcronym())){
+					c.setPosDif(c.getPosition() - c2.getPosition());
+					break;
+				}
+			}
+			al.add(c);
+		}
+		
+		return al;
+	}
+	
+	/*private static final String URL_WS = "http://aqueous-oasis-8080.herokuapp.com/services/";
+
+	public ArrayList<Club> getRanking(int division) throws Exception {
+		String[] resposta = new WebServiceClient().get(URL_WS + "ranking/Gdivision=" + division + "/");
+		
+		if (resposta[0].equals("200")) {
+			ArrayList<Club> al = new ArrayList<Club>();
+			JSONArray array = new JSONArray(resposta[1]);
+			
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				Club c = new Club();
+				c.setName(obj.getString("name"));
+				c.setPosition(obj.getInt("position"));
+				c.setPlayed(obj.getInt("played"));
+				c.setPoints(obj.getInt("pointsGained"));
+				c.setWin(obj.getInt("victories"));
+				c.setDraw(obj.getInt("draws"));
+				c.setLose(obj.getInt("losses"));
+				c.setBalance(obj.getInt("balance"));
+				c.setGoalsPro(obj.getInt("goalsPro"));
+				c.setGoalsAgainst(obj.getInt("goalsAgainst"));
+				c.setPosDif(obj.getInt("posDif"));
+				
+				al.add(c);
+			}
+
+			return al;
+		} else {
+			throw new Exception(resposta[1]);
+		}
+	}*/
+
+}

@@ -1,0 +1,600 @@
+package br.com.zynger.brasileirao2012;
+
+import org.json.JSONObject;
+import org.taptwo.android.widget.CircleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ScrollView;
+import android.widget.TableLayout.LayoutParams;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class MyClubSelectorActivity extends Activity {
+	
+	private TextView tv;
+	private Typeface typeface;
+	
+	private ViewFlow viewFlow;
+	
+	private OnTouchListener otl_greyOverlay;
+	private ImageButton bdg_atleticogo, bdg_atleticomg, bdg_bahia, bdg_botafogo, bdg_corinthians, bdg_coritiba, bdg_cruzeiro, bdg_figueirense, bdg_flamengo, bdg_fluminense, bdg_gremio, bdg_internacional, bdg_nautico, bdg_palmeiras, bdg_pontepreta, bdg_portuguesa, bdg_santos, bdg_saopaulo, bdg_sport, bdg_vasco;
+	private ImageButton bdg_abc, bdg_asa, bdg_americamg, bdg_americarn, bdg_atleticopr, bdg_avai, bdg_barueri, bdg_boaesporte, bdg_bragantino, bdg_crb, bdg_ceara, bdg_criciuma, bdg_goias, bdg_guarani, bdg_guaratingueta, bdg_ipatinga, bdg_joinville, bdg_parana, bdg_saocaetano, bdg_vitoria;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.myclub_selector);
+		
+		loadViews();
+	}
+
+	private void loadViews() {
+		typeface = Typeface.createFromAsset(getAssets(), "tertre-xbol.otf");
+		viewFlow = (ViewFlow) findViewById(R.myclub_selector.viewflow);
+		viewFlow.setAdapter(new MyClubSelectorAdapter(this));
+		CircleFlowIndicator indic = (CircleFlowIndicator) findViewById(R.myclub_selector.viewflowindic);
+		viewFlow.setFlowIndicator(indic);
+		
+		tv = (TextView) findViewById(R.myclub_selector.tv_name);
+		tv.setTypeface(typeface);
+		
+		otl_greyOverlay = new OnTouchListener() {
+    		@Override
+    		public boolean onTouch(View v, MotionEvent me) {
+    			if (me.getAction() == MotionEvent.ACTION_DOWN) {
+    				((ImageButton) v).setColorFilter(Color.argb(150, 50, 50, 50), PorterDuff.Mode.SRC_ATOP);
+    			} else {
+    				((ImageButton) v).setColorFilter(null);
+    			}
+    			return false;
+    		}
+
+    	};
+    	
+    	setOnTouchAndClickListenerA();
+    	setOnTouchAndClickListenerB();		
+	}
+	
+	private void setOnTouchAndClickListenerA() {
+		bdg_atleticogo = (ImageButton) findViewById(R.trophies_selector.iv_atleticogo);
+		bdg_atleticogo.setOnTouchListener(otl_greyOverlay);
+		bdg_atleticogo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Atlético-GO");
+				sendMyTeamToServer("ATG");
+				finish();
+			}
+		});
+		
+		bdg_atleticomg = (ImageButton) findViewById(R.trophies_selector.iv_atleticomg);
+		bdg_atleticomg.setOnTouchListener(otl_greyOverlay);
+		bdg_atleticomg.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Atlético-MG");
+				sendMyTeamToServer("CAM");
+				finish();
+			}
+		});
+		
+		bdg_bahia = (ImageButton) findViewById(R.trophies_selector.iv_bahia);
+		bdg_bahia.setOnTouchListener(otl_greyOverlay);
+		bdg_bahia.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Bahia");
+				sendMyTeamToServer("BAH");
+				finish();
+			}
+		});
+		
+		bdg_botafogo = (ImageButton) findViewById(R.trophies_selector.iv_botafogo);
+		bdg_botafogo.setOnTouchListener(otl_greyOverlay);
+		bdg_botafogo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Botafogo");
+				sendMyTeamToServer("BOT");
+				finish();
+			}
+		});
+		
+		bdg_corinthians = (ImageButton) findViewById(R.trophies_selector.iv_corinthians);
+		bdg_corinthians.setOnTouchListener(otl_greyOverlay);
+		bdg_corinthians.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Corinthians");
+				sendMyTeamToServer("COR");
+				finish();
+			}
+		});
+		
+		bdg_coritiba = (ImageButton) findViewById(R.trophies_selector.iv_coritiba);
+		bdg_coritiba.setOnTouchListener(otl_greyOverlay);
+		bdg_coritiba.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Coritiba");
+				sendMyTeamToServer("CFC");
+				finish();
+			}
+		});
+		
+		bdg_cruzeiro = (ImageButton) findViewById(R.trophies_selector.iv_cruzeiro);
+		bdg_cruzeiro.setOnTouchListener(otl_greyOverlay);
+		bdg_cruzeiro.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Cruzeiro");
+				sendMyTeamToServer("CRU");
+				finish();
+			}
+		});
+		
+		bdg_figueirense = (ImageButton) findViewById(R.trophies_selector.iv_figueirense);
+		bdg_figueirense.setOnTouchListener(otl_greyOverlay);
+		bdg_figueirense.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Figueirense");
+				sendMyTeamToServer("FIG");
+				finish();
+			}
+		});
+		
+		bdg_flamengo = (ImageButton) findViewById(R.trophies_selector.iv_flamengo);
+		bdg_flamengo.setOnTouchListener(otl_greyOverlay);
+		bdg_flamengo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Flamengo");
+				sendMyTeamToServer("FLA");
+				finish();
+			}
+		});
+		
+		bdg_fluminense = (ImageButton) findViewById(R.trophies_selector.iv_fluminense);
+		bdg_fluminense.setOnTouchListener(otl_greyOverlay);
+		bdg_fluminense.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Fluminense");
+				sendMyTeamToServer("FLU");
+				finish();
+			}
+		});
+		
+		bdg_gremio = (ImageButton) findViewById(R.trophies_selector.iv_gremio);
+		bdg_gremio.setOnTouchListener(otl_greyOverlay);
+		bdg_gremio.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Grêmio");
+				sendMyTeamToServer("GRE");
+				finish();
+			}
+		});
+		
+		bdg_internacional = (ImageButton) findViewById(R.trophies_selector.iv_internacional);
+		bdg_internacional.setOnTouchListener(otl_greyOverlay);
+		bdg_internacional.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Internacional");
+				sendMyTeamToServer("INT");
+				finish();
+			}
+		});
+		
+		bdg_nautico = (ImageButton) findViewById(R.trophies_selector.iv_nautico);
+		bdg_nautico.setOnTouchListener(otl_greyOverlay);
+		bdg_nautico.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Náutico");
+				sendMyTeamToServer("NAU");
+				finish();
+			}
+		});
+		
+		bdg_palmeiras = (ImageButton) findViewById(R.trophies_selector.iv_palmeiras);
+		bdg_palmeiras.setOnTouchListener(otl_greyOverlay);
+		bdg_palmeiras.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Palmeiras");
+				sendMyTeamToServer("PAL");
+				finish();
+			}
+		});
+		
+		bdg_pontepreta = (ImageButton) findViewById(R.trophies_selector.iv_pontepreta);
+		bdg_pontepreta.setOnTouchListener(otl_greyOverlay);
+		bdg_pontepreta.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Ponte Preta");
+				sendMyTeamToServer("PON");
+				finish();
+			}
+		});
+		
+		bdg_portuguesa = (ImageButton) findViewById(R.trophies_selector.iv_portuguesa);
+		bdg_portuguesa.setOnTouchListener(otl_greyOverlay);
+		bdg_portuguesa.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Portuguesa");
+				sendMyTeamToServer("POR");
+				finish();
+			}
+		});
+		
+		bdg_santos = (ImageButton) findViewById(R.trophies_selector.iv_santos);
+		bdg_santos.setOnTouchListener(otl_greyOverlay);
+		bdg_santos.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Santos");
+				sendMyTeamToServer("SAN");
+				finish();
+			}
+		});
+		
+		bdg_saopaulo = (ImageButton) findViewById(R.trophies_selector.iv_saopaulo);
+		bdg_saopaulo.setOnTouchListener(otl_greyOverlay);
+		bdg_saopaulo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "São Paulo");
+				sendMyTeamToServer("SPO");
+				finish();
+			}
+		});
+		
+		bdg_sport = (ImageButton) findViewById(R.trophies_selector.iv_sport);
+		bdg_sport.setOnTouchListener(otl_greyOverlay);
+		bdg_sport.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Sport");
+				sendMyTeamToServer("SPT");
+				finish();
+			}
+		});
+		
+		bdg_vasco = (ImageButton) findViewById(R.trophies_selector.iv_vasco);
+		bdg_vasco.setOnTouchListener(otl_greyOverlay);
+		bdg_vasco.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Vasco");
+				sendMyTeamToServer("VAS");
+				finish();
+			}
+		});
+	}
+	
+	private void setOnTouchAndClickListenerB() {
+		bdg_abc = (ImageButton) findViewById(R.trophies_selector.iv_abc);
+		bdg_abc.setOnTouchListener(otl_greyOverlay);
+		bdg_abc.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "ABC");
+				sendMyTeamToServer("ABC");
+				finish();
+			}
+		});
+		
+		bdg_asa = (ImageButton) findViewById(R.trophies_selector.iv_asa);
+		bdg_asa.setOnTouchListener(otl_greyOverlay);
+		bdg_asa.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Asa");
+				sendMyTeamToServer("ASA");
+				finish();
+			}
+		});
+		
+		bdg_americamg = (ImageButton) findViewById(R.trophies_selector.iv_americamg);
+		bdg_americamg.setOnTouchListener(otl_greyOverlay);
+		bdg_americamg.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "América-MG");
+				sendMyTeamToServer("AMG");
+				finish();
+			}
+		});
+		
+		bdg_americarn = (ImageButton) findViewById(R.trophies_selector.iv_americarn);
+		bdg_americarn.setOnTouchListener(otl_greyOverlay);
+		bdg_americarn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "América-RN");
+				sendMyTeamToServer("ARN");
+				finish();
+			}
+		});
+		
+		bdg_atleticopr = (ImageButton) findViewById(R.trophies_selector.iv_atleticopr);
+		bdg_atleticopr.setOnTouchListener(otl_greyOverlay);
+		bdg_atleticopr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Atlético-PR");
+				sendMyTeamToServer("CAP");
+				finish();
+			}
+		});
+		
+		bdg_avai = (ImageButton) findViewById(R.trophies_selector.iv_avai);
+		bdg_avai.setOnTouchListener(otl_greyOverlay);
+		bdg_avai.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Avaí");
+				sendMyTeamToServer("AVA");
+				finish();
+			}
+		});
+		
+		bdg_barueri = (ImageButton) findViewById(R.trophies_selector.iv_barueri);
+		bdg_barueri.setOnTouchListener(otl_greyOverlay);
+		bdg_barueri.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Grêmio Barueri");
+				sendMyTeamToServer("BAR");
+				finish();
+			}
+		});
+		
+		bdg_boaesporte = (ImageButton) findViewById(R.trophies_selector.iv_boaesporte);
+		bdg_boaesporte.setOnTouchListener(otl_greyOverlay);
+		bdg_boaesporte.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Boa Esporte");
+				sendMyTeamToServer("BOA");
+				finish();
+			}
+		});
+		
+		bdg_bragantino = (ImageButton) findViewById(R.trophies_selector.iv_bragantino);
+		bdg_bragantino.setOnTouchListener(otl_greyOverlay);
+		bdg_bragantino.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Bragantino");
+				sendMyTeamToServer("BRA");
+				finish();
+			}
+		});
+		
+		bdg_crb = (ImageButton) findViewById(R.trophies_selector.iv_crb);
+		bdg_crb.setOnTouchListener(otl_greyOverlay);
+		bdg_crb.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "CRB");
+				sendMyTeamToServer("CRB");
+				finish();
+			}
+		});
+		
+		bdg_ceara = (ImageButton) findViewById(R.trophies_selector.iv_ceara);
+		bdg_ceara.setOnTouchListener(otl_greyOverlay);
+		bdg_ceara.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Ceará");
+				sendMyTeamToServer("CEA");
+				finish();
+			}
+		});
+		
+		bdg_criciuma = (ImageButton) findViewById(R.trophies_selector.iv_criciuma);
+		bdg_criciuma.setOnTouchListener(otl_greyOverlay);
+		bdg_criciuma.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Criciúma");
+				sendMyTeamToServer("CRI");
+				finish();
+			}
+		});
+		
+		bdg_goias = (ImageButton) findViewById(R.trophies_selector.iv_goias);
+		bdg_goias.setOnTouchListener(otl_greyOverlay);
+		bdg_goias.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Goiás");
+				sendMyTeamToServer("GOI");
+				finish();
+			}
+		});
+		
+		bdg_guarani = (ImageButton) findViewById(R.trophies_selector.iv_guarani);
+		bdg_guarani.setOnTouchListener(otl_greyOverlay);
+		bdg_guarani.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Guarani");
+				sendMyTeamToServer("GUA");
+				finish();
+			}
+		});
+		
+		bdg_guaratingueta = (ImageButton) findViewById(R.trophies_selector.iv_guaratingueta);
+		bdg_guaratingueta.setOnTouchListener(otl_greyOverlay);
+		bdg_guaratingueta.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Guaratinguetá");
+				sendMyTeamToServer("GTA");
+				finish();
+			}
+		});
+		
+		bdg_ipatinga = (ImageButton) findViewById(R.trophies_selector.iv_ipatinga);
+		bdg_ipatinga.setOnTouchListener(otl_greyOverlay);
+		bdg_ipatinga.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Ipatinga");
+				sendMyTeamToServer("IPA");
+				finish();
+			}
+		});
+		
+		bdg_joinville = (ImageButton) findViewById(R.trophies_selector.iv_joinville);
+		bdg_joinville.setOnTouchListener(otl_greyOverlay);
+		bdg_joinville.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Joinville");
+				sendMyTeamToServer("JOI");
+				finish();
+			}
+		});
+		
+		bdg_parana = (ImageButton) findViewById(R.trophies_selector.iv_parana);
+		bdg_parana.setOnTouchListener(otl_greyOverlay);
+		bdg_parana.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Paraná");
+				sendMyTeamToServer("PAR");
+				finish();
+			}
+		});
+		
+		bdg_saocaetano = (ImageButton) findViewById(R.trophies_selector.iv_saocaetano);
+		bdg_saocaetano.setOnTouchListener(otl_greyOverlay);
+		bdg_saocaetano.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "São Caetano");
+				sendMyTeamToServer("SCA");
+				finish();
+			}
+		});
+		
+		bdg_vitoria = (ImageButton) findViewById(R.trophies_selector.iv_vitoria);
+		bdg_vitoria.setOnTouchListener(otl_greyOverlay);
+		bdg_vitoria.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileHandler.saveBackup(v.getContext(), FileHandler.MYCLUB, "Vitória");
+				sendMyTeamToServer("VIT");
+				finish();
+			}
+		});
+	}
+
+	private void sendMyTeamToServer(String myteam){
+		new SendMyTeamTask(this, myteam).execute();
+	}
+	
+	private class SendMyTeamTask extends AsyncTask<Void, Void, JSONObject> {
+		private Context c;
+		private String myteam;
+		
+		public SendMyTeamTask(Context c, String myteam){
+			this.setContext(c);
+			this.setMyTeam(myteam);
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			return HTMLManager.sendMyTeamToServer(getContext(), getMyTeam());
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			JSONObject json = result;
+			
+			if(json != null) Toast.makeText(getContext(), "Seu time foi atualizado no torcidômetro!", Toast.LENGTH_SHORT).show();
+			else Toast.makeText(getContext(), "Não foi possível atualizar seu time no torcidômetro, tente mais tarde.", Toast.LENGTH_SHORT).show();
+			
+			super.onPostExecute(result);
+		}
+		
+		private void setMyTeam(String myteam) {
+			this.myteam = myteam;
+		}
+		
+		private String getMyTeam() {
+			return this.myteam;
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+	
+	public class MyClubSelectorAdapter extends BaseAdapter {
+
+		private LayoutInflater mInflater;
+		private Context c;
+		private final int[] ids = { R.layout.team_selector_seriea, R.layout.team_selector_serieb };
+
+		public MyClubSelectorAdapter(Context context) {
+			c = context;
+			mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+
+		@Override
+		public int getCount() {
+			return ids.length;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return ids[position];
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {			
+			ScrollView sv = new ScrollView(c);
+			sv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+			sv.addView(mInflater.inflate((Integer) getItem(position), null));
+			
+			return sv;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+	}
+}

@@ -1,0 +1,418 @@
+<clubs>
+    <club>
+	    <name>Independiente</name>
+	    <badge>independiente</badge>
+	    <country>ARG</country>
+	    <winner>
+	        <year>1964</year>
+	        <year>1965</year>
+	        <year>1972</year>
+	        <year>1973</year>
+	        <year>1974</year>
+	        <year>1975</year>
+	        <year>1984</year>
+	    </winner>
+	    <runnerup/>
+	</club>
+	<club>
+	    <name>Boca Juniors</name>
+	    <badge>bocajrs</badge>
+	    <country>ARG</country>
+	    <winner>
+	        <year>1977</year>
+	        <year>1978</year>
+	        <year>2000</year>
+	        <year>2001</year>
+	        <year>2003</year>
+	        <year>2007</year>
+	    </winner>
+	    <runnerup>
+	        <year>1963</year>
+	        <year>1979</year>
+	        <year>2004</year>
+	        <year>2012</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Peñarol</name>
+	    <badge>penarol</badge>
+	    <country>URU</country>
+	    <winner>
+	        <year>1960</year>
+	        <year>1961</year>
+	        <year>1966</year>
+	        <year>1982</year>
+	        <year>1987</year>
+	    </winner>
+	    <runnerup>
+	        <year>1962</year>
+	        <year>1965</year>
+	        <year>1970</year>
+	        <year>1983</year>
+	        <year>2011</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Estudiantes</name>
+	    <badge>estudiantes</badge>
+	    <country>ARG</country>
+	    <winner>
+	        <year>1968</year>
+	        <year>1969</year>
+	        <year>1970</year>
+	        <year>2009</year>
+	    </winner>
+	    <runnerup>
+	        <year>1971</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Nacional</name>
+	    <badge>nacional</badge>
+	    <country>URU</country>
+	    <winner>
+	        <year>1971</year>
+	        <year>1980</year>
+	        <year>1988</year>
+	    </winner>
+	    <runnerup>
+	        <year>1964</year>
+	        <year>1967</year>
+	        <year>1969</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Olimpia</name>
+	    <badge>olimpia</badge>
+	    <country>PAR</country>
+	    <winner>
+	        <year>1979</year>
+	        <year>1990</year>
+	        <year>2002</year>
+	    </winner>
+	    <runnerup>
+	        <year>1960</year>
+	        <year>1989</year>
+	        <year>1991</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>São Paulo</name>
+	    <badge>saopaulo</badge>
+	    <country>BRA</country>
+	    <winner>
+	        <year>1992</year>
+	        <year>1993</year>
+	        <year>2005</year>
+	    </winner>
+	    <runnerup>
+	        <year>1974</year>
+	        <year>1994</year>
+	        <year>2006</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Santos</name>
+	    <badge>santos</badge>
+	    <country>BRA</country>
+	    <winner>
+	        <year>1962</year>
+	        <year>1963</year>
+	        <year>2011</year>
+	    </winner>
+	    <runnerup>
+	        <year>2003</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Grêmio</name>
+	    <badge>gremio</badge>
+	    <country>BRA</country>
+	    <winner>
+	        <year>1983</year>
+	        <year>1995</year>
+	    </winner>
+	    <runnerup>
+	        <year>1984</year>
+	        <year>2007</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>River Plate</name>
+	    <badge>riverplate</badge>
+	    <country>ARG</country>
+	    <winner>
+	        <year>1986</year>
+	        <year>1996</year>
+	    </winner>
+	    <runnerup>
+	        <year>1966</year>
+	        <year>1976</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Cruzeiro</name>
+	    <badge>cruzeiro</badge>
+	    <country>BRA</country>
+	    <winner>
+	        <year>1976</year>
+	        <year>1997</year>
+	    </winner>
+	    <runnerup>
+	        <year>1977</year>
+	        <year>2009</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Internacional</name>
+	    <badge>internacional</badge>
+	    <country>BRA</country>
+	    <winner>
+	        <year>2006</year>
+	        <year>2010</year>
+	    </winner>
+	    <runnerup>
+	        <year>1980</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Palmeiras</name>
+	    <badge>palmeiras</badge>
+	    <country>BRA</country>
+	    <winner>
+	        <year>1999</year>
+	    </winner>
+	    <runnerup>
+	        <year>1961</year>
+	        <year>1968</year>
+	        <year>2000</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Atlético Nacional</name>
+	    <badge>atleticonacional</badge>
+	    <country>COL</country>
+	    <winner>
+	        <year>1989</year>
+	    </winner>
+	    <runnerup>
+	        <year>1995</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Colo-Colo</name>
+	    <badge>colocolo</badge>
+	    <country>CHI</country>
+	    <winner>
+	        <year>1991</year>
+	    </winner>
+	    <runnerup>
+	        <year>1973</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Racing</name>
+	    <badge>racing</badge>
+	    <country>ARG</country>
+	    <winner>
+	        <year>1967</year>
+	    </winner>
+	    <runnerup />
+	</club>
+	<club>
+	    <name>Flamengo</name>
+	    <badge>flamengo</badge>
+	    <country>BRA</country>
+	    <winner>
+	        <year>1981</year>
+	    </winner>
+	    <runnerup />
+	</club>
+	<club>
+	    <name>Argentinos Juniors</name>
+	    <badge>argentinosjrs</badge>
+	    <country>ARG</country>
+	    <winner>
+	        <year>1985</year>
+	    </winner>
+	    <runnerup />
+	</club>
+	<club>
+	    <name>Vélez Sarsfield</name>
+	    <badge>velez</badge>
+	    <country>ARG</country>
+	    <winner>
+	        <year>1994</year>
+	    </winner>
+	    <runnerup />
+	</club>
+	<club>
+	    <name>Vasco da Gama</name>
+	    <badge>vasco</badge>
+	    <country>BRA</country>
+	    <winner>
+	        <year>1998</year>
+	    </winner>
+	    <runnerup />
+	</club>
+	<club>
+	    <name>Once Caldas</name>
+	    <badge>oncecaldas</badge>
+	    <country>COL</country>
+	    <winner>
+	        <year>2004</year>
+	    </winner>
+	    <runnerup />
+	</club>
+	<club>
+	    <name>LDU Quito</name>
+	    <badge>lduquito</badge>
+	    <country>ECU</country>
+	    <winner>
+	        <year>2008</year>
+	    </winner>
+	    <runnerup />
+	</club>
+	<club>
+	    <name>Corinthians</name>
+	    <badge>corinthians</badge>
+	    <country>BRA</country>
+	    <winner>
+	        <year>2012</year>
+	    </winner>
+	    <runnerup />
+	</club>
+	<club>
+	    <name>América de Cali</name>
+	    <badge>americadecali</badge>
+	    <country>COL</country>
+	    <winner />
+	    <runnerup>
+	        <year>1985</year>
+	        <year>1986</year>
+	        <year>1987</year>
+	        <year>1996</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Deportivo Cali</name>
+	    <badge>deportivocali</badge>
+	    <country>COL</country>
+	    <winner />
+	    <runnerup>
+	        <year>1978</year>
+	        <year>1999</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Cobreloa</name>
+	    <badge>cobreloa</badge>
+	    <country>CHI</country>
+	    <winner />
+	    <runnerup>
+	        <year>1981</year>
+	        <year>1982</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Newell's Old Boys</name>
+	    <badge>newells</badge>
+	    <country>ARG</country>
+	    <winner />
+	    <runnerup>
+	        <year>1988</year>
+	        <year>1992</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Barcelona</name>
+	    <badge>barcelona</badge>
+	    <country>ECU</country>
+	    <winner />
+	    <runnerup>
+	        <year>1990</year>
+	        <year>1998</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Universitario</name>
+	    <badge>universitario</badge>
+	    <country>PER</country>
+	    <winner />
+	    <runnerup>
+	        <year>1972</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Unión Española</name>
+	    <badge>unionespanola</badge>
+	    <country>CHI</country>
+	    <winner />
+	    <runnerup>
+	        <year>1975</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Universidad Católica</name>
+	    <badge>universidadcatolica</badge>
+	    <country>CHI</country>
+	    <winner />
+	    <runnerup>
+	        <year>1993</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Sporting Cristal</name>
+	    <badge>sportingcristal</badge>
+	    <country>PER</country>
+	    <winner />
+	    <runnerup>
+	        <year>1997</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Cruz Azul</name>
+	    <badge>cruzazul</badge>
+	    <country>MEX</country>
+	    <winner />
+	    <runnerup>
+	        <year>2001</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>São Caetano</name>
+	    <badge>saocaetano</badge>
+	    <country>BRA</country>
+	    <winner />
+	    <runnerup>
+	        <year>2002</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Atlético Paranaense</name>
+	    <badge>atleticopr</badge>
+	    <country>BRA</country>
+	    <winner />
+	    <runnerup>
+	        <year>2005</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Fluminense</name>
+	    <badge>fluminense</badge>
+	    <country>BRA</country>
+	    <winner />
+	    <runnerup>
+	        <year>2008</year>
+	    </runnerup>
+	</club>
+	<club>
+	    <name>Chivas Guadalajara</name>
+	    <badge>chivas</badge>
+	    <country>MEX</country>
+	    <winner />
+	    <runnerup>
+	        <year>2010</year>
+	    </runnerup>
+	</club>
+</clubs>

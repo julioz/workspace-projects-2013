@@ -1,0 +1,102 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import org.json.JSONObject;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.StandingsAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetStandingsStatsTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.util.JsonUtil;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.web.StandingsParser;
+
+public class StandingsActivity extends ListActivity implements AsyncTaskListener {
+
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	private InternalStorageHandler internalStorage;
+	
+	private StandingsParser standingsParser;
+	
+	private HelveticaTextView tv_title;
+	private RelativeLayout rl_loading;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.standingsactivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		internalStorage = new InternalStorageHandler(this);
+		
+		standingsParser = new StandingsParser(this, clubs);
+		
+		loadViews();
+		
+		tv_title.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {				
+				new GetStandingsStatsTask(standingsParser, StandingsActivity.this).execute();
+			}
+		}); //TODO remove this onclicklistener, replace by actionbar
+        //TODO Colocar legenda explicando as cores da position
+		
+		setAdapterFromClubs();
+	}
+	
+	private void loadViews() {
+		tv_title = (HelveticaTextView) findViewById(R.standingsactivity.titlebar_tvtitle);
+		rl_loading = (RelativeLayout) findViewById(R.standingsactivity.rl_loading);
+		
+		tv_title.setText(getString(R.string.homedashboard_standings).toUpperCase());
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+	
+	private void setAdapterFromClubs() {
+		ArrayList<Club> listClubs = new ArrayList<Club>(clubs.values());
+		setListAdapter(new StandingsAdapter(this, listClubs));
+	}
+
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+
+	@Override
+	public void onComplete(Object result) {
+		JSONObject json = JsonUtil.createStandingsJson(clubs);
+		internalStorage.saveBackup(this, InternalStorageHandler.STANDINGS_JSON, json.toString());
+		
+		hideUpdatingLayout();
+		setAdapterFromClubs();
+	}
+
+	@Override
+	public void onFail(String message) {
+		setAdapterFromClubs();
+		hideUpdatingLayout();
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+	
+}

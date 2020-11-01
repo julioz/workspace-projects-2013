@@ -1,0 +1,514 @@
+package br.com.zynger.brasileirao2012;
+
+import org.json.JSONObject;
+import org.taptwo.android.widget.CircleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.MyClubSelectorAdapter;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class MyClubSelectorActivity extends Activity {
+	
+	public final static String INTENT_CHOOSING_MYCLUB = "INTENT_CHOOSING_MYCLUB";
+	public final static String INTENT_TITLE = "INTENT_TITLE";
+	public final static String INTENT_IMAGELOGO = "INTENT_IMAGELOGO";
+	
+	private ClubsDB clubsDB;
+	
+	private TextView tv;
+	private ImageView iv_badge;
+	
+	private ViewFlow viewFlow;
+	
+	private OnTouchListener otl_greyOverlay;
+	private ImageButton bdg_atleticogo, bdg_atleticomg, bdg_bahia, bdg_botafogo, bdg_corinthians, bdg_coritiba, bdg_cruzeiro, bdg_figueirense, bdg_flamengo, bdg_fluminense, bdg_gremio, bdg_internacional, bdg_nautico, bdg_palmeiras, bdg_pontepreta, bdg_portuguesa, bdg_santos, bdg_saopaulo, bdg_sport, bdg_vasco;
+	private ImageButton bdg_abc, bdg_asa, bdg_americamg, bdg_americarn, bdg_atleticopr, bdg_avai, bdg_chapecoense, bdg_boaesporte, bdg_bragantino, bdg_oeste, bdg_ceara, bdg_criciuma, bdg_goias, bdg_icasa, bdg_guaratingueta, bdg_paysandu, bdg_joinville, bdg_parana, bdg_saocaetano, bdg_vitoria;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.myclubselectoractivity);
+		
+		clubsDB = ClubsDB.getInstance(this);
+		
+		loadViews();
+		
+    	setOnTouchAndClickListenerA();
+    	setOnTouchAndClickListenerB();
+	}
+
+	private void loadViews() {
+		viewFlow = (ViewFlow) findViewById(R.myclubselectoractivity.viewflow);
+		viewFlow.setAdapter(new MyClubSelectorAdapter(this));
+		CircleFlowIndicator indic = (CircleFlowIndicator) findViewById(R.myclubselectoractivity.viewflowindic);
+		viewFlow.setFlowIndicator(indic);
+		
+		tv = (TextView) findViewById(R.myclubselectoractivity.tv_name);
+		iv_badge = (ImageView) findViewById(R.myclubselectoractivity.iv_badge);
+		
+		String title = getIntent().getStringExtra(INTENT_TITLE);
+		if(title != null) tv.setText(title);
+
+		int imagelogo = getIntent().getIntExtra(INTENT_IMAGELOGO, -1);
+		if(imagelogo != -1) iv_badge.setImageResource(imagelogo);
+		
+		otl_greyOverlay = new OnTouchListener() {
+    		@Override
+    		public boolean onTouch(View v, MotionEvent me) {
+    			if (me.getAction() == MotionEvent.ACTION_DOWN) {
+    				((ImageButton) v).setColorFilter(Color.argb(150, 50, 50, 50),
+    						PorterDuff.Mode.SRC_ATOP);
+    			} else {
+    				((ImageButton) v).setColorFilter(null);
+    			}
+    			return false;
+    		}
+    	};
+    	
+    	loadClubBadges();
+	}
+	
+	private void loadClubBadges() {
+		bdg_atleticogo = (ImageButton) findViewById(R.trophies_selector.iv_atleticogo);
+		bdg_atleticomg = (ImageButton) findViewById(R.trophies_selector.iv_atleticomg);
+		bdg_bahia = (ImageButton) findViewById(R.trophies_selector.iv_bahia);
+		bdg_botafogo = (ImageButton) findViewById(R.trophies_selector.iv_botafogo);
+		bdg_corinthians = (ImageButton) findViewById(R.trophies_selector.iv_corinthians);
+		bdg_coritiba = (ImageButton) findViewById(R.trophies_selector.iv_coritiba);
+		bdg_cruzeiro = (ImageButton) findViewById(R.trophies_selector.iv_cruzeiro);
+		bdg_figueirense = (ImageButton) findViewById(R.trophies_selector.iv_figueirense);
+		bdg_flamengo = (ImageButton) findViewById(R.trophies_selector.iv_flamengo);
+		bdg_fluminense = (ImageButton) findViewById(R.trophies_selector.iv_fluminense);
+		bdg_gremio = (ImageButton) findViewById(R.trophies_selector.iv_gremio);
+		bdg_internacional = (ImageButton) findViewById(R.trophies_selector.iv_internacional);
+		bdg_nautico = (ImageButton) findViewById(R.trophies_selector.iv_nautico);
+		bdg_palmeiras = (ImageButton) findViewById(R.trophies_selector.iv_palmeiras);
+		bdg_pontepreta = (ImageButton) findViewById(R.trophies_selector.iv_pontepreta);
+		bdg_portuguesa = (ImageButton) findViewById(R.trophies_selector.iv_portuguesa);
+		bdg_santos = (ImageButton) findViewById(R.trophies_selector.iv_santos);
+		bdg_saopaulo = (ImageButton) findViewById(R.trophies_selector.iv_saopaulo);
+		bdg_sport = (ImageButton) findViewById(R.trophies_selector.iv_sport);
+		bdg_vasco = (ImageButton) findViewById(R.trophies_selector.iv_vasco);
+		
+		bdg_abc = (ImageButton) findViewById(R.trophies_selector.iv_abc);
+		bdg_asa = (ImageButton) findViewById(R.trophies_selector.iv_asa);
+		bdg_americamg = (ImageButton) findViewById(R.trophies_selector.iv_americamg);
+		bdg_americarn = (ImageButton) findViewById(R.trophies_selector.iv_americarn);
+		bdg_atleticopr = (ImageButton) findViewById(R.trophies_selector.iv_atleticopr);
+		bdg_avai = (ImageButton) findViewById(R.trophies_selector.iv_avai);
+		bdg_boaesporte = (ImageButton) findViewById(R.trophies_selector.iv_boaesporte);
+		bdg_bragantino = (ImageButton) findViewById(R.trophies_selector.iv_bragantino);
+		bdg_ceara = (ImageButton) findViewById(R.trophies_selector.iv_ceara);
+		bdg_chapecoense = (ImageButton) findViewById(R.trophies_selector.iv_chapecoense);
+		bdg_criciuma = (ImageButton) findViewById(R.trophies_selector.iv_criciuma);
+		bdg_goias = (ImageButton) findViewById(R.trophies_selector.iv_goias);
+		bdg_guaratingueta = (ImageButton) findViewById(R.trophies_selector.iv_guaratingueta);
+		bdg_joinville = (ImageButton) findViewById(R.trophies_selector.iv_joinville);
+		bdg_icasa = (ImageButton) findViewById(R.trophies_selector.iv_icasa);
+		bdg_oeste = (ImageButton) findViewById(R.trophies_selector.iv_oeste);
+		bdg_parana = (ImageButton) findViewById(R.trophies_selector.iv_parana);
+		bdg_paysandu = (ImageButton) findViewById(R.trophies_selector.iv_paysandu);
+		bdg_saocaetano = (ImageButton) findViewById(R.trophies_selector.iv_saocaetano);
+		bdg_vitoria = (ImageButton) findViewById(R.trophies_selector.iv_vitoria);
+	}
+
+	private void executeClubChoice(Context c, String acronym){
+		if(getIntent().getBooleanExtra(INTENT_CHOOSING_MYCLUB, false)){
+			FileHandler.saveBackup(c, FileHandler.MYCLUB, acronym);
+			clubsDB.setMyClub(clubsDB.getClubs().get(acronym));
+			sendMyTeamToServer(acronym);
+			finish();
+		}else{
+			Intent resultIntent = new Intent();
+	    	resultIntent.putExtra(NewsViewFlowActivity.INTENT_RETURN_FROM_CLUBSELECTOR, acronym);
+	    	setResult(Activity.RESULT_OK, resultIntent);
+	    	finish();
+		}
+	}
+	
+	private void setOnTouchAndClickListenerA() {
+		bdg_atleticogo.setOnTouchListener(otl_greyOverlay);
+		bdg_atleticogo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "ATG");
+			}
+		});
+		
+		bdg_atleticomg.setOnTouchListener(otl_greyOverlay);
+		bdg_atleticomg.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "CAM");
+			}
+		});
+		
+		bdg_bahia.setOnTouchListener(otl_greyOverlay);
+		bdg_bahia.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "BAH");
+			}
+		});
+		
+		bdg_botafogo.setOnTouchListener(otl_greyOverlay);
+		bdg_botafogo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "BOT");
+			}
+		});
+		
+		bdg_corinthians.setOnTouchListener(otl_greyOverlay);
+		bdg_corinthians.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "COR");
+			}
+		});
+		
+		bdg_coritiba.setOnTouchListener(otl_greyOverlay);
+		bdg_coritiba.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "CFC");
+			}
+		});
+		
+		bdg_cruzeiro.setOnTouchListener(otl_greyOverlay);
+		bdg_cruzeiro.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "CRU");
+			}
+		});
+		
+		bdg_figueirense.setOnTouchListener(otl_greyOverlay);
+		bdg_figueirense.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "FIG");
+			}
+		});
+		
+		bdg_flamengo.setOnTouchListener(otl_greyOverlay);
+		bdg_flamengo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "FLA");
+			}
+		});
+		
+		bdg_fluminense.setOnTouchListener(otl_greyOverlay);
+		bdg_fluminense.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "FLU");
+			}
+		});
+		
+		bdg_gremio.setOnTouchListener(otl_greyOverlay);
+		bdg_gremio.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "GRE");
+			}
+		});
+		
+		bdg_internacional.setOnTouchListener(otl_greyOverlay);
+		bdg_internacional.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "INT");
+			}
+		});
+		
+		bdg_nautico.setOnTouchListener(otl_greyOverlay);
+		bdg_nautico.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "NAU");
+			}
+		});
+		
+		bdg_palmeiras.setOnTouchListener(otl_greyOverlay);
+		bdg_palmeiras.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "PAL");
+			}
+		});
+		
+		bdg_pontepreta.setOnTouchListener(otl_greyOverlay);
+		bdg_pontepreta.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "PON");
+			}
+		});
+		
+		bdg_portuguesa.setOnTouchListener(otl_greyOverlay);
+		bdg_portuguesa.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "POR");
+			}
+		});
+		
+		bdg_santos.setOnTouchListener(otl_greyOverlay);
+		bdg_santos.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "SAN");
+			}
+		});
+		
+		bdg_saopaulo.setOnTouchListener(otl_greyOverlay);
+		bdg_saopaulo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "SPO");
+			}
+		});
+
+		bdg_sport.setOnTouchListener(otl_greyOverlay);
+		bdg_sport.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "SPT");
+			}
+		});
+		
+		bdg_vasco.setOnTouchListener(otl_greyOverlay);
+		bdg_vasco.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "VAS");
+			}
+		});
+	}
+	
+	private void setOnTouchAndClickListenerB() {
+		bdg_abc.setOnTouchListener(otl_greyOverlay);
+		bdg_abc.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "ABC");
+			}
+		});
+		
+		bdg_asa.setOnTouchListener(otl_greyOverlay);
+		bdg_asa.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "ASA");
+			}
+		});
+		
+		bdg_americamg.setOnTouchListener(otl_greyOverlay);
+		bdg_americamg.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "AMG");
+			}
+		});
+		
+		bdg_americarn.setOnTouchListener(otl_greyOverlay);
+		bdg_americarn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "ARN");
+			}
+		});
+		
+		bdg_atleticopr.setOnTouchListener(otl_greyOverlay);
+		bdg_atleticopr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "CAP");
+			}
+		});
+		
+		bdg_avai.setOnTouchListener(otl_greyOverlay);
+		bdg_avai.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "AVA");
+			}
+		});
+		
+		bdg_chapecoense.setOnTouchListener(otl_greyOverlay);
+		bdg_chapecoense.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "CHA");
+			}
+		});
+		
+		bdg_boaesporte.setOnTouchListener(otl_greyOverlay);
+		bdg_boaesporte.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "BOA");
+			}
+		});
+		
+		bdg_bragantino.setOnTouchListener(otl_greyOverlay);
+		bdg_bragantino.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "BRA");
+			}
+		});
+		
+		bdg_icasa.setOnTouchListener(otl_greyOverlay);
+		bdg_icasa.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "ICA");
+			}
+		});
+		
+		bdg_ceara.setOnTouchListener(otl_greyOverlay);
+		bdg_ceara.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "CEA");
+			}
+		});
+		
+		bdg_criciuma.setOnTouchListener(otl_greyOverlay);
+		bdg_criciuma.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "CRI");
+			}
+		});
+		
+		bdg_goias.setOnTouchListener(otl_greyOverlay);
+		bdg_goias.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "GOI");
+			}
+		});
+		
+		bdg_oeste.setOnTouchListener(otl_greyOverlay);
+		bdg_oeste.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "OES");
+			}
+		});
+		
+		bdg_guaratingueta.setOnTouchListener(otl_greyOverlay);
+		bdg_guaratingueta.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "GTA");
+			}
+		});
+		
+		bdg_paysandu.setOnTouchListener(otl_greyOverlay);
+		bdg_paysandu.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "PAY");
+			}
+		});
+		
+		bdg_joinville.setOnTouchListener(otl_greyOverlay);
+		bdg_joinville.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "JOI");
+			}
+		});
+		
+		bdg_parana.setOnTouchListener(otl_greyOverlay);
+		bdg_parana.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "PAR");
+			}
+		});
+		
+		bdg_saocaetano.setOnTouchListener(otl_greyOverlay);
+		bdg_saocaetano.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "SCA");
+			}
+		});
+		
+		bdg_vitoria.setOnTouchListener(otl_greyOverlay);
+		bdg_vitoria.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				executeClubChoice(v.getContext(), "VIT");
+			}
+		});
+	}
+
+	private void sendMyTeamToServer(String myteam){
+		new SendMyTeamTask(this, myteam).execute();
+	}
+	
+	private class SendMyTeamTask extends AsyncTask<Void, Void, JSONObject> {
+		private Context c;
+		private String myteam;
+		
+		public SendMyTeamTask(Context c, String myteam){
+			this.setContext(c);
+			this.setMyTeam(myteam);
+		}
+
+		@Override
+		protected JSONObject doInBackground(Void... params) {
+			return HTMLManager.sendMyTeamToServer(getContext(), getMyTeam());
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject result) {
+			JSONObject json = result;
+			
+			if(json != null) Toast.makeText(getContext(), "Seu time foi atualizado no torcidômetro!", Toast.LENGTH_SHORT).show();
+			else Toast.makeText(getContext(), "Não foi possível atualizar seu time no torcidômetro, tente mais tarde.", Toast.LENGTH_SHORT).show();
+			
+			super.onPostExecute(result);
+		}
+		
+		private void setMyTeam(String myteam) {
+			this.myteam = myteam;
+		}
+		
+		private String getMyTeam() {
+			return this.myteam;
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vamos Marcar</string>
+	<string name="facebook_login_button_logintext">Log in com o Facebook</string>
+	<string name="facebook_login_button_logouttext">Log out</string>
+	<string name="facebook_login_progress_text">Fazendo login…</string>
+	<string name="facebook_logout_dialog_title">Quer mesmo fazer logout?</string>
+	
+	<string name="loginactivity_spammessage">Nós usamos o facebook para achar seus amigos, nunca postaremos spam.</string>
+	<string name="loginactivity_errornetwork">Você precisa estar conectado à internet para fazer login!</string>
+	
+	<string name="drawer_open">Abrir barra lateral</string>
+	<string name="drawer_close">Fechar barra lateral</string>
+	
+	<string name="actionitem_confirm">Confirmar</string>
+	<string name="actionitem_addperson">Convidar amigo</string>
+	
+	<string name="eventtype_sports">Esporte</string>
+	<string name="eventtype_party">Festa</string>
+	<string name="eventtype_meeting">Reunião</string>
+	<string name="eventtype_other">Outro</string>
+	
+	<string name="eventaudience_public">Público</string>
+	<string name="eventaudience_private">Privado</string>
+	
+	<string name="feed_drawer_newevent">Novo evento</string>
+	<string name="feed_drawer_checkins">Check-ins</string>
+	<string name="feed_drawer_settings">Ajustes</string>
+	<string name="feed_drawer_logout">Logout</string>
+	
+	<string name="feedactivity_sort_newest">Eventos mais novos</string>
+	<string name="feedactivity_sort_type">Tipo do evento</string>
+	
+	<string name="feedactivity_participants">%1$d participantes</string>
+	
+	<string name="eventactivity_openedby">Evento aberto por</string>
+	<string name="eventactivity_comments">Comentários</string>
+	<string name="eventactivity_entercomment">Escreva um comentário</string>
+	<string name="eventactivity_error_nomapshown">O mapa não pôde ser exibido. Verifique sua conexão à internet.</string>
+	
+	<string name="friendchooseractivity_fetchingfriends">Buscando amigos…</string>
+	<string name="friendchooseractivity_selectfriends">Confirmar seleção</string>
+	<string name="friendchooseractivity_fetchingerror">Nós não pudemos encontrar seus amigos :-(</string>
+	
+	<string name="neweventactivity_category_what">O que</string>
+	<string name="neweventactivity_hint_title">Nome do evento</string>
+	<string name="neweventactivity_hint_description">Descrição do evento</string>
+	<string name="neweventactivity_category_whatkind">Que tipo</string>
+	<string name="neweventactivity_category_where">Onde</string>
+	<string name="neweventactivity_where_empty_buttontext">Onde vão se encontrar?</string>
+	<string name="neweventactivity_category_whattime">Que horas</string>
+	<string name="neweventactivity_category_whom">Com quem</string>
+	<string name="neweventactivity_whom_empty">Você ainda não convidou nenhum amigo</string>
+	<string name="neweventactivity_whom_empty_buttontext">Quero convidar!</string>
+	<string name="neweventactivity_error_emptytitle">Preencha o título do evento</string>
+	<string name="neweventactivity_error_emptylocation">Você não escolheu um local para o evento!</string>
+	
+	<string name="locationpicker_infowindowsnippet_clicktoselect">Clique para escolher este local</string>
+	<string name="locationpicker_placenotfound">Local não encontrado</string>
+	<string name="locationpicker_emptysearchfield">Preencha este campo para buscar</string>
+	<string name="locationpicker_geocodingerror">Um erro ocorreu ao buscar o endereço</string>
+</resources>

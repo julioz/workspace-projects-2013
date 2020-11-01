@@ -1,0 +1,131 @@
+package br.com.zynger.brasileirao2012.util;
+
+import java.util.List;
+import java.util.Locale;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.FacebookConnect;
+import br.com.zynger.brasileirao2012.R;
+
+public class ShareHelper {
+	private Activity context;
+	private String message;	
+
+	public ShareHelper(Activity context, String message) {
+		this.context = context;
+		this.message = message;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void share() {
+		Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+		sendIntent.setType("text/plain");
+		List activities = context.getPackageManager().queryIntentActivities(sendIntent, 0);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(context.getString(R.string.share_send) + "...");
+		final ShareIntentListAdapter adapter = new ShareIntentListAdapter(
+				context, R.layout.basiclistview, activities.toArray());
+
+		builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				ResolveInfo info = (ResolveInfo) adapter.getItem(which);
+				if(info.activityInfo.packageName.
+						toLowerCase(Locale.getDefault()).contains("facebook")) {
+					showConfirmationDialog();
+				}else{
+					Intent intent = new Intent(
+							android.content.Intent.ACTION_SEND);
+					intent.setClassName(info.activityInfo.packageName,
+							info.activityInfo.name);
+					intent.setType("text/plain");
+					intent.putExtra(Intent.EXTRA_TEXT, message);
+					((Activity)context).startActivity(intent);
+				}
+			}
+		});
+		builder.create().show();
+	}
+	
+	private void showConfirmationDialog() {
+		final Dialog d = new Dialog(this.context);
+		d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		d.setContentView(R.layout.dialogshare);
+		
+		TextView tv = (TextView) d.findViewById(R.dialogshare.tv);
+		final EditText et = (EditText) d.findViewById(R.dialogshare.et);
+		Button bt1 = (Button) d.findViewById(R.dialogshare.btcancel);
+		Button bt2 = (Button) d.findViewById(R.dialogshare.btsend);
+		
+		tv.setText(message);
+		
+		bt1.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				d.dismiss();
+			}
+		});
+		
+		bt2.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String msg = et.getText().toString();
+				if(!msg.equals("")) msg += "\n";
+				msg += message;
+				
+				Intent it = new Intent(v.getContext(), FacebookConnect.class);
+				it.putExtra(FacebookConnect.INTENT_MESSAGE, msg);
+				context.startActivity(it);
+				d.dismiss();
+			}
+		});
+		
+		d.show();
+	}
+
+	@SuppressWarnings("rawtypes")
+	public class ShareIntentListAdapter extends ArrayAdapter {
+		private Activity context;
+		private Object[] items;
+		private int layoutId;
+
+		@SuppressWarnings("unchecked")
+		public ShareIntentListAdapter(Activity context,
+				int layoutId, Object[] items) {
+			super(context, layoutId, items);
+			this.context = context;
+			this.items = items;
+			this.layoutId = layoutId;
+		}
+
+		public View getView(int pos, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = context.getLayoutInflater();
+			View row = inflater.inflate(layoutId, null);
+			
+			TextView label = (TextView) row.findViewById(R.basiclistview.text1);
+			label.setText(((ResolveInfo) items[pos]).loadLabel(context.getPackageManager()));
+			
+			ImageView image = (ImageView) row.findViewById(R.basiclistview.logo);
+			image.setImageDrawable(((ResolveInfo) items[pos]).
+					activityInfo.applicationInfo.loadIcon(context.getPackageManager()));
+			
+			return(row);
+		}
+	}
+}

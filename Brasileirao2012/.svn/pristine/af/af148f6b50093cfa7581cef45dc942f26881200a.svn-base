@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="about">Agradecimentos:\n    Grupo AndroidBrasil\n    Ricardo Lecheta\n    Victor Campos\n    Galera da C. da Computação - UFRJ\n    Luis Fernandez\n</string>
+    <string name="donate">Obrigado por escolher este aplicativo!\nSe você tem algum elogio, sugestão, crítica ou mensagem que gostaria de compartilhar comigo, sinta-se a vontade para enviar um email para o endereço abaixo, ficarei feliz em ler sua mensagem!\n\n\nObs.: Todas as imagens, escudos, ou recursos multimídia presentes neste aplicativo são de direito de seus respectivos donos legais.</string>
+    <string name="app_name">Brasileirão</string>
+    <string name="loading_articles">Verifique sua conexão à internet.</string>
+    <string name="maps_api_key">0DMBHxWLZMvAn0X4f1HnfPD6974-1Y4PSsgPR4A</string>
+    <string name="debug_maps_api_key">0DMBHxWLZMvBJgFzSKZ6fLJ23VoqAPp9HufbdpA</string>
+    <string name="guide_url">file:///android_asset/guide.html</string>
+    <string name="facebook_id">278893338872977</string>
+    <string name="share_home">Estou usando o Brasileirão como meu agregador de informações sobre o Campeonato Brasileiro, e consigo encontrar informações sobre as tabelas, notícias, dados sobre meu time, todos os outros das séries A e B, e muito mais!\n\nProcure no Google Play por "Brasileirão", ou clique neste link a partir de seu telefone android: http://bit.ly/IpBPUV</string>
+</resources>

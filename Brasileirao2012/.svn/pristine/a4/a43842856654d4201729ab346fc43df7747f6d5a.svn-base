@@ -1,0 +1,918 @@
+package br.com.zynger.brasileirao2012;
+
+import java.io.IOException;
+import java.nio.charset.IllegalCharsetNameException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TreeMap;
+
+import org.taptwo.android.widget.CircleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.model.Trophy;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class HomeActivity extends Activity {
+
+	private static final int UPDATE_NOTIFICATION = 1;
+	
+	private String appversion;
+	private SharedPreferences prefs;
+	
+	private Club myClub;
+	
+	private ViewFlow viewFlow;
+	
+	private TextView actionbar_tt, tv_progressbar;
+	private ImageButton ranking, table, strikers, news, team, trophies, aprov, realtime, stadium, torcidometer, myTeam, settings, updateAll, inFLU;
+	private ImageButton partners, rate, share, guide, fanpage, about;
+	
+	private TreeMap<String, Club> clubs;
+	
+    @SuppressWarnings("unchecked")
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.home);
+        
+        loadViews();
+        setClickListeners();
+        
+        appversion = getAppVersion(this);
+		String bd_version = FileHandler.openClubsDatabaseVersion(this);
+		if(appversion.equals(bd_version)) this.clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		else this.clubs = null;
+        
+        if(this.clubs == null){
+    		this.clubs = getMapClubs();
+    		FileHandler.saveBackup(this, FileHandler.CLUBS, this.clubs);
+    		FileHandler.saveClubsDatabaseVersion(this, appversion);
+    	}
+        
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        
+        if(prefs.getBoolean("cb_updatecheck", true)) new UpdateAppTask(this, appversion).execute();
+        
+        myTeam.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), MyClubSelectorActivity.class);
+				it.putExtra(MyClubSelectorActivity.INTENT_CHOOSING_MYCLUB, true);
+				startActivity(it);
+			}
+		});
+    }
+    
+    protected void onResume() {
+    	String myclub = (String) FileHandler.openBackup(this, FileHandler.MYCLUB);
+		if(myclub == null){
+			Intent it = new Intent(this, MyClubSelectorActivity.class);
+			it.putExtra(MyClubSelectorActivity.INTENT_CHOOSING_MYCLUB, true);
+    		startActivity(it);
+    	}else{
+    		Club club = clubs.get(myclub);
+    		myTeam.setImageResource(club.getBadge());
+    		myClub = club;
+    		if(club.getName().equals("Fluminense")){
+    			inFLU.setVisibility(View.VISIBLE);
+    			inFLU.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						startActivity(new Intent(v.getContext(), InfluActivity.class));
+					}
+				});
+    		}else{
+    			inFLU.setVisibility(View.GONE);
+    			inFLU.setOnClickListener(null);
+    		}
+    	}
+    	super.onResume();
+    }
+
+	private void loadViews() {
+		viewFlow = (ViewFlow) findViewById(R.home.viewflow);
+		viewFlow.setAdapter(new HomeViewFlowAdapter(this));
+		CircleFlowIndicator indic = (CircleFlowIndicator) findViewById(R.home.viewflowindic);
+		viewFlow.setFlowIndicator(indic);
+		
+		ranking = (ImageButton) findViewById(R.home.ibRanking);
+		table = (ImageButton) findViewById(R.home.ibTable);
+		strikers = (ImageButton) findViewById(R.home.ibStrikers);
+		news = (ImageButton) findViewById(R.home.ibNews);
+		team = (ImageButton) findViewById(R.home.ibTeamGames);
+		trophies = (ImageButton) findViewById(R.home.ibTrophies);
+		aprov = (ImageButton) findViewById(R.home.ibAprov);
+		realtime = (ImageButton) findViewById(R.home.ibRealTime);
+		stadium = (ImageButton) findViewById(R.home.ibStadiums);
+		torcidometer = (ImageButton) findViewById(R.home.ibTorcid);
+		
+		myTeam = (ImageButton) findViewById(R.id.launcher_actionbar_ib_myteam);
+		updateAll = (ImageButton) findViewById(R.id.iv_updateall);
+		inFLU = (ImageButton) findViewById(R.id.iv_influ_ad);
+		
+		partners = (ImageButton) findViewById(R.home.ibPartners);
+		share = (ImageButton) findViewById(R.home.ibShare);
+		rate = (ImageButton) findViewById(R.home.ibRate);
+		guide = (ImageButton) findViewById(R.home.ibGuide);
+		settings = (ImageButton) findViewById(R.home.ibSettings);
+		fanpage = (ImageButton) findViewById(R.home.ibFanpage);
+		about = (ImageButton) findViewById(R.home.ibAbout);
+		
+		actionbar_tt = (TextView) findViewById(R.id.launcher_actionbar_tv);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		tv_progressbar = (TextView) findViewById(R.home.tv_progressbar);
+	}
+	
+	private void setClickListeners(){
+		ranking.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it;
+				if(myClub != null){					
+					if(myClub.getDivision() == Club.SEGUNDADIVISAO) it = new Intent(v.getContext(), RankingDivision2Activity.class);
+					else it = new Intent(v.getContext(), RankingDivision1Activity.class);
+				}else{
+					it = new Intent(v.getContext(), RankingDivision1Activity.class);
+				}
+				v.getContext().startActivity(it);
+			}
+		});
+        table.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it;
+				if(myClub != null){
+					if(myClub.getDivision() == Club.SEGUNDADIVISAO) it = new Intent(v.getContext(), TableDivision2Activity.class);
+					else it = new Intent(v.getContext(), TableDivision1Activity.class);
+				}else it = new Intent(v.getContext(), TableDivision1Activity.class);
+				
+				startActivity(it);
+			}
+		});
+        strikers.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new GetStrikersTask(v.getContext()).execute();
+			}
+		});
+        news.setOnClickListener(getStartActivityListener(NewsTabActivity.class));
+        team.setOnClickListener(getStartActivityListener(MyTeamActivity.class));
+        trophies.setOnClickListener(getStartActivityListener(TrophiesSelectorActivity.class));
+        aprov.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), AprovActivity.class);
+				it.putExtra("DIVISION", myClub.getDivision());
+				startActivity(it);
+			}
+		});
+        realtime.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), RealTimeMatchesActivity.class);
+				it.putExtra("DIVISION", myClub.getDivision());
+				startActivity(it);
+			}
+		});
+        stadium.setOnClickListener(getStartActivityListener(StadiumsMapActivity.class));
+        torcidometer.setOnClickListener(getStartActivityListener(TorcidometerActivity.class));
+        
+        partners.setOnClickListener(getStartActivityListener(PartnersActivity.class));
+        rate.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=br.com.zynger.brasileirao2012"));
+				startActivity(intent);
+			}
+		});
+        share.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String message = getResources().getString(R.string.share_home);
+        		new ShareHelper((Activity) v.getContext(), message).share();
+			}
+		});
+        guide.setOnClickListener(getStartActivityListener(GuideActivity.class));
+        settings.setOnClickListener(getStartActivityListener(SettingsActivity.class));
+        fanpage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("http://www.facebook.com/brasileiraoapp"));
+				startActivity(intent);
+			}
+		});
+        about.setOnClickListener(getStartActivityListener(AboutActivity.class));       
+        
+        updateAll.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(ConnectionHelper.isConnected(v.getContext())) showUpdateAllMenu();
+				else Toast.makeText(v.getContext(), "Verifique a conexão à internet.", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	
+	private void showUpdateAllMenu(){
+		findViewById(R.home.fl_viewflow).setVisibility(View.GONE);
+		findViewById(R.home.rl_updateall).setVisibility(View.VISIBLE);
+		updateAll.setVisibility(View.GONE);
+		
+		Button yes = (Button) findViewById(R.home.bt_updateall_yes);
+		Button no = (Button) findViewById(R.home.bt_updateall_no);
+		
+		yes.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				findViewById(R.home.rl_updateall).setVisibility(View.GONE);
+				findViewById(R.home.fl_viewflow).setVisibility(View.VISIBLE);
+				new UpdateAllTask(HomeActivity.this).execute();
+			}
+		});
+		
+		no.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				findViewById(R.home.rl_updateall).setVisibility(View.GONE);
+				findViewById(R.home.fl_viewflow).setVisibility(View.VISIBLE);
+				updateAll.setVisibility(View.VISIBLE);
+			}
+		});
+	}
+	
+	private View.OnClickListener getStartActivityListener(final Class<?> clazz){
+    	View.OnClickListener ocl = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent it = new Intent(view.getContext(), clazz);
+				view.getContext().startActivity(it);
+			}
+		};
+		
+		return ocl;
+    }
+	
+	public static String getAppVersion(Context c){
+		PackageManager manager = c.getPackageManager();
+		try {
+			PackageInfo info = manager.getPackageInfo(c.getPackageName(), 0);
+			//String packageName = info.packageName;
+			//return info.versionCode;
+			return info.versionName;
+			//Log.d("SiTE", "Package Name: " + packageName);
+			//Log.d("SiTE", "Version Code: " + this.versionCode);
+			//Log.d("SiTE", "Version Name: " + this.versionName);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
+	public static TreeMap<String, Club> getMapClubs(){
+		Club atleticogo = new Club("Atlético-GO", "ATG", R.drawable.escudo_atleticogo, Club.PRIMEIRADIVISAO, "Atlético Clube Goianiense", "http://pt.wikipedia.org/wiki/Atl%C3%A9tico_Clube_Goianiense");
+		atleticogo.getTrophies().add(new Trophy("Campeonato Goiano", Trophy.ESTADUAL, 12, "1944, 1947, 1949, 1955, 1957, 1964, 1970, 1985, 1988, 2007, 2010, 2011"));
+		atleticogo.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 6, "1940, 1944, 1952, 1956, 1962, 1984"));
+		atleticogo.getTrophies().add(new Trophy("Copa Goiás", Trophy.ESTADUAL, 1, "1968"));
+		atleticogo.getTrophies().add(new Trophy("Campeonato Brasileiro - Série C", Trophy.NACIONAL, 2, "1990, 2008"));
+		
+		Club atleticomg = new Club("Atlético-MG", "CAM", R.drawable.escudo_atleticomg, Club.PRIMEIRADIVISAO, "Clube Atlético Mineiro", "http://pt.wikipedia.org/wiki/Clube_Atl%C3%A9tico_Mineiro");
+		atleticomg.getTrophies().add(new Trophy("Campeonato Mineiro", Trophy.ESTADUAL, 41, "1915, 1926, 1927, 1931, 1932, 1936, 1938, 1939, 1941, 1942, 1946, 1947, 1949, 1950, 1952, 1953, 1954, 1955, 1956, 1958, 1962, 1963, 1970, 1976, 1978, 1979, 1980, 1981, 1982, 1983, 1985, 1986, 1988, 1989, 1991, 1995, 1999, 2000, 2007, 2010, 2012"));
+		atleticomg.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 9, "1922, 1928, 1931, 1932, 1939, 1947, 1949, 1950, 1954"));
+		atleticomg.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 1, "1971"));
+		atleticomg.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "2006"));
+		atleticomg.getTrophies().add(new Trophy("Copa Conmebol", Trophy.INTERNACIONAL, 2, "1992, 1997"));
+		
+		Club bahia = new Club("Bahia", "BAH", R.drawable.escudo_bahia, Club.PRIMEIRADIVISAO, "Esporte Clube Bahia", "http://pt.wikipedia.org/wiki/Esporte_Clube_Bahia");
+		bahia.getTrophies().add(new Trophy("Campeonato Baiano", Trophy.ESTADUAL, 44, "1931, 1933, 1934, 1936, 1938, 1940, 1944, 1945, 1947, 1948, 1949, 1950, 1952, 1954, 1956, 1958, 1959, 1960, 1961, 1962, 1967, 1970, 1971, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1981, 1982, 1983, 1984, 1986, 1987, 1988, 1991, 1993, 1994, 1998, 1999, 2001, 2012"));
+		bahia.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 9, "1931, 1932, 1934, 1937, 1938, 1951, 1964, 1967, 1979"));
+		bahia.getTrophies().add(new Trophy("Copa do Nordeste", Trophy.REGIONAL, 2, "2001, 2002"));
+		bahia.getTrophies().add(new Trophy("Copa Norte-Nordeste", Trophy.REGIONAL, 4, "1948, 1959, 1961, 1963"));
+		bahia.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 2, "1959, 1988"));
+				
+		Club botafogo = new Club("Botafogo", "BOT", R.drawable.escudo_botafogo, Club.PRIMEIRADIVISAO, "Botafogo de Futebol e Regatas", "http://pt.wikipedia.org/wiki/Botafogo_de_Futebol_e_Regatas");
+		botafogo.getTrophies().add(new Trophy("Campeonato Carioca", Trophy.ESTADUAL, 19, "1907, 1910, 1912, 1930, 1932, 1933, 1934, 1935, 1948, 1957, 1961, 1962, 1967, 1968, 1989, 1990, 1997, 2006, 2010"));
+		botafogo.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 8, "1934, 1938, 1947, 1961, 1962, 1963, 1967, 1977"));
+		botafogo.getTrophies().add(new Trophy("Torneio Rio-São Paulo", Trophy.REGIONAL, 4, "1962, 1964, 1966, 1998"));
+		botafogo.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 2, "1968, 1995"));
+		botafogo.getTrophies().add(new Trophy("Copa Conmebol", Trophy.INTERNACIONAL, 1, "1993"));
+		
+		Club corinthians = new Club("Corinthians", "COR", R.drawable.escudo_corinthians, Club.PRIMEIRADIVISAO, "Sport Club Corinthians Paulista", "http://pt.wikipedia.org/wiki/Sport_Club_Corinthians_Paulista");
+		corinthians.getTrophies().add(new Trophy("Campeonato Paulista", Trophy.ESTADUAL, 26, "1914, 1916, 1922, 1923, 1924, 1928, 1929, 1930, 1937, 1938, 1939, 1941, 1951, 1952, 1954, 1977, 1979, 1982, 1983, 1988, 1995, 1997, 1999, 2001, 2003, 2009"));
+		corinthians.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 9, "1919, 1920, 1921, 1929, 1936, 1938, 1941, 1944, 1955"));
+		corinthians.getTrophies().add(new Trophy("Torneio Rio-São Paulo", Trophy.REGIONAL, 5, "1950, 1953, 1954, 1966, 2002"));
+		corinthians.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 3, "1995, 2002, 2009"));
+		corinthians.getTrophies().add(new Trophy("Supercopa do Brasil", Trophy.NACIONAL, 1, "1991"));
+		corinthians.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 5, "1990, 1998, 1999, 2005, 2011"));
+		corinthians.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "2008"));
+		corinthians.getTrophies().add(new Trophy("Copa Libertadores da América", Trophy.INTERNACIONAL, 1, "2012"));
+		corinthians.getTrophies().add(new Trophy("Mundial Interclubes", Trophy.INTERNACIONAL, 1, "2000"));
+		
+		Club coritiba = new Club("Coritiba", "CFC", R.drawable.escudo_coritiba, Club.PRIMEIRADIVISAO, "Coritiba Foot Ball Club", "http://pt.wikipedia.org/wiki/Coritiba_Foot_Ball_Club");
+		coritiba.getTrophies().add(new Trophy("Campeonato Paranaense", Trophy.ESTADUAL, 36, "1916, 1927, 1931, 1933, 1935, 1939, 1941, 1942, 1946, 1947, 1951, 1952, 1954, 1956, 1957, 1959, 1960, 1968, 1969, 1971, 1972, 1973, 1974, 1975, 1976, 1978, 1979, 1986, 1989, 1999, 2003, 2004, 2008, 2010, 2011, 2012"));
+		coritiba.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 10, "1920, 1921, 1930, 1932, 1939, 1941, 1942, 1951, 1952, 1957"));
+		coritiba.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 1, "1985"));
+		coritiba.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 2, "2007, 2010"));
+		
+		Club cruzeiro = new Club("Cruzeiro", "CRU", R.drawable.escudo_cruzeiro, Club.PRIMEIRADIVISAO, "Cruzeiro Esporte Clube", "http://pt.wikipedia.org/wiki/Cruzeiro_Esporte_Clube");
+		cruzeiro.getTrophies().add(new Trophy("Campeonato Mineiro", Trophy.ESTADUAL, 36, "1926, 1928, 1929 , 1930 , 1940, 1943, 1944 , 1945, 1956, 1959, 1960, 1961, 1965, 1966, 1967, 1968, 1969, 1972, 1973, 1974, 1975, 1977, 1984, 1987, 1990, 1992, 1994, 1996, 1997, 1998, 2003, 2004, 2006, 2008, 2009, 2011"));
+		cruzeiro.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 10, "1926, 1927, 1929, 1938, 1940, 1941, 1943, 1944, 1948, 1966"));
+		cruzeiro.getTrophies().add(new Trophy("Copa Sul-Minas", Trophy.REGIONAL, 2, "2001, 2002"));
+		cruzeiro.getTrophies().add(new Trophy("Copa Centro-Oeste", Trophy.REGIONAL, 1, "1999"));
+		cruzeiro.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 4, "1993, 1996, 2000, 2003"));
+		cruzeiro.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 2, "1966, 2003"));
+		cruzeiro.getTrophies().add(new Trophy("Copa Ouro", Trophy.INTERNACIONAL, 1, "1995"));
+		cruzeiro.getTrophies().add(new Trophy("Copa Master", Trophy.INTERNACIONAL, 1, "1995"));
+		cruzeiro.getTrophies().add(new Trophy("Recopa Sul-Americana", Trophy.INTERNACIONAL, 1, "1998"));
+		cruzeiro.getTrophies().add(new Trophy("Supercopa Libertadores", Trophy.INTERNACIONAL, 2, "1991, 1992"));
+		cruzeiro.getTrophies().add(new Trophy("Copa Libertadores da América", Trophy.INTERNACIONAL, 2, "1976, 1997"));
+		
+		Club figueirense = new Club("Figueirense", "FIG", R.drawable.escudo_figueirense, Club.PRIMEIRADIVISAO, "Figueirense Futebol Clube", "http://pt.wikipedia.org/wiki/Figueirense_Futebol_Clube");
+		figueirense.getTrophies().add(new Trophy("Campeonato Catarinense", Trophy.ESTADUAL, 15, "1932, 1935, 1936, 1937, 1939, 1941, 1972, 1974, 1994, 1999, 2002, 2003, 2004, 2006, 2008"));
+
+		Club flamengo = new Club("Flamengo", "FLA", R.drawable.escudo_flamengo, Club.PRIMEIRADIVISAO, "Clube de Regatas do Flamengo", "http://pt.wikipedia.org/wiki/Clube_de_Regatas_do_Flamengo");
+		flamengo.getTrophies().add(new Trophy("Campeonato Carioca", Trophy.ESTADUAL, 32, "1914, 1915, 1920, 1921, 1925, 1927, 1939, 1942, 1943, 1944, 1953, 1954, 1955, 1963, 1965, 1972, 1974, 1978, 1979, 1979 (ed. especial), 1981, 1986, 1991, 1996, 1999, 2000, 2001, 2004, 2007, 2008, 2009, 2011"));
+		flamengo.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 6, "1920, 1922, 1946, 1951, 1952, 1959"));
+		flamengo.getTrophies().add(new Trophy("Torneio Rio-São Paulo", Trophy.REGIONAL, 1, "1961"));
+		flamengo.getTrophies().add(new Trophy("Copa dos Campeões", Trophy.NACIONAL, 1, "2001"));
+		flamengo.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 2, "1990, 2006"));
+		flamengo.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 5, "1980, 1982, 1983, 1992, 2009"));
+		flamengo.getTrophies().add(new Trophy("Copa Ouro", Trophy.INTERNACIONAL, 1, "1996"));
+		flamengo.getTrophies().add(new Trophy("Copa Mercosul", Trophy.INTERNACIONAL, 1, "1999"));
+		flamengo.getTrophies().add(new Trophy("Copa Libertadores da América", Trophy.INTERNACIONAL, 1, "1981"));
+		flamengo.getTrophies().add(new Trophy("Mundial Interclubes", Trophy.INTERNACIONAL, 1, "1981"));
+		
+		Club fluminense = new Club("Fluminense", "FLU", R.drawable.escudo_fluminense, Club.PRIMEIRADIVISAO, "Fluminense Football Club", "http://pt.wikipedia.org/wiki/Fluminense_Football_Club");
+		fluminense.getTrophies().add(new Trophy("Campeonato Carioca", Trophy.ESTADUAL, 31, "1906, 1907, 1908 , 1909 , 1911 , 1917, 1918, 1919, 1924, 1936, 1937, 1938, 1940, 1941, 1946, 1951, 1959, 1964, 1969, 1971, 1973, 1975, 1976, 1980, 1983, 1984, 1985, 1995, 2002, 2005, 2012"));
+		fluminense.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 9, "1916, 1924, 1925, 1940, 1941, 1943, 1954, 1956, 1965"));
+		fluminense.getTrophies().add(new Trophy("Torneio Rio-São Paulo", Trophy.REGIONAL, 2, "1957, 1960"));
+		fluminense.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 1, "2007"));
+		fluminense.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 3, "1970, 1984, 2010"));
+		fluminense.getTrophies().add(new Trophy("Copa Rio Internacional", Trophy.INTERNACIONAL, 1, "1952"));
+		
+		Club gremio = new Club("Grêmio", "GRE", R.drawable.escudo_gremio, Club.PRIMEIRADIVISAO, "Grêmio Foot-Ball Porto Alegrense", "http://pt.wikipedia.org/wiki/Gr%C3%AAmio_Foot-Ball_Porto_Alegrense");
+		gremio.getTrophies().add(new Trophy("Campeonato Gaúcho", Trophy.ESTADUAL, 36, "1921, 1922, 1926, 1931, 1932, 1946, 1949, 1956, 1957, 1958, 1959, 1960, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1977, 1979, 1980, 1985, 1986, 1987, 1988, 1989, 1990, 1993, 1995, 1996, 1999, 2001, 2006, 2007, 2010"));
+		gremio.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 11, "1922, 1926, 1927, 1931, 1937, 1939, 1946, 1958, 1963, 1965, 1967"));
+		gremio.getTrophies().add(new Trophy("Copa Sul-Brasileira", Trophy.REGIONAL, 1, "1962"));
+		gremio.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 4, "1989, 1994, 1997, 2001"));
+		gremio.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 2, "1981, 1996"));
+		gremio.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "2005"));
+		gremio.getTrophies().add(new Trophy("Supercopa do Brasil", Trophy.NACIONAL, 1, "1990"));
+		gremio.getTrophies().add(new Trophy("Recopa Sul-Americana", Trophy.INTERNACIONAL, 1, "1996"));
+		gremio.getTrophies().add(new Trophy("Copa Libertadores da América", Trophy.INTERNACIONAL, 2, "1983, 1995"));
+		gremio.getTrophies().add(new Trophy("Mundial Interclubes", Trophy.INTERNACIONAL, 1, "1983"));
+		
+		Club internacional = new Club("Internacional", "INT", R.drawable.escudo_internacional, Club.PRIMEIRADIVISAO, "Sport Club Internacional", "http://pt.wikipedia.org/wiki/Sport_Club_Internacional");
+		internacional.getTrophies().add(new Trophy("Campeonato Gaúcho", Trophy.ESTADUAL, 41, "1927, 1934, 1940, 1941, 1942, 1943, 1944, 1945, 1947, 1948, 1950, 1951, 1952,1953, 1955, 1961, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1978, 1981, 1982, 1983, 1984,1991, 1992, 1994, 1997, 2002, 2003, 2004, 2005, 2008, 2009, 2011, 2012"));
+		internacional.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 1, "1992"));
+		internacional.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 3, "1975, 1976, 1979"));
+		internacional.getTrophies().add(new Trophy("Recopa Sul-Americana", Trophy.INTERNACIONAL, 2, "2007, 2011"));
+		internacional.getTrophies().add(new Trophy("Copa Sul-Americana", Trophy.INTERNACIONAL, 1, "2008"));
+		internacional.getTrophies().add(new Trophy("Copa Libertadores da América", Trophy.INTERNACIONAL, 2, "2006, 2010"));
+		internacional.getTrophies().add(new Trophy("Mundial Interclubes", Trophy.INTERNACIONAL, 1, "2006"));
+		
+		Club nautico = new Club("Náutico", "NAU", R.drawable.escudo_nautico, Club.PRIMEIRADIVISAO, "Clube Náutico Capibaribe", "http://pt.wikipedia.org/wiki/Clube_N%C3%A1utico_Capibaribe");
+		nautico.getTrophies().add(new Trophy("Campeonato Pernambucano", Trophy.ESTADUAL, 21, "1934, 1939, 1945, 1950, 1951, 1952, 1954, 1960, 1963, 1964,1965, 1966, 1967, 1968, 1974, 1984, 1985, 1989, 2001, 2002, 2004"));
+		nautico.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 14, "1933, 1942, 1944, 1949, 1952, 1953, 1962, 1963, 1964, 1965, 1975, 1978, 1979, 1980"));
+		nautico.getTrophies().add(new Trophy("Torneio dos Campeões do Norte-Nordeste", Trophy.REGIONAL, 1, "1952"));
+		nautico.getTrophies().add(new Trophy("Torneio do Norte", Trophy.REGIONAL, 3, "1965, 1966, 1967"));
+		
+		Club palmeiras = new Club("Palmeiras", "PAL", R.drawable.escudo_palmeiras, Club.PRIMEIRADIVISAO, "Sociedade Esportiva Palmeiras", "http://pt.wikipedia.org/wiki/Sociedade_Esportiva_Palmeiras");
+		palmeiras.getTrophies().add(new Trophy("Campeonato Paulista", Trophy.ESTADUAL, 22, "1920, 1926, 1927, 1932, 1933, 1934, 1936, 1940, 1942, 1944, 1947, 1950, 1959, 1963, 1966, 1972, 1974, 1976, 1993, 1994, 1996, 2008"));
+		palmeiras.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 7, "1927, 1930, 1935, 1939, 1942, 1946, 1969"));
+		palmeiras.getTrophies().add(new Trophy("Torneio Rio-São Paulo", Trophy.REGIONAL, 5, "1933, 1951, 1965, 1993, 2000"));
+		palmeiras.getTrophies().add(new Trophy("Copa dos Campeões", Trophy.NACIONAL, 1, "2000"));
+		palmeiras.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 2, "1998, 2012"));
+		palmeiras.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 8, "1960, 1967, 1967, 1969, 1972, 1973, 1993, 1994"));
+		palmeiras.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "2003"));
+		palmeiras.getTrophies().add(new Trophy("Copa Mercosul", Trophy.INTERNACIONAL, 1, "1998"));
+		palmeiras.getTrophies().add(new Trophy("Copa Libertadores da América", Trophy.INTERNACIONAL, 1, "1999"));
+		palmeiras.getTrophies().add(new Trophy("Copa Rio Internacional", Trophy.INTERNACIONAL, 1, "1951"));
+		
+		Club pontepreta = new Club("Ponte Preta", "PON", R.drawable.escudo_pontepreta, Club.PRIMEIRADIVISAO, "Associação Atlética Ponte Preta", "http://pt.wikipedia.org/wiki/Associa%C3%A7%C3%A3o_Atl%C3%A9tica_Ponte_Preta");
+		pontepreta.getTrophies().add(new Trophy("Campeonato Paulista do Interior", Trophy.ESTADUAL, 1, "2009"));
+		pontepreta.getTrophies().add(new Trophy("Campeonato Paulista - Série A2", Trophy.ESTADUAL, 1, "1969"));
+		
+		Club portuguesa = new Club("Portuguesa", "POR", R.drawable.escudo_portuguesa, Club.PRIMEIRADIVISAO, "Associação Portuguesa de Desportos", "http://pt.wikipedia.org/wiki/Associa%C3%A7%C3%A3o_Portuguesa_de_Desportos");
+		portuguesa.getTrophies().add(new Trophy("Campeonato Paulista", Trophy.ESTADUAL, 3, "1935, 1936, 1973"));
+		portuguesa.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 3, "1935, 1947, 1996"));
+		portuguesa.getTrophies().add(new Trophy("Torneio Rio-São Paulo", Trophy.REGIONAL, 2, "1952, 1955"));
+		portuguesa.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "2011"));
+		
+		Club santos = new Club("Santos", "SAN", R.drawable.escudo_santos, Club.PRIMEIRADIVISAO, "Santos Futebol Clube", "http://pt.wikipedia.org/wiki/Santos_Futebol_Clube");
+		santos.getTrophies().add(new Trophy("Campeonato Paulista", Trophy.ESTADUAL, 20, "1935, 1955, 1956, 1958, 1960, 1961, 1962, 1964, 1965, 1967, 1968, 1969, 1973, 1978, 1984, 2006, 2007, 2010, 2011, 2012"));
+		santos.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 3, "1928, 1952, 1984"));
+		santos.getTrophies().add(new Trophy("Torneio Rio-São Paulo", Trophy.REGIONAL, 5, "1959, 1963, 1964, 1966, 1997"));
+		santos.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 1, "2010"));
+		santos.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 8, "1961, 1962, 1963, 1964, 1965, 1968, 2002, 2004"));
+		santos.getTrophies().add(new Trophy("Copa Conmebol", Trophy.INTERNACIONAL, 1, "1998"));
+		santos.getTrophies().add(new Trophy("Recopa Sul-Americana", Trophy.INTERNACIONAL, 1, "2012"));
+		santos.getTrophies().add(new Trophy("Copa Libertadores da América", Trophy.INTERNACIONAL, 3, "1962, 1963,2011"));
+		santos.getTrophies().add(new Trophy("Mundial Interclubes", Trophy.INTERNACIONAL, 2, "1962, 1963"));
+		
+		Club saopaulo = new Club("São Paulo", "SPO", R.drawable.escudo_saopaulo, Club.PRIMEIRADIVISAO, "São Paulo Futebol Clube", "http://pt.wikipedia.org/wiki/S%C3%A3o_Paulo_Futebol_Clube");
+		saopaulo.getTrophies().add(new Trophy("Campeonato Paulista", Trophy.ESTADUAL, 21, "1931, 1943, 1945, 1946, 1948, 1949, 1953, 1957, 1970, 1971, 1975, 1980, 1981, 1985, 1987, 1989, 1991, 1992, 1998, 2000, 2005"));
+		saopaulo.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 3, "1932, 1940, 1945"));
+		saopaulo.getTrophies().add(new Trophy("Torneio Rio-São Paulo", Trophy.REGIONAL, 1, "2001"));
+		saopaulo.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 6, "1977, 1986, 1991, 2006, 2007, 2008"));
+		saopaulo.getTrophies().add(new Trophy("Copa Conmebol", Trophy.INTERNACIONAL, 1, "1994"));
+		saopaulo.getTrophies().add(new Trophy("Supercopa Libertadores", Trophy.INTERNACIONAL, 1, "1993"));
+		saopaulo.getTrophies().add(new Trophy("Recopa Sul-Americana", Trophy.INTERNACIONAL, 2, "1993, 1994"));
+		saopaulo.getTrophies().add(new Trophy("Copa Libertadores da América", Trophy.INTERNACIONAL, 3, "1992, 1993, 2005"));
+		saopaulo.getTrophies().add(new Trophy("Mundial Interclubes", Trophy.INTERNACIONAL, 3, "1992, 1993, 2005"));
+		
+		Club sport = new Club("Sport", "SPT", R.drawable.escudo_sport, Club.PRIMEIRADIVISAO, "Sport Club do Recife", "http://pt.wikipedia.org/wiki/Sport_Club_Recife");
+		sport.getTrophies().add(new Trophy("Campeonato Pernambucano", Trophy.ESTADUAL, 39, "1916, 1917, 1920, 1923, 1924, 1925, 1928, 1938, 1941, 1942, 1943, 1948, 1949, 1953, 1955, 1956, 1958, 1961, 1962, 1975, 1977, 1980, 1981, 1982, 1988, 1991, 1992, 1994, 1996, 1997, 1998, 1999, 2000, 2003, 2006, 2007, 2008, 2009, 2010"));
+		sport.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 18, "1920, 1923, 1924, 1925, 1927, 1928, 1932, 1935, 1940, 1945, 1957, 1958, 1959, 1960, 1966, 1968, 1974, 1977"));
+		sport.getTrophies().add(new Trophy("Copa do Nordeste", Trophy.REGIONAL, 2, "1994, 2000"));
+		sport.getTrophies().add(new Trophy("Torneio Norte-Nordeste", Trophy.REGIONAL, 1, "1968"));
+		sport.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 1, "2008"));
+		sport.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 1, "1987"));
+		sport.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "1990"));
+		
+		Club vasco = new Club("Vasco", "VAS", R.drawable.escudo_vasco, Club.PRIMEIRADIVISAO, "Club de Regatas Vasco da Gama", "http://pt.wikipedia.org/wiki/Club_de_Regatas_Vasco_da_Gama");
+		vasco.getTrophies().add(new Trophy("Campeonato Carioca", Trophy.ESTADUAL, 22, "1923, 1924, 1929, 1934, 1936, 1945, 1947, 1949, 1950, 1952, 1956, 1958, 1970, 1977, 1982, 1987, 1988, 1992, 1993, 1994, 1998, 2003"));
+		vasco.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 10, "1926, 1929, 1930, 1931, 1932, 1942, 1944, 1945, 1948, 1958"));
+		vasco.getTrophies().add(new Trophy("Torneio Rio-São Paulo", Trophy.REGIONAL, 3, "1958, 1966, 1999"));
+		vasco.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 1, "2011"));
+		vasco.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 4, "1974, 1989, 1997, 2000"));
+		vasco.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "2009"));
+		vasco.getTrophies().add(new Trophy("Campeonato Sul-Americano de Campeões", Trophy.INTERNACIONAL, 1, "1948"));
+		vasco.getTrophies().add(new Trophy("Copa Mercosul", Trophy.INTERNACIONAL, 1, "2000"));
+		vasco.getTrophies().add(new Trophy("Copa Libertadores da América", Trophy.INTERNACIONAL, 1, "1998"));
+		
+		////////////////// SERIE B ////////////////////////
+		
+		Club abc = new Club("ABC", "ABC", R.drawable.escudo_abc, Club.SEGUNDADIVISAO, "ABC Futebol Clube", "http://pt.wikipedia.org/wiki/ABC_Futebol_Clube");
+		abc.getTrophies().add(new Trophy("Campeonato Potiguar", Trophy.ESTADUAL, 52, "1920, 1921, 1923, 1925, 1926, 1928, 1929, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941,1944, 1945, 1947, 1950, 1953, 1954, 1955, 1958, 1959, 1960, 1961, 1962, 1965, 1966, 1970, 1971, 1972, 1973, 1976, 1978, 1983, 1984, 1990, 1993, 1994, 1995, 1997, 1998, 1999, 2000, 2005, 2007, 2008, 2010, 2011"));
+		abc.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 34, "1927, 1928, 1930, 1931, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1944, 1945, 1946, 1950, 1951, 1954, 1957, 1958, 1960, 1962, 1963, 1965, 1967, 1973, 1978, 1980, 1983, 1990, 1992, 1993, 1994, 1998"));
+		abc.getTrophies().add(new Trophy("Campeonato Brasileiro - Série C", Trophy.NACIONAL, 1, "2010"));
+		
+		Club americamg = new Club("América-MG", "AMG", R.drawable.escudo_americamg, Club.SEGUNDADIVISAO, "América Futebol Clube", "http://pt.wikipedia.org/wiki/Am%C3%A9rica_Futebol_Clube_(Minas_Gerais)");
+		americamg.getTrophies().add(new Trophy("Campeonato Mineiro", Trophy.ESTADUAL, 15, "1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1948,1957, 1971, 1993, 2001"));
+		americamg.getTrophies().add(new Trophy("Copa Sul-Minas", Trophy.REGIONAL, 1, "2000"));
+		americamg.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "1997"));
+		americamg.getTrophies().add(new Trophy("Campeonato Brasileiro - Série C", Trophy.NACIONAL, 1, "2009"));
+		
+		Club americarn = new Club("América-RN", "ARN", R.drawable.escudo_americarn, Club.SEGUNDADIVISAO, "América Futebol Clube", "http://pt.wikipedia.org/wiki/Am%C3%A9rica_Futebol_Clube_(Rio_Grande_do_Norte)");
+		americarn.getTrophies().add(new Trophy("Campeonato Potiguar", Trophy.ESTADUAL, 34, "1919, 1920 , 1922, 1924, 1926, 1927 , 1930, 1931 ,1942, 1946, 1948, 1949, 1951, 1952 , 1956, 1957, 1967, 1969, 1974 , 1975, 1977, 1979, 1980, 1981, 1982 , 1987, 1988, 1989, 1991, 1992, 1996, 2002, 2003, 2012"));
+		americarn.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 14, "1919, 1929, 1932, 1934, 1948, 1949, 1952, 1953, 1955, 1969, 1971, 1982, 1984, 1991"));
+		americarn.getTrophies().add(new Trophy("Copa do Nordeste", Trophy.REGIONAL, 1, "1998"));
+		
+		Club asa = new Club("Asa", "ASA", R.drawable.escudo_asa, Club.SEGUNDADIVISAO, "Agremiação Sportiva Arapiraquense", "http://pt.wikipedia.org/wiki/Agremia%C3%A7%C3%A3o_Sportiva_Arapiraquense");
+		asa.getTrophies().add(new Trophy("Campeonato Alagoano", Trophy.ESTADUAL, 7, "1953, 2000, 2001, 2003, 2005, 2009, 2011"));
+		asa.getTrophies().add(new Trophy("Copa Alagipe", Trophy.REGIONAL, 1, "2005"));
+		
+		Club atleticopr = new Club("Atlético-PR", "CAP", R.drawable.escudo_atleticopr, Club.SEGUNDADIVISAO, "Clube Atlético Paranaense", "http://pt.wikipedia.org/wiki/Clube_Atl%C3%A9tico_Paranaense");
+		atleticopr.getTrophies().add(new Trophy("Campeonato Paranaense", Trophy.ESTADUAL, 22, "1925, 1929, 1930, 1934, 1936, 1940, 1943, 1945, 1949, 1958, 1970, 1982, 1983, 1985, 1988, 1990, 1998, 2000, 2001, 2002, 2005, 2009"));
+		atleticopr.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 6, "1936, 1947, 1955, 1958, 1987, 1988"));
+		atleticopr.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 1, "2001"));
+		atleticopr.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "1995"));
+		
+		Club avai = new Club("Avaí", "AVA", R.drawable.escudo_avai, Club.SEGUNDADIVISAO, "Avaí Futebol Clube", "http://pt.wikipedia.org/wiki/Ava%C3%AD_Futebol_Clube");
+		avai.getTrophies().add(new Trophy("Campeonato Catarinense", Trophy.ESTADUAL, 16, "1924, 1926, 1927, 1928, 1930, 1942, 1943, 1944, 1945, 1973, 1975, 1988, 1997, 2009, 2010, 2012"));
+		avai.getTrophies().add(new Trophy("Campeonato Brasileiro - Série C", Trophy.NACIONAL, 1, "1998"));
+		
+		Club boaesporte = new Club("Boa Esporte", "BOA", R.drawable.escudo_boaesporte, Club.SEGUNDADIVISAO, "Boa Esporte Clube", "http://pt.wikipedia.org/wiki/Boa_Esporte_Clube");
+		boaesporte.getTrophies().add(new Trophy("Campeonato Mineiro - Módulo II", Trophy.ESTADUAL, 2, "2004, 2011"));
+		boaesporte.getTrophies().add(new Trophy("Taça Minas Gerais", Trophy.ESTADUAL, 1, "2007"));
+		
+		Club bragantino = new Club("Bragantino", "BRA", R.drawable.escudo_bragantino, Club.SEGUNDADIVISAO, "Clube Atlético Bragantino", "http://pt.wikipedia.org/wiki/Clube_Atl%C3%A9tico_Bragantino");
+		bragantino.getTrophies().add(new Trophy("Campeonato Paulista", Trophy.ESTADUAL, 1, "1990"));
+		bragantino.getTrophies().add(new Trophy("Campeonato Paulista - Série A2", Trophy.ESTADUAL, 2, "1965, 1988"));
+		bragantino.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "1989"));
+		bragantino.getTrophies().add(new Trophy("Campeonato Brasileiro - Série C", Trophy.NACIONAL, 1, "2007"));
+		
+		Club ceara = new Club("Ceará", "CEA", R.drawable.escudo_ceara, Club.SEGUNDADIVISAO, "Ceará Sporting Club", "http://pt.wikipedia.org/wiki/Cear%C3%A1_Sporting_Club");
+		ceara.getTrophies().add(new Trophy("Campeonato Cearense", Trophy.ESTADUAL, 41, "1915, 1916, 1917, 1918, 1919, 1922, 1925, 1931, 1932, 1939, 1941, 1942, 1948, 1951, 1957, 1958, 1961, 1962, 1963, 1971, 1972, 1975, 1976, 1977, 1978, 1980, 1981, 1984, 1986, 1989, 1990, 1992, 1993, 1996, 1997, 1998, 1999, 2002, 2006 e 2011, 2012"));
+		ceara.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 12, "1922, 1923, 1926, 1932, 1936, 1937, 1943, 1947, 1952, 1953, 1967, 1978"));
+		ceara.getTrophies().add(new Trophy("Torneio Norte-Nordeste", Trophy.REGIONAL, 2, "1964, 1969"));
+		
+		Club crb = new Club("CRB", "CRB", R.drawable.escudo_crb, Club.SEGUNDADIVISAO, "Clube de Regatas Brasil", "http://pt.wikipedia.org/wiki/Clube_de_Regatas_Brasil");
+		crb.getTrophies().add(new Trophy("Campeonato Alagoano", Trophy.ESTADUAL, 26, "1927, 1930, 1937, 1938, 1939, 1940, 1950, 1951, 1961, 1964, 1969, 1970, 1972, 1973, 1976, 1977, 1978, 1979, 1983, 1986, 1987, 1992, 1993, 1995, 2002, 2012"));
+		crb.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 16, "1936, 1937, 1939, 1943, 1944, 1945, 1946, 1951, 1956, 1958, 1962, 1963, 1966, 1969, 1970, 1973"));
+		
+		Club criciuma = new Club("Criciúma", "CRI", R.drawable.escudo_criciuma, Club.SEGUNDADIVISAO, "Criciúma Esporte Clube", "http://pt.wikipedia.org/wiki/Crici%C3%BAma_Esporte_Clube");
+		criciuma.getTrophies().add(new Trophy("Campeonato Catarinense", Trophy.ESTADUAL, 9, "1968, 1986, 1989, 1990, 1991, 1993, 1995, 1998, 2005"));
+		criciuma.getTrophies().add(new Trophy("Copa do Brasil", Trophy.NACIONAL, 1, "1991"));
+		criciuma.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 2, "1986, 2002"));
+		criciuma.getTrophies().add(new Trophy("Campeonato Brasileiro - Série C", Trophy.NACIONAL, 1, "2006"));
+		
+		Club goias = new Club("Goiás", "GOI", R.drawable.escudo_goias, Club.SEGUNDADIVISAO, "Goiás Esporte Clube", "http://pt.wikipedia.org/wiki/Goi%C3%A1s_Esporte_Clube");
+		goias.getTrophies().add(new Trophy("Campeonato Goiano", Trophy.ESTADUAL, 23, "1966, 1971, 1972, 1975, 1976, 1981, 1983, 1986, 1987, 1989, 1990, 1991, 1994, 1996, 1997, 1998, 1999, 2000, 2002, 2003, 2006, 2009, 2012"));
+		goias.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 6, "1942, 1948, 1951, 1955, 1956, 1960"));
+		goias.getTrophies().add(new Trophy("Copa Centro-Oeste", Trophy.REGIONAL, 3, "2000, 2001, 2002"));
+		goias.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "1999"));
+		
+		Club gremiobarueri = new Club("Grêmio Barueri", "BAR", R.drawable.escudo_barueri, Club.SEGUNDADIVISAO, "Grêmio Barueri Futebol Ltda.", "http://pt.wikipedia.org/wiki/Gr%C3%AAmio_Barueri_Futebol_Ltda.");
+		gremiobarueri.getTrophies().add(new Trophy("Campeonato Paulista do Interior", Trophy.ESTADUAL, 1, "2008"));
+		gremiobarueri.getTrophies().add(new Trophy("Campeonato Paulista - Série A2", Trophy.ESTADUAL, 1, "2006"));
+		
+		Club guarani = new Club("Guarani", "GUA", R.drawable.escudo_guarani, Club.SEGUNDADIVISAO, "Guarani Futebol Clube", "http://pt.wikipedia.org/wiki/Guarani_Futebol_Clube");
+		guarani.getTrophies().add(new Trophy("Campeonato Paulista do Interior", Trophy.ESTADUAL, 5, "1944, 1949, 1972, 1973, 1974"));
+		guarani.getTrophies().add(new Trophy("Campeonato Paulista - Série A2", Trophy.ESTADUAL, 1, "1949"));
+		guarani.getTrophies().add(new Trophy("Campeonato Brasileiro", Trophy.NACIONAL, 1, "1978"));
+		guarani.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 1, "1981"));
+		
+		Club guaratingueta = new Club("Guaratinguetá", "GTA", R.drawable.escudo_guaratingueta, Club.SEGUNDADIVISAO, "Guaratinguetá Futebol Ltda.", "http://pt.wikipedia.org/wiki/Guaratinguet%C3%A1_Futebol_Ltda.");
+		guaratingueta.getTrophies().add(new Trophy("Campeonato Paulista do Interior", Trophy.ESTADUAL, 1, "2007"));
+		
+		Club ipatinga = new Club("Ipatinga", "IPA", R.drawable.escudo_ipatinga, Club.SEGUNDADIVISAO, "Ipatinga Futebol Clube", "http://pt.wikipedia.org/wiki/Ipatinga_Futebol_Clube");
+		ipatinga.getTrophies().add(new Trophy("Campeonato Mineiro", Trophy.ESTADUAL, 1, "2005"));
+		ipatinga.getTrophies().add(new Trophy("Campeonato Mineiro - Módulo II", Trophy.ESTADUAL, 1, "2009"));
+		
+		Club joinville = new Club("Joinville", "JOI", R.drawable.escudo_joinville, Club.SEGUNDADIVISAO, "Joinville Esporte Clube", "http://pt.wikipedia.org/wiki/Joinville_Esporte_Clube");
+		joinville.getTrophies().add(new Trophy("Campeonato Catarinense", Trophy.ESTADUAL, 12, "1976, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1987, 2000, 2001"));
+		joinville.getTrophies().add(new Trophy("Recopa Sul-Brasileira", Trophy.REGIONAL, 1, "2009"));
+		joinville.getTrophies().add(new Trophy("Campeonato Brasileiro - Série C", Trophy.NACIONAL, 1, "2011"));
+		
+		Club parana = new Club("Paraná", "PAR", R.drawable.escudo_parana, Club.SEGUNDADIVISAO, "Paraná Clube", "http://pt.wikipedia.org/wiki/Paran%C3%A1_Clube");
+		parana.getTrophies().add(new Trophy("Campeonato Paranaense", Trophy.ESTADUAL, 7, "1991, 1993, 1994, 1995, 1996, 1997, 2006"));
+		parana.getTrophies().add(new Trophy("Campeonato Brasileiro - Série B", Trophy.NACIONAL, 2, "1992, 2000"));
+		
+		Club saocaetano = new Club("São Caetano", "SCA", R.drawable.escudo_saocaetano, Club.SEGUNDADIVISAO, "Associação Desportiva São Caetano", "http://pt.wikipedia.org/wiki/Associa%C3%A7%C3%A3o_Desportiva_S%C3%A3o_Caetano");
+		saocaetano.getTrophies().add(new Trophy("Campeonato Paulista", Trophy.ESTADUAL, 1, "2004"));
+		saocaetano.getTrophies().add(new Trophy("Campeonato Paulista - Série A2", Trophy.ESTADUAL, 1, "2000"));
+		
+		Club vitoria = new Club("Vitória", "VIT", R.drawable.escudo_vitoria, Club.SEGUNDADIVISAO, "Esporte Clube Vitória", "http://pt.wikipedia.org/wiki/Esporte_Clube_Vit%C3%B3ria");
+		vitoria.getTrophies().add(new Trophy("Campeonato Baiano", Trophy.ESTADUAL, 26, "1908, 1909, 1953, 1955, 1957, 1964, 1965, 1972, 1980, 1985, 1989, 1990, 1992, 1995, 1996, 1997, 1999, 2000, 2002, 2003, 2004, 2005, 2007, 2008, 2009, 2010"));
+		vitoria.getTrophies().add(new Trophy("Torneio Início", Trophy.ESTADUAL, 11, "1926, 1941, 1942, 1943, 1944, 1949, 1953, 1955, 1958, 1961, 1980"));
+		vitoria.getTrophies().add(new Trophy("Copa do Nordeste", Trophy.REGIONAL, 4, "1997, 1999, 2003, 2010"));
+		
+		////////////////// TREEMAP ////////////////////////
+		
+		TreeMap<String, Club> tm = new TreeMap<String, Club>();
+		
+		tm.put(atleticogo.getName(), atleticogo);
+		tm.put(atleticomg.getName(), atleticomg);
+		tm.put(bahia.getName(), bahia);
+		tm.put(botafogo.getName(), botafogo);
+		tm.put(corinthians.getName(), corinthians);
+		tm.put(coritiba.getName(), coritiba);
+		tm.put(cruzeiro.getName(), cruzeiro);
+		tm.put(figueirense.getName(), figueirense);
+		tm.put(flamengo.getName(), flamengo);
+		tm.put(fluminense.getName(), fluminense);
+		tm.put(gremio.getName(), gremio);
+		tm.put(internacional.getName(), internacional);
+		tm.put(nautico.getName(), nautico);
+		tm.put(palmeiras.getName(), palmeiras);
+		tm.put(pontepreta.getName(), pontepreta);
+		tm.put(portuguesa.getName(), portuguesa);
+		tm.put(santos.getName(), santos);
+		tm.put(saopaulo.getName(), saopaulo);
+		tm.put(sport.getName(), sport);
+		tm.put(vasco.getName(), vasco);
+		
+		tm.put(abc.getName(), abc);
+		tm.put(americamg.getName(), americamg);
+		tm.put(americarn.getName(), americarn);
+		tm.put(asa.getName(), asa);
+		tm.put(atleticopr.getName(), atleticopr);
+		tm.put(avai.getName(), avai);
+		tm.put(boaesporte.getName(), boaesporte);
+		tm.put(bragantino.getName(), bragantino);
+		tm.put(ceara.getName(), ceara);
+		tm.put(crb.getName(), crb);
+		tm.put(criciuma.getName(), criciuma);
+		tm.put(goias.getName(), goias);
+		tm.put(gremiobarueri.getName(), gremiobarueri);
+		tm.put(guarani.getName(), guarani);
+		tm.put(guaratingueta.getName(), guaratingueta);
+		tm.put(ipatinga.getName(), ipatinga);
+		tm.put(joinville.getName(), joinville);
+		tm.put(parana.getName(), parana);
+		tm.put(saocaetano.getName(), saocaetano);
+		tm.put(vitoria.getName(), vitoria);
+		
+		return tm;
+	}
+
+	private class GetStrikersTask extends AsyncTask<Void, Void, Void> {
+		private Context c;
+		private boolean hasDownload = false, success = false;
+		
+		public GetStrikersTask(Context c){
+			this.c = c;
+			this.hasDownload = false;
+			this.success = false;
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		protected void onPreExecute() {
+			if((ArrayList<Striker>) FileHandler.openBackup(c, FileHandler.STRIKERS_A) == null || (ArrayList<Striker>) FileHandler.openBackup(c, FileHandler.STRIKERS_B) == null){
+				hasDownload = true;
+			}
+			
+			if(hasDownload){
+				findViewById(R.home.rl_loading).setVisibility(View.VISIBLE);
+				findViewById(R.home.fl_viewflow).setVisibility(View.GONE);
+				updateAll.setVisibility(View.GONE);
+			}
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			if(hasDownload){				
+				ArrayList<Striker> al_a, al_b;
+				try {
+					al_a = HTMLManager.getStrikers(Club.PRIMEIRADIVISAO);
+					al_b = HTMLManager.getStrikers(Club.SEGUNDADIVISAO);
+				} catch (IOException e) {
+					al_a = null;
+					al_b = null;
+				} catch (IllegalCharsetNameException e){
+					al_a = null;
+					al_b = null;
+				} catch (OutOfMemoryError e){
+					al_a = null;
+					al_b = null;
+				}
+				if(al_a != null && al_b != null){
+					FileHandler.saveBackup(c, FileHandler.STRIKERS_A, al_a);
+					FileHandler.saveBackup(c, FileHandler.STRIKERS_B, al_b);
+					success = true;
+				}
+			}else success = true;
+			return null;
+		}
+		
+		protected void onPostExecute(Void result) {
+			if(hasDownload){
+				findViewById(R.home.fl_viewflow).setVisibility(View.VISIBLE);
+				updateAll.setVisibility(View.VISIBLE);
+				findViewById(R.home.rl_loading).setVisibility(View.GONE);
+			}
+			if(success){
+				Intent it;
+				if(myClub.getDivision() == Club.SEGUNDADIVISAO) it = new Intent(c, StrikersDivision2Activity.class);
+				else it = new Intent(c, StrikersDivision1Activity.class);
+				
+				it.putExtra("CHAMPIONSHIP", 1);
+				startActivity(it);
+			}else{
+				Toast.makeText(c, "Não foi possível atualizar os dados. Verifique sua conexão.", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+	
+	private class UpdateAllTask extends AsyncTask<Void, Integer, Boolean> {
+		private final int UPDATE_RANKING = 1;
+		private final int UPDATE_TABLE = 2;
+		private final int UPDATE_STRIKERS = 3;
+		private final int UPDATE_OTHERS = 4;
+		
+		private Context c;
+		
+		public UpdateAllTask(Context c){
+			setContext(c);
+		}
+		
+		public Context getContext() {
+			return c;
+		}
+		
+		public void setContext(Context c) {
+			this.c = c;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			findViewById(R.home.rl_loading).setVisibility(View.VISIBLE);
+			findViewById(R.home.fl_viewflow).setVisibility(View.GONE);
+			updateAll.setVisibility(View.GONE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			if(ConnectionHelper.isConnected(getContext())){
+				try{
+					publishProgress(UPDATE_RANKING);
+					TreeMap<String, Club> ranking1 = HTMLManager.getRankingBrasileirao(getContext(), Club.PRIMEIRADIVISAO);
+					for (Club club : ranking1.values()) {
+						clubs.get(club.getName()).clone(club);
+					}
+					FileHandler.saveBackup(getContext(), FileHandler.CLUBS, clubs);
+					Log.d("bras2012", "Ranking A atualizado");
+					
+					TreeMap<String, Club> ranking2 = HTMLManager.getRankingBrasileirao(getContext(), Club.SEGUNDADIVISAO);
+					for (Club club : ranking2.values()) {
+						clubs.get(club.getName()).clone(club);
+					}
+					FileHandler.saveBackup(getContext(), FileHandler.CLUBS, clubs);
+					Log.d("bras2012", "Ranking B atualizado");
+					
+					publishProgress(UPDATE_TABLE);
+					TreeMap<Integer, ArrayList<Match>> matches_a = HTMLManager.getTableData(getContext(), Club.PRIMEIRADIVISAO);
+					FileHandler.saveBackup(getContext(), FileHandler.MATCHES_A, matches_a);
+					FileHandler.saveBackup(getContext(), FileHandler.VERSION_MATCHES_A, HomeActivity.getAppVersion(getContext()));
+					clubs = AprovActivity.updateClubsDatabase(getContext(), matches_a);
+					Log.d("bras2012", "Matches A atualizado");
+					
+					TreeMap<Integer, ArrayList<Match>> matches_b = HTMLManager.getTableData(getContext(), Club.SEGUNDADIVISAO);
+					FileHandler.saveBackup(getContext(), FileHandler.MATCHES_B, matches_b);
+					FileHandler.saveBackup(getContext(), FileHandler.VERSION_MATCHES_B, HomeActivity.getAppVersion(getContext()));
+					clubs = AprovActivity.updateClubsDatabase(getContext(), matches_b);
+					Log.d("bras2012", "Matches B atualizado");
+					
+					publishProgress(UPDATE_STRIKERS);
+					FileHandler.saveBackup(getContext(), FileHandler.STRIKERS_A, HTMLManager.getStrikers(Club.PRIMEIRADIVISAO));
+					Log.d("bras2012", "Strikers A atualizado");
+					FileHandler.saveBackup(getContext(), FileHandler.STRIKERS_B, HTMLManager.getStrikers(Club.SEGUNDADIVISAO));
+					Log.d("bras2012", "Strikers B atualizado");
+					
+					publishProgress(UPDATE_OTHERS);
+					HTMLManager.updateFansData(getContext(), myClub.getAcronym());
+					Log.d("bras2012", "Torcidometro atualizado");
+					
+					return true;
+				}catch(Exception e){
+					return false;
+				}catch(OutOfMemoryError e){
+					return false;
+				}
+			}else return false;
+		}
+		
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			switch (values[0]) {
+			case UPDATE_RANKING:
+				tv_progressbar.setText("Atualizando classificações...");
+				break;
+			case UPDATE_TABLE:
+				tv_progressbar.setText("Atualizando tabelas...");
+				break;
+			case UPDATE_STRIKERS:
+				tv_progressbar.setText("Atualizando artilharias...");
+				break;
+			case UPDATE_OTHERS:
+				tv_progressbar.setText("Completando atualização...");
+				break;
+			default:
+				tv_progressbar.setText("Atualizando...");
+				break;
+			}
+			super.onProgressUpdate(values);
+		}
+		
+		protected void onPostExecute(Boolean result) {
+			findViewById(R.home.fl_viewflow).setVisibility(View.VISIBLE);
+			updateAll.setVisibility(View.VISIBLE);
+			findViewById(R.home.rl_loading).setVisibility(View.GONE);
+
+			if(result){
+				FileHandler.saveBackup(getContext(), FileHandler.LASTDATE_UPDATEALL, Calendar.getInstance());
+				Toast.makeText(getContext(), "Dados atualizados", Toast.LENGTH_SHORT).show();
+			}
+			else Toast.makeText(getContext(), "Não foi possível atualizar os dados", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private class UpdateAppTask extends AsyncTask<Void, Void, Boolean> {
+		private Context c;
+		private String appVersion, marketVersion;
+		
+		public UpdateAppTask(Context c, String appVersion){
+			this.setContext(c);
+			this.setAppVersion(appVersion);
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			if(ConnectionHelper.isConnected(getContext())){
+        		try {
+        			String market = HTMLManager.getVersionAtMarket();
+        			String thisVers = this.getAppVersion();
+        			if(!market.equals(thisVers)){
+        				setMarketVersion(market);
+        				return true;
+        			}
+        			else return false;
+        		} catch (IOException e) {
+        			return false;
+        		} catch (NullPointerException e) {
+        			return false;
+        		} catch (NumberFormatException e) {
+        			return false;
+        		} catch (IndexOutOfBoundsException e) {
+        			return false;
+        		} catch (ExceptionInInitializerError e) {
+        			return false;
+        		}
+        	}else return false;
+		}
+		
+		private void setMarketVersion(String market) {
+			this.marketVersion = market;
+		}
+		
+		private String getMarketVersion() {
+			return this.marketVersion;
+		}
+		
+		private void setAppVersion(String appv) {
+			this.appVersion = appv;
+		}
+		
+		private String getAppVersion() {
+			return this.appVersion;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if(result == true){
+				NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				
+				Notification newVersionAvailable = new Notification();
+				newVersionAvailable.icon = android.R.drawable.stat_notify_sync;
+				newVersionAvailable.tickerText = "Versão " + getMarketVersion() + " disponível";
+				newVersionAvailable.when = System.currentTimeMillis();
+				newVersionAvailable.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+				
+				Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
+				notificationIntent.setData(Uri.parse("market://details?id=br.com.zynger.brasileirao2012"));
+				
+				PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent, 0);
+				newVersionAvailable.setLatestEventInfo(getContext(), "Atualização - Brasileirão", newVersionAvailable.tickerText, contentIntent);
+				notificationManager.notify(UPDATE_NOTIFICATION, newVersionAvailable);
+			}
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+
+	public class HomeViewFlowAdapter extends BaseAdapter {
+
+		private LayoutInflater mInflater;
+		private final int[] ids = { R.layout.home_dashboard, R.layout.home_dashboard2 };
+
+		public HomeViewFlowAdapter(Context context) {
+			mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+
+		@Override
+		public int getCount() {
+			return ids.length;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return ids[position];
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {			
+			return mInflater.inflate((Integer) getItem(position), null);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+	}
+
+}

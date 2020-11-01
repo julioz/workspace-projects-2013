@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/gradient_titlebar">
+        
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_rosters"
+            android:id="@+rostersactivity/titlebar_ivlogo"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+        
+        <br.com.zynger.libertadores.view.HelveticaTextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:id="@+rostersactivity/titlebar_tvtitle"
+	        android:textColor="#FF3B3B3B"
+	        android:layout_centerVertical="true"
+	        android:layout_margin="5dp"
+	        android:layout_toRightOf="@+rostersactivity/titlebar_ivlogo"
+	        android:gravity="left|center_vertical"
+	        android:layout_marginLeft="10dp"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+	        android:textSize="30dp"/>
+        
+        <ImageView
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:id="@+rostersactivity/titlebar_ivbadge"
+            android:padding="7dp"
+            android:layout_marginRight="2dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    
+    <br.com.zynger.libertadores.view.DataUpdateLayout
+	    android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+rostersactivity/dul_update" />
+    
+    <ExpandableListView
+	    android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+		android:layout_weight="1"
+		android:dividerHeight="4dp"
+	    android:padding="3dp"
+	    android:background="@null"
+	    android:cacheColorHint="#00000000"
+	    android:divider="#00000000"
+	    android:childDivider="#00000000"
+	    android:id="@+rostersactivity/elv_content"/>
+    
+    <include layout="@layout/admob_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:gravity="bottom|center_horizontal"/>
+</LinearLayout>

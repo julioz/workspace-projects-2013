@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+myteamactivity/ll_ad"
+        android:orientation="vertical" >
+
+        <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+            android:id="@+myteamactivity/dul_loading"
+            android:visibility="gone"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+        
+        <include
+            layout="@layout/myteamactivity_header"
+            android:id="@+myteamactivity/ll_header" />
+
+        <ListView
+            android:id="@+myteamactivity/lv_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+myteamactivity/ll_header"
+            android:background="@null"
+            android:cacheColorHint="#00000000"
+            android:divider="#00000000" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+myteamactivity/ll_ad"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom|center_horizontal" >
+
+        <com.google.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="a14f4bbc3448afb"
+            ads:loadAdOnCreate="true" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,213 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.libertadores.MatchesListActivity;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Match;
+
+public class MatchesListAdapter extends ArrayAdapter<Match> {
+
+	private final LayoutInflater mInflater;
+	private static final int LAYOUTRESOURCEID = R.layout.matcheslistrow;
+	private ArrayList<Match> objects;
+	private Integer phase;
+	private Boolean showTitles, showArrows;
+	
+	public MatchesListAdapter(Context context, ArrayList<Match> matches, Integer phase) {
+		super(context, LAYOUTRESOURCEID);
+		this.mInflater = LayoutInflater.from(context);
+		objects = matches;
+		this.phase = phase;
+		this.showTitles = true;
+		this.showArrows = true;
+	}
+	
+	public MatchesListAdapter(Context context, ArrayList<Match> matches) {
+		super(context, LAYOUTRESOURCEID);
+		this.mInflater = LayoutInflater.from(context);
+		objects = matches;
+		this.phase = null;
+		this.showTitles = true;
+		this.showArrows = true;
+	}
+	
+	public MatchesListAdapter(Context context, ArrayList<Match> matches, boolean showTitles, boolean showArrows) {
+		super(context, LAYOUTRESOURCEID);
+		this.mInflater = LayoutInflater.from(context);
+		objects = matches;
+		this.phase = null;
+		this.showTitles = showTitles;
+		this.showArrows = showArrows;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public Match getItem(int position) {
+		return objects.get(position);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+		MatchesListHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+            
+            holder = new MatchesListHolder();
+            holder.tv_match_title = (TextView) row.findViewById(R.matcheslistrow.tv_match_title);
+            holder.ll_match_title = (LinearLayout) row.findViewById(R.matcheslistrow.ll_match_title);
+            holder.tv_date = (TextView) row.findViewById(R.matcheslistrow.tv_date);
+            holder.tv_stadium = (TextView) row.findViewById(R.matcheslistrow.tv_stadium);
+            holder.iv_home = (ImageView) row.findViewById(R.matcheslistrow.iv_home);
+            holder.iv_away = (ImageView) row.findViewById(R.matcheslistrow.iv_away);
+            holder.tv_score_home = (TextView) row.findViewById(R.matcheslistrow.tv_score_home);
+            holder.tv_score_away = (TextView) row.findViewById(R.matcheslistrow.tv_score_away);
+            holder.tv_penalty_home = (TextView) row.findViewById(R.matcheslistrow.tv_penalty_home);
+            holder.tv_penalty_away = (TextView) row.findViewById(R.matcheslistrow.tv_penalty_away);
+            holder.iv_arrow = (ImageView) row.findViewById(R.matcheslistrow.iv_arrow);
+            
+            row.setTag(holder);
+        }else{
+            holder = (MatchesListHolder) row.getTag();
+        }
+
+        Match match = getItem(position);
+        
+        final Club home = match.getHome();
+        final Club away = match.getAway();
+        
+        String stadium = match.getStadium();
+        if(null == stadium){
+        	//stadium = getContext().getString(R.string.matcheslistadapter_stadium_null); //TODO recolocar quando mudar o source do matchparser (atualmente é nulo sempre)
+        	holder.tv_stadium.setVisibility(View.GONE);
+        }
+        
+        GregorianCalendar date = match.getDate();
+        String strDate = getContext().getString(R.string.matcheslistadapter_date_null);
+        if(null != date) strDate = getFormattedDateString(date);
+        
+        String title = (position % 2 == 0 ? match.getTitle() : null);
+        if(null == title || !showTitles) holder.ll_match_title.setVisibility(View.GONE);
+        else{
+        	String prefix = new String();
+        	if(phase == MatchesListActivity.PHASE_PRELIB) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_qualifying);
+        	else if(phase == MatchesListActivity.PHASE_ROUNDOF16) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_roundofsixteen);
+        	else if(phase == MatchesListActivity.PHASE_QUARTERFINAL) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_quarterfinal);
+        	else if(phase == MatchesListActivity.PHASE_SEMIFINAL) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_semifinal);
+        	else if(phase == null) prefix = getContext().getString(R.string.matcheslistadapter_matchtitle_round);
+        	
+        	title = prefix + " " + title;
+        	holder.tv_match_title.setText(title.trim().toUpperCase());
+        	holder.ll_match_title.setVisibility(View.VISIBLE);
+        }
+        
+        holder.tv_date.setText(strDate);
+        holder.tv_stadium.setText(stadium);
+        holder.iv_home.setImageResource(home.getBadgeResource(getContext()));
+        holder.iv_away.setImageResource(away.getBadgeResource(getContext()));
+        holder.iv_home.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getContext(), home.getName(), Toast.LENGTH_SHORT).show();
+			}
+		});
+        holder.iv_away.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getContext(), away.getName(), Toast.LENGTH_SHORT).show();
+			}
+		});
+        holder.tv_score_home.setText(getScoreString(match.getScoreHome()));
+        holder.tv_score_away.setText(getScoreString(match.getScoreAway()));
+        
+        if(match.getPenaltiesHome() != null){
+        	holder.tv_penalty_home.setText(getScoreString(match.getPenaltiesHome()));
+        	holder.tv_penalty_home.setVisibility(View.VISIBLE);
+        }else holder.tv_penalty_home.setVisibility(View.GONE);
+        
+        if(match.getPenaltiesAway() != null){
+        	holder.tv_penalty_away.setText(getScoreString(match.getPenaltiesAway()));
+        	holder.tv_penalty_away.setVisibility(View.VISIBLE);
+        }else holder.tv_penalty_away.setVisibility(View.GONE);
+        
+        String detailsUrl = getItem(position).getDetailsUrl();
+		if(null != detailsUrl && !detailsUrl.equals("null") && showArrows) holder.iv_arrow.setVisibility(View.VISIBLE);
+		else holder.iv_arrow.setVisibility(View.GONE);
+        
+        return row;
+	}
+
+	private String getFormattedDateString(GregorianCalendar date) {
+		String lang = Locale.getDefault().getLanguage();
+		Calendar localTime = Calendar.getInstance();
+		localTime.setTimeInMillis(date.getTimeInMillis());
+		
+		String str = new String();
+		int day_of_month = localTime.get(Calendar.DAY_OF_MONTH);
+		int month = localTime.get(Calendar.MONTH) + 1;
+		int hour = localTime.get(Calendar.HOUR_OF_DAY);
+		int minute = localTime.get(Calendar.MINUTE);
+		
+		
+		if(lang.contains("en")){
+			str = str.concat(addZeroIfNecessary(month));
+			str = str.concat("/");
+			str = str.concat(addZeroIfNecessary(day_of_month));
+		}else{
+			str = str.concat(addZeroIfNecessary(day_of_month));
+			str = str.concat("/");
+			str = str.concat(addZeroIfNecessary(month));			
+		}
+		
+		str = str.concat(" - ");
+		str = str.concat(addZeroIfNecessary(hour));
+		str = str.concat(":");
+		str = str.concat(addZeroIfNecessary(minute));
+		
+		return str;
+	}
+	
+	private String addZeroIfNecessary(int value){
+		return value < 10 ? '0' + String.valueOf(value) : String.valueOf(value);
+	}
+
+	private String getScoreString(Integer score) {
+		if(score == Match.SCORE_NULL) return new String();
+		return String.valueOf(score);
+	}
+	
+}
+
+class MatchesListHolder {
+	TextView tv_match_title;
+	LinearLayout ll_match_title;
+	TextView tv_date;
+	TextView tv_stadium;
+	ImageView iv_home;
+	ImageView iv_away;
+	TextView tv_score_home;
+	TextView tv_score_away;
+	TextView tv_penalty_home;
+	TextView tv_penalty_away;
+	ImageView iv_arrow;
+}

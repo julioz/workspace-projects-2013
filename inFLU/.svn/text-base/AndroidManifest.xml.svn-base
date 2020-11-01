@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest android:installLocation="preferExternal"
+    android:versionCode="16" android:versionName="1.0.13"
+    package="br.com.zynger.influ" xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <activity android:label="@string/app_name"
+            android:name=".SplashScreen"
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".HomeActivity" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".SquadActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".PlayerInformationActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".AboutActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".NewsActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".NextGameActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".StatisticsActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".TicketsActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".RankingTableActivity" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".PhrasesActivity"
+            android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".NewsTabActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".HistoryActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".LaranjeirasStadiumActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".IdolsActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".IdolsListActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".RankingActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:name=".RankingCariocaTabActivity" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <meta-data android:name="ADMOB_PUBLISHER_ID" android:value="a14f107da2e8de1"/>
+        <activity android:name="com.google.ads.AdActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+        <activity android:launchMode="singleTask" android:name=".PrepareRequestTokenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="callback" android:scheme="x-latify-oauth-twitter"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".TwitterDialog" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".RankingLibertadoresTabActivity" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".GamesTableActivity" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".RankingFinalsActivity" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".FutureGameDialog" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:label="@string/set_preferences" android:name=".SettingsActivity"/>
+        <activity android:name=".StatisticsTabActivity" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".StatisticsDataActivity" android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".ThemeChooserActivity" android:theme="@android:style/Theme.NoTitleBar"/>
+        
+        <receiver android:name="br.com.zynger.influ.NextGameWidgetProvider" android:label="inFLU (Próximo Jogo)">
+		   <intent-filter>
+		      <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		   </intent-filter>
+		   <meta-data
+		      android:name="android.appwidget.provider"
+		      android:resource="@xml/nextgame_widget" />
+		</receiver>
+		<receiver android:name="br.com.zynger.influ.RankingBrasileiraoWidgetProvider" android:label="inFLU (Tab. Brasileirão)">
+		   <intent-filter>
+		      <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		   </intent-filter>
+		   <meta-data
+		      android:name="android.appwidget.provider"
+		      android:resource="@xml/ranking_bras_widget" />
+		</receiver>
+		
+    </application>
+    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="13"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+</manifest>

@@ -1,0 +1,94 @@
+package br.com.zynger.brasileirao2012.xml;
+
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.TreeMap;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import android.content.Context;
+import android.util.Log;
+import br.com.zynger.brasileirao2012.HomeActivity;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.util.Raw;
+
+public class MatchesParser {
+
+	private final String MATCHES_A_XML = "matches_firstdivision";
+	private final String MATCHES_B_XML = "matches_seconddivision";
+	
+	private TreeMap<String, Club> clubs;
+	
+	public TreeMap<Integer, Fixture> getMatches(Context context, TreeMap<String, Club> clubs,
+			Division division) {
+		this.clubs = clubs;
+		String xml = Raw.openRaw(context, (division == Division.FIRSTDIVISION ? MATCHES_A_XML : MATCHES_B_XML));
+		TreeMap<Integer, Fixture> matches = parseXML(xml);
+		return matches;
+	}
+
+	private TreeMap<Integer, Fixture> parseXML(String xml) {
+		TreeMap<Integer, Fixture> tmMatches = new TreeMap<Integer, Fixture>();
+		Element root = XMLUtils.getRoot(xml, "UTF-8");
+		List<Node> nodeFixtures = XMLUtils.getChildren(root, "fixture");
+		for (Node node : nodeFixtures) {
+			String number = XMLUtils.getText(node, "number");
+			Fixture f = new Fixture(Integer.valueOf(number));
+			
+			Node matches = XMLUtils.getChild(node, "matches");
+			parseMatches(matches, f);
+			
+			tmMatches.put(Integer.valueOf(number), f);
+		}
+		return tmMatches;
+	}
+	
+	private void parseMatches(Node matches, Fixture f) {
+		List<Node> nodeMatches = XMLUtils.getChildren(matches, "match");
+		for (Node node : nodeMatches) {
+			Match m = new Match();
+			String homeAcronym = XMLUtils.getText(node, "home");
+			String awayAcronym = XMLUtils.getText(node, "away");
+			String stadium = XMLUtils.getText(node, "stadium");
+			
+			String scoreH = XMLUtils.getText(node, "scoreH");
+			String scoreA = XMLUtils.getText(node, "scoreA");
+			
+			Node calendar = XMLUtils.getChild(node, "calendar");
+			String strDate = XMLUtils.getText(calendar, "date");
+			String strMonth = XMLUtils.getText(calendar, "month");
+			String strYear = XMLUtils.getText(calendar, "year");
+			String strHourOfDay = XMLUtils.getText(calendar, "hourofday");
+			String strMinute = XMLUtils.getText(calendar, "minute");
+			
+			Club home = clubs.get(homeAcronym);
+			Club away = clubs.get(awayAcronym);
+			m.setHome(home);
+			m.setAway(away);
+			m.setStadium(stadium);
+			if(scoreH == null || scoreA == null){
+				m.setScore(Match.SCORE_NULL, Match.SCORE_NULL);
+			}else{
+				m.setScore(Integer.valueOf(scoreH), Integer.valueOf(scoreA));
+				m.setDone(true);
+			}
+			GregorianCalendar gregCal = new GregorianCalendar(Integer.valueOf(strYear), Integer.valueOf(strMonth),
+					Integer.valueOf(strDate), Integer.valueOf(strHourOfDay), Integer.valueOf(strMinute));
+			m.setDate(gregCal);
+			
+			try{
+				home.getMatchesParticipation().add(f, m);
+				away.getMatchesParticipation().add(f, m);
+			}catch(NullPointerException npe){
+				Log.e(HomeActivity.TAG, "Home = " + homeAcronym + ", Away = " + awayAcronym);
+			}
+			
+			f.addMatch(m);
+		}
+	}
+
+}

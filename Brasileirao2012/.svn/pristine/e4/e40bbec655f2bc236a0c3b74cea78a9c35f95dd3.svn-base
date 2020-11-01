@@ -1,0 +1,90 @@
+package br.com.zynger.brasileirao2012.view;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.view.LayoutInflater;
+import android.widget.ImageView;
+import android.widget.TableRow;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Striker;
+
+public class StrikerRow extends TableRow{
+	
+	public static final int BLUE = 0xFF6495ED;
+	public static final int YELLOW = 0xFFFFFF00;
+	public static final int RED = 0xFFB3002A;
+	
+	private Context context;
+	private TableRow tablerow;
+	private Striker s;
+	private TextView goals, name, team;
+	private ImageView badge;
+
+	public StrikerRow(Context c, Striker s, Drawable d) {
+		super(c);
+		this.context = c;
+		setStriker(s);
+		
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.tablerow = (TableRow) inflater.inflate(R.layout.striker_row, null);
+		
+		this.badge = (ImageView) tablerow.findViewById(R.strikerrow.badge);
+		this.name = (TextView) tablerow.findViewById(R.strikerrow.name);
+		this.goals = (TextView) tablerow.findViewById(R.strikerrow.goals);
+		this.team = (TextView) tablerow.findViewById(R.strikerrow.team);
+
+		this.badge.setImageDrawable(d);
+		this.name.setText(s.getName());
+		this.goals.setText(String.valueOf(s.getGoals()));
+		this.team.setText(s.getClub().getName());
+	}
+
+	public TableRow getTablerow() {
+		return tablerow;
+	}
+
+	public void setTablerow(TableRow tablerow) {
+		this.tablerow = tablerow;
+	}
+
+	public ImageView getBadge() {
+		return badge;
+	}
+
+	public void setBadge(ImageView badge) {
+		this.badge = badge;
+	}
+
+	public TextView getGoals() {
+		return goals;
+	}
+
+	public void setGoals(TextView goals) {
+		this.goals = goals;
+	}
+
+	public TextView getName() {
+		return name;
+	}
+
+	public void setName(TextView name) {
+		this.name = name;
+	}
+
+	public Striker getStriker() {
+		return s;
+	}
+
+	public void setStriker(Striker s) {
+		this.s = s;
+	}
+
+	public TextView getTeam() {
+		return team;
+	}
+
+	public void setTeam(TextView team) {
+		this.team = team;
+	}
+}

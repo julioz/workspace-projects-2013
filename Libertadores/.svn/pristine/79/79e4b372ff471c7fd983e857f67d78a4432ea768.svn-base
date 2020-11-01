@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white" >
+    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_above="@+groupsactivity/ll_ad"
+	    android:orientation="vertical" >
+	    
+		<RelativeLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="48dp"
+	        android:background="@drawable/gradient_titlebar">
+	        
+	        <ImageView
+	            android:layout_alignParentLeft="true"
+	            android:layout_marginLeft="2dp"
+	            android:src="@drawable/ic_matches"
+	            android:id="@+groupsactivity/titlebar_ivlogo"
+	            android:layout_centerVertical="true"
+	            android:padding="4dp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="fill_parent"
+	            android:scaleType="fitCenter"
+	            android:adjustViewBounds="true" />
+	        
+	        <br.com.zynger.libertadores.view.HelveticaTextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="fill_parent"
+		        android:id="@+groupsactivity/titlebar_tvtitle"
+		        android:textColor="#FF3B3B3B"
+		        android:layout_centerVertical="true"
+		        android:layout_margin="5dp"
+		        android:layout_toRightOf="@+groupsactivity/titlebar_ivlogo"
+		        android:gravity="left|center_vertical"
+		        android:layout_marginLeft="10dp"
+		        android:shadowColor="#FFFFFFFF"
+	            android:shadowRadius="0.5"
+	            android:shadowDx="1.5"
+	            android:shadowDy="1.5"
+		        android:textSize="30dp"/>
+	        
+	        <br.com.zynger.libertadores.view.UpdateImageView
+	            android:scaleType="fitCenter"
+	            android:adjustViewBounds="true"
+	            android:id="@+groupsactivity/titlebar_ivupdate"
+	            android:padding="8dp"
+	            android:layout_centerVertical="true"
+	            android:layout_alignParentRight="true"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+	    </RelativeLayout>
+	    
+		<br.com.zynger.libertadores.view.DataUpdateLayout
+		    android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:id="@+groupsactivity/dul_update"
+		    />
+	    
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:id="@+groupsactivity/ll_toggle_standings_matches"
+	        android:layout_margin="2dp"
+	        android:weightSum="3"
+	        android:gravity="center"
+	        android:orientation="horizontal">
+	        
+	        <br.com.zynger.libertadores.view.HelveticaTextView
+		        android:layout_width="0dp"
+		        android:layout_height="fill_parent"
+		        android:layout_weight="1.2"
+		        android:gravity="center"
+		        android:background="@drawable/layout_roundedges"
+		        android:id="@+groupsactivity/tv_toggle_matches"
+		        android:textColor="#FF3B3B3B"
+		        android:layout_marginTop="5dp"
+		        android:layout_marginBottom="5dp"
+		        android:layout_marginLeft="5dp"
+		        android:layout_gravity="right|center_vertical"
+		        android:text="@string/homedashboard_matches"
+		        android:padding="2dp"
+		        android:shadowColor="#FFFFFFFF"
+	            android:shadowRadius="0.5"
+	            android:shadowDx="1.5"
+	            android:shadowDy="1.5"
+		        android:textSize="20dp"/>
+	        
+	        <br.com.zynger.libertadores.view.HelveticaTextView
+		        android:layout_width="0dp"
+		        android:layout_height="fill_parent"
+		        android:layout_weight="1.2"
+		        android:gravity="center"
+		        android:background="@drawable/layout_roundedges"
+		        android:id="@+groupsactivity/tv_toggle_standings"
+		        android:textColor="#FF3B3B3B"
+		        android:layout_marginTop="5dp"
+		        android:layout_marginBottom="5dp"
+		        android:layout_marginLeft="5dp"
+		        android:layout_gravity="right|center_vertical"
+		        android:text="@string/homedashboard_standings"
+		        android:padding="2dp"
+		        android:shadowColor="#FFFFFFFF"
+	            android:shadowRadius="0.5"
+	            android:shadowDx="1.5"
+	            android:shadowDy="1.5"
+		        android:textSize="20dp"/>
+	    </LinearLayout>
+	    
+	    <TableRow
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+groupsactivity/tr_toggle_standings"
+			android:visibility="gone"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:paddingTop="1dp"
+			android:paddingBottom="1dp">
+			
+			<View
+				android:layout_width="0dp"
+				android:layout_height="24dp"
+				android:layout_weight="2.6"/>
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textSize="17dp"
+				android:textColor="@android:color/black"
+				android:gravity="center"
+				android:layout_gravity="center"
+				android:text="@string/standingsactivity_header_points"/>
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textSize="17dp"
+				android:textColor="@android:color/black"
+				android:gravity="center"
+				android:layout_gravity="center"
+				android:text="@string/standingsactivity_header_played"/>
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textColor="@android:color/black"
+				android:textSize="17dp"
+				android:gravity="center"
+				android:layout_gravity="center"
+				android:text="@string/standingsactivity_header_victories"/>
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textSize="17dp"
+				android:textColor="@android:color/black"
+				android:gravity="center"
+				android:layout_gravity="center"
+				android:text="@string/standingsactivity_header_draws"/>
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textSize="17dp"
+				android:textColor="@android:color/black"
+				android:gravity="center"
+				android:layout_gravity="center"
+				android:text="@string/standingsactivity_header_losses"/>
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textSize="17dp"
+				android:textColor="@android:color/black"
+				android:gravity="center"
+				android:layout_gravity="center"
+				android:text="@string/standingsactivity_header_goalsfor"/>
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textSize="17dp"
+				android:textColor="@android:color/black"
+				android:gravity="center"
+				android:layout_gravity="center"
+				android:text="@string/standingsactivity_header_goalsagainst"/>
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textSize="17dp"
+				android:textColor="@android:color/black"
+				android:gravity="center"
+				android:layout_gravity="center"
+				android:text="@string/standingsactivity_header_balance"/>
+		</TableRow>
+	    
+	    <ListView
+			android:layout_height="0dp"
+			android:layout_width="fill_parent"
+			android:id="@+id/android:list"
+			android:paddingLeft="3dp"
+			android:paddingRight="3dp"
+			android:cacheColorHint="#00000000"
+			android:divider="#20000000"
+			android:background="@null"
+			android:layout_weight="1"/>
+	</LinearLayout>
+    
+    <include layout="@layout/admob_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+groupsactivity/ll_ad"
+        android:layout_alignParentBottom="true"
+		android:gravity="bottom|center_horizontal"/>
+</RelativeLayout>

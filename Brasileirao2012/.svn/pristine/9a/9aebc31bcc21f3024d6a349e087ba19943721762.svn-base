@@ -1,0 +1,41 @@
+package br.com.zynger.brasileirao2012.asynctasks;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import android.os.AsyncTask;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class GetRealTimeMatchesTask extends AsyncTask<Void, Void, ArrayList<RealTimeMatch>> {
+	
+	private Division division;
+	private TreeMap<String, Club> clubs;
+	private AsyncTaskListener listener;
+	
+	public GetRealTimeMatchesTask(Division division, TreeMap<String, Club> clubs, AsyncTaskListener listener){
+		this.division = division;
+		this.listener = listener;
+		this.clubs = clubs;
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		listener.preExecution();
+		super.onPreExecute();
+	}
+	
+	@Override
+	protected ArrayList<RealTimeMatch> doInBackground(Void... params) {
+		return HTMLManager.getRealTimeMatches(clubs, division);
+	}
+	
+	@Override
+	protected void onPostExecute(ArrayList<RealTimeMatch> result) {
+		if(result != null) listener.onComplete(result);
+		else listener.onFail(null);
+		super.onPostExecute(result);
+	}
+}

@@ -1,0 +1,225 @@
+package br.com.zynger.brasileirao2012.movetomove;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.adapters.MoveToMoveArrayAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.GetMoveToMoveTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.view.ActionItem;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+import br.com.zynger.brasileirao2012.view.QuickAction;
+
+public class MoveToMoveActivity extends ListActivity implements AsyncTaskListener, MoveToMoveFollower {
+	public static final String INTENT_MATCH = "MATCH";
+
+	protected Match match;
+
+	protected TreeMap<String, Club> clubs;
+
+	protected DataUpdateLayout dul_loading;
+	private TextView scrH, scrA;
+	private ImageView home, away, iv_more;
+	
+	protected MoveToMoveArrayAdapter adapter;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.movetomoveactivity);
+		clubs = ClubsDB.getInstance(this).getClubs();
+		loadMatchFromIntent();
+
+		loadViews();
+		setData();
+
+		new GetMoveToMoveTask(this, clubs, match, this).execute();
+	}
+
+	private void loadMatchFromIntent() {
+		String jsonMatch = getIntent().getStringExtra(INTENT_MATCH);			
+		if(jsonMatch != null){
+			try{
+				JSONArray jsonArray = new JSONArray(jsonMatch);
+				match = getMatchFromJsonArray(jsonArray, clubs);
+			}catch(JSONException je){
+				je.printStackTrace();
+				Toast.makeText(this, getString(R.string.movetomoveactivity_erroropening),
+						Toast.LENGTH_SHORT).show();
+				finish();
+			}
+		}else{
+			Toast.makeText(this, getString(R.string.movetomoveactivity_erroropening),
+					Toast.LENGTH_SHORT).show();
+			finish();
+		}
+	}
+
+	private void loadViews() {
+		dul_loading = (DataUpdateLayout) findViewById(R.movetomoveactivity.dul_loading);
+		scrH = (TextView) findViewById(R.movetomoveactivity.tv_scr_h);
+		scrA = (TextView) findViewById(R.movetomoveactivity.tv_scr_a);
+		home = (ImageView) findViewById(R.movetomoveactivity.iv_home);
+		away = (ImageView) findViewById(R.movetomoveactivity.iv_away);
+		iv_more = (ImageView) findViewById(R.movetomoveactivity.iv_more);
+		
+		iv_more.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				QuickAction quickAction = new QuickAction(iv_more);
+				quickAction.setAnimStyle(QuickAction.ANIM_REFLECT);
+				setQuickAction(quickAction);
+				quickAction.show();
+			}
+		});
+	}
+
+	private void setData() {
+		home.setImageResource(match.getHome().getBadgeResource(this));
+		away.setImageResource(match.getAway().getBadgeResource(this));
+		setScoreToTextView(match.getScoreHome(), scrH);
+		setScoreToTextView(match.getScoreAway(), scrA);
+	}
+	
+	private void setScoreToTextView(int score, TextView textView){
+		textView.setText(score != Match.SCORE_NULL ? String.valueOf(score) : new String());
+	}
+	
+	private int getScoreFromTextView(TextView textView) {
+		int score = 0;
+		String str = textView.getText().toString();
+		if(!str.trim().equals("")) score = Integer.valueOf(str);
+		return score;
+	}
+
+	protected void setScoreHome(int score) {
+		setScoreToTextView(score, scrH);
+	}
+	
+	protected void setScoreAway(int score) {
+		setScoreToTextView(score, scrA);
+	}
+	
+	protected int getScoreHome(){
+		return getScoreFromTextView(scrH);
+	}
+	
+	protected int getScoreAway(){
+		return getScoreFromTextView(scrA);
+	}
+	
+	protected void setZeroedScoreIfNeeded() {
+		if(scrH.getText().toString().trim().equals("")
+				&& scrA.getText().toString().trim().equals("")){
+			setScoreHome(0);
+			setScoreAway(0);
+		}
+	}
+	
+	@Override
+	public void preExecution() {
+		if(getListAdapter() == null){
+			dul_loading.showFullLayout();
+			iv_more.setVisibility(View.GONE);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		dul_loading.hide();
+		ArrayList<Move> moves = (ArrayList<Move>) result;
+		
+		if(getListAdapter() == null) onMovesFirstParsed(moves);
+		else onNewMovesParsed(moves);
+		
+		iv_more.setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public void onNewMovesParsed(ArrayList<Move> moves) {
+		// This class will never update its adapter
+		// so an implementation is not needed
+	}
+
+	@Override
+	public void onFail(String message) {
+		if(message != null) dul_loading.setOnlyText(message);
+	}
+
+	@Override
+	public Match getMatch() {
+		return match;
+	}
+	
+	@Override
+	public void onMovesFirstParsed(ArrayList<Move> moves) {
+		if(moves.size() > 0) setListAdapter(new MoveToMoveArrayAdapter(this, moves));
+		else dul_loading.setOnlyText(getString(R.string.movetomoveactivity_matchwithnomoves));
+	}
+	
+	@Override
+	public Match getMatchFromJsonArray(JSONArray json,
+			TreeMap<String, Club> clubs) {
+		return new Match(json, clubs);
+	}
+	
+	@Override
+	public void setQuickAction(QuickAction quickAction) {
+		addToQuickAction(quickAction, R.drawable.ic_video_quickaction, R.string.movetomoveactivity_videos,
+				new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(adapter != null && adapter.getCount() > 0){
+					ArrayList<Move> moves = adapter.getMovesWithVideos();
+					if(moves.size() > 0){						
+						Intent it = new Intent(v.getContext(), MoveToMoveVideoCentralActivity.class);
+						it.putExtra(MoveToMoveVideoCentralActivity.INTENT_MOVES, moves);
+						v.getContext().startActivity(it);
+					}else{						
+						Toast.makeText(v.getContext(),
+								getString(R.string.movetomoveactivity_novideostoshow),
+								Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		});
+	}
+	
+	protected void addToQuickAction(QuickAction quickAction,
+			int iconRes, int titleRes, OnClickListener clickListener){
+		ActionItem actionItem = new ActionItem();
+		actionItem.setIcon(getResources().getDrawable(iconRes));
+		actionItem.setTitle(getString(titleRes));
+		actionItem.setOnClickListener(clickListener);
+
+		quickAction.addActionItem(actionItem);
+	}
+	
+	@Override
+	public void setListAdapter(ListAdapter adapter) {
+		if(adapter instanceof MoveToMoveArrayAdapter){			
+			this.adapter = (MoveToMoveArrayAdapter) adapter;
+		}else{
+			throw new RuntimeException("Tried to set an adapter that is not a MoveToMoveArrayAdapter");
+		}
+		super.setListAdapter(adapter);
+	}
+}

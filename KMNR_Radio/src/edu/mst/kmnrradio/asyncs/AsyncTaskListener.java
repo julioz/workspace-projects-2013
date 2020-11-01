@@ -1,0 +1,7 @@
+package edu.mst.kmnrradio.asyncs;
+
+public interface AsyncTaskListener {
+
+	public void onComplete(Object result);
+	public void onFail();
+}

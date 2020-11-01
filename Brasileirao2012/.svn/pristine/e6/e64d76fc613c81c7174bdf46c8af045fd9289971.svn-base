@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+	xmlns:android="http://schemas.android.com/apk/res/android"  
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:paddingTop="3dp"
+	android:paddingBottom="3dp"
+	android:weightSum="9">
+	
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:layout_weight="1">
+        
+        <ImageView
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:scaleType="fitCenter"
+	        android:adjustViewBounds="true"
+	        android:id="@+aprovrow/iv_bdg"/>
+        
+    </LinearLayout>    
+    
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:textIsSelectable="false"
+		android:textSize="16sp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/mand_j"/>
+		
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:textIsSelectable="false"
+		android:textSize="16sp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/mand_v"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:textIsSelectable="false"
+		android:textSize="16sp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/mand_e"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:textIsSelectable="false"
+		android:textSize="16sp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/mand_perc"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:textIsSelectable="false"
+		android:textSize="16sp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/vis_j"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:textIsSelectable="false"
+		android:textSize="16sp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/vis_v"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:textIsSelectable="false"
+		android:textSize="16sp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/vis_e"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:textSize="16sp"
+	    android:textIsSelectable="false"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/vis_perc"/>
+</TableRow>

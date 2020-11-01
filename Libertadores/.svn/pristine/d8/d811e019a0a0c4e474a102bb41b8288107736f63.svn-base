@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="maps_api_key">0DMBHxWLZMvAJcm8dMhxIjWwq5c3bzGvr72TwOQ</string>
+    <string name="maps_api_debug_key">0DMBHxWLZMvD0FvtCL-LscGm-R0NnDOwPwJgHVg</string>
+    <string name="homedashboard_standings">Standings</string>
+    <string name="homedashboard_matches">Matches</string>
+    <string name="homedashboard_strikers">Strikers</string>
+    <string name="homedashboard_teams">Teams</string>
+    <string name="homedashboard_map">Map</string>
+    <string name="homedashboard_fans">Fans</string>
+    <string name="homedashboard_history">History</string>
+    <string name="homedashboard_settings">Settings</string>
+    <string name="homedashboard_about">About</string>
+    <string name="error_datadownload">The data could not be updated. Try again later.</string>
+    <string name="becomefan_async_success">Your team was updated in the online database.</string>
+    <string name="becomefan_async_fail">Your team couldn\'t be updated in the online database. Try again later.</string>
+    <string name="strikersactivity_move">Move</string>
+    <string name="strikersactivity_header">Header</string>
+    <string name="strikersactivity_foul">Foul</string>
+    <string name="strikersactivity_penalty">Penalty</string>
+    <string name="groupsactivity_firststage">First Stage</string>
+    <string name="groupsactivity_group">Group %d</string>
+    <string name="groupsactivity_roundofsixteen">Round of 16</string>
+    <string name="groupsactivity_quarterfinal">Quarter-Final</string>
+    <string name="groupsactivity_semifinal">Semi-Final</string>
+    <string name="groupsactivity_final">Final</string>
+    <string name="updating">Updating...</string>
+    <string name="app_name">Libertadores</string>
+</resources>

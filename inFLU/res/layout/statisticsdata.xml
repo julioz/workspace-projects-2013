@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FF00372a"
+    android:id="@+statisticsdata/ll_actbg">
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:background="#FF00372a"
+		android:id="@+statisticsdata/ll_content1"
+		android:orientation="vertical">
+		
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:weightSum="2"
+	        android:orientation="horizontal">
+	        
+	        <LinearLayout
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:orientation="vertical">
+	            
+	            <TextView
+	                android:text="Estadual 2012"
+	                android:background="#40000000"
+	                android:textColor="#FFFFFFFF"
+	                android:layout_height="wrap_content"
+	                android:layout_width="fill_parent"
+	                android:gravity="center"/>
+	            
+	            <ScrollView
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent">
+	                
+	                <LinearLayout
+	                    android:orientation="vertical"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent">
+	                    
+	                    <TextView
+	                        android:layout_width="fill_parent"
+	                        android:layout_height="fill_parent"
+	                        android:textColor="#FFFFFFFF"
+	                        android:layout_margin="4dp"
+	                        android:id="@+statisticsdata/tv_carioca"/>
+	                    
+	                </LinearLayout>
+	                
+	            </ScrollView>
+	            
+	        </LinearLayout>
+	        
+	        <LinearLayout
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:orientation="vertical">
+	            
+	            <TextView
+	                android:text="Libertadores 2012"
+	                android:background="#40000000"
+	                android:textColor="#FFFFFFFF"
+	                android:layout_height="wrap_content"
+	                android:layout_width="fill_parent"
+	                android:gravity="center"/>
+	            
+	            <ScrollView
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent">
+	                
+	                <LinearLayout
+	                    android:orientation="vertical"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent">
+	                    
+	                    <TextView
+	                        android:layout_width="fill_parent"
+	                        android:layout_height="fill_parent"
+	                        android:textColor="#FFFFFFFF"
+	                        android:layout_margin="4dp"
+	                        android:id="@+statisticsdata/tv_libertadores"/>
+	                    
+	                </LinearLayout>
+	                
+	            </ScrollView>
+	            
+	        </LinearLayout>
+	        
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:weightSum="2"
+	        android:orientation="horizontal">
+	        
+	        <LinearLayout
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:orientation="vertical">
+	            
+	            <TextView
+	                android:text="Brasileiro 2012"
+	                android:background="#40000000"
+	                android:textColor="#FFFFFFFF"
+	                android:layout_height="wrap_content"
+	                android:layout_width="fill_parent"
+	                android:gravity="center"/>
+	            
+	            <ScrollView
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent">
+	                
+	                <LinearLayout
+	                    android:orientation="vertical"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent">
+	                    
+	                    <TextView
+	                        android:layout_width="fill_parent"
+	                        android:textColor="#FFFFFFFF"
+	                        android:layout_height="fill_parent"
+	                        android:layout_margin="4dp"
+	                        android:id="@+statisticsdata/tv_brasileiro"/>
+	                    
+	                </LinearLayout>
+	                
+	            </ScrollView>
+	            
+	        </LinearLayout>
+	        
+	        <LinearLayout
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:orientation="vertical">
+	            
+	            <TextView
+	                android:text="Total 2012"
+	                android:background="#40000000"
+	                android:textColor="#FFFFFFFF"
+	                android:layout_height="wrap_content"
+	                android:layout_width="fill_parent"
+	                android:gravity="center"/>
+	            
+	            <ScrollView
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent">
+	                
+	                <LinearLayout
+	                    android:orientation="vertical"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent">
+	                    
+	                    <TextView
+	                        android:layout_width="fill_parent"
+	                        android:layout_height="fill_parent"
+	                        android:layout_margin="4dp"
+	                        android:textColor="#FFFFFFFF"
+	                        android:id="@+statisticsdata/tv_total"/>
+	                    
+	                </LinearLayout>
+	                
+	            </ScrollView>
+	            
+	        </LinearLayout>
+	        
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:weightSum="2"
+	        android:orientation="horizontal">
+	        
+	        <LinearLayout
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:orientation="vertical">
+	            
+	            <TextView
+	                android:text="Gols"
+	                android:background="#40000000"
+	                android:textColor="#FFFFFFFF"
+	                android:layout_height="wrap_content"
+	                android:layout_width="fill_parent"
+	                android:gravity="center"/>
+	            
+	            <ScrollView
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent">
+	                
+	                <LinearLayout
+	                    android:orientation="vertical"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent">
+	                    
+	                    <TextView
+	                        android:layout_width="fill_parent"
+	                        android:textColor="#FFFFFFFF"
+	                        android:layout_height="fill_parent"
+	                        android:layout_margin="4dp"
+	                        android:id="@+statisticsdata/tv_gols"/>
+	                    
+	                </LinearLayout>
+	                
+	            </ScrollView>
+	            
+	        </LinearLayout>
+	        
+	        <LinearLayout
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:orientation="vertical">
+	            
+	            <TextView
+	                android:text="Dados"
+	                android:background="#40000000"
+	                android:textColor="#FFFFFFFF"
+	                android:layout_height="wrap_content"
+	                android:layout_width="fill_parent"
+	                android:gravity="center"/>
+	            
+	            <ScrollView
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent">
+	                
+	                <LinearLayout
+	                    android:orientation="vertical"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent">
+	                    
+	                    <TextView
+	                        android:layout_width="fill_parent"
+	                        android:layout_height="fill_parent"
+	                        android:layout_margin="4dp"
+	                        android:textColor="#FFFFFFFF"
+	                        android:id="@+statisticsdata/tv_dados"/>
+	                    
+	                </LinearLayout>
+	                
+	            </ScrollView>
+	            
+	        </LinearLayout>
+	        
+	    </LinearLayout>
+	    
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:weightSum="1"
+	        android:orientation="horizontal">
+	        
+	        <LinearLayout
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:orientation="vertical">
+	            
+	            <TextView
+	                android:text="Time"
+	                android:background="#40000000"
+	                android:textColor="#FFFFFFFF"
+	                android:layout_height="wrap_content"
+	                android:layout_width="fill_parent"
+	                android:gravity="center"/>
+	            
+	            <ScrollView
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent">
+	                
+	                <LinearLayout
+	                    android:orientation="vertical"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent">
+	                    
+	                    <TextView
+	                        android:layout_width="fill_parent"
+	                        android:textColor="#FFFFFFFF"
+	                        android:layout_height="fill_parent"
+	                        android:layout_margin="4dp"
+	                        android:id="@+statisticsdata/tv_time"/>
+	                </LinearLayout>
+	            
+	            </ScrollView>
+	        </LinearLayout>
+	    </LinearLayout>
+	</LinearLayout>
+</ScrollView>

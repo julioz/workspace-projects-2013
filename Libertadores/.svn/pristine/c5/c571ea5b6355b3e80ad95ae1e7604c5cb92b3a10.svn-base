@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/gradient_titlebar">
+        
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_matches"
+            android:id="@+matcheslistactivity/titlebar_ivlogo"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+        
+        <br.com.zynger.libertadores.view.HelveticaTextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:id="@+matcheslistactivity/titlebar_tvtitle"
+	        android:textColor="#FF3B3B3B"
+	        android:layout_centerVertical="true"
+	        android:layout_margin="5dp"
+	        android:layout_toRightOf="@+matcheslistactivity/titlebar_ivlogo"
+	        android:gravity="left|center_vertical"
+	        android:layout_marginLeft="10dp"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+	        android:textSize="30dp"/>
+        
+        <br.com.zynger.libertadores.view.UpdateImageView
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:id="@+matcheslistactivity/titlebar_ivupdate"
+            android:padding="8dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    
+    <include layout="@layout/relativelayout_loading"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+matcheslistactivity/rl_loading"/>
+    
+    <ListView
+		android:layout_height="0dp"
+		android:layout_width="fill_parent"
+		android:id="@+id/android:list"
+		android:paddingLeft="3dp"
+		android:paddingRight="3dp"
+		android:cacheColorHint="#00000000"
+		android:divider="#20000000"
+		android:background="@null"
+		android:layout_weight="1"/>
+    
+    <include layout="@layout/admob_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:gravity="bottom|center_horizontal"/>
+
+</LinearLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+divisionsribbonmenu/firstdivision" android:title="@string/ribbonmenuview_firstdivision"
+        android:icon="@drawable/ic_firstdivisionlogo" />
+    <item android:id="@+divisionsribbonmenu/seconddivision" android:title="@string/ribbonmenuview_seconddivision"
+        android:icon="@drawable/ic_seconddivisionlogo" />
+    <!-- <item android:id="@+divisionsribbonmenu/thirddivision" android:title="@string/ribbonmenuview_thirddivision"
+        android:icon="@drawable/ic_thirddivisionlogo" />-->
+</menu>

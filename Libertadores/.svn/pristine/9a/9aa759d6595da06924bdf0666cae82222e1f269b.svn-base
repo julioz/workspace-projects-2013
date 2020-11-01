@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:id="@+historydataactivity/rl_actionbar"
+        android:background="@drawable/gradient_titlebar">
+        
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_history"
+            android:id="@+historydataactivity/titlebar_ivlogo"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+        
+        <br.com.zynger.libertadores.view.HelveticaTextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:id="@+historydataactivity/titlebar_tvtitle"
+	        android:textColor="#FF3B3B3B"
+	        android:layout_centerVertical="true"
+	        android:layout_margin="5dp"
+	        android:layout_toRightOf="@+historydataactivity/titlebar_ivlogo"
+	        android:gravity="left|center_vertical"
+	        android:layout_marginLeft="10dp"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+	        android:textSize="30dp"/>
+    </RelativeLayout>
+    
+    <LinearLayout 
+        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:layout_below="@+historydataactivity/rl_actionbar"
+		android:layout_above="@+historydataactivity/ll_ad">
+        
+        <LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:visibility="gone"
+		    android:id="@+historydataactivity/ll_header_countries"
+		    android:paddingTop="1dp"
+		    android:paddingBottom="1dp"
+		    android:orientation="horizontal" >
+		    
+		    <TextView
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="2.2"
+		        android:textSize="16dp"
+		        android:gravity="center"
+		        android:text="@string/historydata_country"
+		        android:layout_gravity="center_vertical"
+		        android:textColor="@android:color/black"/>
+		    
+		    <TextView
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:textSize="16dp"
+		        android:gravity="center"
+		        android:text="@string/historydata_won"
+		        android:layout_gravity="center_vertical"
+		        android:textColor="@android:color/black"/>
+		    
+		    <TextView
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:textSize="16dp"
+		        android:gravity="center"
+		        android:text="@string/historydata_runnersup"
+		        android:layout_gravity="center_vertical"
+		        android:textColor="@android:color/black"/>
+		</LinearLayout>
+        
+        <ListView
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:id="@+id/android:list"
+			android:paddingLeft="3dp"
+			android:paddingRight="3dp"
+			android:cacheColorHint="#00000000"
+			android:divider="#20000000"
+			android:background="@null" />
+        
+    </LinearLayout>
+    
+    <include layout="@layout/admob_layout"
+        android:id="@+historydataactivity/ll_ad"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:gravity="bottom|center_horizontal"/>
+
+</RelativeLayout>

@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a Júlio Zynger <julioz92@gmail.com> 1380321534 -0300	branch: Created from HEAD
+791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a 7bf6684f6fab9fdcf35cf8d5ef202bf39aba7d9e Júlio Zynger <julioz92@gmail.com> 1380344828 -0300	commit: Adds list of facebook friends with selectable rows.
+7bf6684f6fab9fdcf35cf8d5ef202bf39aba7d9e a20944670074d5199cbdf97477f02c6dfe8830d9 Júlio Zynger <julioz92@gmail.com> 1380395284 -0300	commit: FriendChooserActivity returns a list with chosen friends via Intent.

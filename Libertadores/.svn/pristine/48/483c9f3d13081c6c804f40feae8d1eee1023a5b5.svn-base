@@ -1,0 +1,102 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+
+import android.app.ListActivity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import br.com.zynger.libertadores.adapters.TwitterCentralAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetTwitterCentralTask;
+import br.com.zynger.libertadores.model.Tweet;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.view.LogoProgressBar;
+import br.com.zynger.libertadores.web.TwitterCentralParser;
+
+public class TwitterCentralActivity extends ListActivity implements AsyncTaskListener {
+
+	private TwitterCentralParser parser;
+	
+	private HelveticaTextView tv_title;
+	private RelativeLayout rl_loading;
+	private LogoProgressBar lpb_updating;
+	private TextView tv_updating;
+	
+	private SharedPreferences sharedPrefs;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.twittercentralactivity);
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		loadViews();
+
+		parser = new TwitterCentralParser(this);
+		
+		new GetTwitterCentralTask(parser, this).execute();
+	}
+	
+	private void loadViews() {
+		tv_title = (HelveticaTextView) findViewById(R.twittercentralactivity.titlebar_tvtitle);
+		rl_loading = (RelativeLayout) findViewById(R.twittercentralactivity.rl_loading);
+		lpb_updating = (LogoProgressBar) rl_loading.findViewById(R.relativelayout_loading.lpb_updating);
+		tv_updating = (TextView) rl_loading.findViewById(R.relativelayout_loading.tv_updating);
+
+		tv_title.setText(getString(R.string.homedashboard_twittercentral).toUpperCase());
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		lpb_updating.setVisibility(View.VISIBLE);
+		tv_updating.setText(getString(R.string.updating));
+		RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		p.addRule(RelativeLayout.BELOW, R.relativelayout_loading.lpb_updating);
+		p.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		tv_updating.setLayoutParams(p);		
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		ArrayList<Tweet> tweets = (ArrayList<Tweet>) result;
+
+		if(tweets.size() > 0){
+			setListAdapter(new TwitterCentralAdapter(
+					this, tweets, sharedPrefs.getBoolean("cb_imgsdownload", true)));
+			hideUpdatingLayout();
+		}else{
+			showNoTweetsText(getString(R.string.error_emptytweets));
+		}
+	}
+
+	@Override
+	public void onFail(String message) {
+		showNoTweetsText(getString(R.string.error_notweets));
+	}
+	
+	private void showNoTweetsText(String message) {
+		lpb_updating.setVisibility(View.GONE);
+		tv_updating.setText(message);
+		tv_updating.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
+				RelativeLayout.LayoutParams.FILL_PARENT));
+		tv_updating.setGravity(Gravity.CENTER);
+	}
+}

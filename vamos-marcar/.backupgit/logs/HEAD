@@ -1,0 +1,161 @@
+0000000000000000000000000000000000000000 04c23bca2d945257f330b9f2f1f199cea724c318 Júlio Zynger <julioz92@gmail.com> 1378430036 -0300	commit (initial): first commit
+04c23bca2d945257f330b9f2f1f199cea724c318 52b815690177976733cb8e35ca8860546b0ce376 Júlio Zynger <julioz92@gmail.com> 1378431022 -0300	commit: Initial commit.
+52b815690177976733cb8e35ca8860546b0ce376 52b815690177976733cb8e35ca8860546b0ce376 Júlio Zynger <julioz92@gmail.com> 1378431250 -0300	checkout: moving from master to branchteste
+52b815690177976733cb8e35ca8860546b0ce376 52b815690177976733cb8e35ca8860546b0ce376 Júlio Zynger <julioz92@gmail.com> 1378431959 -0300	checkout: moving from branchteste to master
+52b815690177976733cb8e35ca8860546b0ce376 52b815690177976733cb8e35ca8860546b0ce376 Júlio Zynger <julioz92@gmail.com> 1378431970 -0300	checkout: moving from master to branchteste
+52b815690177976733cb8e35ca8860546b0ce376 52b815690177976733cb8e35ca8860546b0ce376 Júlio Zynger <julioz92@gmail.com> 1378432013 -0300	checkout: moving from branchteste to master
+52b815690177976733cb8e35ca8860546b0ce376 06af33c2297f103f72d58613c8eb541e9efd1e9e Júlio Zynger <julioz92@gmail.com> 1378432051 -0300	commit: Adds gitignore
+06af33c2297f103f72d58613c8eb541e9efd1e9e fb37cc160aa10efaeeea0866a1a24d29f0555331 Júlio Zynger <julioz92@gmail.com> 1378514688 -0300	commit: Login com Facebook.
+fb37cc160aa10efaeeea0866a1a24d29f0555331 da7443f7b2025654bf1bcf05d777e4435c1c8155 Júlio Zynger <julioz92@gmail.com> 1378524021 -0300	commit: Refactor to activity instead of fragment.
+da7443f7b2025654bf1bcf05d777e4435c1c8155 16fc4466f7c2fc73284fc64de53ea063a5d0efb2 Júlio Zynger <julioz92@gmail.com> 1378572918 -0300	commit: Parsing friend list.
+16fc4466f7c2fc73284fc64de53ea063a5d0efb2 16fc4466f7c2fc73284fc64de53ea063a5d0efb2 Júlio Zynger <julioz92@gmail.com> 1378573073 -0300	checkout: moving from master to teste
+16fc4466f7c2fc73284fc64de53ea063a5d0efb2 16fc4466f7c2fc73284fc64de53ea063a5d0efb2 Júlio Zynger <julioz92@gmail.com> 1378573080 -0300	checkout: moving from teste to master
+16fc4466f7c2fc73284fc64de53ea063a5d0efb2 194a26207de30481301ed98fe9f95aac5b51151b Júlio Zynger <julioz92@gmail.com> 1378591774 -0300	commit: Initial styling of LoginActivity.
+194a26207de30481301ed98fe9f95aac5b51151b 536478a41148cfc4faad30aa7c145856abba1bbb Júlio Zynger <julioz92@gmail.com> 1378599582 -0300	commit: Animation added to username and picture in loginactivity
+536478a41148cfc4faad30aa7c145856abba1bbb 536478a41148cfc4faad30aa7c145856abba1bbb Júlio Zynger <julioz92@gmail.com> 1378599645 -0300	checkout: moving from master to issues/1
+536478a41148cfc4faad30aa7c145856abba1bbb d58888189dcbea9b26cb6c9ecc32095229f5b200 Júlio Zynger <julioz92@gmail.com> 1378602638 -0300	commit: Adds google maps integration, centering on marker on map.
+d58888189dcbea9b26cb6c9ecc32095229f5b200 536478a41148cfc4faad30aa7c145856abba1bbb Júlio Zynger <julioz92@gmail.com> 1378602646 -0300	checkout: moving from issues/1 to master
+536478a41148cfc4faad30aa7c145856abba1bbb d58888189dcbea9b26cb6c9ecc32095229f5b200 Júlio Zynger <julioz92@gmail.com> 1378602689 -0300	checkout: moving from master to issues/1
+d58888189dcbea9b26cb6c9ecc32095229f5b200 90e21f8f53f6ad53e60d25a75aa76184c361858f Júlio Zynger <julioz92@gmail.com> 1378939363 -0300	commit: Scope creep. Adds circular imageview to MainActivity.
+90e21f8f53f6ad53e60d25a75aa76184c361858f 536478a41148cfc4faad30aa7c145856abba1bbb Júlio Zynger <julioz92@gmail.com> 1378939515 -0300	checkout: moving from issues/1 to master
+536478a41148cfc4faad30aa7c145856abba1bbb 90e21f8f53f6ad53e60d25a75aa76184c361858f Júlio Zynger <julioz92@gmail.com> 1378939524 -0300	merge issues/1: Fast-forward
+90e21f8f53f6ad53e60d25a75aa76184c361858f e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 Júlio Zynger <julioz92@gmail.com> 1379108238 -0300	commit: Merge with issues/1. Added parse.com sdk.
+e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 Júlio Zynger <julioz92@gmail.com> 1379108375 -0300	checkout: moving from master to issues/3
+e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 9dda66d2fccfca0174d9946998005a66d0da51d9 Júlio Zynger <julioz92@gmail.com> 1379108404 -0300	commit: BroadcastReceiver listens to connectivity change.
+9dda66d2fccfca0174d9946998005a66d0da51d9 e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 Júlio Zynger <julioz92@gmail.com> 1379108410 -0300	checkout: moving from issues/3 to master
+e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 Júlio Zynger <julioz92@gmail.com> 1379108984 -0300	checkout: moving from master to issues/4
+e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 6f34a038cd722f25bb84891734ba62424ef8e23d Júlio Zynger <julioz92@gmail.com> 1379120615 -0300	commit: Adds FadingActionBar and Sherlock dependencies. Adds EventActivity with special actionbar.
+6f34a038cd722f25bb84891734ba62424ef8e23d e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 Júlio Zynger <julioz92@gmail.com> 1379120644 -0300	checkout: moving from issues/4 to master
+e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 6f34a038cd722f25bb84891734ba62424ef8e23d Júlio Zynger <julioz92@gmail.com> 1379120696 -0300	merge issues/4: Fast-forward
+6f34a038cd722f25bb84891734ba62424ef8e23d 6f34a038cd722f25bb84891734ba62424ef8e23d Júlio Zynger <julioz92@gmail.com> 1379171136 -0300	checkout: moving from master to issues/5
+6f34a038cd722f25bb84891734ba62424ef8e23d 1d97c28e78717bbf83c6015af2cb9d9f64795bd6 Júlio Zynger <julioz92@gmail.com> 1379173517 -0300	commit: Replaces facebook's LoginButton with our own Button - more flexible and easy to control
+1d97c28e78717bbf83c6015af2cb9d9f64795bd6 c5154180834bb344aef536a46a092c91c2bd4ad5 Júlio Zynger <julioz92@gmail.com> 1379173561 -0300	commit: Forgot to add the actual files :-)
+c5154180834bb344aef536a46a092c91c2bd4ad5 6f34a038cd722f25bb84891734ba62424ef8e23d Júlio Zynger <julioz92@gmail.com> 1379173582 -0300	checkout: moving from issues/5 to master
+6f34a038cd722f25bb84891734ba62424ef8e23d c5154180834bb344aef536a46a092c91c2bd4ad5 Júlio Zynger <julioz92@gmail.com> 1379173587 -0300	merge issues/5: Fast-forward
+c5154180834bb344aef536a46a092c91c2bd4ad5 c5154180834bb344aef536a46a092c91c2bd4ad5 Júlio Zynger <julioz92@gmail.com> 1379173928 -0300	checkout: moving from master to issues/6
+c5154180834bb344aef536a46a092c91c2bd4ad5 0aae286d158ae19147c831c33c78e42e3943efdd Júlio Zynger <julioz92@gmail.com> 1379177168 -0300	commit: Adds event description with custom TextView to support Roboto font.
+0aae286d158ae19147c831c33c78e42e3943efdd c5154180834bb344aef536a46a092c91c2bd4ad5 Júlio Zynger <julioz92@gmail.com> 1379177197 -0300	checkout: moving from issues/6 to master
+c5154180834bb344aef536a46a092c91c2bd4ad5 0aae286d158ae19147c831c33c78e42e3943efdd Júlio Zynger <julioz92@gmail.com> 1379177200 -0300	merge issues/6: Fast-forward
+0aae286d158ae19147c831c33c78e42e3943efdd 0aae286d158ae19147c831c33c78e42e3943efdd Júlio Zynger <julioz92@gmail.com> 1379177967 -0300	checkout: moving from master to issues/2
+0aae286d158ae19147c831c33c78e42e3943efdd 97f900d0b3a696a2fe7661873659e26f0b3494c4 Júlio Zynger <julioz92@gmail.com> 1379182193 -0300	commit: Initial implementation of Event and Comment models.
+97f900d0b3a696a2fe7661873659e26f0b3494c4 8db2e4e7f71e1ff660a09997dd016fa798ecd2f1 Júlio Zynger <julioz92@gmail.com> 1379183178 -0300	commit: Adds description field to Event
+8db2e4e7f71e1ff660a09997dd016fa798ecd2f1 0aae286d158ae19147c831c33c78e42e3943efdd Júlio Zynger <julioz92@gmail.com> 1379183199 -0300	checkout: moving from issues/2 to master
+0aae286d158ae19147c831c33c78e42e3943efdd 8db2e4e7f71e1ff660a09997dd016fa798ecd2f1 Júlio Zynger <julioz92@gmail.com> 1379183208 -0300	merge issues/2: Fast-forward
+8db2e4e7f71e1ff660a09997dd016fa798ecd2f1 8db2e4e7f71e1ff660a09997dd016fa798ecd2f1 Júlio Zynger <julioz92@gmail.com> 1379183909 -0300	checkout: moving from master to issues/7
+8db2e4e7f71e1ff660a09997dd016fa798ecd2f1 ff4a4cba2c13d2ed3c3aed1ab44a39dea5675c14 Júlio Zynger <julioz92@gmail.com> 1379188278 -0300	commit: Adds GoogleMap to EventActivity, based on a given LatLng, and Geocodes it to show the address on screen.
+ff4a4cba2c13d2ed3c3aed1ab44a39dea5675c14 f1337f427d7de9c93f20032c3e1d0754b83482aa Júlio Zynger <julioz92@gmail.com> 1379259266 -0300	commit: Fix margins between map and description.
+f1337f427d7de9c93f20032c3e1d0754b83482aa 8db2e4e7f71e1ff660a09997dd016fa798ecd2f1 Júlio Zynger <julioz92@gmail.com> 1379259277 -0300	checkout: moving from issues/7 to master
+8db2e4e7f71e1ff660a09997dd016fa798ecd2f1 f1337f427d7de9c93f20032c3e1d0754b83482aa Júlio Zynger <julioz92@gmail.com> 1379259282 -0300	merge issues/7: Fast-forward
+f1337f427d7de9c93f20032c3e1d0754b83482aa f1337f427d7de9c93f20032c3e1d0754b83482aa Júlio Zynger <julioz92@gmail.com> 1379259289 -0300	checkout: moving from master to issues/8
+f1337f427d7de9c93f20032c3e1d0754b83482aa c7907b667baf3bd6ea964ea631882ae13abffadb Júlio Zynger <julioz92@gmail.com> 1379274556 -0300	commit: Adds CommentsActivity with ListView and Adapter.
+c7907b667baf3bd6ea964ea631882ae13abffadb f1337f427d7de9c93f20032c3e1d0754b83482aa Júlio Zynger <julioz92@gmail.com> 1379274576 -0300	checkout: moving from issues/8 to master
+f1337f427d7de9c93f20032c3e1d0754b83482aa c7907b667baf3bd6ea964ea631882ae13abffadb Júlio Zynger <julioz92@gmail.com> 1379274594 -0300	merge issues/8: Fast-forward
+c7907b667baf3bd6ea964ea631882ae13abffadb c7907b667baf3bd6ea964ea631882ae13abffadb Júlio Zynger <julioz92@gmail.com> 1380237360 -0300	checkout: moving from master to issues/9
+c7907b667baf3bd6ea964ea631882ae13abffadb 585064755de0d85f62708efcc920342f25232064 Júlio Zynger <julioz92@gmail.com> 1380244790 -0300	commit: Using Picasso to cache images and transform facebook ids and ParseUsers to nice drawables.
+585064755de0d85f62708efcc920342f25232064 c7907b667baf3bd6ea964ea631882ae13abffadb Júlio Zynger <julioz92@gmail.com> 1380244974 -0300	checkout: moving from issues/9 to master
+c7907b667baf3bd6ea964ea631882ae13abffadb 585064755de0d85f62708efcc920342f25232064 Júlio Zynger <julioz92@gmail.com> 1380244993 -0300	merge issues/9: Fast-forward
+585064755de0d85f62708efcc920342f25232064 791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a Júlio Zynger <julioz92@gmail.com> 1380246033 -0300	commit: Replaces old stubs with actual data for authors' images on CommentsAdapter.
+791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a 791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a Júlio Zynger <julioz92@gmail.com> 1380246064 -0300	checkout: moving from master to issues/10
+791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a b93051e456c491b09621f7ae7434a42be8779e30 Júlio Zynger <julioz92@gmail.com> 1380252846 -0300	commit: Adds drawer to MainActivity, with some stub entries, including a profile row with picture and name for the current user.
+b93051e456c491b09621f7ae7434a42be8779e30 791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a Júlio Zynger <julioz92@gmail.com> 1380321528 -0300	checkout: moving from issues/10 to master
+791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a 791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a Júlio Zynger <julioz92@gmail.com> 1380321534 -0300	checkout: moving from master to issues/11
+791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a 7bf6684f6fab9fdcf35cf8d5ef202bf39aba7d9e Júlio Zynger <julioz92@gmail.com> 1380344828 -0300	commit: Adds list of facebook friends with selectable rows.
+7bf6684f6fab9fdcf35cf8d5ef202bf39aba7d9e a20944670074d5199cbdf97477f02c6dfe8830d9 Júlio Zynger <julioz92@gmail.com> 1380395284 -0300	commit: FriendChooserActivity returns a list with chosen friends via Intent.
+a20944670074d5199cbdf97477f02c6dfe8830d9 791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a Júlio Zynger <julioz92@gmail.com> 1380395302 -0300	checkout: moving from issues/11 to master
+791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a a20944670074d5199cbdf97477f02c6dfe8830d9 Júlio Zynger <julioz92@gmail.com> 1380395307 -0300	merge issues/11: Fast-forward
+a20944670074d5199cbdf97477f02c6dfe8830d9 7cd2aa867614ff6a80f5484bcd8954f8dc0ae785 Júlio Zynger <julioz92@gmail.com> 1380395488 -0300	commit (merge): Merges issues/10 and issues/11
+7cd2aa867614ff6a80f5484bcd8954f8dc0ae785 b93051e456c491b09621f7ae7434a42be8779e30 Júlio Zynger <julioz92@gmail.com> 1380395866 -0300	checkout: moving from master to issues/10
+b93051e456c491b09621f7ae7434a42be8779e30 7cd2aa867614ff6a80f5484bcd8954f8dc0ae785 Júlio Zynger <julioz92@gmail.com> 1380395893 -0300	checkout: moving from issues/10 to master
+7cd2aa867614ff6a80f5484bcd8954f8dc0ae785 c0a6c16eb009486b50efad91fe33937817c18498 Júlio Zynger <julioz92@gmail.com> 1380396927 -0300	commit: Move Logout functionality to BaseActiity, by showing confirmation dialog
+c0a6c16eb009486b50efad91fe33937817c18498 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380398517 -0300	commit: Replace ProfilePictureView from LoginActivity with FacebookImageView to autoload user's picture
+56eeca49e250a61bb69689defc0fbeab62fd4095 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380398759 -0300	checkout: moving from master to issues/12
+56eeca49e250a61bb69689defc0fbeab62fd4095 aef99508eef6e867cd45e808446fd75f41476db3 Júlio Zynger <julioz92@gmail.com> 1380481079 -0300	commit: Adds NewEventActivity with some fields and FlowLayout.
+aef99508eef6e867cd45e808446fd75f41476db3 e87c66d74a6463c3d8ccdcaefb56fdc5c83371f4 Júlio Zynger <julioz92@gmail.com> 1380483025 -0300	commit: Uncouple FriendPicker and LocationPicker by adding interfaces.
+e87c66d74a6463c3d8ccdcaefb56fdc5c83371f4 0cb15f13f4dd225e8e954e3d4e0e0d73a86de2bc Júlio Zynger <julioz92@gmail.com> 1380515831 -0300	commit: Adds ImageView subclass to download static Google Maps images.
+0cb15f13f4dd225e8e954e3d4e0e0d73a86de2bc 3b12219f8c8d0bf4974e359a2dca4ba7bb87197b Júlio Zynger <julioz92@gmail.com> 1380516802 -0300	commit: LocationPicker will need to pass the Address' information in a textual way, besides the location in LatLng.
+3b12219f8c8d0bf4974e359a2dca4ba7bb87197b 3b12219f8c8d0bf4974e359a2dca4ba7bb87197b Júlio Zynger <julioz92@gmail.com> 1380586552 -0300	checkout: moving from issues/12 to issues/13
+3b12219f8c8d0bf4974e359a2dca4ba7bb87197b b8fe5d769464be1bf422d867272e017c73922358 Júlio Zynger <julioz92@gmail.com> 1380603539 -0300	commit: It is already possible to pick locations from adresses. For a single result, it is also possible to return it on the Intent's extras.
+b8fe5d769464be1bf422d867272e017c73922358 66da23a0814978e3630782485215ebd15b3c373c Júlio Zynger <julioz92@gmail.com> 1380688882 -0300	commit: Handling of multiple results in LocationPicker
+66da23a0814978e3630782485215ebd15b3c373c e9d1bec74d97fce6555fdeb2ccc2cea66abfb472 Júlio Zynger <julioz92@gmail.com> 1380693679 -0300	commit: Adds animations to search bar; Treats the click on the map case. Still needs to treat no finding the geocoding result.
+e9d1bec74d97fce6555fdeb2ccc2cea66abfb472 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380745608 -0300	checkout: moving from issues/13 to master
+56eeca49e250a61bb69689defc0fbeab62fd4095 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380750398 -0300	checkout: moving from master to issues/14
+56eeca49e250a61bb69689defc0fbeab62fd4095 755a680e9cd2e8330e68dae92da1dd6215bc7751 Júlio Zynger <julioz92@gmail.com> 1380750420 -0300	commit: First implementation of FlowRadioGroup.
+755a680e9cd2e8330e68dae92da1dd6215bc7751 06bc951f89d0bcc09aa0969d612f6b43b2718fe1 Júlio Zynger <julioz92@gmail.com> 1380752269 -0300	commit: Replaces old handmade version with TitleIndicator library
+06bc951f89d0bcc09aa0969d612f6b43b2718fe1 e9d1bec74d97fce6555fdeb2ccc2cea66abfb472 Júlio Zynger <julioz92@gmail.com> 1380752369 -0300	checkout: moving from issues/14 to issues/13
+e9d1bec74d97fce6555fdeb2ccc2cea66abfb472 f3c7c78171eb32d5102355800716e997b853c79e Júlio Zynger <julioz92@gmail.com> 1380752527 -0300	commit (merge): Merging with issues/15
+f3c7c78171eb32d5102355800716e997b853c79e c4072112a3e0aec76e99b80c924743c40d5f22f6 Júlio Zynger <julioz92@gmail.com> 1380753527 -0300	commit: Shows a toast when there is a geocoding error
+c4072112a3e0aec76e99b80c924743c40d5f22f6 3b12219f8c8d0bf4974e359a2dca4ba7bb87197b Júlio Zynger <julioz92@gmail.com> 1380753559 -0300	checkout: moving from issues/13 to issues/12
+3b12219f8c8d0bf4974e359a2dca4ba7bb87197b c4072112a3e0aec76e99b80c924743c40d5f22f6 Júlio Zynger <julioz92@gmail.com> 1380753603 -0300	merge issues/13: Fast-forward
+c4072112a3e0aec76e99b80c924743c40d5f22f6 3d1a23d6ebf02df3984ff268036fdbbdca624500 Júlio Zynger <julioz92@gmail.com> 1380754123 -0300	commit: Adds a FlowRadioGroup to the right location in NewEventActivity
+3d1a23d6ebf02df3984ff268036fdbbdca624500 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380770392 -0300	checkout: moving from issues/12 to master
+56eeca49e250a61bb69689defc0fbeab62fd4095 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380770399 -0300	checkout: moving from master to issues/15
+56eeca49e250a61bb69689defc0fbeab62fd4095 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380770459 -0300	checkout: moving from issues/15 to master
+56eeca49e250a61bb69689defc0fbeab62fd4095 3d1a23d6ebf02df3984ff268036fdbbdca624500 Júlio Zynger <julioz92@gmail.com> 1380770471 -0300	checkout: moving from master to issues/12
+3d1a23d6ebf02df3984ff268036fdbbdca624500 3d1a23d6ebf02df3984ff268036fdbbdca624500 Júlio Zynger <julioz92@gmail.com> 1380770485 -0300	checkout: moving from issues/12 to issues/15
+3d1a23d6ebf02df3984ff268036fdbbdca624500 8f3a4cb646374c8d9a4ba6eba7f0e8a09971be63 Júlio Zynger <julioz92@gmail.com> 1380772445 -0300	commit: Adds an IndexScroller to the FriendsChooserActivity so the user can search for the first letter of each friends' name
+8f3a4cb646374c8d9a4ba6eba7f0e8a09971be63 3d1a23d6ebf02df3984ff268036fdbbdca624500 Júlio Zynger <julioz92@gmail.com> 1380772469 -0300	checkout: moving from issues/15 to issues/12
+3d1a23d6ebf02df3984ff268036fdbbdca624500 8f3a4cb646374c8d9a4ba6eba7f0e8a09971be63 Júlio Zynger <julioz92@gmail.com> 1380772490 -0300	merge issues/15: Fast-forward
+8f3a4cb646374c8d9a4ba6eba7f0e8a09971be63 d644a119815fe756d51591886f147e2a9e3ffb6d Júlio Zynger <julioz92@gmail.com> 1380815337 -0300	commit: Adds validation to new events title and nice little image to when there are no friends selected
+d644a119815fe756d51591886f147e2a9e3ffb6d 53eb74c7b34b718ff31f3b8b04b74d2fd30e4160 Júlio Zynger <julioz92@gmail.com> 1380828391 -0300	commit: Adds new TODOs
+53eb74c7b34b718ff31f3b8b04b74d2fd30e4160 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380828397 -0300	checkout: moving from issues/12 to master
+56eeca49e250a61bb69689defc0fbeab62fd4095 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380828403 -0300	checkout: moving from master to issues/16
+56eeca49e250a61bb69689defc0fbeab62fd4095 240a6915f4f617776bb2c739036a2135b2fd88bc Júlio Zynger <julioz92@gmail.com> 1380848597 -0300	commit: Adds cardsUI to MainActivity, by setting a custom (but not finished) layout to each event on the list.
+240a6915f4f617776bb2c739036a2135b2fd88bc 2d088c197d57ecd9c22824093947e7bef1358563 Júlio Zynger <julioz92@gmail.com> 1380856791 -0300	commit: Adds a shared pool as singleton to pass ParseObjects between activities. Adds OnClickListener to Cards in MainActivity.
+2d088c197d57ecd9c22824093947e7bef1358563 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380856813 -0300	checkout: moving from issues/16 to master
+56eeca49e250a61bb69689defc0fbeab62fd4095 2d088c197d57ecd9c22824093947e7bef1358563 Júlio Zynger <julioz92@gmail.com> 1380856821 -0300	merge issues/16: Fast-forward
+2d088c197d57ecd9c22824093947e7bef1358563 2d088c197d57ecd9c22824093947e7bef1358563 Júlio Zynger <julioz92@gmail.com> 1380856904 -0300	checkout: moving from master to issues/17
+2d088c197d57ecd9c22824093947e7bef1358563 8980a53f0d9de699c02cc5613d0c0150392a13ee Júlio Zynger <julioz92@gmail.com> 1380860928 -0300	commit: Adds actual headers with specified event types
+8980a53f0d9de699c02cc5613d0c0150392a13ee 2d088c197d57ecd9c22824093947e7bef1358563 Júlio Zynger <julioz92@gmail.com> 1380860956 -0300	checkout: moving from issues/17 to master
+2d088c197d57ecd9c22824093947e7bef1358563 8980a53f0d9de699c02cc5613d0c0150392a13ee Júlio Zynger <julioz92@gmail.com> 1380860962 -0300	merge issues/17: Fast-forward
+8980a53f0d9de699c02cc5613d0c0150392a13ee 53eb74c7b34b718ff31f3b8b04b74d2fd30e4160 Júlio Zynger <julioz92@gmail.com> 1380942141 -0300	checkout: moving from master to issues/12
+53eb74c7b34b718ff31f3b8b04b74d2fd30e4160 8166e576ed7ba83b9829bdf91f9f4d32c1c7866e Júlio Zynger <julioz92@gmail.com> 1380945676 -0300	commit: Adds public/private audiences to events and related RadioGroup on NewEventActivity
+8166e576ed7ba83b9829bdf91f9f4d32c1c7866e 8980a53f0d9de699c02cc5613d0c0150392a13ee Júlio Zynger <julioz92@gmail.com> 1380946353 -0300	checkout: moving from issues/12 to master
+8980a53f0d9de699c02cc5613d0c0150392a13ee 5a3d28579f51d12d857074b63a29a60b31b403b4 Júlio Zynger <julioz92@gmail.com> 1380947034 -0300	commit (merge): Merges issues-12
+5a3d28579f51d12d857074b63a29a60b31b403b4 5a3d28579f51d12d857074b63a29a60b31b403b4 Júlio Zynger <julioz92@gmail.com> 1380947202 -0300	checkout: moving from master to issues/18
+5a3d28579f51d12d857074b63a29a60b31b403b4 cf872e4233da80852682cda59c4eb02941e50ea3 Júlio Zynger <julioz92@gmail.com> 1380950476 -0300	commit:  Adds audience icon to events' cards.
+cf872e4233da80852682cda59c4eb02941e50ea3 5a3d28579f51d12d857074b63a29a60b31b403b4 Júlio Zynger <julioz92@gmail.com> 1380950491 -0300	checkout: moving from issues/18 to master
+5a3d28579f51d12d857074b63a29a60b31b403b4 cf872e4233da80852682cda59c4eb02941e50ea3 Júlio Zynger <julioz92@gmail.com> 1380950496 -0300	merge issues/18: Fast-forward
+cf872e4233da80852682cda59c4eb02941e50ea3 cf872e4233da80852682cda59c4eb02941e50ea3 Júlio Zynger <julioz92@gmail.com> 1381081732 -0300	checkout: moving from master to issues/20
+cf872e4233da80852682cda59c4eb02941e50ea3 c5648a0a0e51adaf322a288968c4c6e2f620e0b1 Júlio Zynger <julioz92@gmail.com> 1381090400 -0300	commit: Adds a pseudo-sorting method to the card list
+c5648a0a0e51adaf322a288968c4c6e2f620e0b1 cf872e4233da80852682cda59c4eb02941e50ea3 Júlio Zynger <julioz92@gmail.com> 1381090459 -0300	checkout: moving from issues/20 to master
+cf872e4233da80852682cda59c4eb02941e50ea3 c5648a0a0e51adaf322a288968c4c6e2f620e0b1 Júlio Zynger <julioz92@gmail.com> 1381090467 -0300	merge issues/20: Fast-forward
+c5648a0a0e51adaf322a288968c4c6e2f620e0b1 c5648a0a0e51adaf322a288968c4c6e2f620e0b1 Júlio Zynger <julioz92@gmail.com> 1381090478 -0300	checkout: moving from master to issues/19
+c5648a0a0e51adaf322a288968c4c6e2f620e0b1 0ebfbdc569115dfd8a3c32d48931ef66f086dd32 Júlio Zynger <julioz92@gmail.com> 1381093661 -0300	commit: Replaces MapFragment by static map in EventActivity; Adds message to when there is no network.
+0ebfbdc569115dfd8a3c32d48931ef66f086dd32 c5648a0a0e51adaf322a288968c4c6e2f620e0b1 Júlio Zynger <julioz92@gmail.com> 1381093684 -0300	checkout: moving from issues/19 to master
+c5648a0a0e51adaf322a288968c4c6e2f620e0b1 0ebfbdc569115dfd8a3c32d48931ef66f086dd32 Júlio Zynger <julioz92@gmail.com> 1381093688 -0300	merge issues/19: Fast-forward
+0ebfbdc569115dfd8a3c32d48931ef66f086dd32 0ebfbdc569115dfd8a3c32d48931ef66f086dd32 Júlio Zynger <julioz92@gmail.com> 1381366018 -0300	checkout: moving from master to issues/21
+0ebfbdc569115dfd8a3c32d48931ef66f086dd32 04e4854e3b7ebef1e56bd898e940180829e4e445 Júlio Zynger <julioz92@gmail.com> 1381367850 -0300	commit: Adds LocationViewerActivity that takes a LatLng and a String to show a single location in an interactive map.
+04e4854e3b7ebef1e56bd898e940180829e4e445 0ebfbdc569115dfd8a3c32d48931ef66f086dd32 Júlio Zynger <julioz92@gmail.com> 1381367870 -0300	checkout: moving from issues/21 to master
+0ebfbdc569115dfd8a3c32d48931ef66f086dd32 04e4854e3b7ebef1e56bd898e940180829e4e445 Júlio Zynger <julioz92@gmail.com> 1381367874 -0300	merge issues/21: Fast-forward
+04e4854e3b7ebef1e56bd898e940180829e4e445 2cd40bb36e6e3e14ae722047f617af9ae239f68f Júlio Zynger <julioz92@gmail.com> 1381370341 -0300	commit: Resizes the map in EventActivity for landscape mode.
+2cd40bb36e6e3e14ae722047f617af9ae239f68f 2cd40bb36e6e3e14ae722047f617af9ae239f68f Júlio Zynger <julioz92@gmail.com> 1381454782 -0300	checkout: moving from master to issues/22
+2cd40bb36e6e3e14ae722047f617af9ae239f68f 870913b4e1e476a324b3b034fa6b9d59a84f9d6d Júlio Zynger <julioz92@gmail.com> 1381459018 -0300	commit: NewEventActivity sends the Event to the server.
+870913b4e1e476a324b3b034fa6b9d59a84f9d6d 2cd40bb36e6e3e14ae722047f617af9ae239f68f Júlio Zynger <julioz92@gmail.com> 1381459061 -0300	checkout: moving from issues/22 to master
+2cd40bb36e6e3e14ae722047f617af9ae239f68f 870913b4e1e476a324b3b034fa6b9d59a84f9d6d Júlio Zynger <julioz92@gmail.com> 1381459072 -0300	merge issues/22: Fast-forward
+870913b4e1e476a324b3b034fa6b9d59a84f9d6d 870913b4e1e476a324b3b034fa6b9d59a84f9d6d Júlio Zynger <julioz92@gmail.com> 1382194475 -0300	checkout: moving from master to issues/23
+870913b4e1e476a324b3b034fa6b9d59a84f9d6d 344c2f817324e0f062ba566d9a92df6dc2aba51e Júlio Zynger <julioz92@gmail.com> 1382220826 -0300	commit: Styles the feeds drawer listview, adding icons and etc
+344c2f817324e0f062ba566d9a92df6dc2aba51e 870913b4e1e476a324b3b034fa6b9d59a84f9d6d Júlio Zynger <julioz92@gmail.com> 1382220960 -0300	checkout: moving from issues/23 to master
+870913b4e1e476a324b3b034fa6b9d59a84f9d6d 344c2f817324e0f062ba566d9a92df6dc2aba51e Júlio Zynger <julioz92@gmail.com> 1382220965 -0300	merge issues/23: Fast-forward
+344c2f817324e0f062ba566d9a92df6dc2aba51e 344c2f817324e0f062ba566d9a92df6dc2aba51e Júlio Zynger <julioz92@gmail.com> 1382221570 -0300	checkout: moving from master to issues/24
+344c2f817324e0f062ba566d9a92df6dc2aba51e 26b8e80643c548c904549bcb1850f709d6643667 Júlio Zynger <julioz92@gmail.com> 1382222940 -0300	commit: Adds SwingBottomInAnimationAdapter to cardsUI.
+26b8e80643c548c904549bcb1850f709d6643667 344c2f817324e0f062ba566d9a92df6dc2aba51e Júlio Zynger <julioz92@gmail.com> 1382222944 -0300	checkout: moving from issues/24 to master
+344c2f817324e0f062ba566d9a92df6dc2aba51e 26b8e80643c548c904549bcb1850f709d6643667 Júlio Zynger <julioz92@gmail.com> 1382222948 -0300	merge issues/24: Fast-forward
+26b8e80643c548c904549bcb1850f709d6643667 26b8e80643c548c904549bcb1850f709d6643667 Júlio Zynger <julioz92@gmail.com> 1382223829 -0300	checkout: moving from master to issues/25
+26b8e80643c548c904549bcb1850f709d6643667 22b55a6bc62e63a92caf47a0e7bbfe8b1dcf1e45 Júlio Zynger <julioz92@gmail.com> 1382224550 -0300	commit: Adds placeholder ninepatch balloons
+22b55a6bc62e63a92caf47a0e7bbfe8b1dcf1e45 75ef4ff3076371b1860451df40c2d0896bb405f4 Júlio Zynger <julioz92@gmail.com> 1382372117 -0200	commit: Replaces balloons nine-patches.
+75ef4ff3076371b1860451df40c2d0896bb405f4 26b8e80643c548c904549bcb1850f709d6643667 Júlio Zynger <julioz92@gmail.com> 1382372139 -0200	checkout: moving from issues/25 to master
+26b8e80643c548c904549bcb1850f709d6643667 75ef4ff3076371b1860451df40c2d0896bb405f4 Júlio Zynger <julioz92@gmail.com> 1382372145 -0200	merge issues/25: Fast-forward
+75ef4ff3076371b1860451df40c2d0896bb405f4 75ef4ff3076371b1860451df40c2d0896bb405f4 Júlio Zynger <julioz92@gmail.com> 1382373272 -0200	checkout: moving from master to issues/26
+75ef4ff3076371b1860451df40c2d0896bb405f4 83c56a2433755b686247f2bd86870686d660dcf1 Júlio Zynger <julioz92@gmail.com> 1382374869 -0200	commit: Event activity shows host picture in header
+83c56a2433755b686247f2bd86870686d660dcf1 75ef4ff3076371b1860451df40c2d0896bb405f4 Júlio Zynger <julioz92@gmail.com> 1382374885 -0200	checkout: moving from issues/26 to master
+75ef4ff3076371b1860451df40c2d0896bb405f4 83c56a2433755b686247f2bd86870686d660dcf1 Júlio Zynger <julioz92@gmail.com> 1382374889 -0200	merge issues/26: Fast-forward
+83c56a2433755b686247f2bd86870686d660dcf1 83c56a2433755b686247f2bd86870686d660dcf1 Júlio Zynger <julioz92@gmail.com> 1382400993 -0200	checkout: moving from master to issues/27
+83c56a2433755b686247f2bd86870686d660dcf1 56a444273d02f7a3d16d37bdbb17e05dd0aaa453 Júlio Zynger <julioz92@gmail.com> 1382404813 -0200	commit: Adds a ParseQueryCreator singleton to handle queries to the server database.
+56a444273d02f7a3d16d37bdbb17e05dd0aaa453 83c56a2433755b686247f2bd86870686d660dcf1 Júlio Zynger <julioz92@gmail.com> 1382404868 -0200	checkout: moving from issues/27 to master
+83c56a2433755b686247f2bd86870686d660dcf1 56a444273d02f7a3d16d37bdbb17e05dd0aaa453 Júlio Zynger <julioz92@gmail.com> 1382404871 -0200	merge issues/27: Fast-forward
+56a444273d02f7a3d16d37bdbb17e05dd0aaa453 56a444273d02f7a3d16d37bdbb17e05dd0aaa453 Júlio Zynger <julioz92@gmail.com> 1382737740 -0200	checkout: moving from master to issues/28
+56a444273d02f7a3d16d37bdbb17e05dd0aaa453 9b1a058a21b056ed4259751b5e62019661af77a8 Júlio Zynger <julioz92@gmail.com> 1382743876 -0200	commit: Lets stick to Holo...
+9b1a058a21b056ed4259751b5e62019661af77a8 56a444273d02f7a3d16d37bdbb17e05dd0aaa453 Júlio Zynger <julioz92@gmail.com> 1382743899 -0200	checkout: moving from issues/28 to master
+56a444273d02f7a3d16d37bdbb17e05dd0aaa453 9b1a058a21b056ed4259751b5e62019661af77a8 Júlio Zynger <julioz92@gmail.com> 1382743903 -0200	merge issues/28: Fast-forward
+9b1a058a21b056ed4259751b5e62019661af77a8 9b1a058a21b056ed4259751b5e62019661af77a8 Júlio Zynger <julioz92@gmail.com> 1382744707 -0200	checkout: moving from master to issues/29
+9b1a058a21b056ed4259751b5e62019661af77a8 03571858b554d53f7a905f51c7cc0f112cceb1f4 Júlio Zynger <julioz92@gmail.com> 1382749214 -0200	commit: Adds BetterPickers library, and mechanism to select a date.

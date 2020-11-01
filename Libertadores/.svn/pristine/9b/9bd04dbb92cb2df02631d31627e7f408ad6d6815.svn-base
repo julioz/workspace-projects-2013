@@ -1,0 +1,118 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.util.ColorFilterGenerator;
+
+public class ClubSelectorActivity extends ListActivity {
+
+	public static final String INTENT_CLUB_RETURNED = "clubreturned";
+	
+	private ClubsDB clubsDB;
+	private Club myClub;
+	private TreeMap<String, Club> clubs;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.clubselectoractivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		myClub = clubsDB.getMyClub();
+		
+		List<Club> listClubs = new ArrayList<Club>();
+		for (Club club : clubs.values()) {
+			listClubs.add(club);
+		}
+		setListAdapter(new ClubSelectorAdapter(this, listClubs));
+	}
+
+	private void returnAcronym(String acronym){
+		Intent resultIntent = new Intent();
+    	resultIntent.putExtra(INTENT_CLUB_RETURNED, acronym);
+    	setResult(Activity.RESULT_OK, resultIntent);
+    	finish();
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		Club club = (Club) getListAdapter().getItem(position);
+		returnAcronym(club.getAcronym());
+		super.onListItemClick(l, v, position, id);
+	}
+	
+	private class ClubSelectorAdapter extends ArrayAdapter<Club>{
+
+		private final LayoutInflater mInflater;
+		private static final int LAYOUTRESOURCEID = R.layout.clubselectorrow;
+		private List<Club> objects;
+		
+		public ClubSelectorAdapter(Context context, List<Club> objects) {
+			super(context, LAYOUTRESOURCEID, objects);
+			this.mInflater = LayoutInflater.from(context);
+			this.objects = objects;
+		}
+		
+		@Override
+		public int getCount() {
+			return objects.size();
+		}
+		
+		@Override
+		public Club getItem(int position) {
+			return objects.get(position);
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View row = convertView;
+	        ClubHolder holder = null;
+	        
+	        if(row == null){
+	            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+	            
+	            holder = new ClubHolder();
+	            holder.ivBadge = (ImageView) row.findViewById(R.clubselectorrow.iv_badge);
+	            holder.txtName = (TextView) row.findViewById(R.clubselectorrow.tv_name);
+	            
+	            row.setTag(holder);
+	        }else{
+	            holder = (ClubHolder) row.getTag();
+	        }
+
+	        Club club = getItem(position);
+
+	        int badgeRes = club.getBadgeResource(getContext());
+	        String clubName = club.getName().toUpperCase();
+	        holder.ivBadge.setImageResource(badgeRes);
+	        if(!club.getAcronym().equals(myClub.getAcronym())) holder.ivBadge.setColorFilter(ColorFilterGenerator.adjustSaturation(0));
+	        else holder.ivBadge.setColorFilter(null);
+	        holder.txtName.setText(clubName);
+
+	        return row;
+		}
+	}
+	
+	static class ClubHolder
+    {
+        ImageView ivBadge;
+        TextView txtName;
+    }
+}

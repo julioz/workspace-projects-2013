@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+	android:background="@drawable/backrepeat"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<LinearLayout
+	    android:layout_width="fill_parent"
+		android:gravity="center_horizontal"
+		android:id="@+guide/header_layout"
+		android:orientation="vertical"
+		android:layout_height="wrap_content">
+		<org.taptwo.android.widget.TitleFlowIndicator
+			android:id="@+guide/viewflowindic"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			app:footerLineHeight="2dp"
+			app:footerTriangleHeight="10dp"
+			app:textColor="#FFE0E0E0"
+			app:selectedColor="#FFFFFFFF"
+			app:footerColor="#FFFFFFFF"
+			app:titlePadding="10dp"
+			app:textSize="11dp"
+			app:selectedSize="13dp"
+			android:layout_marginTop="10dip"
+			app:clipPadding="5dp"/>
+
+	</LinearLayout>
+	<org.taptwo.android.widget.ViewFlow
+		android:duplicateParentState="true"
+		android:id="@+guide/viewflow"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"/>
+</LinearLayout> 
+
+
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<WebView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+guide/webview"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" /> -->

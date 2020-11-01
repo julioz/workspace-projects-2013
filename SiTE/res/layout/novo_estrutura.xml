@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#FFFFFFFF"
+  android:orientation="vertical"
+  android:stretchColumns="1"
+  android:shrinkColumns="0,2">
+  
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:shrinkColumns="0,1"
+  		android:stretchColumns="2"
+  		android:id="@+novo_estrutura/tlTituloBarraEstrutura">
+  		
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="wrap_content"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#FF068ED4">
+  		
+  		<ImageView
+  		android:src="@drawable/casa_icon"
+  		android:layout_gravity="left"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:id="@+novo_estrutura/tvEstruturaTit"
+        android:gravity="center_vertical|right" android:paddingRight="20sp"
+        android:text="Nova Estrutura" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		
+			
+		<ImageButton
+			android:src="@drawable/bt_add"
+			android:id="@+novo_estrutura/estSalvar"
+			android:background="@null"
+			android:layout_gravity="right"
+			android:paddingRight="10sp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+  		
+  		</TableRow>
+</TableLayout>
+
+<ScrollView
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:scrollbars="horizontal|vertical"
+    android:layout_below="@novo_estrutura/tlTituloBarraEstrutura"
+    android:layout_above="@+novo_estrutura/tlEstDelete">
+
+
+<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="fill_parent"
+  		android:shrinkColumns="0"
+  		android:stretchColumns="1"
+  		android:padding="3px">
+  		
+  		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstNome"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Nome da estrutura:" />
+              
+            <EditText android:id="@+novo_estrutura/etEstNome"
+              android:layout_height="fill_parent"
+              android:text=""
+              android:layout_weight="1"
+              android:scrollHorizontally="true"
+              android:singleLine="true"
+              android:layout_width="0dp"/>
+  		</TableRow>
+  		
+  		
+  		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstTipo"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Tipo de estrutura:" />
+              
+           <Spinner android:id="@+novo_estrutura/spEstTipo"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent" />
+              
+  		</TableRow>
+  		
+  		
+  		<TableRow
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+novo_estrutura/trEstruturaTipo"
+		android:visibility="gone">
+			<TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Outro tipo:" />
+              
+            <EditText android:id="@+novo_estrutura/etEstruturaTipoDeEstrutura"
+              android:layout_height="fill_parent"
+              android:singleLine="true"
+              android:scrollHorizontally="true"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:text="" />
+		</TableRow>
+  		
+  		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstAfluencia"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Afluência de público:" />
+              
+            <EditText android:id="@+novo_estrutura/etEstAfluencia"
+              android:layout_height="fill_parent"
+              android:singleLine="true"
+              android:inputType="number"
+              android:scrollHorizontally="true"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:text="" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstRevisao"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Estado da revisão:" />
+              
+            <Spinner android:id="@+novo_estrutura/spEstRevisao"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent"
+           	 android:prompt="@string/estRevisao_prompt" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstEstabilidade"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Estabilidade:" />
+              
+            <Spinner android:id="@+novo_estrutura/spEstEstabilidade"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent"
+           	 android:prompt="@string/estEstabilidade_prompt" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstMaterial"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Tipo de Material:" />
+              
+            <EditText android:id="@+novo_estrutura/etEstMaterial"
+              android:layout_height="fill_parent"
+              android:scrollHorizontally="true"
+              android:singleLine="true"
+              android:layout_width="0dp"
+           	 android:layout_weight="1"
+              android:text=""/>
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstTamanhoAcesso"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Tamanho do Acesso:" />
+              
+            <Spinner android:id="@+novo_estrutura/spEstTamanhoAcesso"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent"
+           	 android:prompt="@string/estTamanhoAcesso_prompt" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstDificuldadeAcesso"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Dificuldade do Acesso:" />
+              
+            <Spinner android:id="@+novo_estrutura/spEstDificuldadeAcesso"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent"
+           	 android:prompt="@string/estDificuldadeAcesso_prompt" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstNumAndares"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Número de Andares:" />
+              
+            <EditText android:id="@+novo_estrutura/etNumAndares"
+              android:layout_height="fill_parent"
+              android:inputType="number"
+              android:singleLine="true"
+              android:scrollHorizontally="true"
+              android:layout_width="0dp"
+           	 android:layout_weight="1"
+              android:text="" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Média de pessoas por andar:" />
+              
+            <EditText android:id="@+novo_estrutura/etQtdPessoasPiso"
+              android:layout_height="fill_parent"
+              android:inputType="number"
+              android:singleLine="true"
+              android:scrollHorizontally="true"
+              android:layout_width="0dp"
+           	 android:layout_weight="1"
+              android:text="" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Resistência do Piso:\n(em kg)" />
+              
+            <EditText android:id="@+novo_estrutura/etResistenciaPiso"
+              android:layout_height="fill_parent"
+              android:inputType="number"
+              android:singleLine="true"
+              android:scrollHorizontally="true"
+              android:layout_width="0dp"
+           	 android:layout_weight="1"
+              android:text="" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstTipoSubterraneo"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Tipo de Subterrâneo:" />
+              
+            <EditText android:id="@+novo_estrutura/etTipoSubterraneo"
+              android:layout_height="fill_parent"
+              android:layout_width="0dp"
+           	 android:layout_weight="1"
+              android:scrollHorizontally="true"
+              android:singleLine="true"
+              android:text="" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstNumSubterraneos"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Número de Subsolos:" />
+              
+            <EditText android:id="@+novo_estrutura/etNumSubterraneos"
+              android:layout_height="fill_parent"
+              android:inputType="number"
+              android:scrollHorizontally="true"
+              android:singleLine="true"
+              android:layout_width="0dp"
+           	 android:layout_weight="1"
+              android:text="" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Tempo estimado de acesso:\n(em minutos)" />
+              
+            <EditText android:id="@+novo_estrutura/etTempoEstimadoAcesso"
+              android:layout_height="fill_parent"
+              android:inputType="number"
+              android:singleLine="true"
+              android:scrollHorizontally="true"
+              android:layout_width="0dp"
+           	 android:layout_weight="1"
+              android:text="" />
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:id="@+novo_estrutura/tvEstEvolucao"
+              android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Evolução do Trabalho:" />
+              
+            <Spinner android:id="@+novo_estrutura/spEstEvolucao"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent"
+           	 android:prompt="@string/estEvolucao_prompt" />
+		</TableRow>
+		
+		<!-- <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Equipe:" />
+              
+            <Spinner android:id="@+novo_estrutura/spEstEquipe"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent" />
+		</TableRow> -->
+		
+		<TableLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+novo_estrutura/tlEquipe">
+		
+			<TableRow
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+novo_estrutura/trInicialEquipe">
+				<TextView android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent"
+	              android:textColor="#000000"
+	              android:text="Equipe:"
+	              android:gravity="center_vertical" />
+	             
+	            <LinearLayout android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent">
+	            
+		            <Spinner android:id="@+novo_estrutura/spEstEquipe"
+		           	 android:layout_width="0dp"
+		           	 android:layout_weight="2"
+		           	 android:layout_height="fill_parent" />
+		           	 
+		           	<ImageButton android:id="@+novo_estrutura/spEstEquipeMais"
+		           	 android:layout_width="wrap_content"
+		           	 android:src="@drawable/bt_mais"
+		           	 android:background="@null"
+		           	 android:layout_height="fill_parent"/>
+	          	 
+				</LinearLayout>
+			</TableRow>
+		</TableLayout>
+		
+		<!-- <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Perigo:" />
+              
+            <Spinner android:id="@+novo_estrutura/spEstPerigo"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent" />
+		</TableRow> -->
+		
+		<TableLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+novo_estrutura/tlPerigo">
+		
+			<TableRow
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+novo_estrutura/trInicialPerigo">
+				<TextView android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent"
+	              android:textColor="#000000"
+	              android:text="Perigo:"
+	              android:gravity="center_vertical" />
+	             
+	            <LinearLayout android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent">
+	            
+		            <Spinner android:id="@+novo_estrutura/spEstPerigo"
+		           	 android:layout_width="0dp"
+		           	 android:layout_weight="2"
+		           	 android:layout_height="fill_parent" />
+		           	 
+		           	<ImageButton android:id="@+novo_estrutura/spEstPerigoMais"
+		           	 android:layout_width="wrap_content"
+		           	 android:src="@drawable/bt_mais"
+		           	 android:background="@null"
+		           	 android:layout_height="fill_parent"/>
+	          	 
+				</LinearLayout>
+			</TableRow>
+		</TableLayout>
+		
+		<!-- <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              android:layout_height="fill_parent"
+              android:textColor="#000000"
+              android:gravity="center_vertical"
+              android:text="Vítima:" />
+              
+            <Spinner android:id="@+novo_estrutura/spEstVitima"
+           	 android:layout_width="0dp"
+           	 android:layout_weight="1"
+           	 android:layout_height="fill_parent" />
+		</TableRow> -->
+		
+		<TableLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@+novo_estrutura/tlVitima">
+		
+			<TableRow
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+novo_estrutura/trInicialVitima">
+				<TextView android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent"
+	              android:textColor="#000000"
+	              android:text="Vítima:"
+	              android:gravity="center_vertical" />
+	             
+	            <LinearLayout android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent">
+	            
+		            <Spinner android:id="@+novo_estrutura/spEstVitima"
+		           	 android:layout_width="0dp"
+		           	 android:layout_weight="2"
+		           	 android:layout_height="fill_parent" />
+		           	 
+		           	<ImageButton android:id="@+novo_estrutura/spEstVitimaMais"
+		           	 android:layout_width="wrap_content"
+		           	 android:src="@drawable/bt_mais"
+		           	 android:background="@null"
+		           	 android:layout_height="fill_parent"/>
+	          	 
+				</LinearLayout>
+			</TableRow>
+		</TableLayout>
+	
+	</TableLayout>
+	</ScrollView>
+	<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:gravity="bottom"
+  		android:id="@+novo_estrutura/tlEstDelete"
+  		android:shrinkColumns="0"
+  		android:stretchColumns="1"
+  		android:layout_alignParentBottom="true"
+  		android:orientation="horizontal">
+  		
+  		<TableRow
+  		android:layout_width="fill_parent" android:layout_height="fill_parent"
+  		android:paddingTop="3sp" android:paddingBottom="3sp"
+  		android:background="#FF668E54">
+  		
+  		<ImageView
+  		android:src="@drawable/bt_delete"
+  		android:layout_gravity="left"  android:id="@+novo_estrutura/ivDelEst"
+        android:layout_height="fill_parent" android:layout_width="fill_parent" android:layout_marginLeft="5dip"/>
+        
+        <TextView
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:gravity="center_vertical" android:paddingRight="20sp"  android:id="@+novo_estrutura/tvDelEst"
+        android:text="Excluir Estrutura" android:textColor="#FFFFFFFF" android:textStyle="bold" android:textSize="17sp"/>
+  		
+  		</TableRow>
+</TableLayout>
+
+</RelativeLayout>
+
+</TableLayout>

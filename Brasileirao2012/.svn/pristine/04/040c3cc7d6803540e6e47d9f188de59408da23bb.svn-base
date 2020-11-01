@@ -1,0 +1,151 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.MyTeamListAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.GetTableTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.MatchesDB;
+import br.com.zynger.brasileirao2012.data.StrikersDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+import br.com.zynger.brasileirao2012.view.CustomActionBar;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+import br.com.zynger.brasileirao2012.view.MatchViewLayout;
+
+public class MyTeamActivity extends ListActivity implements AsyncTaskListener {
+	
+	private ClubsDB clubsDB;
+	private MatchesDB matchesDB;
+	
+	private CustomActionBar actionbar;
+	private ImageView iv_badge;
+	private DataUpdateLayout dul_loading;
+	private TextView tv_fullname, tv_points_place;
+	private Button bt_strikers, bt_trophies, bt_wiki;
+	
+	private Club myclub;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.myteamactivity);
+		
+		clubsDB = ClubsDB.getInstance(this);
+		matchesDB = MatchesDB.getInstance(this, clubsDB.getClubs());
+		
+		myclub = clubsDB.getMyClub(this);
+		loadViews();
+		
+		iv_badge.setImageResource(myclub.getBadgeResource(this));
+		tv_fullname.setText(myclub.getFullName());
+		tv_points_place.setText(getString(
+				R.string.myteamactivity_pointsandposition,
+				myclub.getPoints(), myclub.getPosition()));
+		
+		if(StrikersDB.getInstance().getStrikers(myclub.getDivision()) == null){
+			bt_strikers.setVisibility(View.INVISIBLE);
+			bt_strikers.setClickable(false);
+		}
+		
+		if(PreferenceEditor.shouldAutoUpdate(this)){
+			new GetTableTask(this, matchesDB, clubsDB, this).execute();
+		}else populateLayout();
+		
+		bt_strikers.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), StrikersListActivity.class);
+				it.putExtra(StrikersListActivity.INTENT_DIVISION, myclub.getDivision());
+				it.putExtra(StrikersListActivity.INTENT_CLUBACRONYM, myclub.getAcronym());
+				startActivity(it);
+			}
+		});
+		
+		bt_trophies.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), TrophiesActivity.class);
+				it.putExtra(TrophiesActivity.INTENT_CLUBACRONYM, myclub.getAcronym());
+				startActivity(it);
+			}
+		});
+		
+		bt_wiki.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse(myclub.getWiki()));
+				startActivity(it);
+			}
+		});
+	}
+	
+	private void loadViews() {
+		actionbar = (CustomActionBar) findViewById(R.myteamactivity.actionbar);
+		dul_loading = (DataUpdateLayout) findViewById(R.myteamactivity.dul_loading);
+		dul_loading.addViewToToggle(getListView());
+		
+		iv_badge = (ImageView) findViewById(R.myteamactivity.iv_badge);
+		tv_fullname = (TextView) findViewById(R.myteamactivity.tv_fullname);
+		tv_points_place = (TextView) findViewById(R.myteamactivity.tv_points_place);
+		bt_strikers = (Button) findViewById(R.myteamactivity.bt_strikers);
+		bt_trophies = (Button) findViewById(R.myteamactivity.bt_trophies);
+		bt_wiki = (Button) findViewById(R.myteamactivity.bt_wiki);
+		
+		actionbar.setUpdateOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(ConnectionHelper.isConnected(v.getContext())){
+					new GetTableTask(v.getContext(), matchesDB, clubsDB,
+							MyTeamActivity.this).execute();
+				}else Toast.makeText(v.getContext(),
+						getString(R.string.message_verifyconnection), Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	
+	private void populateLayout() {
+		ArrayList<MatchViewLayout> al = new ArrayList<MatchViewLayout>();
+		
+		for (Match m : myclub.getMatchesParticipation().getMixedSets().values()) {
+			al.add(new MatchViewLayout(this, m, true));
+		}
+		
+		getListView().setAdapter(new MyTeamListAdapter(this, al));
+	}
+
+	@Override
+	public void preExecution() {
+		dul_loading.showFullLayout();
+	}
+
+	@Override
+	public void onComplete(Object result) {
+		FileHandler.saveBackup(this, FileHandler.MATCHES, result, myclub.getDivision());
+		Toast.makeText(this, getString(R.string.message_dataupdated), Toast.LENGTH_SHORT).show();
+		
+		dul_loading.hide();
+		populateLayout();
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		dul_loading.hide();
+		populateLayout();
+	}
+}

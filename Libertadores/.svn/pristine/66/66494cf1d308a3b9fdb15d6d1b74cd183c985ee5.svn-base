@@ -1,0 +1,37 @@
+package br.com.zynger.libertadores;
+
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.Toast;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.data.GroupsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Group;
+import br.com.zynger.libertadores.util.GroupEnum;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+
+public class GroupActivity extends Activity {
+
+	public final static String INTENT_GROUPNUM = "INTENT_GROUPNUM";
+	
+	private ClubsDB clubsDB;
+	private GroupsDB groupsDB;
+	private InternalStorageHandler internalStorage;
+	
+	private Group group;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		clubsDB = ClubsDB.getSingletonObject(this);
+		groupsDB = GroupsDB.getSingletonObject(clubsDB);
+		internalStorage = new InternalStorageHandler(this);
+		
+		GroupEnum gEnum = (GroupEnum) getIntent().getSerializableExtra(INTENT_GROUPNUM);
+		this.group = groupsDB.getGroups().get(gEnum);
+		
+		Toast.makeText(this, group.toString(), Toast.LENGTH_SHORT).show();
+	}
+}

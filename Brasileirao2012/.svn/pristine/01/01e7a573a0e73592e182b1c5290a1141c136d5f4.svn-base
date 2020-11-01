@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+	xmlns:android="http://schemas.android.com/apk/res/android"  
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:paddingTop="3dp"
+	android:paddingBottom="3dp"
+	android:weightSum="9">
+	
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:layout_weight="1">
+        
+        <ImageView
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:scaleType="fitCenter"
+	        android:adjustViewBounds="true"
+	        android:id="@+aprovrow/iv_bdg"/>
+        
+    </LinearLayout>    
+    
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:text="19"
+		android:layout_weight="1"
+		android:textSize="16dp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/mand_j"/>
+		
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:text="13"
+		android:layout_weight="1"
+		android:textSize="16dp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/mand_v"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:text="2"
+		android:layout_weight="1"
+		android:textSize="16dp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/mand_e"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:text="72"
+		android:layout_weight="1"
+		android:textSize="16dp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/mand_perc"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:text="19"
+		android:layout_weight="1"
+		android:textSize="16dp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/vis_j"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:text="8"
+		android:layout_weight="1"
+		android:textSize="16dp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/vis_v"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:text="6"
+		android:layout_weight="1"
+		android:textSize="16dp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/vis_e"/>
+	
+	<TextView
+		android:layout_width="0dp"
+		android:layout_height="fill_parent"
+		android:text="53"
+		android:layout_weight="1"
+		android:textSize="16dp"
+		android:gravity="center"
+		android:textColor="#ffffffff"
+		android:id="@+aprovrow/vis_perc"/>
+</TableRow>

@@ -1,0 +1,92 @@
+package br.com.zynger.libertadores.util;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
+import br.com.zynger.libertadores.HomeActivity;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Striker;
+
+public class JsonUtil {
+
+	public static String readJsonFeed(String url) {
+		StringBuilder builder = new StringBuilder();
+		HttpClient client = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet(url);
+		try {
+			HttpResponse response = client.execute(httpGet);
+			StatusLine statusLine = response.getStatusLine();
+			int statusCode = statusLine.getStatusCode();
+			if (statusCode == 200) {
+				HttpEntity entity = response.getEntity();
+				InputStream content = entity.getContent();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+			} else {
+				Log.e(HomeActivity.TAG, "Failed to download file - " + url);
+			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return builder.toString();
+	}
+
+	public static JSONObject createStandingsJson(TreeMap<String, Club> clubs){
+		try {
+			JSONObject object = new JSONObject();
+			for (Club club : clubs.values()) {
+				JSONArray data = club.toJson();
+				object.put(club.getAcronym(), data);
+			}
+			return object;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static JSONArray createStrikersJson(ArrayList<Striker> strikers){
+		JSONArray array = new JSONArray();
+		for (Striker striker : strikers) {
+			JSONArray data = striker.toJson();
+			array.put(data);
+		}
+		return array;
+	}
+	
+	public static JSONObject createFansJson(TreeMap<String, Integer> map) {
+		try{			
+			JSONObject object = new JSONObject();
+			for(TreeMap.Entry<String, Integer> entry : map.entrySet()) {
+				String key = entry.getKey();
+				Integer value = entry.getValue();
+				object.put(key, value.intValue());
+			}
+			return object;
+		}catch(JSONException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+}

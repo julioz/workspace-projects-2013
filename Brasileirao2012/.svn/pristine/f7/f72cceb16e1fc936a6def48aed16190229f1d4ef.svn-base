@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Application theme. -->
+    <style name="Theme.Brasileirao" parent="Theme.Sherlock.Light">
+        <item name="actionBarStyle">@style/Widget.Brasileirao.ActionBar</item>
+        <item name="displayOptions">showHome|useLogo</item>
+    </style>
+
+    <style name="Widget.Brasileirao.ActionBar" parent="Widget.Sherlock.Light.ActionBar">
+        <item name="titleTextStyle">@style/Widget.Brasileirao.TitleTextStyle</item>
+        <item name="background">@drawable/actionbar_background_dark</item>
+    </style>
+    
+    <style name="Theme.Brasileirao.Bright" parent="Theme.Brasileirao">
+        <item name="actionBarStyle">@style/Widget.Brasileirao.ActionBar.Bright</item>
+    </style>
+    
+    <style name="Theme.Brasileirao.Preferences" parent="Theme.Brasileirao">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/darker_gray</item>
+    </style>
+
+    <style name="Widget.Brasileirao.ActionBar.Bright" parent="Widget.Sherlock.Light.ActionBar">
+        <item name="titleTextStyle">@style/Widget.Brasileirao.TitleTextStyle</item>
+        <item name="background">@drawable/actionbar_background_bright</item>
+    </style>
+
+    <style name="Widget.Brasileirao.TitleTextStyle" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+    
+    <style name="Widget.RefreshActionItem">
+        <item name="refreshActionItemBackground">?attr/actionBarItemBackground</item>
+        <item name="refreshActionItemIcon">@drawable/ic_action_update</item>
+    </style>
+
+    <style name="Widget.RefreshActionItem.TextAppearance">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    
+    <style name="ViewPagerIndicator">
+        <item name="footerColor">@color/actionbar_color1</item>
+        <item name="fillColor">@color/actionbar_color1</item>
+        <item name="pageColor">@android:color/transparent</item>
+        <item name="radius">3dp</item>
+    </style>
+
+	<style name="ShadowedText">
+		<item name="android:paddingLeft">4dp</item>
+    	<item name="android:paddingBottom">4dp</item>
+    	<item name="android:textColor">#ffffffff</item>
+    	<item name="android:textSize">12sp</item>
+    	<item name="android:shadowColor">#000000</item>
+    	<item name="android:shadowDx">1</item>
+    	<item name="android:shadowDy">1</item>
+    	<item name="android:shadowRadius">1</item>
+    	<item name="android:focusable">true</item>
+	</style>
+	
+	<style name="Animations" />
+
+	<!-- PopDownMenu -->
+	<style name="Animations.PopDownMenu" />
+	
+	<style name="Animations.PopDownMenu.Center">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_top</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>
+	</style>
+	
+	<style name="Animations.PopDownMenu.Left">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
+	</style>
+	
+	<style name="Animations.PopDownMenu.Right">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
+	</style>
+	
+	<style name="Animations.PopDownMenu.Reflect">
+		<item name="@android:windowEnterAnimation">@anim/pump_top</item>
+		<item name="@android:windowExitAnimation">@anim/disappear</item>
+	</style>
+	
+	<!-- PopUpMenu -->
+	<style name="Animations.PopUpMenu" />
+	
+	<style name="Animations.PopUpMenu.Center">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
+	</style>
+	
+	<style name="Animations.PopUpMenu.Left">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
+	</style>
+	
+	<style name="Animations.PopUpMenu.Right">
+		<item name="@android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
+		<item name="@android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
+	</style>
+	
+	<style name="Animations.PopUpMenu.Reflect">
+		<item name="@android:windowEnterAnimation">@anim/pump_bottom</item>
+		<item name="@android:windowExitAnimation">@anim/disappear</item>
+	</style>
+</resources>

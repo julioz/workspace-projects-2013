@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 0aae286d158ae19147c831c33c78e42e3943efdd Júlio Zynger <julioz92@gmail.com> 1379177967 -0300	branch: Created from HEAD
+0aae286d158ae19147c831c33c78e42e3943efdd 97f900d0b3a696a2fe7661873659e26f0b3494c4 Júlio Zynger <julioz92@gmail.com> 1379182193 -0300	commit: Initial implementation of Event and Comment models.
+97f900d0b3a696a2fe7661873659e26f0b3494c4 8db2e4e7f71e1ff660a09997dd016fa798ecd2f1 Júlio Zynger <julioz92@gmail.com> 1379183178 -0300	commit: Adds description field to Event

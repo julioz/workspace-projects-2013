@@ -1,0 +1,146 @@
+package edu.mst.kmnrradio;
+
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.widget.Button;
+import org.holoeverywhere.widget.TextView;
+
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnBufferingUpdateListener;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import edu.mst.kmnrradio.asyncs.AsyncTaskListener;
+import edu.mst.kmnrradio.asyncs.GetRadioInfoTask;
+
+public class MainActivity extends Activity implements AsyncTaskListener {
+
+	private static final String RADIOURL = "http://marconi.kmnr.org:7000/webstream.mp3";
+
+	public static String TAG = "kmnrradio";
+	private MediaPlayer mp = null;
+
+	private Button play;
+	private Button pause;
+	private Button stop;
+	private TextView info;
+
+	@Override
+	public void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
+		setContentView(R.layout.main);
+
+		play = (Button) findViewById(R.id.play);
+		pause = (Button) findViewById(R.id.pause);
+		stop = (Button) findViewById(R.id.stop);
+		info = (TextView) findViewById(R.id.tv_info);
+
+		play.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				info.setText("Play pressed.");
+				new GetRadioInfoTask(RADIOURL, MainActivity.this).execute();
+				play();
+			}
+		});
+
+		pause.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				info.setText("Pause pressed.");
+				pause();
+			}
+		});
+
+		stop.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				info.setText("Stop pressed.");
+				stop();
+			}
+		});
+	}
+
+	private void play() {
+		Uri myUri = Uri.parse(RADIOURL);
+		try {
+			if (mp == null) {
+				this.mp = new MediaPlayer();
+			} else {
+				mp.stop();
+				mp.reset();
+			}
+			mp.setDataSource(this, myUri); // Go to Initialized state
+			mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			mp.setOnPreparedListener(new OnPreparedListener() {
+				@Override
+				public void onPrepared(MediaPlayer mp) {
+					Log.d(TAG, "Stream is prepared");
+					mp.start();
+				}
+			});
+			
+			mp.setOnBufferingUpdateListener(new OnBufferingUpdateListener() {
+				@Override
+				public void onBufferingUpdate(MediaPlayer mp, int percent) {
+					Log.d(TAG, "PlayerService onBufferingUpdate : " + percent + "%");
+				}
+			});
+
+			mp.setOnErrorListener(new OnErrorListener() {
+				@Override
+				public boolean onError(MediaPlayer mp, int what, int extra) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("Media Player Error: ");
+					switch (what) {
+					case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
+						sb.append("Not Valid for Progressive Playback");
+						break;
+					case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+						sb.append("Server Died");
+						break;
+					case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+						sb.append("Unknown");
+						break;
+					default:
+						sb.append(" Non standard (");
+						sb.append(what);
+						sb.append(")");
+					}
+					sb.append(" (" + what + ") ");
+					sb.append(extra);
+					Log.e(TAG, sb.toString());
+					return true;
+				}
+			});
+			mp.prepareAsync();
+
+			Log.d(TAG, "LoadClip Done");
+		} catch (Throwable t) {
+			Log.d(TAG, t.toString());
+		}
+	}
+
+	private void pause() {
+		if(mp != null){
+			mp.pause();
+		}
+	}
+
+	private void stop() {
+		if(mp != null){
+			mp.stop();
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		stop();
+	}
+
+	@Override
+	public void onComplete(Object result) {
+		info.setText(result.toString());
+	}
+}

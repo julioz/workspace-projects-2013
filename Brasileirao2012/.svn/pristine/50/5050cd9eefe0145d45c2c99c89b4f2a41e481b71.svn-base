@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:background="@drawable/actionbar_gradient2"
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:id="@+movetomovevideocentralactivity/rl_actionbar"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:id="@+movetomovevideocentralactivity/iv_actionbar_badge"
+            android:src="@drawable/ic_realtime"
+            android:layout_centerVertical="true" />
+        
+        <br.com.zynger.brasileirao2012.view.TertreTextView
+            android:text="Vídeos"
+            android:layout_marginLeft="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_toRightOf="@+movetomovevideocentralactivity/iv_actionbar_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="30dp" />
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+movetomovevideocentralactivity/rl_actionbar"
+        android:layout_above="@+movetomovevideocentralactivity/ll_ad">
+	    
+        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:id="@android:id/list"
+		    android:cacheColorHint="#00000000"
+		    android:dividerHeight="1dp"/>
+    </LinearLayout>
+    
+    <LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+movetomovevideocentralactivity/ll_ad"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>
+</RelativeLayout>

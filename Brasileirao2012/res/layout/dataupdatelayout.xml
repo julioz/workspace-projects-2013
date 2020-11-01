@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:id="@+dataupdatelayout/sv_content"
+    android:fillViewport="true" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <RelativeLayout
+            android:id="@+dataupdatelayout/rl_representation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center" >
+
+            <ProgressBar
+                android:id="@+dataupdatelayout/pb_updating"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:indeterminate="true"/>
+
+            <ImageView
+                android:id="@+dataupdatelayout/iv_image"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"
+                android:adjustViewBounds="true"
+                android:paddingBottom="7dp"
+                android:scaleType="fitCenter"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+dataupdatelayout/bt_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+dataupdatelayout/tv_text"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/btn_default_holo_purple"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+dataupdatelayout/tv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+dataupdatelayout/rl_representation"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="25dp"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/updating"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+</ScrollView>

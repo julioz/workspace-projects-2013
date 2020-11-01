@@ -1,0 +1,88 @@
+package br.com.zynger.brasileirao2012.model;
+
+public class RealTimePlayer {
+	
+	public final static int NULL = -1;
+	
+	public final static int TIPO_TITULAR = 0;
+	public final static int TIPO_RESERVA = 1;
+	public final static int TIPO_SUBSTITUICAO = 2;
+	public final static int TIPO_EXPULSO = 7;
+	
+	public final static int SUBST_ENTROU = 3;
+	public final static int SUBST_SAIU = 4;
+	public final static int SUBST_EXPULSO = 8;
+	
+	public final static int CARTAO_AMAR = 5;
+	public final static int CARTAO_VERM = 6;
+	
+	private String name;
+	private int type, subst_type, card_type, goalspro, goalsagainst;
+	
+	public RealTimePlayer(String name, int type, int subst_type, int card_type, int goalspro, int goalsagainst) {
+		setName(name);
+		setType(type);
+		setSubst_type(subst_type);
+		setCard_type(card_type);
+		setGoalspro(goalspro);
+		setGoalsagainst(goalsagainst);
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public int getType() {
+		return type;
+	}
+	
+	public void setType(int type) {
+		this.type = type;
+	}
+	
+	public int getSubst_type() {
+		return subst_type;
+	}
+	
+	public void setSubst_type(int subst_type) {
+		this.subst_type = subst_type;
+	}
+	
+	public int getGoalspro() {
+		return goalspro;
+	}
+	
+	public void setGoalspro(int goalspro) {
+		this.goalspro = goalspro;
+	}
+	
+	public int getGoalsagainst() {
+		return goalsagainst;
+	}
+	
+	public void setGoalsagainst(int goalsagainst) {
+		this.goalsagainst = goalsagainst;
+	}
+
+	public int getCard_type() {
+		return card_type;
+	}
+
+	public void setCard_type(int card_type) {
+		this.card_type = card_type;
+	}
+
+	@Override
+	public String toString() {
+		return "name=" + name + ", type=" + type
+				+ ", subst_type=" + subst_type + ", card_type=" + card_type
+				+ ", goalspro=" + goalspro + ", goalsagainst=" + goalsagainst;
+	}
+	
+	
+
+}

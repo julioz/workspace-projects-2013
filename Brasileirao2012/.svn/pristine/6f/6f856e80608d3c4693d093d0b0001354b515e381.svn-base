@@ -1,0 +1,37 @@
+package br.com.zynger.brasileirao2012;
+
+import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Partner;
+import br.com.zynger.brasileirao2012.view.PartnerLayout;
+
+public class PartnersActivity extends Activity {
+	
+	private TextView actionbar_tt;
+	private LinearLayout ll_partners;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.partners);
+		
+		loadViews();
+		
+		Resources res = getResources();
+		ll_partners.addView(new PartnerLayout(this, new Partner("Legítimo Chopp & Bar", "http://bit.ly/JG5cSR", res.getDrawable(R.drawable.partner_legitimo)), new Partner("Cruzeiro Torcedor", "http://on.fb.me/Jf0fRr", res.getDrawable(R.drawable.partner_cruzeirotorcedor))));
+		ll_partners.addView(new PartnerLayout(this, new Partner("Palmeiras Todo Dia", "http://bit.ly/LytcTZ", res.getDrawable(R.drawable.partner_palmeirastododia)), new Partner("EasyAula", "http://bit.ly/K4Ymrv", res.getDrawable(R.drawable.partner_easyaula))));
+		ll_partners.addView(new PartnerLayout(this, new Partner("NetFLU", "http://bit.ly/JUNqsv", res.getDrawable(R.drawable.partner_netflu)), new Partner("Turma do Limão", "http://bit.ly/NNSwvs", res.getDrawable(R.drawable.partner_turmadolimao))));
+		ll_partners.addView(new PartnerLayout(this, new Partner("Arquibancada Tricolor", "http://bit.ly/M7NV6a", res.getDrawable(R.drawable.partner_arquibancadatricolor)), null));
+	}
+
+	private void loadViews() {
+		actionbar_tt = (TextView) findViewById(R.partners.tv_name);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		ll_partners = (LinearLayout) findViewById(R.partners.ll_partners);
+	}
+}

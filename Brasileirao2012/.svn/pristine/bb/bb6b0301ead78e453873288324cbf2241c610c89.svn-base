@@ -1,0 +1,175 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import br.com.zynger.brasileirao2012.asynctasks.GetRealTimeMatchesTask;
+import br.com.zynger.brasileirao2012.base.DivisionsActivity;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.Constants;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+import br.com.zynger.brasileirao2012.view.MatchViewLayout;
+
+public class RealTimeMatchesActivity extends DivisionsActivity<ArrayList<RealTimeMatch>> {	
+	private Timer timer;
+	private AsyncTask<Void, Void, ArrayList<RealTimeMatch>> task;
+	
+	private boolean showRanking;
+	private LinearLayout llRealTimeMatches;
+	private ScrollView svMatches;
+
+	@Override
+	protected void onResume() {
+		cancelTimer();
+		if(ConnectionHelper.isConnected(this)){			
+			startRecorrentTask();
+			unlockDrawer();
+		}else{
+			setErrorMessage(getString(R.string.message_verifyconnection));
+			lockDrawer();
+		}
+		super.onResume();
+	}
+	
+	private TimerTask getTimerTask(final Handler handler) {
+		return new TimerTask() {
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					public void run() {
+						task = getAsyncTask();
+						task.execute();
+					}
+				});
+			}
+		};
+	}
+	
+	private void startRecorrentTask() {
+		timer = new Timer();
+		timer.schedule(getTimerTask(new Handler()), 0,
+				Integer.parseInt(PreferenceEditor.getRealTimeUpdateInterval(this)));
+	}
+	
+	@Override
+	protected void onStop() {
+		cancelTimer();
+		super.onStop();
+	}
+	
+	private void cancelTimer() {
+		if(timer != null){
+			timer.cancel();
+		}
+	}
+
+	private void populateLayout(ArrayList<RealTimeMatch> realTimeMatches){
+		Collections.sort(realTimeMatches);
+		llRealTimeMatches.removeAllViews();
+		for (RealTimeMatch realtimematch : realTimeMatches) {
+			llRealTimeMatches.addView(new MatchViewLayout(this, realtimematch, showRanking));
+		}
+	}
+	
+	@Override
+	protected boolean showUpdateButton() {
+		return false;
+	}
+
+	@Override
+	public Division getInitialDivision() {
+		return (Division) getIntent().getSerializableExtra(Constants.INTENT_DIVISION);
+	}
+
+	@Override
+	public void onDivisionChosenFromDrawer(Division division) {
+		if(getDivision() != division){
+			if(task != null){				
+				task.cancel(true);
+			}
+			setDivision(division);
+			task = getAsyncTask();
+			task.execute();
+		}
+	}
+
+	@Override
+	public int getLayoutResource() {
+		return R.layout.realtimematchesactivity;
+	}
+
+	@Override
+	public void initializeActivityEnvironment(View activityView) {
+		showRanking = PreferenceEditor.shouldShowRealTimeRanking(this);
+	}
+
+	@Override
+	public boolean shouldAutoUpdate() {
+		return true;
+	}
+	
+	@Override
+	public void didNotAutoUpdate() { }
+
+	@Override
+	public void loadViews(View activityView) {
+		llRealTimeMatches = (LinearLayout) activityView
+				.findViewById(R.realtimematchesactivity.ll_matches);
+		svMatches = (ScrollView) activityView
+				.findViewById(R.realtimematchesactivity.sv_matches);
+	}
+
+	@Override
+	public View[] getDataUpdateViewsToToggle(View activityView) {
+		return new View[]{ svMatches };
+	}
+
+	@Override
+	public Integer getDataUpdateLayoutId() {
+		return R.realtimematchesactivity.dul_loading;
+	}
+	
+	@Override
+	public AsyncTask<Void, Void, ArrayList<RealTimeMatch>> getAsyncTask() {
+		return new GetRealTimeMatchesTask(this, getDivision(),
+				Boolean.valueOf(showRanking));
+	}
+
+	@Override
+	public boolean onAsyncSuccess(ArrayList<RealTimeMatch> matches) {
+		if(!matches.isEmpty()){
+			populateLayout(matches);
+			return true;
+		}else{
+			setEmptyDataSetMessage(getString(R.string.realtimematchesactivity_nomatchestoshow));
+			return false;
+		}
+	}
+
+	@Override
+	public void onAsyncFail(String message) {}
+	
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_realtime;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.realtimematchesactivity_title;
+	}
+
+	@Override
+	public Integer getPullToRefreshViewId() {
+		return null;
+	}
+}

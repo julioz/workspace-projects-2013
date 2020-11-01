@@ -1,0 +1,179 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.util.Log;
+import br.com.zynger.brasileirao2012.HomeActivity;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.util.WebDatabaseMapper;
+
+public class MoveToMoveREST {
+
+	private static final String MOVETOMOVE_VIDEOS_PREFIX = "http://api.globovideos.com/videos/";
+	private static final String MOVETOMOVE_VIDEOS_SUFFIX = "/playlist";
+	private static final String MOVETOMOVE_URL_PREFIX = "http://globoesporte.globo.com/temporeal/futebol/";
+	private static final String MOVETOMOVE_URL_SUFFIX = "/mensagens.json";
+
+	private WebDatabaseMapper webDatabaseMapper;
+	
+	public MoveToMoveREST(TreeMap<String, Club> clubs) {
+		this.webDatabaseMapper = new WebDatabaseMapper(clubs, WebDatabaseMapper.SOURCE_MOVETOMOVE);
+	}
+	
+	public LinkedHashMap<String, Move> getRealTimeMatchMoveToMove(Context context, Match m) throws JSONException{
+		String url = getRealTimeMatchUrl(m);
+		Log.e(HomeActivity.TAG, url);
+		JSONArray jsonarray = new JSONArray(JsonUtil.readJsonFeed(url));
+		LinkedHashMap<String, Move> map = new LinkedHashMap<String, Move>();
+		for (int i = 0; i < jsonarray.length(); i++) {
+			JSONObject obj = jsonarray.getJSONObject(i);
+			try{
+				Move move = parseMove(obj);
+				map.put(String.valueOf(move.getId()), move);
+			}catch(JSONException e){
+				Log.e(HomeActivity.TAG, obj.toString());
+				e.printStackTrace();
+				continue;
+			}
+		}
+		
+		LinkedHashMap<String, Move> inverseOrderMap = new LinkedHashMap<String, Move>(); //TODO encontrar um jeito melhor de inverter a ordem do mapa
+		Set<String> keySet = map.keySet(); 
+		Object[] tempArray = keySet.toArray(); 
+
+		int length = tempArray == null ? 0 : tempArray.length; 
+		for(int i = length-1; i >= 0 ; i--){
+			Move move = map.get(tempArray[i]);
+			inverseOrderMap.put(String.valueOf(move.getId()), move);
+		}
+		return inverseOrderMap;
+	}
+	
+	public ArrayList<Move> getUpdatedMoves(Context c, String lastId, Match match) throws JSONException{
+		String url = getRealTimeMatchUrl(match);
+		JSONArray jsonarray = new JSONArray(JsonUtil.readJsonFeed(url));
+		ArrayList<Move> al = new ArrayList<Move>();
+		for (int i = jsonarray.length() - 1; i >= 0; i--){
+			JSONObject obj = jsonarray.getJSONObject(i);
+			try{
+				Move move = parseMove(obj);
+				
+				if(move.getOperacao().equals("ALTERACAO")) continue;
+				if(String.valueOf(move.getId()).equals(lastId)) break;
+				
+				al.add(move);
+			}catch(JSONException e){
+				Log.e(HomeActivity.TAG, obj.toString());
+				e.printStackTrace();
+				continue;
+			}catch(Exception e){
+				Log.e(HomeActivity.TAG, obj.toString());
+				e.printStackTrace();
+				continue;
+			}
+		}
+		return al;
+	}
+	
+	private String getRealTimeMatchUrl(Match m){
+		String home = webDatabaseMapper.getStringForMoveToMove(m.getHome().getName());
+		home = home.toLowerCase();
+		home = home.replace(" ", "-");
+		String away = webDatabaseMapper.getStringForMoveToMove(m.getAway().getName());
+		away = away.toLowerCase();
+		away = away.replace(" ", "-");
+		
+		String day = String.valueOf(m.getDate().get(Calendar.DATE));
+		if(day.length() < 2) day = "0" + day;
+		
+		String month = new String();
+		month = String.valueOf(m.getDate().get(Calendar.MONTH)+1);
+		if(month.length() < 2) month = "0" + month;
+		
+		String year = String.valueOf(m.getDate().get(Calendar.YEAR));
+		
+		String date = day + "-" + month + "-" + year;
+		
+		return MOVETOMOVE_URL_PREFIX + date + "/" + home + "-" + away + MOVETOMOVE_URL_SUFFIX;
+	}
+	
+	private Move parseMove(JSONObject obj) throws JSONException{
+		String operacao = obj.getString("operacao");
+		String str_tipo = obj.getString("tipo");
+		int tipo = getMoveToMoveTipo(str_tipo);
+        String nome_time = obj.getString("nome_time");
+		String periodo = obj.getString("periodo");
+		String video_id = obj.getString("video_id");
+		String url_thumb = obj.getString("url_thumb_playlist");
+		int periodo_id = obj.getInt("periodo_id");
+		String texto = obj.getString("texto");
+		String momento = obj.getString("momento");
+		int id = obj.getInt("id");
+		
+		String video_url = null;
+		if(!video_id.trim().equals("")) video_url = getMoveVideoUrl(video_id);
+		
+		int cartao = Move.CARTAO_NULL;
+		try{					
+			JSONObject objCard = obj.getJSONObject("cartao");
+			if(objCard.getString("tipo").toUpperCase().equals("A")) cartao = Move.CARTAO_AMARELO;
+			else if(objCard.getString("tipo").toUpperCase().equals("V")) cartao = Move.CARTAO_VERMELHO;
+		}catch(JSONException e){
+			cartao = Move.CARTAO_NULL;
+		}
+		
+		texto = texto.replaceAll("<p>", "");
+		texto = texto.replaceAll("</p>", "");
+		
+		Move move = new Move(operacao, tipo, nome_time, periodo, video_id, url_thumb,
+				periodo_id, texto, momento, id, video_url, cartao);
+		return move;
+	}
+	
+	private int getMoveToMoveTipo(String str_tipo) {
+		str_tipo = str_tipo.toUpperCase();
+		if(str_tipo.equals("LANCE")) return Move.TIPO_LANCE;
+		else if(str_tipo.equals("LANCE_IMPORTANTE")) return Move.TIPO_LANCEIMPORTANTE;
+		else if(str_tipo.equals("LANCE_CARTAO")) return Move.TIPO_LANCECARTAO;
+		else if(str_tipo.equals("LANCE_GOL")) return Move.TIPO_LANCEGOL;
+		else if(str_tipo.equals("LANCE_SUBSTITUICAO")) return Move.TIPO_LANCESUBSTITUICAO;
+
+		return Move.TIPO_LANCE;
+	}
+
+	private String getMoveVideoUrl(String video_id) {
+		String url = MOVETOMOVE_VIDEOS_PREFIX + video_id + MOVETOMOVE_VIDEOS_SUFFIX;
+		try {
+			JSONObject json = new JSONObject(JsonUtil.readJsonFeed(url));
+			JSONArray tmp = json.getJSONArray("videos");
+			JSONObject videos = tmp.getJSONObject(0);
+			JSONArray resources = videos.getJSONArray("resources");
+			for (int i = 0; i < resources.length(); i++) {
+				try{
+					JSONObject videoObj = resources.getJSONObject(i);
+					
+					if(videoObj.getString("kind").equals("M4")) return videoObj.getString("url");
+					else continue;
+				}catch(JSONException e){
+					continue;
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+contextual_menu_table/menu_calendar"
+        android:icon="@drawable/ic_menu_calendar"
+        android:showAsAction="always"
+        android:title="@string/actionmode_addtocalendar"/>
+    <item
+        android:id="@+contextual_menu_table/menu_stadium"
+        android:icon="@drawable/ic_menu_stadium"
+        android:showAsAction="always"
+        android:title="@string/actionmode_stadium"/>
+    
+    <item
+        android:id="@+contextual_menu_table/menu_movetomove"
+        android:icon="@drawable/ic_menu_clock"
+        android:visible="false"
+        android:showAsAction="always"
+        android:title="@string/actionmode_movetomove"/>
+</menu>

@@ -1,0 +1,68 @@
+package br.com.zynger.libertadores.view;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.util.AttributeSet;
+import android.view.Gravity;
+import android.webkit.WebView;
+import android.widget.LinearLayout;
+import br.com.zynger.libertadores.R;
+
+public class LogoProgressBar extends LinearLayout {
+	
+	private final static int SIZE32 = 0;
+	private final static int SIZE64 = 1;
+	private final static int SIZE128 = 2;
+	
+	private final static String path32 = "file:///android_asset/progress_logo_anim_32.gif";
+	private final static String path64 = "file:///android_asset/progress_logo_anim_64.gif";
+	private final static String path128 = "file:///android_asset/progress_logo_anim_128.gif";
+	
+	private WebView wv;
+
+	public LogoProgressBar(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		initializeView(attrs);
+	}
+	
+	private void initializeView(AttributeSet attrs) {
+		this.setGravity(Gravity.CENTER);
+		wv = new WebView(getContext());
+		wv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.FILL_PARENT, Gravity.CENTER));
+		addView(wv);
+		
+		if (attrs != null) {
+			TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.LogoProgressBar);
+			
+			int size = a.getInt(R.styleable.LogoProgressBar_size, 0);
+			a.recycle();
+			
+			String path;
+			
+			switch (size) {
+			case SIZE32:
+				path = path32;
+				break;
+			case SIZE64:
+				path = path64;
+				break;
+			case SIZE128:
+				path = path128;
+				break;
+			default:
+				path = path64;
+				break;
+			}
+			
+			setWebViewConfigurations(path);
+		}else{
+			setWebViewConfigurations(path128);
+		}
+	}
+	
+	private void setWebViewConfigurations(String path){
+		wv.loadUrl(path);
+		wv.setBackgroundColor(0x00000000);
+	}
+}

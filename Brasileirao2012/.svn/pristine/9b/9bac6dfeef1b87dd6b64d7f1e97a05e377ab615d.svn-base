@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes">
+	<string name="actionbar_update">Atualizar</string>
+	<string name="actionbar_zoom">Zoom</string>
+	<string name="drawerlayout_open">Abrir menu lateral</string>
+	<string name="drawerlayout_close">Fechar menu lateral</string>
+	<string name="pulltorefresh_pull">Puxe para atualizar</string>
+	
+	<string name="divisions">Divisões</string>
+	<string name="firstdivision">Primeira Divisão</string>
+	<string name="seconddivision">Segunda Divisão</string>
+	
+	<string name="rate">Avaliar</string>
+	<string name="share">Compartilhar</string>
+	<string name="fanpage">Fanpage</string>
+	
+	<string name="homeactivity_updateall_title">Deseja atualizar tudo?</string>
+	<string name="homeactivity_updateall_message">Não recomendado se conectado via 3G</string>
+
+	<string name="aboutactivity_title">Sobre</string>
+	<string name="aboutactivity_viewflow_title_theapp">O app</string>
+	<string name="aboutactivity_viewflow_title_moreinfo">Mais informações</string>
+	<string name="aboutactivity_viewflow_title_thanks">Agradecimentos</string>
+	<string name="aboutactivity_version">Versão</string>
+	<string name="aboutactivity_developedby">desenvolvido por:</string>
+	<string name="aboutactivity_juliozynger">Júlio Zynger</string>
+	<string name="aboutactivity_mailandrights">Obrigado por escolher este aplicativo!\n\nSe você
+		tem algum elogio, sugestão, crítica ou mensagem que gostaria de
+		compartilhar comigo, sinta-se a vontade para enviar um email para o
+		meu endereço (na tela ao lado), ficarei feliz em ler sua
+		mensagem!\n\n\nObs.: Todas as imagens, escudos, ou recursos multimídia
+		presentes neste aplicativo são de direito de seus respectivos donos
+		legais.</string>
+	<string name="aboutactivity_email">juliozapps@gmail.com</string>
+
+	<string name="aprovactivity_title">Aproveitamento</string>
+	<string name="aprovactivity_home">Mandante</string>
+	<string name="aprovactivity_visitor">Visitante</string>
+	<string name="aprovactivity_played">J</string>
+	<string name="aprovactivity_win">V</string>
+	<string name="aprovactivity_draw">E</string>
+	<string name="aprovactivity_percent">%</string>
+
+	<string name="facebookconnect_loginfail">Login falhou!</string>
+	<string name="facebookconnect_logoutsuccess">Logout realizado com sucesso!</string>
+	<string name="facebookconnect_graphapistatus">https://lh5.ggpht.com/KM5Z185xBqp3ZYs6Pt9FQ-8YIJh3yiLpypKJsZDSeVTAz3ReSY2TDkhaz9KfX9kCOnU=w124
+	</string>
+	<string name="facebookconnect_messagesent">Mensagem enviada!</string>
+	<string name="facebookconnect_messagefail">Não foi possível enviar a mensagem</string>
+
+	<string name="guideactivity_title">Guia</string>
+
+	<string name="movetomoveactivity_title">Lance a Lance</string>
+	<string name="movetomoveactivity_erroropening">Um erro ocorreu.\nNão foi possível abrir o lance a
+		lance para esta partida.</string>
+	<string name="movetomoveactivity_holdtoshare">Segure para compartilhar…</string>
+	<string name="movetomoveactivity_follow">Acompanhar</string>
+	<string name="movetomoveactivity_dontfollow">Não acompanhar</string>
+	<string name="movetomoveactivity_squad">Escalação</string>
+	<string name="movetomoveactivity_nolongerfollowing">Você não está mais acompanhando a partida.</string>
+	<string name="movetomoveactivity_watchvideo">Ver vídeo</string>
+	<string name="movetomoveactivity_videos">Vídeos</string>
+	<string name="movetomoveactivity_novideostoshow">Não há vídeos para exibição no momento.</string>
+	<string name="movetomoveactivity_matchwithnomoves">Ainda não há lances para esta partida.</string>
+<string name="movetomoveactivity_matchwithnovideos">Ainda não há vídeos para esta partida.</string>
+	
+	<string name="movetomovevideocentralactivity_title">Vídeos</string>
+	<string name="movetomovevideocentralactivity_parsingvideo">Buscando vídeo…</string>
+	<string name="movetomovevideocentralactivity_novideoscouldbeparsed">O vídeo não pode ser listado. Tente mais tarde.</string>
+
+	<string name="myteamactivity_title">Meu Time</string>
+	<string name="myteamactivity_strikers">Artilheiros</string>
+	<string name="myteamactivity_rivalries">Clássicos</string>
+	<string name="myteamactivity_norivalriestoshow">Não há clássicos marcados para este clube</string>
+	<string name="myteamactivity_players">Jogadores</string>
+	<string name="myteamactivity_matches">Partidas</string>
+	<string name="myteamactivity_matches_all">Todas</string>
+	<string name="myteamactivity_trophies">Troféus</string>
+	<string name="myteamactivity_more">Mais</string>
+	<string name="myteamactivity_changeteam">Trocar Time</string>
+	<string name="myteamactivity_pointsandposition" formatted="false">%d
+		pontos - %d° lugar</string>
+
+	<string name="newsdetailsactivity_reading">Lendo…</string>
+	<string name="readnewsfromdomain_errorreading">Não foi possível ler a notícia</string>
+
+	<string name="newsviewflowactivity_title">Notícias</string>
+	<string name="newsviewflowactivity_errorreading">Um erro ocorreu ao ler as notícias deste time.
+	</string>
+
+	<string name="partnersactivity_title">Parceiros</string>
+
+	<string name="clubselectoractivity_title">Time do coração</string>
+	
+	<string name="rankingactivity_title">Classificação</string>
+	<string name="rankingactivity_footer_libertadores">Libertadores</string>
+	<string name="rankingactivity_footer_access">Acesso</string>
+	<string name="rankingactivity_footer_sulamericana">Sul-Americana</string>
+	<string name="rankingactivity_footer_punishment">Rebaixamento</string>
+	<string name="rankingactivity_points">P</string>
+	<string name="rankingactivity_games">J</string>
+	<string name="rankingactivity_win">V</string>
+	<string name="rankingactivity_draw">E</string>
+	<string name="rankingactivity_lose">D</string>
+	<string name="rankingactivity_goalspro">GP</string>
+	<string name="rankingactivity_goalsagainst">GC</string>
+	<string name="rankingactivity_balance">SG</string>
+
+	<string name="realtimematchesactivity_title">Tempo Real</string>
+	<string name="realtimematchesactivity_nomatchestoshow">Não há nenhum jogo a ser exibido no momento.
+	</string>
+
+	<string name="realtimematchservice_notification_goal">GOOOOLLL</string>
+	<string name="realtimematchservice_notification_following">Acompanhando</string>
+	<string name="realtimematchservice_notification_matchstarted">Jogo iniciado</string>
+	<string name="realtimematchservice_notification_matchended">Fim de jogo</string>
+	<string name="realtimematchservice_error">Ocorreu um problema no acompanhamento da partida,
+		tente novamente</string>
+
+	<string name="settingsactivity_title">Configurações</string>
+
+	<string name="stadiumsactivity_stadiumnotfound">Não foi possível encontrar o estádio</string>
+	<string name="stadiumsactivity_title">Estádios</string>
+	<string name="stadiumsactivity_name">Nome</string>
+	<string name="stadiumsactivity_nick">Apelido</string>
+	<string name="stadiumsactivity_city">Cidade</string>
+	<string name="stadiumsactivity_capacity">Capacidade</string>
+	<string name="stadiumsactivity_measures">Medidas</string>
+	<string name="stadiumsactivity_foundation">Inaugurado em</string>
+
+	<string name="strikerslistactivity_title">Artilharia</string>
+	<string name="strikerslistactivity_goals">Gols</string>
+	<string name="strikerslistactivity_player">Jogador</string>
+	<string name="strikerslistactivity_team">Equipe</string>
+	<string name="strikerslistactivity_emptydataset">Não há artilheiros a serem exibidos. Que tal atualizar a lista?</string>
+
+	<string name="tableflowactivity_title">Tabela</string>
+	<string name="tableflowactivity_selectfixture">Selecione a rodada</string>
+	<string name="tableflowactivity_ok">OK</string>
+	<string name="tableflowactivity_cancel">Cancelar</string>
+
+	<string name="thirddivisionactivity_title">Terceira Divisão</string>
+	<string name="thirddivisionactivity_footer_classified">Classificados</string>
+	<string name="thirddivisionactivity_footer_punishment">Rebaixamento</string>
+
+	<string name="torcidometeractivity_title">Torcidômetro</string>
+	<string name="torcidometeractivity_share">Compartilhar</string>
+	<string name="torcidometeractivity_sharemessage" formatted="false">O %s
+		está em %d° lugar no torcidômetro do %s com %d torcedores!\n\nBaixe já
+		o aplicativo para android no Google Play e vamos aumentar a contagem!
+		http://bit.ly/IpBPUV</string>
+
+	<string name="trophiesactivity_generalupdateerror">Um erro ocorreu, faça uma atualização geral antes
+		de prosseguir.</string>
+	<string name="trophiesselectoractivity_title">Sala de Troféus</string>
+	<string name="trophiesselectoractivity_selectteam">Selecione a equipe</string>
+	<string name="trophiesselectoractivity_myteam">Meu time</string>
+	<string name="newsviewflowadapter_read">Ler</string>
+	<string name="newsviewflowadapter_openpage">Abrir página</string>
+	<string name="newsviewflowadapter_share">Compartilhar</string>
+	<string name="newsviewflowadapter_interneterrorreading">Conecte-se à internet para ler as notícias.
+	</string>
+	<string name="thirddivisionviewflowadapter_group">Grupo</string>
+	<string name="thirddivisionactivity_emptydataset">Não há dados para exibir.</string>
+	<string name="trophiesarrayadapter_time">vez</string>
+	<string name="trophiesarrayadapter_times">vezes</string>
+
+	<string name="model_club_points">pontos</string>
+	<string name="model_club_place">º lugar</string>
+
+	<string name="views_matchviewlayout_fixture">ª rodada</string>
+	<string name="matchviewlayout_rivalry">★ Clássico ★</string>
+	<string name="actionmode_addtocalendar">Adicionar ao calendário</string>
+	<string name="actionmode_stadium">Estádio</string>
+	<string name="actionmode_movetomove">Lance a lance</string>
+	<string name="views_matchviewlayout_unavailabletime">Horário indisponível</string>
+	<string name="views_matchviewlayout_unavailableplace">Local indisponível</string>
+	<string name="views_matchviewlayout_ordinalendingtoposition">º</string>
+	<string name="views_matchviewlayout_stadium">Estádio</string>
+	<string name="views_matchviewlayout_erroraddingcalendar">Um erro ocorreu!\nNão foi possível adicionar a
+		partida ao seu calendário</string>
+
+	<string name="views_partnerlayout_contact">Contato: juliozapps@gmail.com</string>
+
+	<string name="getrealtimesquadtask_fail">Não foi possível obter a escalação deste jogo.
+	</string>
+
+	<string name="sendmyteamtask_success">Seu time foi atualizado no torcidômetro!</string>
+	<string name="sendmyteamtask_fail">Não foi possível atualizar seu time no
+		torcidômetro, tente mais tarde.</string>
+
+	<string name="realtimematch_tostart">A iniciar</string>
+	<string name="realtimematch_inprogress">Em andamento</string>
+	<string name="realtimematch_ended">Finalizado</string>
+
+	<string name="share_send">Enviar</string>
+	<string name="share_cancel">Cancelar</string>
+	<string name="share_addmoretexthint">Adicione mais texto aqui</string>
+	
+	<string name="preferences_category_internet">Internet</string>
+	<string name="preferences_category_realtime">Tempo real</string>
+	<string name="preferences_category_updates">Atualizações</string>
+	<string name="preferences_title_updateatstart">Checar atualizações ao iniciar</string>
+	<string name="preferences_summary_updateatstart">Procura por atualizações do aplicativo no Google Play</string>
+	<string name="preferences_title_showinternetimages">Exibir imagens da internet</string>
+	<string name="preferences_summary_showinternetimages">Download de imagens consome banda de internet</string>
+	<string name="preferences_title_alwaysupdate">Atualizar sempre</string>
+	<string name="preferences_summary_alwaysupdate">Atualiza automaticamente todos os dados ao abrir cada tela</string>
+	<string name="preferences_title_vibrate">Vibrar</string>
+	<string name="preferences_summary_vibrate">Notificação somente para dispositivos com esta capacidade</string>
+	<string name="preferences_title_audio">Áudio</string>
+	<string name="preferences_title_updateinterval">Intervalo de atualização</string>
+	<string name="preferences_title_showclubsranking">Exibir colocação dos clubes</string>
+	<string name="preferences_title_lastglobalupdate">Última atualização geral</string>
+	<string name="preferences_summary_lastglobalupdate">Ainda não realizada</string>
+	
+	<string name="yes">Sim</string>
+	<string name="no">Não</string>
+	
+	<string name="ribbonmenuview_firstdivision">1ª Divisão</string>
+	<string name="ribbonmenuview_seconddivision">2ª Divisão</string>
+	<string name="ribbonmenuview_thirddivision">3ª Divisão</string>
+	<string name="message_errormovetomovefail">Não foi possível ler o lance a lance da partida.\nTente novamente mais tarde.</string>
+	<string name="message_updatedatatoshow">Atualize os dados para exibí-los.</string>
+	<string name="message_verifyconnection">Verifique a conexão à internet.</string>
+	<string name="message_errorupdatefail">Não foi possível atualizar os dados. Tente
+		novamente.</string>
+	<string name="message_errortryagain">Um erro ocorreu. Tente novamente.</string>
+	<string name="message_dataupdated">Dados atualizados</string>
+	<string name="app_name">Brasileirão</string>
+	<string name="maps_api_key">0DMBHxWLZMvAn0X4f1HnfPD6974-1Y4PSsgPR4A</string>
+	<string name="debug_maps_api_key">0DMBHxWLZMvBJgFzSKZ6fLJ23VoqAPp9HufbdpA</string>
+	<string name="guide_url">file:///android_asset/guide.html</string>
+	<string name="facebook_id">278893338872977</string>
+	<string name="share_home">Estou usando o Brasileirão como meu agregador de
+		informações sobre o Campeonato Brasileiro, e consigo encontrar
+		informações sobre as tabelas, notícias, dados sobre meu time, todos os
+		outros das séries A e B, e muito mais!\n\nProcure no Google Play por
+		"Brasileirão", ou clique neste link a partir de seu telefone android:
+		http://bit.ly/IpBPUV</string>
+	<string name="updating">Atualizando…</string>
+</resources>

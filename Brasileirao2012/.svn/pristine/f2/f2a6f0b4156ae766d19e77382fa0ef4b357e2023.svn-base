@@ -1,0 +1,347 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import org.taptwo.android.widget.ViewFlow;
+import org.taptwo.android.widget.ViewFlow.ViewSwitchListener;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.data.MatchesDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.view.MatchViewLayout;
+import br.com.zynger.brasileirao2012.view.TableViewFlowAdapter;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public abstract class TableActivity extends Activity {
+	
+	private MatchesDB matchesDB;
+	
+	@SuppressWarnings("unused")
+	private TextView actionbar_tt, rod_number, tv_div, tv_progressbar;
+	private ViewFlow viewFlow;
+	private ScrollView sv_ll_table;
+	private LinearLayout ll_table;
+	private RelativeLayout rl_loading;
+	
+	private ArrayAdapter<String> rod_adapter;
+	private Dialog rod_dialog;
+	private ListView rod_listview;
+	private ImageButton update;
+	private RotateAnimation rot;
+	
+	private static TreeMap<String, Club> clubs;
+	private static TreeMap<Integer, Fixture> matches;
+	
+	private boolean usingViewFlow;
+	
+	protected void loadViews() {
+		viewFlow = (ViewFlow) findViewById(R.table.viewflow);
+		rl_loading = (RelativeLayout) findViewById(R.table.rl_loading);
+		tv_progressbar = (TextView) findViewById(R.table.tv_progressbar);
+		
+		sv_ll_table = (ScrollView) findViewById(R.table.sv_linearlayout_table_lowperformance);
+		ll_table = (LinearLayout) sv_ll_table.findViewById(R.tablesupport.ll);
+		
+		if(isUsingViewFlow()){			
+			viewFlow.setOnViewSwitchListener(new ViewSwitchListener() {
+				@Override
+				public void onSwitched(View v, int position) {
+					setRodNumber(position+1);
+				}
+			});
+		}
+		
+		actionbar_tt = (TextView) findViewById(R.table.actionbar_tv);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		rod_number = (TextView) findViewById(R.table.tv_actionbar_number);
+		tv_div = (TextView) findViewById(R.table.tv_actionbar_div);
+		
+		rot = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rot.setInterpolator(new LinearInterpolator());
+		rot.setDuration(900L);
+		rot.setStartTime(200L);
+		
+		update = (ImageButton) findViewById(R.table.ib_update);
+		
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				v.startAnimation(rot);
+				if(ConnectionHelper.isConnected(v.getContext())){					
+					new UpdateTableTask(v.getContext(), getDivision()).execute();
+				}else{
+					Toast.makeText(v.getContext(), "Não foi possível atualizar. Verifique a conexão à internet.", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+		
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		if(isUsingViewFlow()) viewFlow.onConfigurationChanged(newConfig);
+	}
+	
+	protected void loadFixtureSelectorDialog(){
+		rod_adapter = new ArrayAdapter<String>(this, R.layout.textview_layout_tabledialog, new String[]{
+				"1ª Rodada", "2ª Rodada", "3ª Rodada", "4ª Rodada", "5ª Rodada", "6ª Rodada", "7ª Rodada", "8ª Rodada", "9ª Rodada", "10ª Rodada", "11ª Rodada", "12ª Rodada", 
+				"13ª Rodada",  "14ª Rodada",  "15ª Rodada",  "16ª Rodada",  "17ª Rodada",  "18ª Rodada",  "19ª Rodada",  "20ª Rodada",  "21ª Rodada",  "22ª Rodada",  "23ª Rodada",
+				"24ª Rodada",  "25ª Rodada",  "26ª Rodada",  "27ª Rodada",  "28ª Rodada",  "29ª Rodada",  "30ª Rodada",  "31ª Rodada",  "32ª Rodada",  "33ª Rodada",
+				"34ª Rodada",  "35ª Rodada",  "36ª Rodada",  "37ª Rodada",  "38ª Rodada" });
+		rod_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		rod_dialog = new Dialog(this);
+		rod_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		rod_listview = new ListView(this);
+		rod_listview.setCacheColorHint(0x00000000);
+		rod_listview.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		rod_listview.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				rod_dialog.dismiss();
+				setTable(Integer.valueOf(rod_listview.getItemAtPosition(position).toString().substring(0, rod_listview.getItemAtPosition(position).toString().indexOf("ª"))));
+			}
+		});
+		rod_listview.setAdapter(rod_adapter);
+		rod_dialog.setContentView(rod_listview);
+		rod_dialog.getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+	}
+	
+	protected void setTable(int rod) {
+		if(isUsingViewFlow()) viewFlow.setSelection(rod-1);
+		else{
+			ll_table.removeAllViews();
+            ArrayList<Match> al = getMatches().get(rod).getMatches();
+            
+            for (Match match : al) {
+            	ll_table.addView(new MatchViewLayout(this, match, false));
+            }
+            ll_table.invalidate();
+            rl_loading.setVisibility(View.GONE);
+            viewFlow.setVisibility(View.GONE);
+            sv_ll_table.setVisibility(View.VISIBLE);
+            
+            setRodNumber(rod);
+            loadFixtureSelectorDialog();
+            rod_number.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					rod_dialog.show();
+				}
+			});
+		}
+	}
+	
+	protected void setRodNumber(int num){
+		rod_number.setText(String.valueOf(num));
+	}
+	
+	protected int getRodNumber(){
+		return Integer.valueOf(rod_number.getText().toString());
+	}
+	
+	protected class ShowTableUsingViewFlowTask extends AsyncTask<Void, Void, TableViewFlowAdapter> {
+		private Context c;
+		private TreeMap<Integer, Fixture> matches;
+		
+		public ShowTableUsingViewFlowTask(Context c, TreeMap<Integer, Fixture> matches){
+			this.setContext(c);
+			this.matches = matches;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			viewFlow.setVisibility(View.GONE);
+			tv_progressbar.setText("Gerando tabela...");
+			findViewById(R.table.pb_progressbar).setVisibility(View.VISIBLE);
+			rl_loading.setVisibility(View.VISIBLE);
+			loadFixtureSelectorDialog();
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected TableViewFlowAdapter doInBackground(Void... params) {
+			try{
+				TableViewFlowAdapter tvfa = new TableViewFlowAdapter(getContext(), this.matches);
+				System.gc();
+				return tvfa;
+			}catch(OutOfMemoryError e){
+				e.printStackTrace();
+				return null;
+			}catch(Exception e){
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(TableViewFlowAdapter result) {
+			if(result != null){
+				try{					
+					viewFlow.setAdapter(result);
+					setTable(getRodBasedOnCalendar());
+					rod_number.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							rod_dialog.show();
+						}
+					});
+					viewFlow.setVisibility(View.VISIBLE);
+					rl_loading.setVisibility(View.GONE);
+				}catch(OutOfMemoryError e){
+					findViewById(R.table.pb_progressbar).setVisibility(View.GONE);
+					tv_progressbar.setText("Um erro ocorreu. Tente novamente.");
+				}catch(IndexOutOfBoundsException e){
+					findViewById(R.table.pb_progressbar).setVisibility(View.GONE);
+					tv_progressbar.setText("Um erro ocorreu. Tente novamente.");
+				}
+			}else{
+				findViewById(R.table.pb_progressbar).setVisibility(View.GONE);
+				tv_progressbar.setText("Um erro ocorreu. Tente novamente.");
+			}
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+	
+	protected int getRodBasedOnCalendar(){
+		return 1;
+	}
+	
+	protected abstract Division getDivision();
+	
+	public void setMatches(TreeMap<Integer, Fixture> matches){}
+	
+	public TreeMap<Integer, Fixture> getMatches() {
+		return matches;
+	}
+	
+	public void setClubs(TreeMap<String, Club> clubs){}
+	
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	public class UpdateTableTask extends AsyncTask<Void, Void, TreeMap<Integer, Fixture>> {
+		private Context c;
+		private Division division;
+		
+		public UpdateTableTask(Context c, Division division){
+			setContext(c);
+			setDivision(division);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			matchesDB = MatchesDB.getInstance(getContext(), getClubs());
+			
+			viewFlow.setVisibility(View.GONE);
+			sv_ll_table.setVisibility(View.GONE);
+			tv_progressbar.setText("Atualizando tabela...");
+			findViewById(R.table.pb_progressbar).setVisibility(View.VISIBLE);
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected TreeMap<Integer, Fixture> doInBackground(Void... arg0) {
+			try{
+				return HTMLManager.getTableData(getContext(), matchesDB, getClubs(), getDivision());
+			}catch(Exception e){
+				Log.e("brasileirao2012", "ASYNCTASK EXCEPTION = "+e.toString());
+				e.printStackTrace();
+				return null;
+			}catch(OutOfMemoryError e){
+				Log.e("brasileirao2012", "ASYNCTASK EXCEPTION = "+e.toString());
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(TreeMap<Integer, Fixture> result) {
+			if(result != null){
+				setMatches(result);
+				
+				FileHandler.saveBackup(getContext(), FileHandler.MATCHES, getMatches(), getDivision());
+				FileHandler.saveBackup(getContext(), FileHandler.VERSION_MATCHES, HomeActivity.getAppVersion(getContext()), getDivision());
+				Toast.makeText(getContext(), "Dados atualizados", Toast.LENGTH_SHORT).show();
+			}else{
+				Toast.makeText(getContext(), "Não foi possível atualizar os dados. Tente novamente.", Toast.LENGTH_SHORT).show();
+			}
+			rl_loading.setVisibility(View.GONE);
+			if(isUsingViewFlow()){
+				viewFlow.setVisibility(View.VISIBLE);
+				sv_ll_table.setVisibility(View.GONE);
+				new ShowTableUsingViewFlowTask(getContext(), getMatches()).execute();
+			}else{
+				sv_ll_table.setVisibility(View.VISIBLE);
+				viewFlow.setVisibility(View.GONE);
+				setTable(getRodBasedOnCalendar());
+			}
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+
+		public Division getDivision() {
+			return division;
+		}
+
+		public void setDivision(Division division) {
+			this.division = division;
+		}
+	}
+	
+	public boolean isUsingViewFlow() {
+		return usingViewFlow;
+	}
+
+	public void setUsingViewFlow(boolean usingViewFlow) {
+		this.usingViewFlow = usingViewFlow;
+	}
+}

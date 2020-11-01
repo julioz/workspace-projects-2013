@@ -1,0 +1,81 @@
+package br.com.zynger.brasileirao2012.util;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
+
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo.State;
+import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
+import android.util.Log;
+
+public class ConnectionHelper {
+	private static final String WEBSITE_TO_PING = "http://www.amazon.com";
+
+    private static boolean testConnectionByHardware(Context c){
+		try{
+			ConnectivityManager conMan = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+			
+			State mobile = conMan.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+			State wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();			
+
+			if (mobile == State.CONNECTED || mobile == State.CONNECTING) {
+				return true;
+			} else if (wifi == State.CONNECTED || wifi == State.CONNECTING) {
+				return true;
+			}else{
+				return false;
+			}
+		}catch(NullPointerException e){
+			return false;
+		}
+	}
+	
+	public static boolean isConnected(Context c){
+		Boolean byHardwarePossibility = (Boolean) FileHandler.openBackup(c, FileHandler.TESTCONNECTIONVIAHARDWARE);
+		if(byHardwarePossibility != null && byHardwarePossibility.booleanValue() == true) return testConnectionByHardware(c);
+		
+		if (!testConnectionByHardware(c)) {
+	        try {
+				return new CheckConnectionByPingTask().execute().get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				return false;
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+				return false;
+			}
+	    } else {
+	    	FileHandler.saveBackup(c, FileHandler.TESTCONNECTIONVIAHARDWARE, new Boolean(true));
+	        return true;
+	    }
+	}
+	
+	@SuppressWarnings("unused")
+	private void setWifiEnabled(Context context, boolean state){
+		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		wifiManager.setWifiEnabled(state);
+	}
+	
+	private static class CheckConnectionByPingTask extends AsyncTask<Void, Void, Boolean> {		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			try {
+	            HttpURLConnection urlc = (HttpURLConnection) (new URL(WEBSITE_TO_PING).openConnection());
+	            urlc.setRequestProperty("User-Agent", "Test");
+	            urlc.setRequestProperty("Connection", "close");
+	            urlc.setConnectTimeout(500);
+	            Log.e("bras2012", "tentarei conectar");
+	            
+	            urlc.connect();
+	            return (urlc.getResponseCode() == 200);
+	        } catch (IOException e) {
+	            Log.e("bras2012", "isConnected: IOException");
+	            return false;
+	        }
+		}
+	}
+}

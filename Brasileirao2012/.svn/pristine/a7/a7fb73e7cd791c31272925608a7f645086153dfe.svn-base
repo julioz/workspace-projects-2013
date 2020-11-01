@@ -1,0 +1,30 @@
+package br.com.zynger.brasileirao2012.util;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+public abstract class ImageManager {
+	
+	public static Bitmap loadFromUrl(String url){
+		try{
+		    URL ulrn = new URL(url);
+		    HttpURLConnection con = (HttpURLConnection) ulrn.openConnection();
+		    InputStream is = con.getInputStream();
+		    BitmapFactory.Options options = new BitmapFactory.Options();
+		    options.inDither = false;                     //Disable Dithering mode
+		    options.inPurgeable = true;                   //Tell to gc that whether it needs free memory, the Bitmap can be cleared
+		    options.inSampleSize = 2;
+		    Bitmap bmp = BitmapFactory.decodeStream(is, null, options);
+		    if(con != null) con.disconnect();
+		    return bmp;
+		}catch(Exception e){
+			return null;
+		}catch(OutOfMemoryError e){
+			return null;
+		}
+	}
+}

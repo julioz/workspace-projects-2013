@@ -1,0 +1,95 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.TreeMap;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ListView;
+import br.com.zynger.brasileirao2012.adapters.TorcidometerArrayAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.UpdateFansTask;
+import br.com.zynger.brasileirao2012.base.UpdateableActivity;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+
+public class TorcidometerActivity extends UpdateableActivity<TreeMap<String, Club>> {
+
+	private ListView lvContent;
+	private View viewBase;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView();
+
+		if(ClubsDB.getInstance(this).hasClubWithFans()){			
+			setListAdapter();
+		}else{
+			setClickToUpdateMessage(getString(R.string.message_updatedatatoshow));
+		}
+	}
+
+	private void setContentView() {
+		View layout = LayoutInflater.from(this).inflate(
+				R.layout.torcidometeractivity, null);
+		setContentView(layout);
+		loadViews(layout);
+		setDataUpdateLayout(layout);
+		setPullToRefresh(layout);
+	}
+
+	private void loadViews(View activityView) {
+		lvContent = (ListView) activityView.findViewById(R.torcidometeractivity.lv_content);
+		viewBase = activityView.findViewById(R.torcidometeractivity.dummy_ll_bar);
+	}
+
+	private void setListAdapter() {
+		lvContent.setAdapter(new TorcidometerArrayAdapter(this, viewBase));
+	}
+
+	@Override
+	public View[] getDataUpdateViewsToToggle(View activityView) {
+		return new View[] { lvContent };
+	}
+
+	@Override
+	public Integer getDataUpdateLayoutId() {
+		return R.torcidometeractivity.dul_loading;
+	}
+
+	@Override
+	public AsyncTask<Void, Void, TreeMap<String, Club>> getAsyncTask() {
+		return new UpdateFansTask(this);
+	}
+
+	@Override
+	public boolean onAsyncSuccess(TreeMap<String, Club> result) {
+		String json = JsonUtil.createFansJson(result).toString();
+		FileHandler.saveBackup(this, FileHandler.JSON_FANS, json);
+		setListAdapter();
+		return true;
+	}
+
+	@Override
+	public void onAsyncFail(String message) {
+		setErrorMessage(message);
+	}
+
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_torcidometer;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.torcidometeractivity_title;
+	}
+
+	@Override
+	public Integer getPullToRefreshViewId() {
+		return R.torcidometeractivity.lv_content;
+	}
+}

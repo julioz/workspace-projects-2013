@@ -1,0 +1,623 @@
+package br.com.zynger.brasileirao2012;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import org.taptwo.android.widget.CircleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.MatchesDB;
+import br.com.zynger.brasileirao2012.data.StrikersDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class HomeActivity extends Activity {
+	
+	public final static String TAG = "bras2012";
+
+	private static final int UPDATE_NOTIFICATION = 1;
+	
+	private ClubsDB clubsDB;
+	private MatchesDB matchesDB;
+	private StrikersDB strikersDB;
+	
+	private String appversion;
+	private SharedPreferences prefs;
+	
+	private Club myClub;
+	
+	private ViewFlow viewFlow;
+	
+	private TextView tv_progressbar;
+	private ImageButton ranking, table, strikers, news, team, trophies, aprov, realtime;
+	private ImageButton stadium, torcidometer, myTeam, settings, updateAll, inFLU;
+	private ImageButton partners, rate, share, guide, fanpage, about;
+	
+	private TreeMap<String, Club> clubs;
+	
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.homeactivity);
+        
+        clubsDB = ClubsDB.getInstance(this);
+        matchesDB = MatchesDB.getInstance(this, clubsDB.getClubs());
+        strikersDB = StrikersDB.getInstance();
+        
+        this.clubs = clubsDB.getClubs();
+        
+        loadViews();
+        setClickListeners();
+        
+        appversion = getAppVersion(this);
+		String bd_version = FileHandler.openClubsDatabaseVersion(this);
+		if(!appversion.equals(bd_version)) FileHandler.saveClubsDatabaseVersion(this, appversion);
+        
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        
+        if(prefs.getBoolean("cb_updatecheck", true)){
+        	new UpdateAppTask(this, appversion).execute();
+        }
+        
+        myTeam.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), MyClubSelectorActivity.class);
+				it.putExtra(MyClubSelectorActivity.INTENT_CHOOSING_MYCLUB, true);
+				startActivity(it);
+			}
+		});
+        
+        // Propaganda ao abrir o app
+        /*new IconedAlertDialog(this, R.drawable.ic_libertadores_logo, "Libertadores",
+        		"Enquanto o Brasileirão 2013 não começa, que tal acompanhar todos os detalhes da Copa Libertadores" +
+        		" na palma da sua mão?\nSeja para torcer pelo seu time, ou secar o rival, o app da Libertadores" +
+        		" é perfeito para você que ama futebol!",
+        		"https://play.google.com/store/apps/details?id=br.com.zynger.libertadores").show();*/
+    }
+    
+    protected void onResume() {
+    	myClub = clubsDB.getMyClub();
+		if(myClub == null){
+			Intent it = new Intent(this, MyClubSelectorActivity.class);
+			it.putExtra(MyClubSelectorActivity.INTENT_CHOOSING_MYCLUB, true);
+    		startActivity(it);
+    	}else{
+    		myTeam.setImageResource(myClub.getBadgeResource(this));
+    		if(myClub.getAcronym().equals("FLU")){
+    			inFLU.setVisibility(View.VISIBLE);
+    			inFLU.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						startActivity(new Intent(v.getContext(), InfluActivity.class));
+					}
+				});
+    		}else{
+    			inFLU.setVisibility(View.GONE);
+    			inFLU.setOnClickListener(null);
+    		}
+    	}
+    	super.onResume();
+    }
+
+	private void loadViews() {
+		viewFlow = (ViewFlow) findViewById(R.homeactivity.viewflow);
+		viewFlow.setAdapter(new HomeViewFlowAdapter(this));
+		CircleFlowIndicator indic = (CircleFlowIndicator) findViewById(R.homeactivity.viewflowindic);
+		viewFlow.setFlowIndicator(indic);
+		
+		ranking = (ImageButton) findViewById(R.home.ibRanking);
+		table = (ImageButton) findViewById(R.home.ibTable);
+		strikers = (ImageButton) findViewById(R.home.ibStrikers);
+		news = (ImageButton) findViewById(R.home.ibNews);
+		team = (ImageButton) findViewById(R.home.ibTeamGames);
+		trophies = (ImageButton) findViewById(R.home.ibTrophies);
+		aprov = (ImageButton) findViewById(R.home.ibAprov);
+		realtime = (ImageButton) findViewById(R.home.ibRealTime);
+		stadium = (ImageButton) findViewById(R.home.ibStadiums);
+		torcidometer = (ImageButton) findViewById(R.home.ibTorcid);
+		
+		myTeam = (ImageButton) findViewById(R.homeactivity.launcher_actionbar_ib_myteam);
+		updateAll = (ImageButton) findViewById(R.homeactivity.iv_updateall);
+		inFLU = (ImageButton) findViewById(R.homeactivity.iv_influ_ad);
+		
+		partners = (ImageButton) findViewById(R.home.ibPartners);
+		share = (ImageButton) findViewById(R.home.ibShare);
+		rate = (ImageButton) findViewById(R.home.ibRate);
+		guide = (ImageButton) findViewById(R.home.ibGuide);
+		settings = (ImageButton) findViewById(R.home.ibSettings);
+		fanpage = (ImageButton) findViewById(R.home.ibFanpage);
+		about = (ImageButton) findViewById(R.home.ibAbout);
+		
+		tv_progressbar = (TextView) findViewById(R.homeactivity.tv_progressbar);
+	}
+	
+	private void setClickListeners(){
+		ranking.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it;
+				if(myClub != null){					
+					if(myClub.getDivision() == Division.SECONDDIVISION){
+						it = new Intent(v.getContext(), RankingDivision2Activity.class);
+					}else it = new Intent(v.getContext(), RankingDivision1Activity.class);
+				}else{
+					it = new Intent(v.getContext(), RankingDivision1Activity.class);
+				}
+				v.getContext().startActivity(it);
+			}
+		});
+        table.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = null;
+				if(myClub.getDivision() == Division.SECONDDIVISION) it = new Intent(v.getContext(), TableDivision2Activity.class);
+				else it = new Intent(v.getContext(), TableDivision1Activity.class);
+				
+				startActivity(it);
+			}
+		});
+        strikers.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(strikersDB.getStrikersA() == null || strikersDB.getStrikersB() == null){					
+					new GetStrikersTask(v.getContext()).execute();
+				}else{
+					Intent it;
+					if(myClub.getDivision() == Division.SECONDDIVISION){
+						it = new Intent(v.getContext(), StrikersDivision2Activity.class);
+					}else it = new Intent(v.getContext(), StrikersDivision1Activity.class);
+
+					it.putExtra("CHAMPIONSHIP", 1);
+					startActivity(it);
+				}
+			}
+		});
+        news.setOnClickListener(getStartActivityListener(NewsTabActivity.class));
+        team.setOnClickListener(getStartActivityListener(MyTeamActivity.class));
+        trophies.setOnClickListener(getStartActivityListener(TrophiesSelectorActivity.class));
+        aprov.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), AprovActivity.class);
+				it.putExtra(AprovActivity.INTENT_DIVISION, myClub.getDivision());
+				startActivity(it);
+			}
+		});
+        realtime.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), RealTimeMatchesActivity.class);
+				it.putExtra(RealTimeMatchesActivity.INTENT_DIVISION, myClub.getDivision());
+				startActivity(it);
+			}
+		});
+        stadium.setOnClickListener(getStartActivityListener(StadiumsMapActivity.class));
+        torcidometer.setOnClickListener(getStartActivityListener(TorcidometerActivity.class));
+        
+        partners.setOnClickListener(getStartActivityListener(PartnersActivity.class));
+        rate.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=br.com.zynger.brasileirao2012"));
+				startActivity(intent);
+			}
+		});
+        share.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String message = getResources().getString(R.string.share_home);
+        		new ShareHelper((Activity) v.getContext(), message).share();
+			}
+		});
+        guide.setOnClickListener(getStartActivityListener(GuideActivity.class));
+        settings.setOnClickListener(getStartActivityListener(SettingsActivity.class));
+        fanpage.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("http://www.facebook.com/brasileiraoapp"));
+				startActivity(intent);
+			}
+		});
+        about.setOnClickListener(getStartActivityListener(AboutActivity.class));       
+        
+        updateAll.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(ConnectionHelper.isConnected(v.getContext())) showUpdateAllMenu();
+				else Toast.makeText(v.getContext(), "Verifique a conexão à internet.", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	
+	private void showUpdateAllMenu(){
+		findViewById(R.homeactivity.fl_viewflow).setVisibility(View.GONE);
+		findViewById(R.homeactivity.rl_updateall).setVisibility(View.VISIBLE);
+		updateAll.setVisibility(View.GONE);
+		
+		Button yes = (Button) findViewById(R.homeactivity.bt_updateall_yes);
+		Button no = (Button) findViewById(R.homeactivity.bt_updateall_no);
+		
+		yes.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				findViewById(R.homeactivity.rl_updateall).setVisibility(View.GONE);
+				findViewById(R.homeactivity.fl_viewflow).setVisibility(View.VISIBLE);
+				new UpdateAllTask(HomeActivity.this).execute();
+			}
+		});
+		
+		no.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				findViewById(R.homeactivity.rl_updateall).setVisibility(View.GONE);
+				findViewById(R.homeactivity.fl_viewflow).setVisibility(View.VISIBLE);
+				updateAll.setVisibility(View.VISIBLE);
+			}
+		});
+	}
+	
+	private View.OnClickListener getStartActivityListener(final Class<?> clazz){
+    	View.OnClickListener ocl = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent it = new Intent(view.getContext(), clazz);
+				view.getContext().startActivity(it);
+			}
+		};
+		
+		return ocl;
+    }
+	
+	public static String getAppVersion(Context c){
+		PackageManager manager = c.getPackageManager();
+		try {
+			PackageInfo info = manager.getPackageInfo(c.getPackageName(), 0);
+			//String packageName = info.packageName;
+			//return info.versionCode;
+			return info.versionName;
+			//Log.d("SiTE", "Package Name: " + packageName);
+			//Log.d("SiTE", "Version Code: " + this.versionCode);
+			//Log.d("SiTE", "Version Name: " + this.versionName);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	private class GetStrikersTask extends AsyncTask<Void, Void, Boolean> {
+		private Context c;
+		
+		public GetStrikersTask(Context c){
+			this.c = c;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			findViewById(R.homeactivity.rl_loading).setVisibility(View.VISIBLE);
+			findViewById(R.homeactivity.fl_viewflow).setVisibility(View.GONE);
+			updateAll.setVisibility(View.GONE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			ArrayList<Striker> al_a = HTMLManager.getStrikers(clubsDB.getClubs(), Division.FIRSTDIVISION);
+			ArrayList<Striker> al_b = HTMLManager.getStrikers(clubsDB.getClubs(), Division.SECONDDIVISION);
+			
+			strikersDB.setStrikersA(al_a);
+			strikersDB.setStrikersB(al_b);
+
+			if(al_a != null && al_b != null){
+				TreeMap<Division, ArrayList<Striker>> tmStrikers = new TreeMap<Division, ArrayList<Striker>>();
+				tmStrikers.put(Division.FIRSTDIVISION, al_a);
+				tmStrikers.put(Division.SECONDDIVISION, al_b);
+				FileHandler.saveBackup(c, FileHandler.JSON_STRIKERS, JsonUtil.createStrikersJson(tmStrikers).toString());
+				return true;
+			}else return false;
+		}
+
+		protected void onPostExecute(Boolean success) {
+			findViewById(R.homeactivity.fl_viewflow).setVisibility(View.VISIBLE);
+			updateAll.setVisibility(View.VISIBLE);
+			findViewById(R.homeactivity.rl_loading).setVisibility(View.GONE);
+
+			if(success){
+				Intent it;
+				if(myClub.getDivision() == Division.SECONDDIVISION) it = new Intent(c, StrikersDivision2Activity.class);
+				else it = new Intent(c, StrikersDivision1Activity.class);
+
+				it.putExtra("CHAMPIONSHIP", 1);
+				startActivity(it);
+			}else{
+				Toast.makeText(c, "Não foi possível atualizar os dados. Verifique sua conexão.", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+	
+	private class UpdateAllTask extends AsyncTask<Void, Integer, Boolean> {
+		private final int UPDATE_RANKING = 1;
+		private final int UPDATE_TABLE = 2;
+		private final int UPDATE_STRIKERS = 3;
+		private final int UPDATE_APROV = 4;
+		private final int UPDATE_OTHERS = 5;
+		
+		private Context c;
+		
+		public UpdateAllTask(Context c){
+			setContext(c);
+		}
+		
+		public Context getContext() {
+			return c;
+		}
+		
+		public void setContext(Context c) {
+			this.c = c;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			findViewById(R.homeactivity.rl_loading).setVisibility(View.VISIBLE);
+			findViewById(R.homeactivity.fl_viewflow).setVisibility(View.GONE);
+			updateAll.setVisibility(View.GONE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			if(ConnectionHelper.isConnected(getContext())){
+				try{
+					publishProgress(UPDATE_RANKING);
+					TreeMap<String, Club> ranking1 = HTMLManager.getRanking(clubs, Division.FIRSTDIVISION);
+					FileHandler.saveBackup(getContext(), FileHandler.JSON_RANKING,
+							JsonUtil.createRankingJson(ranking1).toString());
+					Log.d(HomeActivity.TAG, "Ranking A atualizado");
+					
+					TreeMap<String, Club> ranking2 = HTMLManager.getRanking(clubs, Division.SECONDDIVISION);
+					FileHandler.saveBackup(getContext(), FileHandler.JSON_RANKING,
+							JsonUtil.createRankingJson(ranking2).toString());
+					Log.d(HomeActivity.TAG, "Ranking B atualizado");
+					
+					publishProgress(UPDATE_TABLE);
+					TreeMap<Integer, Fixture> matches_a = HTMLManager.getTableData(getContext(), matchesDB,
+							clubs, Division.FIRSTDIVISION);
+					FileHandler.saveBackup(getContext(), FileHandler.MATCHES, matches_a, Division.FIRSTDIVISION);
+					FileHandler.saveBackup(getContext(), FileHandler.VERSION_MATCHES,
+							HomeActivity.getAppVersion(getContext()), Division.FIRSTDIVISION);
+					Log.d(HomeActivity.TAG, "Matches A atualizado");
+					
+					TreeMap<Integer, Fixture> matches_b = HTMLManager.getTableData(getContext(),
+							matchesDB, clubs, Division.SECONDDIVISION);
+					FileHandler.saveBackup(getContext(), FileHandler.MATCHES, matches_b, Division.SECONDDIVISION);
+					FileHandler.saveBackup(getContext(), FileHandler.VERSION_MATCHES,
+							HomeActivity.getAppVersion(getContext()), Division.SECONDDIVISION);
+					Log.d(HomeActivity.TAG, "Matches B atualizado");
+					
+					publishProgress(UPDATE_STRIKERS);
+					TreeMap<Division, ArrayList<Striker>> tmStrikers = new TreeMap<Division, ArrayList<Striker>>();
+					tmStrikers.put(Division.FIRSTDIVISION, HTMLManager.getStrikers(clubs, Division.FIRSTDIVISION));
+					tmStrikers.put(Division.SECONDDIVISION, HTMLManager.getStrikers(clubs, Division.SECONDDIVISION));
+					FileHandler.saveBackup(getContext(), FileHandler.JSON_STRIKERS, JsonUtil.createStrikersJson(tmStrikers));
+					Log.d(HomeActivity.TAG, "Strikers atualizado");
+					
+					publishProgress(UPDATE_APROV);
+					TreeMap<String, AprovData> tmAprov = HTMLManager.getAprov(clubs, matchesDB);
+					for (Iterator<String> it = tmAprov.keySet().iterator(); it.hasNext();) {
+						String clubAcr = (String) it.next();
+						clubs.get(clubAcr).setAprov(tmAprov.get(clubAcr));
+					}
+					FileHandler.saveBackup(getContext(), FileHandler.JSON_APROV, JsonUtil.createAprovJson(tmAprov).toString());
+					Log.d(HomeActivity.TAG, "Aproveitamento atualizado");
+					
+					publishProgress(UPDATE_OTHERS);
+					FileHandler.saveBackup(getContext(), FileHandler.JSON_FANS,
+							JsonUtil.createFansJson(HTMLManager.updateFansData(getContext(),
+									clubs, myClub.getAcronym())).toString());
+					Log.d(HomeActivity.TAG, "Torcidômetro atualizado");
+					return true;
+				}catch(Exception e){
+					e.printStackTrace();
+					return false;
+				}catch(OutOfMemoryError e){
+					return false;
+				}
+			}else return false;
+		}
+		
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			switch (values[0]) {
+			case UPDATE_RANKING:
+				tv_progressbar.setText("Atualizando classificações...");
+				break;
+			case UPDATE_TABLE:
+				tv_progressbar.setText("Atualizando tabelas...");
+				break;
+			case UPDATE_STRIKERS:
+				tv_progressbar.setText("Atualizando artilharias...");
+				break;
+			case UPDATE_APROV:
+				tv_progressbar.setText("Atualizando aproveitamento...");
+				break;
+			case UPDATE_OTHERS:
+				tv_progressbar.setText("Completando atualização...");
+				break;
+			default:
+				tv_progressbar.setText("Atualizando...");
+				break;
+			}
+			super.onProgressUpdate(values);
+		}
+		
+		protected void onPostExecute(Boolean result) {
+			findViewById(R.homeactivity.fl_viewflow).setVisibility(View.VISIBLE);
+			updateAll.setVisibility(View.VISIBLE);
+			findViewById(R.homeactivity.rl_loading).setVisibility(View.GONE);
+
+			if(result){
+				FileHandler.saveBackup(getContext(), FileHandler.LASTDATE_UPDATEALL, Calendar.getInstance());
+				Toast.makeText(getContext(), "Dados atualizados", Toast.LENGTH_SHORT).show();
+			}
+			else Toast.makeText(getContext(), "Não foi possível atualizar os dados", Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private class UpdateAppTask extends AsyncTask<Void, Void, Boolean> {
+		private Context c;
+		private String appVersion, marketVersion;
+		
+		public UpdateAppTask(Context c, String appVersion){
+			this.setContext(c);
+			this.setAppVersion(appVersion);
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			if(ConnectionHelper.isConnected(getContext())){
+        		try {
+        			String market = HTMLManager.getVersionAtMarket();
+        			String thisVers = this.getAppVersion();
+        			if(!market.equals(thisVers)){
+        				setMarketVersion(market);
+        				return true;
+        			}
+        			else return false;
+        		} catch (IOException e) {
+        			return false;
+        		} catch (NullPointerException e) {
+        			return false;
+        		} catch (NumberFormatException e) {
+        			return false;
+        		} catch (IndexOutOfBoundsException e) {
+        			return false;
+        		} catch (ExceptionInInitializerError e) {
+        			return false;
+        		} catch (NoSuchFieldError e) {
+        			return false;
+        		}
+        	}else return false;
+		}
+		
+		private void setMarketVersion(String market) {
+			this.marketVersion = market;
+		}
+		
+		private String getMarketVersion() {
+			return this.marketVersion;
+		}
+		
+		private void setAppVersion(String appv) {
+			this.appVersion = appv;
+		}
+		
+		private String getAppVersion() {
+			return this.appVersion;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if(result == true){
+				NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				
+				Notification newVersionAvailable = new Notification();
+				newVersionAvailable.icon = android.R.drawable.stat_notify_sync;
+				newVersionAvailable.tickerText = "Versão " + getMarketVersion() + " disponível";
+				newVersionAvailable.when = System.currentTimeMillis();
+				newVersionAvailable.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+				
+				Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
+				notificationIntent.setData(Uri.parse("market://details?id=br.com.zynger.brasileirao2012"));
+				
+				PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent, 0);
+				newVersionAvailable.setLatestEventInfo(getContext(), "Atualização - Brasileirão", newVersionAvailable.tickerText, contentIntent);
+				notificationManager.notify(UPDATE_NOTIFICATION, newVersionAvailable);
+			}
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+
+	public class HomeViewFlowAdapter extends BaseAdapter {
+		private LayoutInflater mInflater;
+		private ArrayList<View> cache;
+		private final int[] ids = { R.layout.home_dashboard, R.layout.home_dashboard2 };
+
+		public HomeViewFlowAdapter(Context context) {
+			mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			cache = new ArrayList<View>();
+		}
+
+		@Override
+		public int getCount() {
+			return ids.length;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return ids[position];
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {			
+			try{			
+				View view = cache.get(position);
+				return view;
+			}catch(Exception e){
+				View view = mInflater.inflate((Integer) getItem(position), null);
+				cache.add(position, view);
+				return view;
+			}
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+	}
+}

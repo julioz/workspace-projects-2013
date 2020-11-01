@@ -1,0 +1,92 @@
+package br.com.zynger.libertadores.web;
+
+import java.io.IOException;
+import java.util.TreeMap;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import android.content.Context;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.util.WebDatabaseMapper;
+
+public class StandingsParser {
+	private final String STANDINGS_URL = "http://www.pasionlibertadores.com/df/libertadores/posiciones_pasion.html";
+	
+	private Context context;
+	private TreeMap<String, Club> clubs;
+	private WebDatabaseMapper webDatabaseMapper;
+	
+	public StandingsParser(Context context, TreeMap<String, Club> clubs) {
+		setContext(context);
+		setClubs(clubs);
+		this.webDatabaseMapper = new WebDatabaseMapper(getClubs(), WebDatabaseMapper.SOURCE_STANDINGS);
+	}
+	
+	public Boolean updateStandings() {
+		try{			
+			Document document = Jsoup.connect(STANDINGS_URL).get();
+			Elements groupsDivs = document.getElementsByClass("posiciones");			
+			
+			for (Element div : groupsDivs) {
+				Elements trClubs = div.getElementsByClass("Club");
+				int groupPosition = 1;
+				for (Element tr : trClubs) {
+					Elements tds = tr.getElementsByTag("td");
+					parseClub(tds, groupPosition);
+					groupPosition++;
+				}
+			}
+			
+			return true;
+		}catch(IOException e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	private void parseClub(Elements tds, int groupPosition) {
+		String name = tds.get(0).text().toString();
+		Integer pj = Integer.parseInt(tds.get(1).text().toString());
+		Integer pg = Integer.parseInt(tds.get(2).text().toString());
+		Integer pe = Integer.parseInt(tds.get(3).text().toString());
+		Integer pp = Integer.parseInt(tds.get(4).text().toString());
+		Integer gf = Integer.parseInt(tds.get(5).text().toString());
+		Integer gc = Integer.parseInt(tds.get(6).text().toString());
+		Integer bal = Integer.parseInt(tds.get(7).text().toString());
+		Integer pts = Integer.parseInt(tds.get(8).text().toString());
+		
+		//Log.e(HomeActivity.TAG, name + " -> " + "pj=" + pj +
+		//" pg=" + pg + " pe=" + pe + " pp=" + pp + " gf=" + gf +
+		//" gc=" + gc + " bal=" + bal + " pts=" + pts);
+		
+		Club club = webDatabaseMapper.getClubByName(name);
+		club.setPoints(pts);
+		club.setGroupPosition(groupPosition);
+		club.setGamesPlayed(pj);
+		club.setVictories(pg);
+		club.setDraws(pe);
+		club.setLosses(pp);
+		club.setGoalsPro(gf);
+		club.setGoalsAgainst(gc);
+		club.setBalance(bal);
+	}
+
+	public Context getContext() {
+		return context;
+	}
+	
+	public void setContext(Context context) {
+		this.context = context;
+	}
+	
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	public void setClubs(TreeMap<String, Club> clubs) {
+		this.clubs = clubs;
+	}
+}

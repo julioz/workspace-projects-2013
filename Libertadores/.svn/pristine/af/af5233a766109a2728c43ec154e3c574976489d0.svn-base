@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+home/home_root"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/gradient_titlebar">
+        
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/img_launcher_logo"
+            android:id="@+home/titlebar_ivlogo"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+        
+        <br.com.zynger.libertadores.view.HelveticaTextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:id="@+home/titlebar_tvtitle"
+	        android:text="@string/app_name"
+	        android:textColor="#FF3B3B3B"
+	        android:layout_centerVertical="true"
+	        android:layout_margin="5dp"
+	        android:layout_toRightOf="@+home/titlebar_ivlogo"
+	        android:gravity="left|center_vertical"
+	        android:layout_marginLeft="10dp"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+	        android:textSize="30dp"/>
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="192dp"
+        android:id="@+home/ll_header">
+        <br.com.zynger.libertadores.view.ResizableImageView
+			android:id="@+home/iv_header"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+    </LinearLayout>
+	<RelativeLayout
+  	    android:layout_width="fill_parent"
+  	    android:layout_height="48dp"
+  	    android:background="@drawable/pattern_scanline">
+	    
+        <br.com.zynger.libertadores.view.HelveticaTextView
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:id="@+home/tv_centerbar_clubname"
+	        android:textColor="#FF3B3B3B"
+	        android:layout_centerVertical="true"
+	        android:layout_margin="5dp"
+	        android:layout_toLeftOf="@+home/iv_centerbar_badge"
+	        android:gravity="left"
+	        android:layout_marginLeft="10dp"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+	        android:textSize="26dp"/>
+	    
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:scaleType="fitCenter"
+            android:id="@+home/iv_centerbar_badge"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="1dp"
+            android:adjustViewBounds="true"/>
+  	</RelativeLayout>
+	<include layout="@layout/homedashboard_layout"
+	    android:layout_height="fill_parent"
+	    android:layout_width="fill_parent" />
+</LinearLayout>

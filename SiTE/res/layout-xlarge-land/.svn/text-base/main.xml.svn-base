@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wood_background"
+    android:weightSum="3">
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:layout_weight="1">
+    	
+    	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:layout_width="fill_parent"
+    		android:layout_height="fill_parent"
+    		android:orientation="vertical">
+    	
+    		<ImageButton
+			  	android:src="@drawable/nova_emergencia"
+			  	android:id="@+id/bt_nova_emergencia"
+			  	android:background="@null"
+			  	android:gravity="center_horizontal"
+			  	android:paddingTop="145dp"
+			  	android:layout_width="fill_parent"
+			  	android:layout_height="0dp"
+				android:layout_weight="1" 
+				android:paddingLeft="30dp"/>
+			  	
+			<TextView
+				android:id="@+id/novaemerg"
+				android:textSize="22dip"
+				android:text="novaemerg"
+				android:textStyle="bold"
+				android:gravity="center_horizontal"
+			  	android:layout_width="fill_parent"
+			  	android:layout_height="0dp"
+				android:layout_weight="1"
+				android:textColor="#FFEFEFEF"
+				android:paddingLeft="30dp"/>
+				
+			<ImageButton
+			  	android:src="@drawable/atualizar_app"
+			  	android:id="@+id/bt_atualizar"
+			  	android:background="@null"
+			  	android:paddingTop="145dp"
+			  	android:layout_width="fill_parent"
+			  	android:layout_height="0dp"
+			  	android:gravity="center_horizontal"
+				android:layout_weight="1"
+				android:paddingLeft="30dp"/>
+			  	
+			<TextView
+				android:id="@+id/atualizar_app"
+				android:textSize="22dip"
+				android:gravity="center_horizontal"
+				android:textStyle="bold"
+				android:text="atualizar_app"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:layout_width="fill_parent"
+				android:textColor="#FFEFEFEF"
+				android:paddingLeft="30dp"/>				
+			
+    	
+    	</LinearLayout>    	
+    </LinearLayout>
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:gravity="center"
+    	android:layout_weight="1">
+    	
+    	<ImageView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:src="@drawable/logo"/>
+    	
+    </LinearLayout>
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:layout_weight="1"
+    	android:gravity="center_vertical">
+    	
+    	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:layout_width="fill_parent"
+    		android:layout_height="fill_parent"
+    		android:orientation="vertical">
+    	
+    		<ImageButton
+			  	android:src="@drawable/carregar_emergencia"
+			  	android:id="@+id/bt_carregar_emergencia"
+			  	android:gravity="center_horizontal"
+			  	android:background="@null"
+			  	android:paddingTop="145dp"
+			  	android:layout_width="fill_parent"
+			  	android:layout_height="0dp"
+				android:layout_weight="1"
+				android:paddingRight="30dp"/>
+			  	
+			<TextView
+				android:id="@+id/loademerg"
+				android:textSize="22dip"
+				android:gravity="center_horizontal"
+				android:text="loademerg"
+				android:textStyle="bold"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:layout_width="fill_parent"
+				android:textColor="#FFEFEFEF"
+				android:paddingRight="30dp"/>
+				
+			<TextView
+				android:layout_height="0dp"
+				android:layout_weight="2"
+				android:layout_width="fill_parent"/>
+    	
+    	</LinearLayout>
+    </LinearLayout>
+</LinearLayout>

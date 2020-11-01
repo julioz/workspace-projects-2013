@@ -1,0 +1,79 @@
+package br.com.zynger.brasileirao2012.view;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+
+public class AprovRow extends TableRow {
+
+	private Context context;
+	private Club club;
+	private AprovData aprov;
+	
+	private TableRow tablerow;
+	private ImageView iv_bdg;
+	private TextView mand_j, mand_v, mand_e, mand_perc, vis_j, vis_v, vis_e, vis_perc;
+	
+	public AprovRow(Context c, Club club) {
+		super(c);
+		this.context = c;
+		this.setClub(club);
+		this.aprov = club.getAprov();
+		
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.tablerow = (TableRow) inflater.inflate(R.layout.aprovrow, null);
+		
+		iv_bdg = (ImageView) tablerow.findViewById(R.aprovrow.iv_bdg);
+		mand_j = (TextView) tablerow.findViewById(R.aprovrow.mand_j);
+		mand_v = (TextView) tablerow.findViewById(R.aprovrow.mand_v);
+		mand_e = (TextView) tablerow.findViewById(R.aprovrow.mand_e);
+		mand_perc = (TextView) tablerow.findViewById(R.aprovrow.mand_perc);
+		vis_j = (TextView) tablerow.findViewById(R.aprovrow.vis_j);
+		vis_v = (TextView) tablerow.findViewById(R.aprovrow.vis_v);
+		vis_e = (TextView) tablerow.findViewById(R.aprovrow.vis_e);
+		vis_perc = (TextView) tablerow.findViewById(R.aprovrow.vis_perc);
+		
+		iv_bdg.setImageResource(getClub().getBadgeResource(context));
+		iv_bdg.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Club c = getClub();
+				Toast.makeText(context, c.getToastDescription(), Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		setData();		
+	}
+
+	private void setData() {
+		mand_j.setText(String.valueOf(aprov.getHomePlayed()));
+		mand_v.setText(String.valueOf(aprov.getHomeVictories()));
+		mand_e.setText(String.valueOf(aprov.getHomeDrawn()));
+		mand_perc.setText(String.valueOf(Math.round(aprov.getHomePerc())));
+		
+		vis_j.setText(String.valueOf(aprov.getAwayPlayed()));
+		vis_v.setText(String.valueOf(aprov.getAwayVictories()));
+		vis_e.setText(String.valueOf(aprov.getAwayDrawn()));
+		vis_perc.setText(String.valueOf(Math.round(aprov.getAwayPerc())));
+	}
+
+	public Club getClub() {
+		return club;
+	}
+
+	public void setClub(Club club) {
+		this.club = club;
+	}
+	
+	public TableRow getTableRow(){
+		return tablerow;
+	}
+
+}

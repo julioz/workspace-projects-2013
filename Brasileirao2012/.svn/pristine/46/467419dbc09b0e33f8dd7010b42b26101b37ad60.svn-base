@@ -1,0 +1,299 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.view.MatchViewLayout;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class MyTeamActivity extends ListActivity {
+	
+	private ImageView iv_badge;
+	private RelativeLayout rl_loading;
+	private ProgressBar pb_progressbar;
+	private TextView actionbar_tt, tv_progressbar, tv_fullname, tv_points_place;
+	private ImageButton update;
+	private RotateAnimation rot;
+	private Button bt_strikers, bt_trophies, bt_wiki;
+	
+	private static TreeMap<Integer, ArrayList<Match>> matches;
+	private Club myclub;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.myteam);
+		
+		myclub = getMyClub();
+		loadViews();
+		
+		iv_badge.setImageResource(myclub.getBadge());
+		tv_fullname.setText(myclub.getFullName());
+		tv_points_place.setText(myclub.getPoints() + " pontos - " + myclub.getPosition() + "° lugar");
+		
+		if(myclub.getDivision() == Club.PRIMEIRADIVISAO){			
+			matches = (TreeMap<Integer, ArrayList<Match>>) FileHandler.openBackup(this, FileHandler.MATCHES_A);
+			if(matches == null){
+				matches = TableDivision1Activity.matchesDatabase((TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS));
+				FileHandler.saveBackup(this, FileHandler.MATCHES_A, matches);
+			}
+
+			if((ArrayList<Striker>) FileHandler.openBackup(this, FileHandler.STRIKERS_A) == null){
+				bt_strikers.setVisibility(View.INVISIBLE);
+				bt_strikers.setClickable(false);
+			}
+		}else if(myclub.getDivision() == Club.SEGUNDADIVISAO){
+			matches = (TreeMap<Integer, ArrayList<Match>>) FileHandler.openBackup(this, FileHandler.MATCHES_B);
+			if(matches == null){
+				matches = TableDivision2Activity.matchesDatabase((TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS));
+				FileHandler.saveBackup(this, FileHandler.MATCHES_B, matches);
+			}
+
+			if((ArrayList<Striker>) FileHandler.openBackup(this, FileHandler.STRIKERS_B) == null){
+				bt_strikers.setVisibility(View.INVISIBLE);
+				bt_strikers.setClickable(false);
+			}
+		}
+		
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_actsupdates", false)) new UpdateMyTeamTableTask(this).execute();
+		else new ShowTableTask().execute();
+		
+		bt_strikers.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it;
+				if(myclub.getDivision() == Club.SEGUNDADIVISAO) it = new Intent(v.getContext(), StrikersDivision2Activity.class);
+				else it = new Intent(v.getContext(), StrikersDivision1Activity.class);
+				it.putExtra("CLUB_NAME", myclub.getName());
+				startActivity(it);
+			}
+		});
+		
+		bt_trophies.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), TrophiesActivity.class);
+				it.putExtra("CLUB_NAME", myclub.getName());
+				startActivity(it);
+			}
+		});
+		
+		bt_wiki.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(Intent.ACTION_VIEW, Uri.parse(myclub.getWiki()));
+				startActivity(it);
+			}
+		});
+		
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				v.startAnimation(rot);
+				if(ConnectionHelper.isConnected(v.getContext())) new UpdateMyTeamTableTask(v.getContext()).execute();
+				else Toast.makeText(v.getContext(), "Verifique a conexão à internet.", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	
+	private void loadViews() {
+		actionbar_tt = (TextView) findViewById(R.myteam.tv_name);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		rl_loading = (RelativeLayout) findViewById(R.myteam.rl_loading);
+		pb_progressbar = (ProgressBar) findViewById(R.myteam.pb_progressbar);
+		tv_progressbar = (TextView) findViewById(R.myteam.tv_progressbar);
+		
+		rot = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+		rot.setInterpolator(new LinearInterpolator());
+		rot.setDuration(900L);
+		rot.setStartTime(200L);
+		
+		update = (ImageButton) findViewById(R.myteam.ib_update);
+		
+		iv_badge = (ImageView) findViewById(R.myteam.iv_badge);
+		tv_fullname = (TextView) findViewById(R.myteam.tv_fullname);
+		tv_points_place = (TextView) findViewById(R.myteam.tv_points_place);
+		bt_strikers = (Button) findViewById(R.myteam.bt_strikers);
+		bt_trophies = (Button) findViewById(R.myteam.bt_trophies);
+		bt_wiki = (Button) findViewById(R.myteam.bt_wiki);
+	}
+
+	private ArrayList<MatchViewLayout> getArrayMatchViewLayout(TreeMap<Integer, ArrayList<Match>> matches) {
+		ArrayList<MatchViewLayout> al_MVL = new ArrayList<MatchViewLayout>();
+		for (int i = 1; i <= matches.size(); i++) {
+			ArrayList<Match> al = matches.get(i);
+			for (Match m : al) {
+				if(m.getHome().getName().equals(myclub.getName()) || m.getAway().getName().equals(myclub.getName())){
+					al_MVL.add(new MatchViewLayout(this, m, true));
+					break;
+				}
+			}
+		}
+		return al_MVL;
+	}
+	
+	private void populateLayout(ArrayList<MatchViewLayout> al) {
+		getListView().setAdapter(new MyTeamListAdapter(this, al));
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	private Club getMyClub() {
+		String myclub = (String) FileHandler.openBackup(this, FileHandler.MYCLUB);
+		TreeMap<String, Club> clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		if(clubs == null){
+			clubs = HomeActivity.getMapClubs();
+			FileHandler.saveBackup(this, FileHandler.CLUBS, clubs);
+		}
+		
+		return clubs.get(myclub);
+	}
+	
+	private class ShowTableTask extends AsyncTask<Void, Void, ArrayList<MatchViewLayout>> {
+		@Override
+		protected void onPreExecute() {
+			getListView().setVisibility(View.GONE);
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected ArrayList<MatchViewLayout> doInBackground(Void... params) {
+			if(matches != null) return getArrayMatchViewLayout(matches);
+			else return null;
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<MatchViewLayout> result) {
+			if(result != null){				
+				populateLayout(result);
+				getListView().setVisibility(View.VISIBLE);
+				rl_loading.setVisibility(View.GONE);
+			}else{
+				pb_progressbar.setVisibility(View.GONE);
+				tv_progressbar.setText("Um erro ocorreu.\nAtualize a tabela do campeonato antes de prosseguir.");
+			}
+			super.onPostExecute(result);
+		}
+	}
+	
+	private class UpdateMyTeamTableTask extends AsyncTask<Void, Void, TreeMap<Integer, ArrayList<Match>>> {
+		private Context c;
+		
+		public UpdateMyTeamTableTask(Context c){
+			this.setContext(c);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			getListView().setVisibility(View.GONE);
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected TreeMap<Integer, ArrayList<Match>> doInBackground(Void... arg0) {
+			try{				
+				return HTMLManager.getTableData(getContext(), myclub.getDivision());
+			}catch(Exception e){
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(TreeMap<Integer, ArrayList<Match>> result) {
+			if(result != null){
+				matches = result;
+				
+				if(myclub.getDivision() == Club.SEGUNDADIVISAO) FileHandler.saveBackup(getContext(), FileHandler.MATCHES_B, matches);
+				else FileHandler.saveBackup(getContext(), FileHandler.MATCHES_A, matches);
+				
+				updateClubsDatabase(matches);
+				Toast.makeText(getContext(), "Dados atualizados", Toast.LENGTH_SHORT).show();
+			}else{
+				Toast.makeText(getContext(), "Não foi possível atualizar os dados. Tente novamente.", Toast.LENGTH_SHORT).show();
+			}
+			getListView().setVisibility(View.VISIBLE);
+			rl_loading.setVisibility(View.GONE);
+			new ShowTableTask().execute();
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void updateClubsDatabase(TreeMap<Integer, ArrayList<Match>> matches) {
+		TreeMap<String, Club> clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		
+		for (Match m : matches.get(1)) {
+			Club home = clubs.get(m.getHome().getName());
+			home.setMand(m.getHome().getMand());
+			home.setVisit(m.getHome().getVisit());
+			
+			Club away = clubs.get(m.getAway().getName());
+			away.setMand(m.getAway().getMand());
+			away.setVisit(m.getAway().getVisit());
+		}
+		
+		FileHandler.saveBackup(this, FileHandler.CLUBS, clubs);
+		
+	}
+
+	private class MyTeamListAdapter extends ArrayAdapter<MatchViewLayout>{
+
+		private List<MatchViewLayout> objects;
+		
+		public MyTeamListAdapter(Context context, List<MatchViewLayout> objects) {
+			super(context, R.layout.matchview, objects);
+			this.objects = objects;
+		}
+		
+		@Override
+		public int getCount() {
+			return objects.size();
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+	        return objects.get(position);
+		}
+	}
+}

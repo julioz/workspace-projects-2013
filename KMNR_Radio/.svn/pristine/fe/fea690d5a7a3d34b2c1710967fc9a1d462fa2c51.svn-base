@@ -1,0 +1,168 @@
+package edu.mst.kmnrradio;
+
+import java.util.ArrayList;
+
+import org.holoeverywhere.app.ListActivity;
+import org.holoeverywhere.widget.SeekBar;
+import org.holoeverywhere.widget.TextView;
+
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnBufferingUpdateListener;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import edu.mst.kmnrradio.adapters.PostsListAdapter;
+import edu.mst.kmnrradio.asyncs.AsyncTaskListener;
+import edu.mst.kmnrradio.asyncs.GetRadioInfoTask;
+import edu.mst.kmnrradio.asyncs.GetTumblrPostsTask;
+import edu.mst.kmnrradio.model.Post;
+
+public class MainActivity extends ListActivity implements AsyncTaskListener {
+
+	private static final String RADIOURL = "http://marconi.kmnr.org:7000/webstream.mp3";
+
+	public static String TAG = "kmnrradio";
+	private MediaPlayer mp = null;
+
+	private OnClickListener oclPlay, oclStop;
+	
+	private ImageButton play;
+	private SeekBar seekbar;
+	private TextView radioname, dj;
+
+	@Override
+	public void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
+		setContentView(R.layout.mainactivity);
+
+		loadViews();
+		
+		new GetTumblrPostsTask(this).execute();
+	}
+	
+	private void loadViews() {
+		play = (ImageButton) findViewById(R.mainactivity.ib_play);
+		seekbar = (SeekBar) findViewById(R.mainactivity.seekbar);
+		radioname = (TextView) findViewById(R.mainactivity.tv_radioname);
+		dj = (TextView) findViewById(R.mainactivity.tv_dj);
+
+		oclPlay = new View.OnClickListener() {
+			public void onClick(View view) {
+				seekbar.setVisibility(View.VISIBLE);
+				play.setImageResource(R.drawable.ic_stop);
+				play.setOnClickListener(oclStop);
+				new GetRadioInfoTask(RADIOURL, MainActivity.this).execute();
+				play();
+			}
+		};
+		
+		oclStop = new View.OnClickListener() {
+			public void onClick(View view) {
+				seekbar.setVisibility(View.INVISIBLE);
+				play.setImageResource(R.drawable.ic_play);
+				setRadioInfo(getString(R.string.kmnr), getString(R.string.mainactivity_musicnotplaying));
+				play.setOnClickListener(oclPlay);
+				stop();
+			}
+		};
+		
+		play.setOnClickListener(oclPlay);
+	}
+	
+	private void setRadioInfo(String radio, String dj) {
+		this.radioname.setText(radio);
+		this.dj.setText(dj);
+	}
+
+	private void play() {
+		Uri myUri = Uri.parse(RADIOURL);
+		try {
+			if (mp == null) {
+				this.mp = new MediaPlayer();
+			} else {
+				mp.stop();
+				mp.reset();
+			}
+			mp.setDataSource(this, myUri); // Go to Initialized state
+			mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			mp.setOnPreparedListener(new OnPreparedListener() {
+				@Override
+				public void onPrepared(MediaPlayer mp) {
+					Log.d(TAG, "Stream is prepared");
+					mp.start();
+				}
+			});
+			
+			mp.setOnBufferingUpdateListener(new OnBufferingUpdateListener() {
+				@Override
+				public void onBufferingUpdate(MediaPlayer mp, int percent) {
+					Log.d(TAG, "PlayerService onBufferingUpdate : " + percent + "%");
+				}
+			});
+
+			mp.setOnErrorListener(new OnErrorListener() {
+				@Override
+				public boolean onError(MediaPlayer mp, int what, int extra) {
+					StringBuilder sb = new StringBuilder();
+					sb.append("Media Player Error: ");
+					switch (what) {
+					case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
+						sb.append("Not Valid for Progressive Playback");
+						break;
+					case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+						sb.append("Server Died");
+						break;
+					case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+						sb.append("Unknown");
+						break;
+					default:
+						sb.append(" Non standard (");
+						sb.append(what);
+						sb.append(")");
+					}
+					sb.append(" (" + what + ") ");
+					sb.append(extra);
+					Log.e(TAG, sb.toString());
+					return true;
+				}
+			});
+			mp.prepareAsync();
+
+			Log.d(TAG, "LoadClip Done");
+		} catch (Throwable t) {
+			Log.d(TAG, t.toString());
+		}
+	}
+
+	private void stop() {
+		if(mp != null){
+			mp.stop();
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		stop();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		if(result instanceof String){			
+			String radioAndDJ = result.toString();
+			String radio = radioAndDJ.substring(0, radioAndDJ.indexOf(" "));
+			String djName = radioAndDJ.substring(radioAndDJ.indexOf("-")+1).trim();
+			setRadioInfo(radio, djName);
+		}else{
+			ArrayList<Post> posts = (ArrayList<Post>) result;
+			setListAdapter(new PostsListAdapter(this, posts));
+		}
+	}
+}

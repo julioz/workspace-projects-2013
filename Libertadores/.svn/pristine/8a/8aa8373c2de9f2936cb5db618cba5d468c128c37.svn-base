@@ -1,0 +1,807 @@
+<!-- http://en.wikipedia.org/wiki/List_of_Copa_Libertadores_winners -->
+<finals>
+	<final>
+		<year>1960</year>
+		<winner>Peñarol</winner>
+		<badgewinner>penarol</badgewinner>
+		<runnerup>Olimpia</runnerup>
+		<badgerunnerup>olimpia</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+		<match>
+			<score>1-1</score>
+			<venue>Estadio de Puerto Sajonia</venue>
+		</match>
+	</final>
+	<final>
+		<year>1961</year>
+		<winner>Peñarol</winner>
+		<badgewinner>penarol</badgewinner>
+		<runnerup>Palmeiras</runnerup>
+		<badgerunnerup>palmeiras</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+		<match>
+			<score>1-1</score>
+			<venue>Estádio do Pacaembu</venue>
+		</match>
+	</final>
+	<final>
+		<year>1962</year>
+		<winner>Santos</winner>
+		<badgewinner>santos</badgewinner>
+		<runnerup>Peñarol</runnerup>
+		<badgerunnerup>penarol</badgerunnerup>
+		<match>
+			<score>2-1</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+		<match>
+			<score>2-3</score>
+			<venue>Estadio Vila Belmiro</venue>
+		</match>
+	</final>
+	<final>
+		<year>1963</year>
+		<winner>Santos</winner>
+		<badgewinner>santos</badgewinner>
+		<runnerup>Boca Juniors</runnerup>
+		<badgerunnerup>bocajrs</badgerunnerup>
+		<match>
+			<score>3-2</score>
+			<venue>Estádio do Maracanã</venue>
+		</match>
+		<match>
+			<score>2-1</score>
+			<venue>Estadio Camilo Cichero</venue>
+		</match>
+	</final>
+	<final>
+		<year>1964</year>
+		<winner>Independiente</winner>
+		<badgewinner>independiente</badgewinner>
+		<runnerup>Nacional</runnerup>
+		<badgerunnerup>nacional</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Parque Central</venue>
+		</match>
+		<match>
+			<score>1-0</score>
+			<venue>La Doble Visera</venue>
+		</match>
+	</final>
+	<final>
+		<year>1965</year>
+		<winner>Independiente</winner>
+		<badgewinner>independiente</badgewinner>
+		<runnerup>Peñarol</runnerup>
+		<badgerunnerup>penarol</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>La Doble Visera</venue>
+		</match>
+		<match>
+			<score>1-3</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+	</final>
+	<final>
+		<year>1966</year>
+		<winner>Peñarol</winner>
+		<badgewinner>penarol</badgewinner>
+		<runnerup>River Plate</runnerup>
+		<badgerunnerup>riverplate</badgerunnerup>
+		<match>
+			<score>2-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+		<match>
+			<score>2-3</score>
+			<venue>Estadio Monumental</venue>
+		</match>
+	</final>
+	<final>
+		<year>1967</year>
+		<winner>Racing</winner>
+		<badgewinner>racing</badgewinner>
+		<runnerup>Nacional</runnerup>
+		<badgerunnerup>nacional</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Juan D. Peron</venue>
+		</match>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+	</final>
+	<final>
+		<year>1968</year>
+		<winner>Estudiantes</winner>
+		<badgewinner>estudiantes</badgewinner>
+		<runnerup>Palmeiras</runnerup>
+		<badgerunnerup>palmeiras</badgerunnerup>
+		<match>
+			<score>2-1</score>
+			<venue>Estadio Jorge L. Hirschi</venue>
+		</match>
+		<match>
+			<score>1-3</score>
+			<venue>Estádio do Pacaembu</venue>
+		</match>
+	</final>
+	<final>
+		<year>1969</year>
+		<winner>Estudiantes</winner>
+		<badgewinner>estudiantes</badgewinner>
+		<runnerup>Nacional</runnerup>
+		<badgerunnerup>nacional</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+		<match>
+			<score>2-0</score>
+			<venue>Estadio Jorge L. Hirschi</venue>
+		</match>
+	</final>
+	<final>
+		<year>1970</year>
+		<winner>Estudiantes</winner>
+		<badgewinner>estudiantes</badgewinner>
+		<runnerup>Peñarol</runnerup>
+		<badgerunnerup>penarol</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Jorge L. Hirschi</venue>
+		</match>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+	</final>
+	<final>
+		<year>1971</year>
+		<winner>Nacional</winner>
+		<badgewinner>nacional</badgewinner>
+		<runnerup>Estudiantes</runnerup>
+		<badgerunnerup>estudiantes</badgerunnerup>
+		<match>
+			<score>0-1</score>
+			<venue>Estadio Jorge L. Hirschi</venue>
+		</match>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+	</final>
+	<final>
+		<year>1972</year>
+		<winner>Independiente</winner>
+		<badgewinner>independiente</badgewinner>
+		<runnerup>Universitario</runnerup>
+		<badgerunnerup>universitario</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Nacional</venue>
+		</match>
+		<match>
+			<score>2-1</score>
+			<venue>La Doble Visera</venue>
+		</match>
+	</final>
+	<final>
+		<year>1973</year>
+		<winner>Independiente</winner>
+		<badgewinner>independiente</badgewinner>
+		<runnerup>Colo-Colo</runnerup>
+		<badgerunnerup>colocolo</badgerunnerup>
+		<match>
+			<score>1-1</score>
+			<venue>La Doble Visera</venue>
+		</match>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Nacional</venue>
+		</match>
+	</final>
+	<final>
+		<year>1974</year>
+		<winner>Independiente</winner>
+		<badgewinner>independiente</badgewinner>
+		<runnerup>São Paulo</runnerup>
+		<badgerunnerup>saopaulo</badgerunnerup>
+		<match>
+			<score>1-2</score>
+			<venue>Estádio do Pacaembu</venue>
+		</match>
+		<match>
+			<score>2-0</score>
+			<venue>La Doble Visera</venue>
+		</match>
+	</final>
+	<final>
+		<year>1975</year>
+		<winner>Independiente</winner>
+		<badgewinner>independiente</badgewinner>
+		<runnerup>Unión Española</runnerup>
+		<badgerunnerup>unionespanola</badgerunnerup>
+		<match>
+			<score>0-1</score>
+			<venue>Estadio Nacional</venue>
+		</match>
+		<match>
+			<score>3-1</score>
+			<venue>La Doble Visera</venue>
+		</match>
+	</final>
+	<final>
+		<year>1976</year>
+		<winner>Cruzeiro</winner>
+		<badgewinner>cruzeiro</badgewinner>
+		<runnerup>River Plate</runnerup>
+		<badgerunnerup>riverplate</badgerunnerup>
+		<match>
+			<score>4-1</score>
+			<venue>Mineirão</venue>
+		</match>
+		<match>
+			<score>1-2</score>
+			<venue>Estadio Monumental</venue>
+		</match>
+	</final>
+	<final>
+		<year>1977</year>
+		<winner>Boca Juniors</winner>
+		<badgewinner>bocajrs</badgewinner>
+		<runnerup>Cruzeiro</runnerup>
+		<badgerunnerup>cruzeiro</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Camilo Cichero</venue>
+		</match>
+		<match>
+			<score>0-1</score>
+			<venue>Mineirão</venue>
+		</match>
+	</final>
+	<final>
+		<year>1978</year>
+		<winner>Boca Juniors</winner>
+		<badgewinner>bocajrs</badgewinner>
+		<runnerup>Deportivo Cali</runnerup>
+		<badgerunnerup>deportivocali</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Pascual Guerrero</venue>
+		</match>
+		<match>
+			<score>4-0</score>
+			<venue>Estadio Camilo Cichero</venue>
+		</match>
+	</final>
+	<final>
+		<year>1979</year>
+		<winner>Olimpia</winner>
+		<badgewinner>olimpia</badgewinner>
+		<runnerup>Boca Juniors</runnerup>
+		<badgerunnerup>bocajrs</badgerunnerup>
+		<match>
+			<score>2-0</score>
+			<venue>Estadio Defensores Del Chaco</venue>
+		</match>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Alberto J. Armando</venue>
+		</match>
+	</final>
+	<final>
+		<year>1980</year>
+		<winner>Nacional</winner>
+		<badgewinner>nacional</badgewinner>
+		<runnerup>Internacional</runnerup>
+		<badgerunnerup>internacional</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Beira=Rio</venue>
+		</match>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+	</final>
+	<final>
+		<year>1981</year>
+		<winner>Flamengo</winner>
+		<badgewinner>flamengo</badgewinner>
+		<runnerup>Cobreloa</runnerup>
+		<badgerunnerup>cobreloa</badgerunnerup>
+		<match>
+			<score>2-1</score>
+			<venue>Estádio do Maracanã</venue>
+		</match>
+		<match>
+			<score>0-1</score>
+			<venue>Estadio Nacional</venue>
+		</match>
+	</final>
+	<final>
+		<year>1982</year>
+		<winner>Peñarol</winner>
+		<badgewinner>penarol</badgewinner>
+		<runnerup>Cobreloa</runnerup>
+		<badgerunnerup>cobreloa</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Nacional</venue>
+		</match>
+	</final>
+	<final>
+		<year>1983</year>
+		<winner>Grêmio</winner>
+		<badgewinner>gremio</badgewinner>
+		<runnerup>Peñarol</runnerup>
+		<badgerunnerup>penarol</badgerunnerup>
+		<match>
+			<score>1-1</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+		<match>
+			<score>2-1</score>
+			<venue>Estádio Olímpico Monumental</venue>
+		</match>
+	</final>
+	<final>
+		<year>1984</year>
+		<winner>Independiente</winner>
+		<badgewinner>independiente</badgewinner>
+		<runnerup>Grêmio</runnerup>
+		<badgerunnerup>gremio</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estádio Olímpico Monumental</venue>
+		</match>
+		<match>
+			<score>0-0</score>
+			<venue>La Doble Visera</venue>
+		</match>
+	</final>
+	<final>
+		<year>1985</year>
+		<winner>Argentinos Juniors</winner>
+		<badgewinner>argentinosjrs</badgewinner>
+		<runnerup>América de Cali</runnerup>
+		<badgerunnerup>americadecali</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Monumental</venue>
+		</match>
+		<match>
+			<score>0-1</score>
+			<venue>Estádio Pascual Guerrero</venue>
+		</match>
+	</final>
+	<final>
+		<year>1986</year>
+		<winner>River Plate</winner>
+		<badgewinner>riverplate</badgewinner>
+		<runnerup>América de Cali</runnerup>
+		<badgerunnerup>americadecali</badgerunnerup>
+		<match>
+			<score>2-1</score>
+			<venue>Estadio Pascual Guerrero</venue>
+		</match>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Monumental</venue>
+		</match>
+	</final>
+	<final>
+		<year>1987</year>
+		<winner>Peñarol</winner>
+		<badgewinner>penarol</badgewinner>
+		<runnerup>América de Cali</runnerup>
+		<badgerunnerup>americadecali</badgerunnerup>
+		<match>
+			<score>0-2</score>
+			<venue>Estadio Pascual Guerrero</venue>
+		</match>
+		<match>
+			<score>2-1</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+	</final>
+	<final>
+		<year>1988</year>
+		<winner>Nacional</winner>
+		<badgewinner>nacional</badgewinner>
+		<runnerup>Newell's Old Boys</runnerup>
+		<badgerunnerup>newells</badgerunnerup>
+		<match>
+			<score>0-1</score>
+			<venue>Estadio Newell's Old Boys</venue>
+		</match>
+		<match>
+			<score>3-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+	</final>
+	<final>
+		<year>1989</year>
+		<winner>Atlético Nacional</winner>
+		<badgewinner>atleticonacional</badgewinner>
+		<runnerup>Olimpia</runnerup>
+		<badgerunnerup>olimpia</badgerunnerup>
+		<match>
+			<score>0-2</score>
+			<venue>Estadio Defensores del Chaco</venue>
+		</match>
+		<match>
+			<score>2-0</score>
+			<venue>Estadio El Campín</venue>
+		</match>
+		<penalties>5-4</penalties>
+	</final>
+	<final>
+		<year>1990</year>
+		<winner>Olimpia</winner>
+		<badgewinner>olimpia</badgewinner>
+		<runnerup>Barcelona</runnerup>
+		<badgerunnerup>barcelona</badgerunnerup>
+		<match>
+			<score>2-0</score>
+			<venue>Estadio Defensores del Chaco</venue>
+		</match>
+		<match>
+			<score>1-1</score>
+			<venue>Estadio Isidro R. Carbo</venue>
+		</match>
+	</final>
+	<final>
+		<year>1991</year>
+		<winner>Colo-Colo</winner>
+		<badgewinner>colocolo</badgewinner>
+		<runnerup>Olimpia</runnerup>
+		<badgerunnerup>olimpia</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Defensores del Chaco</venue>
+		</match>
+		<match>
+			<score>3-0</score>
+			<venue>Estadio David Arellano</venue>
+		</match>
+	</final>
+	<final>
+		<year>1992</year>
+		<winner>São Paulo</winner>
+		<badgewinner>saopaulo</badgewinner>
+		<runnerup>Newell's Old Boys</runnerup>
+		<badgerunnerup>newells</badgerunnerup>
+		<match>
+			<score>0-1</score>
+			<venue>Estadio Newell's Old Boys</venue>
+		</match>
+		<match>
+			<score>1-0</score>
+			<venue>Estádio do Morumbi</venue>
+		</match>
+		<penalties>3-2</penalties>
+	</final>
+	<final>
+		<year>1993</year>
+		<winner>São Paulo</winner>
+		<badgewinner>saopaulo</badgewinner>
+		<runnerup>Universidad Católica</runnerup>
+		<badgerunnerup>universidadcatolica</badgerunnerup>
+		<match>
+			<score>5-1</score>
+			<venue>Estádio do Morumbi</venue>
+		</match>
+		<match>
+			<score>0-2</score>
+			<venue>Estadio Nacional</venue>
+		</match>
+	</final>
+	<final>
+		<year>1994</year>
+		<winner>Vélez Sarsfield</winner>
+		<badgewinner>velez</badgewinner>
+		<runnerup>São Paulo</runnerup>
+		<badgerunnerup>saopaulo</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio José Amalfitani</venue>
+		</match>
+		<match>
+			<score>0-1</score>
+			<venue>Estádio do Morumbi</venue>
+		</match>
+		<penalties>5-3</penalties>
+	</final>
+	<final>
+		<year>1995</year>
+		<winner>Grêmio</winner>
+		<badgewinner>gremio</badgewinner>
+		<runnerup>Atlético Nacional</runnerup>
+		<badgerunnerup>atleticonacional</badgerunnerup>
+		<match>
+			<score>3-1</score>
+			<venue>Estádio Olímpico Monumental</venue>
+		</match>
+		<match>
+			<score>1-1</score>
+			<venue>Estadio Atanasio Girardot</venue>
+		</match>
+	</final>
+	<final>
+		<year>1996</year>
+		<winner>River Plate</winner>
+		<badgewinner>riverplate</badgewinner>
+		<runnerup>América de Cali</runnerup>
+		<badgerunnerup>americadecali</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Pascual Guerrero</venue>
+		</match>
+		<match>
+			<score>2-0</score>
+			<venue>Estadio Antonio V. Liberti</venue>
+		</match>
+	</final>
+	<final>
+		<year>1997</year>
+		<winner>Cruzeiro</winner>
+		<badgewinner>cruzeiro</badgewinner>
+		<runnerup>Sporting Cristal</runnerup>
+		<badgerunnerup>sportingcristal</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Nacional</venue>
+		</match>
+		<match>
+			<score>1-0</score>
+			<venue>Mineirão</venue>
+		</match>
+	</final>
+	<final>
+		<year>1998</year>
+		<winner>Vasco da Gama</winner>
+		<badgewinner>vasco</badgewinner>
+		<runnerup>Barcelona</runnerup>
+		<badgerunnerup>barcelona</badgerunnerup>
+		<match>
+			<score>2-0</score>
+			<venue>Estádio São Januário</venue>
+		</match>
+		<match>
+			<score>2-1</score>
+			<venue>Estadio Isidro R. Carbo</venue>
+		</match>
+	</final>
+	<final>
+		<year>1999</year>
+		<winner>Palmeiras</winner>
+		<badgewinner>palmeiras</badgewinner>
+		<runnerup>Deportivo Cali</runnerup>
+		<badgerunnerup>deportivocali</badgerunnerup>
+		<match>
+			<score>0-1</score>
+			<venue>Estadio Pascual Guerrero</venue>
+		</match>
+		<match>
+			<score>2-1</score>
+			<venue>Estádio Palestra Itália</venue>
+		</match>
+		<penalties>4-3</penalties>
+	</final>
+	<final>
+		<year>2000</year>
+		<winner>Boca Juniors</winner>
+		<badgewinner>bocajrs</badgewinner>
+		<runnerup>Palmeiras</runnerup>
+		<badgerunnerup>palmeiras</badgerunnerup>
+		<match>
+			<score>2-2</score>
+			<venue>Estadio Alberto J. Armando</venue>
+		</match>
+		<match>
+			<score>0-0</score>
+			<venue>Estádio Cícero Pompeu de Toledo</venue>
+		</match>
+		<penalties>4-2</penalties>
+	</final>
+	<final>
+		<year>2001</year>
+		<winner>Boca Juniors</winner>
+		<badgewinner>bocajrs</badgewinner>
+		<runnerup>Cruz Azul</runnerup>
+		<badgerunnerup>cruzazul</badgerunnerup>
+		<match>
+			<score>1-0</score>
+			<venue>Estadio Azteca</venue>
+		</match>
+		<match>
+			<score>0-1</score>
+			<venue>Estadio Alberto J. Armando</venue>
+		</match>
+		<penalties>3-1</penalties>
+	</final>
+	<final>
+		<year>2002</year>
+		<winner>Olimpia</winner>
+		<badgewinner>olimpia</badgewinner>
+		<runnerup>São Caetano</runnerup>
+		<badgerunnerup>saocaetano</badgerunnerup>
+		<match>
+			<score>0-1</score>
+			<venue>Estadio Defensores del Chaco</venue>
+		</match>
+		<match>
+			<score>2-1</score>
+			<venue>Estádio Paulo Machado de Carvalho</venue>
+		</match>
+		<penalties>4-2</penalties>
+	</final>
+	<final>
+		<year>2003</year>
+		<winner>Boca Juniors</winner>
+		<badgewinner>bocajrs</badgewinner>
+		<runnerup>Santos</runnerup>
+		<badgerunnerup>santos</badgerunnerup>
+		<match>
+			<score>2-0</score>
+			<venue>Estadio Alberto J. Armando</venue>
+		</match>
+		<match>
+			<score>3-1</score>
+			<venue>Estádio Cícero Pompeu de Toledo</venue>
+		</match>
+	</final>
+	<final>
+		<year>2004</year>
+		<winner>Once Caldas</winner>
+		<badgewinner>oncecaldas</badgewinner>
+		<runnerup>Boca Juniors</runnerup>
+		<badgerunnerup>bocajrs</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Alberto J. Armando</venue>
+		</match>
+		<match>
+			<score>1-1</score>
+			<venue>Estadio Palogrande</venue>
+		</match>
+		<penalties>2-0</penalties>
+	</final>
+	<final>
+		<year>2005</year>
+		<winner>São Paulo</winner>
+		<badgewinner>saopaulo</badgewinner>
+		<runnerup>Atlético Paranaense</runnerup>
+		<badgerunnerup>atleticopr</badgerunnerup>
+		<match>
+			<score>1-1</score>
+			<venue>Estádio José Pinheiro Borda</venue>
+		</match>
+		<match>
+			<score>4-0</score>
+			<venue>Estádio Cícero Pompeu de Toledo</venue>
+		</match>
+	</final>
+	<final>
+		<year>2006</year>
+		<winner>Internacional</winner>
+		<badgewinner>internacional</badgewinner>
+		<runnerup>São Paulo</runnerup>
+		<badgerunnerup>saopaulo</badgerunnerup>
+		<match>
+			<score>2-1</score>
+			<venue>Estádio Cícero Pompeu de Toledo</venue>
+		</match>
+		<match>
+			<score>2-2</score>
+			<venue>Estádio José Pinheiro Borda</venue>
+		</match>
+	</final>
+	<final>
+		<year>2007</year>
+		<winner>Boca Juniors</winner>
+		<badgewinner>bocajrs</badgewinner>
+		<runnerup>Grêmio</runnerup>
+		<badgerunnerup>gremio</badgerunnerup>
+		<match>
+			<score>3-0</score>
+			<venue>Estadio Alberto J. Armando</venue>
+		</match>
+		<match>
+			<score>2-0</score>
+			<venue>Estádio Olímpico Monumental</venue>
+		</match>
+	</final>
+	<final>
+		<year>2008</year>
+		<winner>LDU Quito</winner>
+		<badgewinner>lduquito</badgewinner>
+		<runnerup>Fluminense</runnerup>
+		<badgerunnerup>fluminense</badgerunnerup>
+		<match>
+			<score>4-2</score>
+			<venue>Estadio Casa Blanca</venue>
+		</match>
+		<match>
+			<score>1-3</score>
+			<venue>Estádio do Maracanã</venue>
+		</match>
+		<penalties>3-1</penalties>
+	</final>
+	<final>
+		<year>2009</year>
+		<winner>Estudiantes</winner>
+		<badgewinner>estudiantes</badgewinner>
+		<runnerup>Cruzeiro</runnerup>
+		<badgerunnerup>cruzeiro</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Ciudad de La Plata</venue>
+		</match>
+		<match>
+			<score>2-1</score>
+			<venue>Estádio Governador Magalhães Pinto</venue>
+		</match>
+	</final>
+	<final>
+		<year>2010</year>
+		<winner>Internacional</winner>
+		<badgewinner>internacional</badgewinner>
+		<runnerup>Chivas Guadalajara</runnerup>
+		<badgerunnerup>chivas</badgerunnerup>
+		<match>
+			<score>2-1</score>
+			<venue>Estadio Omnilife</venue>
+		</match>
+		<match>
+			<score>3-2</score>
+			<venue>Estádio José Pinheiro Borda</venue>
+		</match>
+	</final>
+	<final>
+		<year>2011</year>
+		<winner>Santos</winner>
+		<badgewinner>santos</badgewinner>
+		<runnerup>Peñarol</runnerup>
+		<badgerunnerup>penarol</badgerunnerup>
+		<match>
+			<score>0-0</score>
+			<venue>Estadio Centenario</venue>
+		</match>
+		<match>
+			<score>2-1</score>
+			<venue>Estádio Paulo Machado de Carvalho</venue>
+		</match>
+	</final>
+	<final>
+		<year>2012</year>
+		<winner>Corinthians</winner>
+		<badgewinner>corinthians</badgewinner>
+		<runnerup>Boca Juniors</runnerup>
+		<badgerunnerup>bocajrs</badgerunnerup>
+		<match>
+			<score>1-1</score>
+			<venue>Estadio Alberto J. Armando</venue>
+		</match>
+		<match>
+			<score>2-0</score>
+			<venue>Estádio Paulo Machado de Carvalho</venue>
+		</match>
+	</final>
+</finals>

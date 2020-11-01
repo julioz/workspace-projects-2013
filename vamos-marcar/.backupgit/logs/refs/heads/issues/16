@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 56eeca49e250a61bb69689defc0fbeab62fd4095 Júlio Zynger <julioz92@gmail.com> 1380828403 -0300	branch: Created from HEAD
+56eeca49e250a61bb69689defc0fbeab62fd4095 240a6915f4f617776bb2c739036a2135b2fd88bc Júlio Zynger <julioz92@gmail.com> 1380848597 -0300	commit: Adds cardsUI to MainActivity, by setting a custom (but not finished) layout to each event on the list.
+240a6915f4f617776bb2c739036a2135b2fd88bc 2d088c197d57ecd9c22824093947e7bef1358563 Júlio Zynger <julioz92@gmail.com> 1380856791 -0300	commit: Adds a shared pool as singleton to pass ParseObjects between activities. Adds OnClickListener to Cards in MainActivity.

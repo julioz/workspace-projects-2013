@@ -1,0 +1,32 @@
+package br.com.zynger.brasileirao2012.util;
+
+import java.util.Comparator;
+
+import br.com.zynger.brasileirao2012.model.Move;
+
+public class MoveByTimeComparator implements Comparator<Move> {
+	@Override
+	public int compare(Move lhs, Move rhs) {
+		if (lhs.getPeriodo_id() > rhs.getPeriodo_id())
+			return -1;
+		else if (lhs.getPeriodo_id() == rhs.getPeriodo_id()) {
+			try {
+				int lMomento = Integer.parseInt(lhs.getMomento().trim());
+				int rMomento = Integer.parseInt(rhs.getMomento().trim());
+
+				if (lMomento > rMomento) {
+					return -1;
+				} else {
+					return 1;
+				}
+			} catch (NumberFormatException nfe) {
+				return 0;
+			} catch (NullPointerException npe) {
+				return 0;
+			}
+		} else {
+			return 1;
+		}
+	}
+
+}

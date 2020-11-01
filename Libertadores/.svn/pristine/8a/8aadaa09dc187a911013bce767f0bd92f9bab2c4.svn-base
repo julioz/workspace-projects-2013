@@ -1,0 +1,33 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import br.com.zynger.libertadores.adapters.StandingsAdapter;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+
+public class StandingsActivity extends ListActivity {
+
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.standingsactivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		
+		//ArrayList<Club> listClubs = new ArrayList<Club>(clubs.values()); TODO
+		ArrayList<Club> listClubs = new ArrayList<Club>();
+		for (Club club : clubs.values()) {
+			if(club.getGamesPlayed() > 0) listClubs.add(club);
+		}
+		setListAdapter(new StandingsAdapter(this, listClubs));
+	}
+	
+}

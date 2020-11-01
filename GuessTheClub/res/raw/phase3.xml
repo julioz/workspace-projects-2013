@@ -1,0 +1,135 @@
+<clubs>
+	<club>
+		<nm_bdg>bv_borussia</nm_bdg>
+		<nm_club>Borussia Dortmund</nm_club>
+		<alt_names>
+			<name>Borussia</name>
+			<name>Ballspielverein Borussia</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>ca_mineiro</nm_bdg>
+		<nm_club>Atlético Mineiro</nm_club>
+	</club>
+	<club>
+		<nm_bdg>celtic_fc</nm_bdg>
+		<nm_club>Celtic</nm_club>
+		<alt_names>
+			<name>Celtic Glasgow</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>club_americamexico</nm_bdg>
+		<nm_club>América de México</nm_club>
+		<alt_names>
+			<name>América</name>
+			<name>América do México</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>club_olimpia</nm_bdg>
+		<nm_club>Olimpia</nm_club>
+	</club>
+	<club>
+		<nm_bdg>dep_quito</nm_bdg>
+		<nm_club>Deportivo Quito</nm_club>
+	</club>
+	<club>
+		<nm_bdg>emelec</nm_bdg>
+		<nm_club>Emelec</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fc_dynamokyiv</nm_bdg>
+		<nm_club>Dínamo Kiev</nm_club>
+		<alt_names>
+			<name>Dínamo de Kiev</name>
+			<name>Динамо Київ</name>
+			<name>ФК Динамо Київ</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>fc_schalke04</nm_bdg>
+		<nm_club>Schalke 04</nm_club>
+		<alt_names>
+			<name>Gelsenkirchen-Schalke 04</name>
+			<name>Schalke</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>fc_twente</nm_bdg>
+		<nm_club>Twente</nm_club>
+	</club>
+	<club>
+		<nm_bdg>fenerbahce_sk</nm_bdg>
+		<nm_club>Fenerbahçe</nm_club>
+		<alt_names>
+			<name>Fenerbahce</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>fk_zenit</nm_bdg>
+		<nm_club>Zenit</nm_club>
+		<alt_names>
+			<name>Zenit São Petersburgo</name>
+			<name>Zenit San Petersburgo</name>
+			<name>Zenit Saint Petersburg</name>
+			<name>ФК Зенит Санкт-Петербург</name>
+			<name>Зенит Санкт-Петербург</name>
+			<name>Зенит</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>galatasaray_sc</nm_bdg>
+		<nm_club>Galatasaray</nm_club>
+	</club>
+	<club>
+		<nm_bdg>girondins_bordeaux</nm_bdg>
+		<nm_club>Girondins de Bordeaux</nm_club>
+		<alt_names>
+			<name>Bordeaux</name>
+			<name>Girondinos de Bordéus</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>gremio_fpga</nm_bdg>
+		<nm_club>Grêmio</nm_club>
+	</club>
+	<club>
+		<nm_bdg>hamburger_sv</nm_bdg>
+		<nm_club>Hamburger</nm_club>
+		<alt_names>
+			<name>Hamburgo</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>ldu_quito</nm_bdg>
+		<nm_club>LDU</nm_club>
+		<alt_names>
+			<name>LDU Quito</name>
+			<name>Liga de Quito</name>
+			<name>Liga Deportiva Universitaria</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>lille_osc</nm_bdg>
+		<nm_club>Lille</nm_club>
+		<alt_names>
+			<name>LOSC</name>
+			<name>Lille Métropole</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>nk_dinamozagreb</nm_bdg>
+		<nm_club>Dínamo Zagreb</nm_club>
+		<alt_names>
+			<name>Dínamo de Zagreb</name>
+		</alt_names>
+	</club>
+	<club>
+		<nm_bdg>panathinaikos_fc</nm_bdg>
+		<nm_club>Panathinaikos</nm_club>
+		<alt_names>
+			<name>Παναθηναϊκός</name>
+		</alt_names>
+	</club>
+</clubs>

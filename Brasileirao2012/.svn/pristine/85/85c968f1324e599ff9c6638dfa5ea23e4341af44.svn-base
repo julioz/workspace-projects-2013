@@ -1,0 +1,112 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Club;
+
+public class RankingListAdapter extends ArrayAdapter<Club>{
+	private final static int LAYOUT_RESOURCE = R.layout.ranking_row;
+	
+	private static final String CAMP_CBRASIL = "";
+	private static final String CAMP_LIBERTA = "";
+	
+	private final LayoutInflater mInflater;
+	private ArrayList<Club> objects;
+	
+	public RankingListAdapter(Context context, ArrayList<Club> objects) {
+		super(context, LAYOUT_RESOURCE, objects);
+		this.mInflater = LayoutInflater.from(context);
+		this.objects = objects;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	public ArrayList<Club> getList() {
+		return objects;
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+		RankingClubHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUT_RESOURCE, parent, false);
+            
+            holder = new RankingClubHolder();
+            holder.position = (TextView) row.findViewById(R.rankingrow.position);
+            holder.badge = (ImageView) row.findViewById(R.rankingrow.badge);
+            holder.points = (TextView) row.findViewById(R.rankingrow.points);
+            holder.played = (TextView) row.findViewById(R.rankingrow.played);
+            holder.win = (TextView) row.findViewById(R.rankingrow.win);
+            holder.draw = (TextView) row.findViewById(R.rankingrow.draw);
+            holder.lose = (TextView) row.findViewById(R.rankingrow.lose);
+            holder.goalspro = (TextView) row.findViewById(R.rankingrow.goalspro);
+            holder.goalsagainst = (TextView) row.findViewById(R.rankingrow.goalsagainst);
+            holder.balance = (TextView) row.findViewById(R.rankingrow.balance);
+            
+            row.setTag(holder);
+        }else{
+            holder = (RankingClubHolder) row.getTag();
+        }
+        holder.position.setTextColor(getContext().getResources().getColor(android.R.color.white));
+
+        final Club club = getItem(position);
+
+        if(club.getPosition() < 10) holder.position.setText("0" + String.valueOf(club.getPosition())); 
+		else holder.position.setText(String.valueOf(club.getPosition()));
+		
+		if((club.getPosition() > 0 && club.getPosition() < 5)
+				|| club.getAcronym().equals(CAMP_CBRASIL)
+				|| club.getAcronym().equals(CAMP_LIBERTA)){
+			holder.position.setTextColor(getContext().getResources().getColor(R.color.rankingrow_blue));			
+		}else if(club.getPosition() > 16){
+			holder.position.setTextColor(getContext().getResources().getColor(R.color.rankingrow_red));
+		}
+
+		holder.badge.setImageDrawable(getContext().getResources().getDrawable(club.getBadgeResource(getContext())));
+		holder.points.setText(String.valueOf(club.getPoints()));
+		holder.played.setText(String.valueOf(club.getPlayed()));
+		holder.win.setText(String.valueOf(club.getWin()));
+		holder.draw.setText(String.valueOf(club.getDraw()));
+		holder.lose.setText(String.valueOf(club.getLose()));
+		holder.goalspro.setText(String.valueOf(club.getGoalsPro()));
+		holder.goalsagainst.setText(String.valueOf(club.getGoalsAgainst()));
+		holder.balance.setText(String.valueOf(club.getBalance()));
+		
+		holder.badge.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), club.getName(), Toast.LENGTH_SHORT).show();
+			}
+		});
+
+        return row;
+	}
+}
+
+class RankingClubHolder {
+	TextView position;
+	ImageView badge;
+	TextView points;
+	TextView played;
+	TextView win;
+	TextView draw;
+	TextView lose;
+	TextView goalspro;
+	TextView goalsagainst;
+	TextView balance;
+}

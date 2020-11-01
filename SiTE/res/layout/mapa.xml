@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent">
+ 
+ 	<FrameLayout
+    	xmlns:android="http://schemas.android.com/apk/res/android" 
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent">
+        
+        <view android:id="@+id/mapView"
+		class="com.google.android.maps.MapView"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:enabled="true"
+		android:layout_weight="1"
+		android:clickable="true"
+		android:apiKey="0DMBHxWLZMvBWJ1avKVs3vdqrCsHkWt94b1jkyw"/>
+		
+		<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal" android:layout_width="fill_parent"
+		android:layout_height="58dip" android:background="@drawable/gradient"
+		android:id="@+id/actionbar" android:layout_alignParentTop="true"
+		android:visibility="gone">
+		
+			<ImageView android:layout_width="40dip" android:layout_height="wrap_content" android:src="@drawable/icon"
+			android:layout_toLeftOf="@+id/titulo" android:paddingLeft="5px"
+			android:layout_marginRight="7dip" android:layout_alignParentBottom="true"
+			android:layout_alignParentTop="true" />
+		
+			<TextView android:layout_width="wrap_content" android:layout_centerVertical="true"
+			android:textColor="#2a6cae" android:textSize="16dip" android:id="@id/titulo"
+			android:textStyle="bold" android:layout_height="wrap_content" android:layout_marginLeft="45dip"
+			android:text="SiTE" android:padding="5dp" />
+	
+			<RelativeLayout android:id="@+id/actionbar_princ" android:layout_width="fill_parent" android:layout_height="wrap_content" android:visibility="visible">
+			
+					<!-- <ImageView android:layout_width="1px" android:layout_height="wrap_content" android:src="#ff9a9ea6"
+					android:layout_toLeftOf="@+id/cj_mao" android:id="@+id/borderfour"
+					android:layout_marginRight="12dip" android:layout_alignParentBottom="true"
+					android:layout_alignParentTop="true" />
+			
+					<LinearLayout android:layout_width="42dip" android:layout_height="wrap_content"
+					android:layout_marginRight="12dip" android:layout_centerVertical="true"
+					android:layout_toLeftOf="@+id/borderthree" android:id="@id/cj_mao" android:orientation="vertical">
+						<ImageView android:layout_width="30dip" android:src="@drawable/ic_mao" android:scaleType="fitXY"
+						android:layout_height="30dip" android:background="@null" android:id="@+id/ic_mao" android:layout_gravity="center_horizontal"/>
+						
+						<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:paddingTop="3dip"
+						android:text="Mão" android:layout_gravity="center_horizontal" android:textColor="#2a6cae" android:textSize="13dip"/>
+					</LinearLayout> -->
+					
+					<ImageView android:layout_width="1px" android:layout_height="wrap_content" android:src="#ff9a9ea6"
+					android:layout_toLeftOf="@+id/cj_server" android:id="@+id/borderfour"
+					android:layout_marginRight="12dip" android:layout_alignParentBottom="true"
+					android:layout_alignParentTop="true" />
+			
+					<LinearLayout android:layout_width="56dip" android:layout_height="wrap_content"
+					android:layout_marginRight="12dip" android:layout_centerVertical="true"
+					android:layout_toLeftOf="@+id/borderthree" android:id="@id/cj_server" android:orientation="vertical">
+						<ImageView android:layout_width="30dip" android:src="@drawable/ic_server" android:scaleType="fitXY"
+						android:layout_height="30dip" android:background="@null" android:id="@+id/ic_server" android:layout_gravity="center_horizontal"/>
+						
+						<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:paddingTop="3dip"
+						android:text="Conexão" android:layout_gravity="center_horizontal" android:textColor="#2a6cae" android:textSize="13dip"/>
+					</LinearLayout>
+					
+					<ImageView android:layout_width="1px" android:layout_height="wrap_content" android:src="#ff9a9ea6"
+					android:layout_toLeftOf="@+id/cj_desenho" android:id="@+id/borderthree"
+					android:layout_marginRight="12dip" android:layout_alignParentBottom="true"
+					android:layout_alignParentTop="true" />
+					
+					<LinearLayout android:layout_width="42dip" android:layout_height="wrap_content"
+					android:layout_marginRight="12dip" android:layout_centerVertical="true"
+					android:layout_toLeftOf="@+id/bordertwo" android:id="@id/cj_desenho" android:orientation="vertical">
+						<ImageView android:layout_width="30dip" android:src="@drawable/ic_desenho" android:scaleType="fitXY"
+						android:layout_height="30dip" android:background="@null" android:id="@+id/ic_desenho" android:layout_gravity="center_horizontal"/>
+						
+						<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:paddingTop="3dip"
+						android:text="Traçar" android:layout_gravity="center_horizontal" android:textColor="#2a6cae" android:textSize="13dip"/>
+					</LinearLayout>
+					
+					<ImageView android:layout_width="1px" android:layout_height="wrap_content" android:src="#ff9a9ea6"
+					android:layout_toLeftOf="@+id/cj_novo" android:id="@id/bordertwo"
+					android:layout_marginRight="12dip" android:layout_alignParentBottom="true"
+					android:layout_alignParentTop="true" />
+					
+					<LinearLayout android:layout_width="42dip" android:layout_height="wrap_content"
+					android:layout_marginRight="12dip" android:layout_centerVertical="true"
+					android:layout_toLeftOf="@+id/borderone" android:id="@+id/cj_novo" android:orientation="vertical">
+						<ImageView android:layout_width="30dip" android:src="@drawable/ic_pdi" android:scaleType="fitXY"
+						android:layout_height="30dip" android:background="@null" android:id="@+id/ic_novo" android:layout_gravity="center_horizontal"/>
+						
+						<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+						android:paddingTop="3dip"
+						android:text="PDI" android:layout_gravity="center_horizontal" android:textColor="#2a6cae" android:textSize="13dip"/>
+					</LinearLayout>
+			
+					<ImageView android:layout_width="wrap_content" android:src="#ff9a9ea6" android:layout_height="wrap_content"
+					android:id="@id/borderone" android:layout_alignParentTop="true"
+					android:layout_marginRight="12dip" android:layout_alignParentBottom="true"
+					android:layout_alignBottom="@+id/cj_exibicao"
+					android:layout_toLeftOf="@id/cj_exibicao" />
+					
+					<LinearLayout android:layout_width="50dip" android:layout_height="wrap_content"
+					android:layout_marginRight="12dip" android:layout_centerVertical="true"
+					android:layout_alignParentRight="true" android:id="@id/cj_exibicao" android:orientation="vertical">
+						<ImageView android:layout_width="30dip" android:src="@drawable/ic_exibicao" android:scaleType="fitXY"
+						android:layout_height="30dip" android:background="@null" android:id="@+id/ic_exibicao" android:layout_gravity="center_horizontal"/>
+						
+						<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingTop="3dip"
+						android:text="Exibir" android:layout_gravity="center_horizontal" android:textColor="#2a6cae" android:textSize="13dip"/>
+					</LinearLayout>
+			
+			</RelativeLayout>
+		</RelativeLayout>
+        
+    </FrameLayout>
+    
+	
+	<!-- Desenho -->
+	<RelativeLayout
+    	xmlns:android="http://schemas.android.com/apk/res/android" 
+    	android:paddingLeft="5px"
+    	android:id="@+id/desenho_layout"
+		android:paddingTop="5px"
+		android:paddingRight="5px"
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent"
+		android:paddingBottom="5px"
+		android:orientation="vertical"
+		android:gravity="bottom"
+		android:visibility="gone">
+
+		 <br.com.site.view.TransparentPanel 
+	    	android:paddingTop="5px"
+	        android:paddingLeft="5px"
+			android:paddingBottom="5px"
+			android:paddingRight="18px"
+			android:id="@+id/desenho_transparent_panel"
+			android:layout_width="wrap_content"
+			android:clickable="false"
+			android:layout_height="wrap_content"
+			android:visibility="visible">
+	    
+		    <LinearLayout
+		    	xmlns:android="http://schemas.android.com/apk/res/android"
+		    	android:gravity="center"
+		    	android:layout_height="fill_parent"
+		    	android:layout_width="fill_parent">
+		    
+		    <TableLayout
+		    	android:layout_width="wrap_content"
+		    	android:layout_height="wrap_content">
+		    	
+		    	<TableRow
+		    		android:layout_width="fill_parent"
+	  				android:layout_height="wrap_content"
+	  				android:id="@+id/desenho_icones_barra">
+		    
+		    		<ImageButton
+	  					android:src="@drawable/bt_desenho"
+	  					android:id="@+id/bt_desenho"
+	  					android:background="@null"
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:paddingLeft="5sp"
+	  					/>
+	  					
+	  				<ImageButton
+	  					android:src="@drawable/bt_fill"
+	  					android:id="@+id/bt_fill"
+	  					android:background="@null"
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:paddingLeft="5sp"
+	  					/>
+	  					
+	  				<ImageButton
+	  					android:src="@drawable/bt_poligono"
+	  					android:id="@+id/bt_poligono"
+	  					android:background="@null"
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:paddingLeft="10sp"
+	  					/>
+	  					
+	  				<ImageButton
+	  					android:src="@drawable/bt_cores"
+	  					android:id="@+id/bt_cores"
+	  					android:background="@null"
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:paddingLeft="10sp"
+	  					/>
+	  					
+	  				<ImageButton
+	  					android:src="@drawable/bt_borracha"
+	  					android:id="@+id/bt_borracha"
+	  					android:background="@null"
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:paddingLeft="10sp"
+	  					android:paddingRight="5sp"/>
+	  			</TableRow>
+	  			
+	  			<TableRow
+		    		android:layout_width="fill_parent"
+	  				android:layout_height="wrap_content"
+	  				android:id="@+id/desenho_texto_barra">
+		    
+		    		<TextView
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:text="Livre"
+	  					android:paddingLeft="5sp"/>
+	  					
+	  				<TextView
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:text="Região"
+	  					android:paddingLeft="5sp"/>
+	  					
+	  				<TextView
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:text="Polígono"
+	  					android:paddingLeft="10sp"/>
+	  					
+	  				<TextView
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:text="Cor"
+	  					android:paddingLeft="10sp"/>
+	  					
+	  				<TextView
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:gravity="center"
+	  					android:text="Borracha"
+	  					android:paddingLeft="10sp"
+	  					android:paddingRight="5sp"/>
+	  			</TableRow>
+	  			
+	  			
+	  			<TableRow
+	  				android:id="@+id/desenho_botoes_poligono_barra"
+	  				android:layout_width="fill_parent"
+	  				android:layout_height="wrap_content"
+	  				android:visibility="gone">
+	  				
+	  				<Button
+	  					android:id="@+id/bt_triangulo"
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:text="Triângulo"/>
+	  					
+	  				<Button
+	  					android:id="@+id/bt_quadrilatero"
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:text="Quadrilátero"/>
+	  					
+	  				<Button
+	  					android:id="@+id/bt_pentagono"
+	  					android:layout_width="wrap_content"
+	  					android:layout_height="wrap_content"
+	  					android:text="Pentágono"/>
+	  				
+	  			</TableRow>
+	  			
+			</TableLayout>	
+		   </LinearLayout>
+	        
+		</br.com.site.view.TransparentPanel>
+		
+		<ImageButton
+			android:src="@drawable/ic_close"
+			android:id="@+id/bt_fechar_desenho"
+			android:background="@null"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_alignRight="@id/desenho_transparent_panel"/>
+		
+	</RelativeLayout>
+	
+	    
+</RelativeLayout>

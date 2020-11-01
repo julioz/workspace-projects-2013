@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="Internet">
+		<CheckBoxPreference
+		    android:key="cb_updatecheck"
+		    android:title="Checar atualizações ao iniciar"
+		    android:summary="Procura por atualizações do aplicativo no Google Play"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_imgsdownload"
+		    android:title="Atualizar imagens"
+		    android:summary="Download de imagens consome banda de internet"
+		    android:defaultValue="true"/>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Personalização">
+		<Preference
+			android:key="app_theme"
+			android:title="Tema" />
+		<ListPreference
+		    android:key="widget_theme"
+		    android:title="Tema dos widgets"
+		    android:entries="@array/preferenceWidgetsThemeEntries"
+  			android:entryValues="@array/preferenceWidgetsThemeValues"/>	    
+	</PreferenceCategory>	
+	<PreferenceCategory android:title="Sobre">
+		<Preference
+			android:key="app_version"
+			android:title="Versão" />
+	</PreferenceCategory>
+</PreferenceScreen>

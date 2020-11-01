@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:background="@drawable/backrepeat"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical">
+	
+    <RelativeLayout
+        android:background="@drawable/actionbar_gradient2"
+        android:id="@+trophies/rl_actionbar"
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:id="@+trophies/iv_badge"
+            android:layout_centerVertical="true" />
+        
+        <br.com.zynger.brasileirao2012.view.TertreTextView
+            android:id="@+trophies/tv_name"
+            android:layout_marginLeft="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_toRightOf="@+trophies/iv_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="30dp" />
+        
+    </RelativeLayout>
+    
+	<ListView
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent"
+		android:layout_below="@+trophies/rl_actionbar"
+		android:layout_above="@+trophies/ll_ad"
+		android:id="@+id/android:list"
+		android:paddingLeft="3dp"
+		android:paddingRight="3dp"
+		android:cacheColorHint="#00000000"/>
+	
+	<LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+trophies/ll_ad"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>
+</RelativeLayout>

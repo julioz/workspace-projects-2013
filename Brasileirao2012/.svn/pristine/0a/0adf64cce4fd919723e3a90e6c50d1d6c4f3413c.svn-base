@@ -1,0 +1,90 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Striker;
+
+public class StrikersREST {
+
+	private static final int STRIKER_MINGOALS = 2; //TODO
+
+	public static ArrayList<Striker> getStrikers(int division){
+		ArrayList<Striker> al = new ArrayList<Striker>();
+		
+		try{
+			Document doc = null;
+			if(division == Club.PRIMEIRADIVISAO) doc = Jsoup.connect("http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2012/serie-a/artilheiros.jhtm").get();
+			else doc = Jsoup.connect("http://esporte.uol.com.br/futebol/campeonatos/brasileiro/2012/serie-b/artilheiros.jhtm").get();
+			
+			Element table = doc.getElementById("marcados");
+			Element tbody = table.getElementsByTag("tbody").get(0);
+			Elements tr = tbody.getElementsByTag("tr");
+			
+			int goals = 0;
+			String team = null;
+			Element names = null;
+			
+			for (Element el : tr) {
+				Elements td = el.getElementsByTag("td");
+				for (Element el_td : td) {
+					if(el_td.className().equals("col2")) continue;
+					else if(el_td.className().equals("col3")) team = el_td.html();
+					else if(el_td.className().equals("col4")) names = el_td;
+					else if(el_td.className().equals("col5")) goals = Integer.parseInt(el_td.html());
+				}
+				if(goals == STRIKER_MINGOALS-1) break;
+				
+				addStrikersToArray(al, names, team, goals);
+			}
+		}catch(IOException ioexc){ }
+		
+		return al;
+	}
+	
+	private static void addStrikersToArray(ArrayList<Striker> al, Element td_names, String team, int goals) {
+		for (Element striker : td_names.getElementsByTag("p")) {			
+			team = team.replaceAll("&eacute;", "é");
+			team = team.replaceAll("&oacute;", "ó");
+			team = team.replaceAll("&iacute;", "í");
+			team = team.replaceAll("&uacute;", "ú");
+			team = team.replaceAll("&aacute;", "á");
+			team = team.replaceAll("&atilde;", "ã");
+			team = team.replaceAll("&ecirc;", "ê");
+			
+			if(team.equals("ASA") || team.equals("ASA AL")) team = "Asa";
+			else if(team.equals("Boa") || team.equals("Boa Esporte Clube")) team = "Boa Esporte";
+			else if(team.equals("Barueri")) team = "Grêmio Barueri";
+			else if(team.equals("Ipatinga-MG")) team = "Ipatinga";
+			else if(team.equals("Paraná Clube")) team = "Paraná";
+			
+			al.add(new Striker(striker.text(), team, goals));
+		}
+	}
+	
+	/*private static final String URL_WS = "http://aqueous-oasis-8080.herokuapp.com/services/";
+
+	public ArrayList<Striker> getStrikers(int division) throws Exception {
+		String[] resposta = new WebServiceClient().get(URL_WS + "strikers/Gdivision=" + division + "/");
+		
+		if (resposta[0].equals("200")) {
+			ArrayList<Striker> alStrikers = new ArrayList<Striker>();
+			JSONArray array = new JSONArray(resposta[1]);
+			
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				alStrikers.add(new Striker(obj.getString("name"), obj.getString("team"), obj.getInt("goals")));
+			}
+
+			return alStrikers;
+		} else {
+			throw new Exception(resposta[1]);
+		}
+	}*/
+}

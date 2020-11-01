@@ -1,0 +1,113 @@
+package br.com.zynger.libertadores;
+
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.MatchesAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetMatchesTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.data.GroupsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.util.GroupEnum;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.web.MatchesParser;
+
+public class MatchesActivity extends ListActivity implements AsyncTaskListener {
+
+	private ClubsDB clubsDB;
+	private GroupsDB groupsDB;
+	private TreeMap<String, Club> clubs;
+	private InternalStorageHandler internalStorage;
+	
+	private MatchesParser matchesParser;
+	
+	private RelativeLayout rl_loading;
+	private HelveticaTextView tv_title;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.matchesactivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		groupsDB = GroupsDB.getSingletonObject(clubsDB);
+		clubs = clubsDB.getClubs();
+		internalStorage = new InternalStorageHandler(this);
+		
+		matchesParser = new MatchesParser(this, clubs);
+		
+		loadViews();
+		
+		tv_title.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new GetMatchesTask(matchesParser, MatchesActivity.this).execute();
+			}
+		}); //TODO remove
+		
+		setListAdapter(new MatchesAdapter(this, groupsDB.getGroups()));
+	}
+	
+	private void loadViews() {
+		rl_loading = (RelativeLayout) findViewById(R.matchesactivity.rl_loading);
+		tv_title = (HelveticaTextView) findViewById(R.matchesactivity.titlebar_tvtitle);
+		
+		tv_title.setText(getString(R.string.homedashboard_matches).toUpperCase());
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		MatchesAdapter adapter = ((MatchesAdapter) getListAdapter());
+		GroupEnum gEnum = adapter.getGroupClicked(position);
+		if(null != gEnum){
+			Intent intent = new Intent(this, GroupActivity.class);
+			intent.putExtra(GroupActivity.INTENT_GROUPNUM, gEnum);
+			startActivity(intent);
+		}else{
+			Intent intent = new Intent(this, MatchesListActivity.class);
+			intent.putExtra(MatchesListActivity.INTENT_PHASENUM, adapter.getPhaseClicked(position));
+			intent.putExtra(MatchesListActivity.INTENT_PHASENAME, adapter.getItem(position));
+			startActivity(intent);
+		}
+		super.onListItemClick(l, v, position, id);
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+
+	@Override
+	public void onComplete(Object result) {
+		//TODO
+		
+		hideUpdatingLayout();
+	}
+
+	@Override
+	public void onFail(String message) {
+		//TODO load the old definitions
+		hideUpdatingLayout();
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+
+}

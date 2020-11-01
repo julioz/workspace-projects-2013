@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Maps1746</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_call_details">Maps1746</string>
+    <string name="open_drawer">Abrir filtros</string>
+    <string name="close_drawer">Fechar filtros</string>
+
+</resources>

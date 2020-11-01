@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:font="http://schemas.android.com/apk/res/br.com.zynger.vamosmarcar"
+    android:id="@+eventactivity/contentview"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="?android:attr/windowBackground"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+eventactivity/rl_map"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/border_square"
+        android:padding="1dp" >
+
+        <br.com.zynger.vamosmarcar.view.GoogleMapImageView
+            android:id="@+eventactivity/gmiv_map"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:id="@+eventactivity/ll_mapheadline"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+eventactivity/gmiv_map"
+            android:background="#98000000" >
+
+            <br.com.zynger.vamosmarcar.view.RobotoTextView
+                android:id="@+eventactivity/tv_mapheadline"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="2dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical|right"
+                android:maxLines="1"
+                android:paddingRight="8dp"
+                android:textColor="@android:color/white"
+                font:typeface="roboto_light" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+eventactivity/rl_nomapconnection"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="25dp"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+eventactivity/iv_noconnection"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:adjustViewBounds="true"
+            android:padding="2dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_network" />
+
+        <br.com.zynger.vamosmarcar.view.RobotoTextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dp"
+            android:layout_toRightOf="@+eventactivity/iv_noconnection"
+            android:text="@string/eventactivity_error_nomapshown"
+            android:textColor="@color/darkgray"
+            android:textSize="18sp"
+            font:typeface="roboto_regular" />
+    </RelativeLayout>
+
+    <br.com.zynger.vamosmarcar.view.RobotoTextView
+        android:id="@+eventactivity/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="6"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:textColor="@color/darkgray"
+        font:typeface="roboto_regular" />
+
+    <Button
+        android:id="@+eventactivity/bt_comments"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:gravity="center"
+        android:paddingLeft="30dp"
+        android:paddingRight="35dp"
+        android:text="@string/eventactivity_comments"
+        android:textColor="@color/mediumgray" />
+
+</LinearLayout>

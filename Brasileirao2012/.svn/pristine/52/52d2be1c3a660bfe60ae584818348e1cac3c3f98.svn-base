@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:visibility="gone"
+        android:id="@+matchviewlayout/ll_line_rodada"
+        android:gravity="center"
+        android:weightSum="3">
+        
+        <View
+	        android:layout_width="0dp"
+	        android:layout_height="1dp"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:background="#40FFFFFF"/>
+        
+		<TextView
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:layout_gravity="center"
+	        android:textIsSelectable="false"
+	        android:gravity="center"
+	        android:textColor="#FFFFFFFF"
+	        android:id="@+matchviewlayout/tv_rod"/>
+        
+        <View
+	        android:layout_width="0dp"
+	        android:layout_height="1dp"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:background="#40FFFFFF"/>
+    </LinearLayout>
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:id="@+matchviewlayout/view_line_notrodada"
+        android:background="#40FFFFFF"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textIsSelectable="false"
+        android:textColor="#FFFFFFFF"
+        android:id="@+matchviewlayout/tv_date"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textIsSelectable="false"
+        android:id="@+matchviewlayout/tv_stadium"
+        android:textColor="#FFFFFFFF"/>
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="horizontal">
+        
+        <TextView
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            android:textSize="14sp"
+            android:textIsSelectable="false"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="#FFFFFFFF"
+            android:id="@+matchviewlayout/tv_position_home"/>
+        
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:id="@+matchviewlayout/iv_home"/>
+        
+        <TextView
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
+	        android:textSize="36sp"
+	        android:textIsSelectable="false"
+	        android:id="@+matchviewlayout/tv_scr_h"
+	        android:gravity="center"
+	        android:textColor="#FFFFFFFF"/>
+        
+        <LinearLayout
+            android:layout_width="52dp"
+	        android:layout_height="52dp"
+	        android:gravity="center"
+	        android:orientation="vertical">
+            <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="32sp"
+		        android:textIsSelectable="false"
+		        android:gravity="center"
+		        android:textColor="#FFFFFFFF"
+		        android:text="X"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8sp"
+                android:visibility="gone"
+                android:textIsSelectable="false"
+                android:id="@+matchviewlayout/tv_classico"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:text="@string/matchviewlayout_rivalry"/>
+        </LinearLayout>
+        
+        <TextView
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
+	        android:id="@+matchviewlayout/tv_scr_a"
+	        android:textSize="36sp"
+	        android:textIsSelectable="false"
+	        android:gravity="center"
+	        android:textColor="#FFFFFFFF"/>
+        
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+matchviewlayout/iv_away"
+            android:layout_gravity="center"/>
+        
+        <TextView
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            android:textSize="14sp"
+            android:textIsSelectable="false"
+            android:gravity="center"
+            android:textColor="#FFFFFFFF"
+            android:visibility="gone"
+            android:id="@+matchviewlayout/tv_position_away"/>
+    </LinearLayout>
+</LinearLayout>

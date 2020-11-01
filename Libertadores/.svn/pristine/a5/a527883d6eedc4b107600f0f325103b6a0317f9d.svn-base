@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="Internet">
+		<CheckBoxPreference
+		    android:key="cb_updatecheck"
+		    android:title="@string/settingsactivity_updatecheck_title"
+		    android:summary="@string/settingsactivity_updatecheck_summary"
+		    android:defaultValue="true"/>
+		<CheckBoxPreference
+		    android:key="cb_imgsdownload"
+		    android:title="@string/settingsactivity_imgsdownload_title"
+		    android:summary="@string/settingsactivity_imgsdownload_summary"
+		    android:defaultValue="true"/>
+		<!-- <CheckBoxPreference
+		    android:key="cb_actsupdates"
+		    android:title="@string/settingsactivity_actsupdates_title"
+		    android:summary="@string/settingsactivity_actsupdates_summary"
+		    android:defaultValue="false"/> -->
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/homedashboard_news">
+	    <ListPreference 
+	        android:key="list_newslanguage"
+	        android:title="@string/settingsactivity_newslanguage_title"
+	        android:entries="@array/entries_list_news_language"
+	        android:entryValues="@array/entryvalues_list_news_language" />
+	</PreferenceCategory>
+</PreferenceScreen>

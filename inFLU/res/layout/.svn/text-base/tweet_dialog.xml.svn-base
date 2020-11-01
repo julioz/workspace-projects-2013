@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:background="@color/green_background"
+    android:id="@+twitter_dialog/ll_actbg"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
+        
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_twitter_quickaction"
+            android:id="@+twitter_dialog/iv_twitter"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="2dp"/>
+        
+        <TextView
+            android:layout_toRightOf="@+twitter_dialog/iv_twitter"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+twitter_dialog/tv_title"
+            android:text="inFLU"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="18dp"/>
+        
+        <TextView
+            android:layout_toRightOf="@+twitter_dialog/tv_title"
+            android:id="@+twitter_dialog/login_status"
+            android:layout_centerVertical="true"
+            android:padding="3dp"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:text="Status:
+Desligado"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"/>
+        
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        
+        <EditText
+	        android:layout_margin="3dp"
+	        android:layout_width="250dp"
+	        android:layout_height="wrap_content"
+	        android:lines="4"
+	        android:maxLength="140"
+	        android:id="@+twitter_dialog/et_text"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@+twitter_dialog/et_text"
+            android:id="@+twitter_dialog/characted_counter"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"
+            android:text="N° de caracteres restantes: 140"/>
+        
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="2dp">
+        
+        <Button
+		    android:id="@+twitter_dialog/btn_tweet"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Tweet"
+		    android:layout_alignParentRight="true"
+		    android:layout_marginRight="2dp"/>
+        
+        <Button
+			android:id="@+twitter_dialog/btn_clear_credentials"
+		    android:layout_width="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_height="wrap_content"
+		    android:text="Logout"
+		    android:layout_marginLeft="2dp"/>
+        
+    </LinearLayout>
+
+</LinearLayout>

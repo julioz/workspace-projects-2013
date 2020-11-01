@@ -1,0 +1,298 @@
+package br.com.zynger.brasileirao2012.web;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.util.Log;
+import br.com.zynger.brasileirao2012.HomeActivity;
+import br.com.zynger.brasileirao2012.adapters.ThirdDivisionViewFlowAdapter;
+import br.com.zynger.brasileirao2012.data.MatchesDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.enums.NewsDomain;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.model.RealTimePlayer;
+import br.com.zynger.brasileirao2012.rest.MatchesREST;
+import br.com.zynger.brasileirao2012.rest.RankingREST;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.util.ThirdDivisionBadgeMapper;
+
+public class HTMLManager {
+	
+	public static TreeMap<String, Club> getRanking(TreeMap<String, Club> clubs, Division division) {
+		try {
+			RankingREST cliREST = new RankingREST(clubs);
+			ArrayList<Club> al = cliREST.getRanking(division);
+			for (Club club : al) {
+				Club c = clubs.get(club.getAcronym());
+				club.setAprov(c.getAprov());
+				club.setFullName(c.getFullName());
+				club.setWiki(c.getWiki());
+				c.clone(club);
+			}
+			return clubs;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	@SuppressLint("UseSparseArrays")
+	public static HashMap<Integer, ArrayList<Club>> getThirdDivisionRanking() throws JSONException {
+		HashMap<Integer, ArrayList<Club>> clubs = new HashMap<Integer, ArrayList<Club>>();
+		JSONObject document = new JSONObject(JsonUtil.readJsonFeed("http://globoesporte.globo.com/dynamo/"
+				+ "futebol/campeonato/campeonatobrasileiroc/"
+			+ "campeonato-brasileiro-c-2013/classificacao.json"));
+		
+		JSONArray jsonArrayGroups = document.getJSONObject("edicao_campeonato").getJSONArray("fases").getJSONObject(0).getJSONArray("pontos_corridos_grupada");
+		document = null;
+		JSONObject jsonObjectGroupA = jsonArrayGroups.getJSONObject(0);
+		JSONObject jsonObjectGroupB = jsonArrayGroups.getJSONObject(1);
+		jsonArrayGroups = null;
+		
+		clubs.put(ThirdDivisionViewFlowAdapter.GROUP_A, parseThirdDivisionClubs(jsonObjectGroupA));
+		clubs.put(ThirdDivisionViewFlowAdapter.GROUP_B, parseThirdDivisionClubs(jsonObjectGroupB));
+		
+		return clubs;
+	}
+    
+	private static ArrayList<Club> parseThirdDivisionClubs(
+			JSONObject jsonObjectGroup) throws JSONException {
+		ArrayList<Club> clubs = new ArrayList<Club>();
+		ThirdDivisionBadgeMapper thirdDivisionDBMapper = new ThirdDivisionBadgeMapper();
+		JSONArray classificacao = jsonObjectGroup.getJSONArray("classificacoes").getJSONObject(0).getJSONArray("classificacao");
+		for (int i = 0; i < classificacao.length(); i++) {
+			JSONObject jsonClub = classificacao.getJSONObject(i);
+
+			Club club = new Club();
+			club.setPosition(i+1);
+			club.setName(jsonClub.getString("nome_popular"));
+			if(club.getName().contains("Barueri")) club.setAcronym("GBA");
+			else club.setAcronym(jsonClub.getString("equipe_sigla"));
+			club.setPlayed(jsonClub.getInt("jogos"));
+			club.setPoints(jsonClub.getInt("pontos"));
+			club.setWin(jsonClub.getInt("vitorias"));
+			club.setDraw(jsonClub.getInt("empates"));
+			club.setLose(jsonClub.getInt("derrotas"));
+			club.setGoalsPro(jsonClub.getInt("gols_pro"));
+			club.setGoalsAgainst(jsonClub.getInt("gols_contra"));
+			club.setBalance(jsonClub.getInt("saldo_gols"));
+			club.setBadge(thirdDivisionDBMapper.getBadge(club.getAcronym()));
+			
+			clubs.add(club);
+		}
+		return clubs;
+	}
+
+	public static JSONObject getTableData(Context c, MatchesDB matchesDB,
+			TreeMap<String, Club> clubs, Division division) throws IOException {
+		JSONObject json = new JSONObject();
+		TreeMap<Integer, Fixture> matches = matchesDB.getMatches(division);
+		HashMap<Integer, GregorianCalendar> rod_dates = matchesDB.getDates(division);
+		MatchesREST matchesREST = new MatchesREST(clubs);
+		
+		Calendar today = new GregorianCalendar();
+		for (int rodada = rod_dates.size(); rodada >= 1; rodada--) {
+			Calendar date = rod_dates.get(rodada);
+			
+			if(today.before(date)){ // nao preciso tentar atualizar as partidas que ainda nao aconteceram
+				Log.d(HomeActivity.TAG, today.get(Calendar.DAY_OF_MONTH)
+						+ "/" + today.get(Calendar.MONTH) + " before rodada = " + rodada);
+			}else{
+				try{
+					// se a rodada ja passou e ja tenho no banco o resultado das partidas
+					// nao preciso atualizar novamente
+					Fixture fixture = matches.get(rodada);
+					if(fixture.isDone()){
+						Log.d(HomeActivity.TAG, "Rodada = " + rodada + " isDone");
+						json.put(String.valueOf(rodada), fixture.toJSONObject());
+					}else{
+						Log.d(HomeActivity.TAG, "Rodada = " + rodada + " getMatches");
+						json.remove(String.valueOf(rodada));
+						fixture = new Fixture(rodada);
+						fixture.setMatches(matchesREST.getMatches(matches, division, rodada));
+						matchesDB.replaceFixture(division, fixture);
+						json.put(String.valueOf(rodada), fixture.toJSONObject());
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return json;
+	}
+
+	public static String getVersionAtMarket() throws IOException{
+		Document document = Jsoup.connect("https://play.google.com/store/apps/details?id=br.com.zynger.brasileirao2012").get();
+		
+		Elements els = document.getElementsByAttributeValue("itemprop", "softwareVersion");
+		
+		return els.get(0).text();
+	}
+
+	public static String[] getNewsDetailsContent(String serverId, String newsurl) throws JSONException{
+		String url = "http://electric-stream-5784.herokuapp.com/news?domain=" + serverId + "&url=" + newsurl;
+		String[] result = new String[2];
+		JSONObject json = new JSONObject(JsonUtil.readJsonFeed(url));
+		try{
+			result[0] = json.getString("imgsrc");
+			if(result[0].equals("null")) result[0] = null;
+		}catch(JSONException e){
+			result[0] = null;
+		}
+		result[1] = json.getString("content");
+		if(result[1].equals("")) throw new RuntimeException();
+		return result;
+	}
+	
+	public static String getNewsContent(String newsurl, NewsDomain domain) {
+		System.gc();
+		
+		try{
+			if(domain == NewsDomain.GLOBOESPORTE){
+				Connection connect = Jsoup.connect(newsurl);
+				Connection.Response response = connect.execute();
+				String html = response.body();
+				int closureNode = html.indexOf("<div class=\"barra-ferramentas\">");
+				html = html.substring(0, closureNode);
+				html += "</body></head>";
+				
+				Document doc = Jsoup.parse(html);
+				Element div = doc.getElementById("materia-letra");
+				
+				Elements paragraph = div.getElementsByTag("p");
+				
+				String ret = "";
+				for (Element el : paragraph) {
+					ret += el.html()+"<br /><br />";
+				}
+				ret = ret.substring(0, ret.length()-"<br /><br />".length());
+				
+				return ret;
+			}else if(domain == NewsDomain.UOL){
+				String url = "http://electric-stream-5784.herokuapp.com/news?domain=" + "uol" + "&url=" + newsurl;
+				JSONObject json = new JSONObject(JsonUtil.readJsonFeed(url));
+				Log.e(HomeActivity.TAG, json.getString("imgsrc"));
+				return json.getString("content");
+			}else if (domain == NewsDomain.GOOGLE){
+				//Nao deveria entrar aqui em hipotese alguma, se entrou, tivemos algum erro
+				return "Não foi possível ler a notícia";
+			}
+			return "Não foi possível ler a notícia";
+		}catch(Exception e){
+			Log.e(HomeActivity.TAG, e.toString());
+			e.printStackTrace();
+			return "Não foi possível ler a notícia, abra-a no browser clicando em \"Abrir Página\".";
+		}catch(OutOfMemoryError oom){
+			System.gc();
+			Log.e(HomeActivity.TAG, oom.toString());
+			oom.printStackTrace();
+			return "Não foi possível ler a notícia, abra-a no browser clicando em \"Abrir Página\".";
+		}
+	}
+	
+	public static LinkedHashMap<String, ArrayList<RealTimePlayer>> getRealTimeSquad(Context c, RealTimeMatch rtm) throws IOException{
+		String url = rtm.getUrlDetails();
+		
+		LinkedHashMap<String, ArrayList<RealTimePlayer>> map = new LinkedHashMap<String, ArrayList<RealTimePlayer>>();
+		
+		Document doc = Jsoup.connect(url).timeout(15*1000).get();
+		Element div_escalacao = doc.getElementById("escalacao");
+		
+		Elements times = div_escalacao.getElementsByClass("time");
+		
+		try{			
+			Element timeHome = times.get(0);
+			Element timeAway = times.get(1);
+			
+			ArrayList<RealTimePlayer> home = parseRealTimeSquad(timeHome.getElementsByTag("tbody").get(0));
+			ArrayList<RealTimePlayer> away = parseRealTimeSquad(timeAway.getElementsByTag("tbody").get(0));
+			map.put(timeHome.getElementsByTag("p").get(0).text(), home);
+			map.put(timeAway.getElementsByTag("p").get(0).text(), away);
+			
+			if(home.size() == 0 || away.size() == 0) return null;
+		} catch(IndexOutOfBoundsException e){
+			map = null;
+		}
+		
+		return map;
+	}
+
+	private static ArrayList<RealTimePlayer> parseRealTimeSquad(Element tbody) {
+		Elements trs = tbody.getElementsByTag("tr");
+		ArrayList<RealTimePlayer> al = new ArrayList<RealTimePlayer>();
+		
+		for (Element tr : trs) {
+			String typeClass = tr.className();
+			
+			int type = RealTimePlayer.TIPO_TITULAR;
+			if(typeClass.equals("tr-titulares")) type = RealTimePlayer.TIPO_TITULAR;
+			else if(typeClass.equals("tr-substituicao")) type = RealTimePlayer.TIPO_SUBSTITUICAO;
+			else if(typeClass.equals("tr-reservas")) type = RealTimePlayer.TIPO_RESERVA;
+			else if(typeClass.equals("tr-expulso")) type = RealTimePlayer.TIPO_EXPULSO;
+			
+			Elements td = tr.getElementsByTag("td");
+			
+			String subst = null;
+			int subst_type = RealTimePlayer.NULL;
+			if(td.get(0).children().size() > 0){
+				subst = td.get(0).getElementsByTag("img").get(0).attr("alt");
+				if(subst.toLowerCase(Locale.getDefault()).equals("saiu")) subst_type = RealTimePlayer.SUBST_SAIU;
+				else if(subst.toLowerCase(Locale.getDefault()).equals("entrou")) subst_type = RealTimePlayer.SUBST_ENTROU;
+				else if(subst.toLowerCase(Locale.getDefault()).equals("expulso")) subst_type = RealTimePlayer.SUBST_EXPULSO;
+			}
+			
+			String name = td.get(1).text();
+			
+			String cartao = null;
+			int card_type = RealTimePlayer.NULL;
+			if(td.get(2).children().size() > 0){
+				cartao = td.get(2).getElementsByTag("img").get(0).attr("alt");
+				if(cartao.toLowerCase(Locale.getDefault()).equals("cartão amarelo")) card_type = RealTimePlayer.CARTAO_AMAR;
+				else if(cartao.toLowerCase(Locale.getDefault()).equals("cartão vermelho")) card_type = RealTimePlayer.CARTAO_VERM;
+			}
+			
+			String gp = td.get(3).text();
+			String gc = td.get(4).text();
+			
+			int goalspro;
+			try{				
+				goalspro = Integer.parseInt(gp);
+			}catch(NumberFormatException e){
+				goalspro = RealTimePlayer.NULL;
+			}
+			
+			int goalsagainst;
+			try{				
+				goalsagainst = Integer.parseInt(gc);
+			}catch(NumberFormatException e){
+				goalsagainst = RealTimePlayer.NULL;
+			}
+			
+			RealTimePlayer rtp = new RealTimePlayer(name, type, subst_type, card_type, goalspro, goalsagainst);
+			al.add(rtp);
+		}
+		
+		return al;
+	}
+}

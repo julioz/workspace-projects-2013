@@ -1,0 +1,29 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.List;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.view.StrikerRow;
+
+public class StrikersListAdapter extends ArrayAdapter<StrikerRow>{
+	private List<StrikerRow> objects;
+	
+	public StrikersListAdapter(Context context, List<StrikerRow> objects) {
+		super(context, R.layout.striker_row, objects);
+		this.objects = objects;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+        return objects.get(position).getTablerow();
+	}
+}

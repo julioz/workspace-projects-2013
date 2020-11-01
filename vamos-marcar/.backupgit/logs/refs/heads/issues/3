@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 Júlio Zynger <julioz92@gmail.com> 1379108375 -0300	branch: Created from HEAD
+e3a5ff4daae90fdc73df9d8ab0c5b4d5c3922630 9dda66d2fccfca0174d9946998005a66d0da51d9 Júlio Zynger <julioz92@gmail.com> 1379108404 -0300	commit: BroadcastReceiver listens to connectivity change.

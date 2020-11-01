@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    
+    <Button
+        android:id="@+clubselector/bt1"
+        android:text="FLU"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    
+    <Button
+        android:id="@+clubselector/bt2"
+        android:text="VEL"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    
+    <Button
+        android:id="@+clubselector/bt3"
+        android:text="TOL"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    
+    <Button
+        android:id="@+clubselector/bt4"
+        android:text="PAL"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+</LinearLayout>

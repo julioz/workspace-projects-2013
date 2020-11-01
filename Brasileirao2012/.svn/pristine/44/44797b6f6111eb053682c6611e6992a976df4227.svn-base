@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/backrepeat"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+    <RelativeLayout
+        android:background="@drawable/actionbar_gradient2"
+        android:id="@+realtimematchesactivity/rl_actionbar"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content">
+        
+        <ImageView
+	        android:layout_width="45dp"
+	        android:layout_height="45dp"
+	        android:padding="3dp"
+	        android:id="@+realtimematchesactivity/iv_badge"
+	        android:src="@drawable/ic_realtime"
+	        android:layout_centerVertical="true" />
+        
+        <br.com.zynger.brasileirao2012.view.TertreTextView
+	        android:text="Tempo Real"
+	        android:layout_marginLeft="3dp"
+	        android:layout_marginBottom="3dp"
+	        android:layout_toRightOf="@+realtimematchesactivity/iv_badge"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:textSize="30dp" />
+        
+        <LinearLayout
+            android:id="@+realtimematchesactivity/actionbar_ll"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/layout_roundborder"
+            android:gravity="center"
+            android:layout_centerVertical="true">
+            
+            <TextView
+                android:id="@+realtimematchesactivity/actionbar_tv_division"
+                android:gravity="center"
+                android:textColor="#FFFFFFFF"
+                android:textStyle="bold"
+                android:background="@null"
+                android:layout_width="20dp"
+                android:layout_height="20dp"/>
+            
+        </LinearLayout>
+        
+    </RelativeLayout>
+	
+	<RelativeLayout
+	 	xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@+realtimematchesactivity/rl_actionbar"
+		android:layout_above="@+realtimematchesactivity/ll_ad"
+		android:id="@+realtimematchesactivity/rl_loading"
+		android:gravity="center"
+		android:orientation="vertical">
+        
+        <ProgressBar
+		    android:indeterminate="true"
+		    style="@android:style/Widget.ProgressBar.Small"
+		    android:layout_gravity="center"
+		    android:id="@+realtimematchesactivity/pb_progressbar"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginBottom="5dp"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"/>
+			
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:gravity="center"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@+realtimematchesactivity/pb_progressbar"
+			android:textColor="#FFFFFFFF"
+			android:id="@+realtimematchesactivity/tv_progressbar"
+			android:textSize="15dp"
+			android:text="Atualizando..."/>
+        
+    </RelativeLayout>
+	
+	<ScrollView 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:visibility="gone"
+		android:layout_below="@+realtimematchesactivity/rl_actionbar"
+		android:layout_above="@+realtimematchesactivity/ll_ad"
+		android:id="@+realtimematchesactivity/sv_matches"
+		android:layout_marginTop="3dp">
+		<LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:id="@+realtimematchesactivity/ll_matches"
+		    android:orientation="vertical">
+    
+		</LinearLayout>
+	</ScrollView>
+	
+	<LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+realtimematchesactivity/ll_ad"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>
+	
+</RelativeLayout>

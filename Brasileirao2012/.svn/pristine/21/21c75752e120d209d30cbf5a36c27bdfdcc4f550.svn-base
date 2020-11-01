@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:background="@drawable/backrepeat"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical">
+	
+    <RelativeLayout
+        android:background="@drawable/actionbar_gradient2"
+        android:id="@+torcidometeractivity/rl_actionbar"
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:src="@drawable/ic_torcidometer"
+            android:id="@+torcidometeractivity/iv_badge"
+            android:layout_centerVertical="true" />
+        
+        <br.com.zynger.brasileirao2012.view.TertreTextView
+            android:text="Torcidômetro"
+            android:layout_marginLeft="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_toRightOf="@+torcidometeractivity/iv_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="26dp" />
+        
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal" >
+            
+            <View
+                android:layout_height="45dp"
+                android:layout_width="1px"
+                android:layout_alignParentLeft="true"
+                android:background="#88FFFFFF" />
+
+            <ImageButton
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:id="@+torcidometeractivity/ib_update"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_actionbar_update" />
+            
+        </RelativeLayout>
+        
+    </RelativeLayout>
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@null"
+	    android:layout_above="@+torcidometeractivity/rl_actionbar"
+	    android:orientation="horizontal" >
+	    
+	    <ImageView 
+	        android:layout_width="48dp"
+	        android:layout_margin="4dp"
+	        android:layout_height="48dp"/>
+	    
+	    <RelativeLayout
+	        android:layout_height="48dp"
+	        android:layout_margin="4dp"
+	        android:layout_width="fill_parent">
+	        
+	        <LinearLayout
+	            android:layout_toLeftOf="@+torcidometeractivity/dummy_tv_number"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_margin="4dp"
+	            android:id="@+torcidometeractivity/dummy_ll_bar"
+	            android:layout_centerVertical="true">
+	            
+	            <View
+	                android:layout_height="24dp"
+	                android:layout_width="fill_parent" />
+	            
+	        </LinearLayout>
+	        
+	        <TextView
+	            android:textColor="@android:color/white"
+	            android:layout_width="wrap_content"
+	            android:id="@+torcidometeractivity/dummy_tv_number"
+	            android:layout_height="fill_parent"
+	            android:gravity="center_vertical|right"
+	            android:layout_alignParentRight="true"
+	            android:layout_centerVertical="true"
+	            android:text="112.358"
+	            android:layout_margin="4dp"/>
+	        
+	    </RelativeLayout>
+	</LinearLayout>
+    
+    <LinearLayout
+	    android:layout_height="fill_parent"
+	    android:layout_width="fill_parent"
+        android:layout_below="@+torcidometeractivity/rl_actionbar"
+		android:layout_above="@+torcidometeractivity/ll_ad"
+		android:visibility="gone"
+		android:id="@+torcidometeractivity/ll_tv_loading"
+	    android:gravity="center"
+	    android:orientation="vertical">
+	    
+		<ProgressBar
+		    android:indeterminate="true"
+		    style="@android:style/Widget.ProgressBar.Small"
+		    android:layout_gravity="center"
+		    android:layout_marginBottom="5dp"
+		    android:layout_height="wrap_content"
+		    android:layout_width="wrap_content"/>
+			
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:gravity="center"
+			android:textColor="#FFFFFFFF"
+			android:textSize="15dp"
+			android:text="Atualizando..."/>
+	    
+	</LinearLayout>
+    
+	<ListView
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent"
+		android:layout_below="@+torcidometeractivity/rl_actionbar"
+		android:layout_above="@+torcidometeractivity/ll_ad"
+		android:id="@+id/android:list"
+		android:paddingLeft="3dp"
+		android:paddingRight="3dp"
+		android:cacheColorHint="#00000000"/>
+	
+	<LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+torcidometeractivity/ll_ad"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>
+</RelativeLayout>

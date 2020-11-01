@@ -1,0 +1,64 @@
+package br.com.zynger.brasileirao2012.model;
+
+import java.io.Serializable;
+
+public class Trophy implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	public static final int ESTADUAL = 0;
+	public static final int REGIONAL = 1;
+	public static final int NACIONAL = 2;
+	public static final int INTERNACIONAL = 3;	
+	
+	private String type;
+	private int region;
+	private String years;
+	private int times;
+	
+	public Trophy(String type, int region, int times){
+		setType(type);
+		setRegion(region);
+		setTimes(times);
+		setYears("Lista de anos ainda não foi cadastrada.");
+	}
+	
+	public Trophy(String type, int region, int times, String years){
+		setType(type);
+		setRegion(region);
+		setTimes(times);
+		setYears(years);
+	}
+
+	public int getTimes() {
+		return times;
+	}
+
+	public void setTimes(int times) {
+		this.times = times;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public int getRegion() {
+		return region;
+	}
+
+	public void setRegion(int region) {
+		this.region = region;
+	}
+
+	public String getYears() {
+		return years;
+	}
+
+	public void setYears(String years) {
+		this.years = years;
+	}
+
+}

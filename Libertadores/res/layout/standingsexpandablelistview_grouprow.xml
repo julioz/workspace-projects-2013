@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="40dp" >
+     
+    <br.com.zynger.libertadores.view.HelveticaTextView
+        android:id="@+standingsexpandablelistview_grouprow/tv_groupname"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textSize="20dp"
+        android:paddingLeft="40dp"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp" />
+    
+    <LinearLayout 
+        android:id="@+standingsexpandablelistview_grouprow/ll_clubs1"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+	    <ImageView
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
+	        android:layout_margin="2dp"
+	        android:scaleType="fitCenter"
+	        android:layout_gravity="center"
+	        android:id="@+standingsexpandablelistview_grouprow/iv_club1"/>
+	    
+	    <ImageView
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
+	        android:layout_margin="2dp"
+	        android:scaleType="fitCenter"
+	        android:layout_gravity="center"
+	        android:id="@+standingsexpandablelistview_grouprow/iv_club2"/>
+	    
+	    <ImageView
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
+	        android:layout_margin="2dp"
+	        android:scaleType="fitCenter"
+	        android:layout_gravity="center"
+	        android:id="@+standingsexpandablelistview_grouprow/iv_club3"/>
+	    
+	    <ImageView
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
+	        android:layout_margin="2dp"
+	        android:scaleType="fitCenter"
+	        android:layout_gravity="center"
+	        android:id="@+standingsexpandablelistview_grouprow/iv_club4"/>
+    </LinearLayout>
+ 
+</RelativeLayout>

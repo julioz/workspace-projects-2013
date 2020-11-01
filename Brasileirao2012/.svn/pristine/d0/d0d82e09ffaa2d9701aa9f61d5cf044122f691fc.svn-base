@@ -1,0 +1,228 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.adapters.MyTeamListAdapter;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerItem;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerListItem;
+import br.com.zynger.brasileirao2012.asynctasks.GetTableTask;
+import br.com.zynger.brasileirao2012.base.DrawerActivity;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.StrikersDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.Constants;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+public class MyTeamActivity extends DrawerActivity<JSONObject> {
+
+	private Club myClub;
+
+	private ListView lvContent;
+	private ImageView ivBadge;
+	private TextView tvFullname, tvPointsPlace;
+
+	private MyTeamListAdapter myTeamListAdapter;
+
+	@Override
+	public void loadViews(View activityView) {
+		lvContent = (ListView) activityView
+				.findViewById(R.myteamactivity.lv_content);
+		ivBadge = (ImageView) activityView
+				.findViewById(R.myteamactivity.iv_badge);
+		tvFullname = (TextView) activityView
+				.findViewById(R.myteamactivity.tv_fullname);
+		tvPointsPlace = (TextView) activityView
+				.findViewById(R.myteamactivity.tv_points_place);
+	}
+
+	@Override
+	public boolean onAsyncSuccess(JSONObject matchesJson) {
+		FileHandler.saveBackup(this, FileHandler.JSON_MATCHES,
+				matchesJson.toString(), getMyClub().getDivision());
+		myTeamListAdapter = new MyTeamListAdapter(this);
+		setListAdapter(myTeamListAdapter);
+		return true;
+	}
+
+	@Override
+	public void onAsyncFail(String message) {
+		setListAdapter(myTeamListAdapter);
+	}
+
+	private void setListAdapter(final MyTeamListAdapter adapter) {
+		lvContent.setAdapter(adapter);
+
+		if (!adapter.isOnlyRivalries()) {
+			lvContent.post(new Runnable() {
+				@Override
+				public void run() {
+					lvContent.smoothScrollToPosition(adapter
+							.getFirstFixtureWithNoScore());
+				}
+			});
+		}
+	}
+
+	@Override
+	public boolean shouldCloseDrawerAfterItemSelection() {
+		return false;
+	}
+
+	private void setClubInformationHeader() {
+		ivBadge.setImageResource(getMyClub().getBadgeResource(this));
+
+		tvFullname.setText(getMyClub().getFullName());
+		tvPointsPlace.setText(getString(
+				R.string.myteamactivity_pointsandposition, getMyClub()
+						.getPoints(), getMyClub().getPosition()));
+	}
+
+	@Override
+	public List<DrawerItem> getDrawerListViewAdapter(List<DrawerItem> items) {
+		addDrawerHeaderToList(R.string.myteamactivity_matches);
+		addDrawerItemToList(R.drawable.ic_team,
+				R.string.myteamactivity_matches_all);
+		addRivalsItem();
+
+		addStrikersItem(items);
+
+		addDrawerHeaderToList(R.string.myteamactivity_more);
+		addDrawerItemToList(R.drawable.ic_trophies,
+				R.string.myteamactivity_trophies);
+		addDrawerItemToList(R.drawable.ic_more, R.string.myteamactivity_more);
+
+		return items;
+	}
+
+	private void addRivalsItem() {
+		if (ClubsDB.getInstance(this).hasRivalsOnDivision(getMyClub())) {
+			addDrawerItemToList(R.drawable.img_rivals,
+					R.string.myteamactivity_rivalries);
+		}
+	}
+
+	private void addStrikersItem(List<DrawerItem> items) {
+		if (StrikersDB.getInstance().hasStrikersFromClub(getMyClub())) {
+			addDrawerHeaderToList(R.string.myteamactivity_players);
+			addDrawerItemToList(R.drawable.ic_striker,
+					R.string.myteamactivity_strikers);
+		}
+	}
+
+	@Override
+	public void onDrawerListItemClick(AdapterView<?> parent, View view,
+			int position, long id, DrawerListItem item) {
+		switch (item.getIconRes()) {
+		case R.drawable.ic_striker:
+			startStrikersActivity();
+			break;
+		case R.drawable.ic_team:
+			setAdapterContent(false);
+			break;
+		case R.drawable.img_rivals:
+			setAdapterContent(true);
+			break;
+		case R.drawable.ic_trophies:
+			startTrophiesActivity();
+			break;
+		case R.drawable.ic_more:
+			startWikiActivity();
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void setAdapterContent(boolean onlyRivalries) {
+		if (myTeamListAdapter.isOnlyRivalries() != onlyRivalries) {
+			myTeamListAdapter.setMatchesOnAdapter(onlyRivalries);
+			setListAdapter(myTeamListAdapter);
+			setUpdateButtonVisibility(!onlyRivalries);
+		}
+	}
+
+	private void startStrikersActivity() {
+		Intent intent = new Intent(this, StrikersListActivity.class);
+		intent.putExtra(Constants.INTENT_DIVISION, getMyClub().getDivision());
+		intent.putExtra(Constants.INTENT_MYCLUB, true);
+		startActivity(intent);
+	}
+
+	private void startTrophiesActivity() {
+		Intent intent = new Intent(this, TrophiesActivity.class);
+		intent.putExtra(Constants.INTENT_CLUBACRONYM, getMyClub().getAcronym());
+		startActivity(intent);
+	}
+
+	private void startWikiActivity() {
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getMyClub()
+				.getWiki()));
+		startActivity(intent);
+	}
+
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_team;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.myteamactivity_title;
+	}
+
+	@Override
+	public AsyncTask<Void, Void, JSONObject> getAsyncTask() {
+		return new GetTableTask(this);
+	}
+
+	@Override
+	public View[] getDataUpdateViewsToToggle(View activityView) {
+		return new View[] { lvContent,
+				activityView.findViewById(R.myteamactivity.ll_labellistview) };
+	}
+
+	@Override
+	public Integer getDataUpdateLayoutId() {
+		return R.myteamactivity.dul_loading;
+	}
+
+	@Override
+	public int getLayoutResource() {
+		return R.layout.myteamactivity;
+	}
+
+	private Club getMyClub() {
+		if (myClub == null) {
+			myClub = ClubsDB.getInstance(this).getMyClub();
+		}
+		return myClub;
+	}
+
+	@Override
+	public void initializeActivityEnvironment(View activityView) {
+		// Select the item "All matches"
+		setItemSelected(1);
+		setClubInformationHeader();
+		myTeamListAdapter = new MyTeamListAdapter(this);
+	}
+
+	@Override
+	public void didNotAutoUpdate() {
+		setListAdapter(myTeamListAdapter);
+	}
+
+	@Override
+	public Integer getPullToRefreshViewId() {
+		return R.myteamactivity.lv_content;
+	}
+}

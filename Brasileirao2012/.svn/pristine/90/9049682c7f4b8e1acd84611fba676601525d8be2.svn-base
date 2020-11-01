@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+	<RelativeLayout
+	    android:background="@drawable/actionbar_gradient2"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content">
+	    
+	    <ImageView
+	        android:layout_width="45dp"
+	        android:layout_height="45dp"
+	        android:padding="3dp"
+	        android:id="@+newstabs/iv_badge"
+	        android:layout_centerVertical="true" />
+	    
+	    <TextView
+	        android:textColor="@color/text_actionbar"
+	        android:id="@+newstabs/tv_name"
+	        android:layout_marginLeft="3dp"
+	        android:layout_marginBottom="3dp"
+	        android:layout_toRightOf="@+newstabs/iv_badge"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:textSize="30dp"
+	        android:textStyle="bold" />        
+	    
+	</RelativeLayout>
+	
+	
+	<TabHost
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:id="@android:id/tabhost">
+	
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_height="fill_parent"
+			android:layout_width="fill_parent"
+			android:background="@drawable/backrepeat">
+			
+			<HorizontalScrollView
+				android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:fillViewport="true"
+	            android:scrollbars="none">
+			
+				<TabWidget
+				    android:id="@android:id/tabs"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent"/>
+			</HorizontalScrollView>
+			
+			<FrameLayout
+			    android:id="@android:id/tabcontent"
+				android:layout_height="fill_parent"
+				android:layout_width="fill_parent"
+				android:background="@null" />"
+		</LinearLayout>
+	
+	</TabHost>
+</LinearLayout>

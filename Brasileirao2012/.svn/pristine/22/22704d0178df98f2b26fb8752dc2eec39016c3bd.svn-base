@@ -1,0 +1,44 @@
+package br.com.zynger.brasileirao2012.asynctasks;
+
+import android.os.AsyncTask;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class ReadNewsFromDomain extends AsyncTask<Void, Void, String[]> {
+	private String newsurl, serverId;
+	private int domain;
+	private AsyncTaskListener listener;
+	
+	public ReadNewsFromDomain(String newsurl, int domain, AsyncTaskListener listener){
+		this.newsurl = newsurl;
+		this.domain = domain;
+		this.listener = listener;
+		
+		if(this.domain == Article.UOL) serverId = "uol";
+		else if(this.domain == Article.NETFLU) serverId = "netflu";
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		listener.preExecution();
+		super.onPreExecute();
+	}
+
+	@Override
+	protected String[] doInBackground(Void... arg0) {
+		try{
+			return HTMLManager.getNewsDetailsContent(serverId, newsurl);
+		}catch(Exception e){
+			String[] result = new String[2];
+			result[0] = null;
+			result[1] = "Não foi possível ler a notícia";
+			return result;
+		}
+	}
+	
+	@Override
+	protected void onPostExecute(String[] result) {
+		listener.onComplete(result);
+		super.onPostExecute(result);
+	}
+}

@@ -1,0 +1,293 @@
+package br.com.zynger.libertadores.model;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.util.Log;
+import br.com.zynger.libertadores.HomeActivity;
+import br.com.zynger.libertadores.enums.Phase;
+
+public class Match implements Comparable<Match> {
+	
+	private final static int JSON_TITLE = 0;
+	private final static int JSON_HOME = 1;
+	private final static int JSON_AWAY = 2;
+	private final static int JSON_HOME_NAME = 3;
+	private final static int JSON_AWAY_NAME = 4;
+	private final static int JSON_STADIUM = 5;
+	private final static int JSON_DAY = 6;
+	private final static int JSON_MONTH = 7;
+	private final static int JSON_YEAR = 8;
+	private final static int JSON_HOUR = 9;
+	private final static int JSON_MINUTE = 10;
+	private final static int JSON_SCORE_HOME = 11;
+	private final static int JSON_SCORE_AWAY = 12;
+	private final static int JSON_URL_DETAILS = 13;
+	private final static int JSON_PHASE = 14;
+	private final static int JSON_PENALTY_HOME = 15;
+	private final static int JSON_PENALTY_AWAY = 16;
+	private final static int JSON_TIMEZONE = 17;
+	private final static int JSON_OVER = 18;
+
+	public static final int SCORE_NULL = -1;
+	
+	private String title;
+	private Club home;
+	private Club away;
+	private String stadium;
+	private GregorianCalendar date;
+	private Integer scoreHome;
+	private Integer scoreAway;
+	private Integer penaltiesHome;
+	private Integer penaltiesAway;
+	private String detailsUrl;
+	private Boolean over;
+	private Phase phase;
+	
+	public Match() { }
+	
+	public Match(JSONArray data, TreeMap<String, Club> clubs) throws JSONException{
+		setFromJson(data, clubs);
+	}
+	
+	public Match(Club home, Club away, String stadium, GregorianCalendar date,
+			Integer scoreHome, Integer scoreAway) {
+		this.home = home;
+		this.away = away;
+		this.stadium = stadium;
+		this.date = date;
+		this.scoreHome = scoreHome;
+		this.scoreAway = scoreAway;
+	}
+	
+	public Match(Club home, Club away, String stadium, GregorianCalendar date,
+			Integer scoreHome, Integer scoreAway, Integer penaltyHome, Integer penaltyAway) {
+		this.home = home;
+		this.away = away;
+		this.stadium = stadium;
+		this.date = date;
+		this.scoreHome = scoreHome;
+		this.scoreAway = scoreAway;
+		this.penaltiesHome = penaltyHome;
+		this.penaltiesAway = penaltyAway;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public Club getHome() {
+		return home;
+	}
+	
+	public void setHome(Club home) {
+		this.home = home;
+	}
+	
+	public Club getAway() {
+		return away;
+	}
+	
+	public void setAway(Club away) {
+		this.away = away;
+	}
+	
+	public String getStadium() {
+		return stadium;
+	}
+	
+	public void setStadium(String stadium) {
+		this.stadium = stadium;
+	}
+	
+	public GregorianCalendar getDate() {
+		return date;
+	}
+	
+	public void setDate(GregorianCalendar date) {
+		this.date = date;
+	}
+	
+	public Integer getScoreHome() {
+		return scoreHome;
+	}
+	
+	public void setScoreHome(Integer scoreHome) {
+		this.scoreHome = scoreHome;
+	}
+	
+	public Integer getScoreAway() {
+		return scoreAway;
+	}
+	
+	public void setScoreAway(Integer scoreAway) {
+		this.scoreAway = scoreAway;
+	}
+	
+	public Integer getPenaltiesHome() {
+		return penaltiesHome;
+	}
+	
+	public void setPenaltiesHome(Integer penaltiesHome) {
+		this.penaltiesHome = penaltiesHome;
+	}
+	
+	public Integer getPenaltiesAway() {
+		return penaltiesAway;
+	}
+	
+	public void setPenaltiesAway(Integer penaltiesAway) {
+		this.penaltiesAway = penaltiesAway;
+	}
+	
+	public String getDetailsUrl() {
+		return detailsUrl;
+	}
+	
+	public void setDetailsUrl(String detailsUrl) {
+		this.detailsUrl = detailsUrl;
+	}
+	
+	public Boolean isOver() {
+		return over;
+	}
+	
+	public void setOver(Boolean over) {
+		this.over = over;
+	}
+	
+	public Phase getPhase(){
+		return phase;
+	}
+	
+	public void setPhase(Phase phase) {
+		this.phase = phase;
+	}
+
+	@Override
+	public int compareTo(Match another) {
+		int comparisonByTitle = 0;
+		if(getTitle() != null && another.getTitle() != null) comparisonByTitle = getTitle().compareTo(another.getTitle());
+		if(comparisonByTitle == 0){			
+			if(getDate() == null || another.getDate() == null) return 0;
+			return getDate().compareTo(another.getDate());
+		} else return comparisonByTitle;
+	}
+	
+	public JSONArray toJson(){
+		try{			
+			JSONArray data = new JSONArray();
+			data.put(JSON_TITLE, getTitle());
+			String homeAcr = getHome().getAcronym();
+			String awayAcr = getAway().getAcronym();
+			
+			data.put(JSON_HOME, homeAcr);
+			data.put(JSON_AWAY, awayAcr);
+			if(homeAcr.equals("DMY") || awayAcr.equals("DMY")){
+				data.put(JSON_HOME_NAME, getHome().getName());
+				data.put(JSON_AWAY_NAME, getAway().getName());
+			}
+			data.put(JSON_STADIUM, getStadium());
+			GregorianCalendar date = getDate();
+			if(null != date){				
+				data.put(JSON_DAY, date.get(Calendar.DAY_OF_MONTH));
+				data.put(JSON_MONTH, date.get(Calendar.MONTH));
+				data.put(JSON_YEAR, date.get(Calendar.YEAR));
+				data.put(JSON_HOUR, date.get(Calendar.HOUR_OF_DAY));
+				data.put(JSON_MINUTE, date.get(Calendar.MINUTE));
+				data.put(JSON_TIMEZONE, date.getTimeZone().getID());
+			}else{
+				data.put(JSON_DAY, null);
+				data.put(JSON_MONTH, null);
+				data.put(JSON_YEAR, null);
+				data.put(JSON_HOUR, null);
+				data.put(JSON_MINUTE, null);
+				data.put(JSON_TIMEZONE, null);
+			}
+			data.put(JSON_SCORE_HOME, getScoreHome());
+			data.put(JSON_SCORE_AWAY, getScoreAway());
+			data.put(JSON_PENALTY_HOME, getPenaltiesHome());
+			data.put(JSON_PENALTY_AWAY, getPenaltiesAway());
+			data.put(JSON_URL_DETAILS, getDetailsUrl());
+			if(isOver() != null){				
+				data.put(JSON_OVER, isOver().booleanValue());
+			}else data.put(JSON_OVER, null);
+			data.put(JSON_PHASE, getPhase());
+			
+			return data;
+		}catch(JSONException e){
+			Log.e(HomeActivity.TAG, e.toString());
+			return null;
+		}
+	}
+	
+	public Boolean setFromJson(JSONArray data, TreeMap<String, Club> clubs){
+		try {			
+			setTitle(data.getString(JSON_TITLE));
+			String homeAcr = data.getString(JSON_HOME);
+			String awayAcr = data.getString(JSON_AWAY);
+			
+			Club home = null;
+			Club away = null;
+			if(homeAcr.equals("DMY")){
+				home = new Club();
+				home.setBadge("badge_dummy");
+				home.setIcon("ic_dummy");
+				home.setAcronym("DMY");
+				home.setName(data.getString(JSON_HOME_NAME));
+			}else home = clubs.get(homeAcr);
+			
+			if(awayAcr.equals("DMY")){
+				away = new Club();
+				away.setBadge("badge_dummy");
+				away.setIcon("ic_dummy");
+				away.setAcronym("DMY");
+				away.setName(data.getString(JSON_AWAY_NAME));
+			}else away = clubs.get(awayAcr);
+			
+			setHome(home);
+			setAway(away);
+			String stadium = data.getString(JSON_STADIUM);
+			stadium = (stadium.equals("null") ? null : stadium);
+			setStadium(stadium);
+			GregorianCalendar date = new GregorianCalendar();
+			try{				
+				date.set(Calendar.DAY_OF_MONTH, data.getInt(JSON_DAY));
+				date.set(Calendar.MONTH, data.getInt(JSON_MONTH));
+				date.set(Calendar.YEAR, data.getInt(JSON_YEAR));
+				date.set(Calendar.HOUR_OF_DAY, data.getInt(JSON_HOUR));
+				date.set(Calendar.MINUTE, data.getInt(JSON_MINUTE));
+				date.setTimeZone(TimeZone.getTimeZone(data.getString(JSON_TIMEZONE)));
+			}catch(JSONException je){
+				date = null;
+			}
+			setDate(date);
+			setScoreHome(data.getInt(JSON_SCORE_HOME));
+			setScoreAway(data.getInt(JSON_SCORE_AWAY));
+			try{				
+				setPenaltiesHome(data.getInt(JSON_PENALTY_HOME));
+				setPenaltiesAway(data.getInt(JSON_PENALTY_AWAY));
+			}catch(JSONException je) {} // no penalties in the match
+			setDetailsUrl(data.getString(JSON_URL_DETAILS));
+			setOver(data.getBoolean(JSON_OVER));
+			String strPhase = data.getString(JSON_PHASE);
+			Phase phase = null;
+			if(!strPhase.equals("null")) phase = Phase.valueOf(strPhase);
+			setPhase(phase);
+			
+			return true;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+}

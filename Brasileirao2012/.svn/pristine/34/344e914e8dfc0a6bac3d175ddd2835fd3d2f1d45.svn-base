@@ -1,0 +1,251 @@
+package br.com.zynger.brasileirao2012.view;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
+import android.content.Context;
+import android.content.Intent;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.movetomove.RealTimeMoveToMoveActivity;
+import br.com.zynger.brasileirao2012.util.Constants;
+
+public class MatchViewLayout extends LinearLayout {
+	
+	private static final String DATEFORMAT_EXP_NOHOUR = "dd/MM - EEEE";
+	private static final String DATEFORMAT_EXP_FULL = DATEFORMAT_EXP_NOHOUR + " - HH:mm";
+	
+	private SimpleDateFormat dateFormatterFullTime, dateFormatterNoHour;
+	
+	private RealTimeMatch rtm;
+	private Match match;
+	private TextView tvDate, tvStadium, tvScoreHome, tvScoreAway, tvRodada;
+	private LinearLayout llRodada;
+	private View lineNotRodada;
+	private ImageView ivHome, ivAway;
+	private TextView tv_position_home, tv_position_away;
+	private TextView tvClassico;
+	
+	public MatchViewLayout(Context context, Match match, Integer fixtureNumber) {
+		super(context);
+		this.match = match;
+		
+		loadDateFormatters();
+		LayoutInflater.from(context).inflate(R.layout.matchviewlayout, this);
+		loadViews();
+		setDataFromMatch();
+		
+		setBadgeClickListener(ivHome, match.getHome());
+		setBadgeClickListener(ivAway, match.getAway());
+		
+		if (setRodadaLayoutElement(fixtureNumber != null)) {
+			tvRodada.setText(fixtureNumber
+					+ context.getString(R.string.views_matchviewlayout_fixture));
+		}
+		setRivalryLayoutElement();
+	}
+	
+	private void setBadgeClickListener(ImageView badge, final Club club) {
+		badge.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), club.getToastDescription(v.getContext()),
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	private boolean setRodadaLayoutElement(boolean visible) {
+		if (visible) {
+			lineNotRodada.setVisibility(View.GONE);
+			llRodada.setVisibility(View.VISIBLE);
+		} else {
+			lineNotRodada.setVisibility(View.VISIBLE);
+			llRodada.setVisibility(View.GONE);
+		}
+		return visible;
+	}
+
+	private void loadDateFormatters() {
+		dateFormatterFullTime = new SimpleDateFormat(DATEFORMAT_EXP_FULL, Locale.getDefault());
+		dateFormatterNoHour = new SimpleDateFormat(DATEFORMAT_EXP_NOHOUR, Locale.getDefault());
+	}
+
+	private void setRivalryLayoutElement() {
+		if(match.isRivalry()){
+			tvClassico.setVisibility(View.VISIBLE);
+		}else{
+			tvClassico.setVisibility(View.GONE);
+		}
+	}
+	
+	public MatchViewLayout(Context context, RealTimeMatch realTimeMatch, boolean showRanking){
+		super(context);
+		this.rtm = realTimeMatch;
+		LayoutInflater.from(context).inflate(R.layout.matchviewlayout, this);
+		
+		loadDateFormatters();
+		loadViewsRealTimeMatch();
+
+		String res_home = realTimeMatch.getResultHome();
+		String res_away = realTimeMatch.getResultAway();
+		if(realTimeMatch.getState() == RealTimeMatch.State.TO_START) res_home = res_away = "";
+		int resHome = -1;
+		int resAway = -1;
+		if(!res_home.equals("")) resHome = Integer.parseInt(res_home);
+		if(!res_away.equals("")) resAway = Integer.parseInt(res_away);
+		
+		setDate(realTimeMatch.getDate());
+		setHome(realTimeMatch.getHome().getBadgeResource(getContext()));
+		setAway(realTimeMatch.getAway().getBadgeResource(getContext()));
+		setScoreHome(resHome);
+		setScoreAway(resAway);
+		if(showRanking){
+			try{
+				setPosition(tv_position_home, realTimeMatch.getHomePos(), realTimeMatch.getHomePosDif(), true, realTimeMatch.getState());
+				setPosition(tv_position_away, realTimeMatch.getAwayPos(), realTimeMatch.getAwayPosDif(), false, realTimeMatch.getState());
+			}catch(NullPointerException npe){} //TODO
+		}
+		
+		this.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), RealTimeMoveToMoveActivity.class);
+				it.putExtra(Constants.INTENT_MATCH, rtm.toJson().toString());
+				v.getContext().startActivity(it);
+			}
+		});
+		
+		setRodadaLayoutElement(true);
+		
+		String state = getContext().getString(R.string.realtimematch_tostart);
+		if(realTimeMatch.getState() == RealTimeMatch.State.IN_PROGRESS){
+			state = getContext().getString(R.string.realtimematch_inprogress);
+		}else if(realTimeMatch.getState() == RealTimeMatch.State.FINISHED){
+			state = getContext().getString(R.string.realtimematch_ended);
+		}
+		tvRodada.setText(state);
+	}
+	
+	private void loadViewsRealTimeMatch() {
+		tvDate = (TextView) findViewById(R.matchviewlayout.tv_date);
+		findViewById(R.matchviewlayout.tv_stadium).setVisibility(View.GONE);
+		tvScoreHome = (TextView) findViewById(R.matchviewlayout.tv_scr_h);
+		tvScoreAway = (TextView) findViewById(R.matchviewlayout.tv_scr_a);
+		ivHome = (ImageView) findViewById(R.matchviewlayout.iv_home);
+		ivAway = (ImageView) findViewById(R.matchviewlayout.iv_away);
+		llRodada = (LinearLayout) findViewById(R.matchviewlayout.ll_line_rodada);
+		tvRodada = (TextView) findViewById(R.matchviewlayout.tv_rod);
+		lineNotRodada = findViewById(R.matchviewlayout.view_line_notrodada);
+		tv_position_home = (TextView) findViewById(R.matchviewlayout.tv_position_home);
+		tv_position_away = (TextView) findViewById(R.matchviewlayout.tv_position_away);
+	}
+	
+	private void setDate(GregorianCalendar gregorianCalendar) {
+		if(gregorianCalendar == null){
+			tvDate.setText(getResources().getString(R.string.views_matchviewlayout_unavailabletime));
+		} else {
+			SimpleDateFormat sdf = gregorianCalendar.get(Calendar.HOUR_OF_DAY) == 0 ? dateFormatterNoHour : dateFormatterFullTime;
+			String formattedDate = sdf.format(gregorianCalendar.getTime());
+			formattedDate = formattedDate.substring(0, 8)
+					+ formattedDate.substring(8, 9).toUpperCase(Locale.getDefault()) + formattedDate.substring(9);
+			tvDate.setText(formattedDate);
+		}
+	}
+
+	private void setStadium(String stadium) {
+		if (stadium == null) {
+			stadium = getResources().getString(
+					R.string.views_matchviewlayout_unavailableplace);
+		}
+		
+		tvStadium.setText(stadium);
+	}
+
+	private void setHome(int res) {
+		ivHome.setImageResource(res);
+	}
+	
+	private void setAway(int res) {
+		ivAway.setImageResource(res);
+	}
+	
+	private void setScoreHome(int scr){
+		if(scr < 0){
+			tvScoreHome.setText("");
+		}else{
+			tvScoreHome.setText(String.valueOf(scr));
+		}
+	}
+	
+	private void setScoreAway(int scr){
+		if(scr < 0){
+			tvScoreAway.setText("");
+		}else{
+			tvScoreAway.setText(String.valueOf(scr));
+		}
+	}
+	
+	private void setPosition(TextView textView, int position, int posDif, boolean isLeft, RealTimeMatch.State state){
+		if(position > 0){			
+			textView.setText(Html.fromHtml(getPosDifModified(posDif, isLeft, state)
+					+ "<br />" + position
+					+ getResources().getString(R.string.views_matchviewlayout_ordinalendingtoposition)));
+			textView.setVisibility(View.VISIBLE);
+		}
+	}
+
+	private String getPosDifModified(int posDif, boolean isLeft, RealTimeMatch.State state){
+		if (posDif > 0) {
+			return "<font color='green'>"
+					+ (isLeft ? "↑ " + "+" + posDif : "+" + posDif + " ↑")
+					+ "</font>";
+		} else if (posDif < 0) {
+			return "<font color='red'>"
+					+ (isLeft ? "↓ " + posDif : posDif + " ↓") + "</font>";
+		} else {
+			if (state == RealTimeMatch.State.IN_PROGRESS) {
+				return (isLeft ? "■ " + posDif : posDif + " ■");
+			} else {
+				return "";
+			}
+		}
+	}
+
+	private void loadViews() {
+		tvDate = (TextView) findViewById(R.matchviewlayout.tv_date);
+		tvStadium = (TextView) findViewById(R.matchviewlayout.tv_stadium);
+		tvScoreHome = (TextView) findViewById(R.matchviewlayout.tv_scr_h);
+		tvScoreAway = (TextView) findViewById(R.matchviewlayout.tv_scr_a);
+		ivHome = (ImageView) findViewById(R.matchviewlayout.iv_home);
+		ivAway = (ImageView) findViewById(R.matchviewlayout.iv_away);
+		tvRodada = (TextView) findViewById(R.matchviewlayout.tv_rod);
+		llRodada = (LinearLayout) findViewById(R.matchviewlayout.ll_line_rodada);
+		lineNotRodada = findViewById(R.matchviewlayout.view_line_notrodada);
+		tvClassico = (TextView) findViewById(R.matchviewlayout.tv_classico);
+	}
+
+	private void setDataFromMatch() {
+		setDate(match.getDate());
+		setStadium(match.getStadium());
+		setHome(match.getHome().getBadgeResource(getContext()));
+		setAway(match.getAway().getBadgeResource(getContext()));
+		setScoreHome(match.getScoreHome());
+		setScoreAway(match.getScoreAway());
+	}
+	
+	public Match getMatch() {
+		return match;
+	}
+}

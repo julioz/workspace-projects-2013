@@ -1,0 +1,69 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.TorcidometerAdapter;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.web.FansREST;
+
+public class TorcidometerActivity extends ListActivity {
+
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.torcidometeractivity);
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		
+		new GetFansTask(this).execute();
+	}
+	
+	private void setData(TreeMap<String, Integer> tm) {
+		ArrayList<Club> listClubs = new ArrayList<Club>();
+		Integer totalFans = 0;
+		for(TreeMap.Entry<String, Integer> entry : tm.entrySet()) {
+			String key = entry.getKey();
+			Integer value = entry.getValue();
+			
+			Club club = clubs.get(key);
+			
+			if(club != null){
+				club.setFans(value);
+				totalFans += value;
+				listClubs.add(club);
+			}
+		}
+		setListAdapter(new TorcidometerAdapter(this, listClubs, totalFans));
+	}
+
+	private class GetFansTask extends AsyncTask<Void, Void, TreeMap<String, Integer>> {
+		private Context context;
+		
+		public GetFansTask(Context context) {
+			this.context = context;
+		}
+		
+		@Override
+		protected TreeMap<String, Integer> doInBackground(Void... params) {
+			return FansREST.getFans();
+		}
+
+		@Override
+		protected void onPostExecute(TreeMap<String, Integer> tm) {
+			if(tm != null) setData(tm);
+			else Toast.makeText(context, getString(R.string.error_datadownload), Toast.LENGTH_SHORT).show();
+			super.onPostExecute(tm);
+		}
+	
+	}
+}

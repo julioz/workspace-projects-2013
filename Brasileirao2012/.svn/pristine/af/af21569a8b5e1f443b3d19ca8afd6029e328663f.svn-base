@@ -1,0 +1,242 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.IBinder;
+import android.util.Log;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.rest.RealTimeREST;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+
+public class RealTimeMatchService extends Service {
+	protected static final String INTENT_REALTIMEMATCH_JSON = "REALTIMEMATCH_JSON";
+
+	private static final long INTERVAL = 2 * 60 * 1000L; // 2 minutos
+	private static final int FOLLOW_NOTIFICATION = 1;
+	private static final int GOAL_NOTIFICATION = 2;
+	private static final int WHISTLE_NOTIFICATION = 3;
+	private static final int STARTMATCH_NOTIFICATION = 4;
+
+	private ClubsDB clubsDB;
+
+	private TreeMap<String, Club> clubs;
+
+	private long serviceStartedTime;
+	private RealTimeMatch rtm;
+	private RunTask runTask;
+	private Handler serviceHandler = null; //To handle the service
+
+	@Override
+	public void onStart(Intent intent, int startId){
+		super.onStart(intent, startId);
+		serviceStartedTime = System.currentTimeMillis();
+
+		clubsDB = ClubsDB.getInstance(this);
+		clubs = clubsDB.getClubs();
+
+		RealTimeMatch rtm = null;
+		try{
+			JSONArray jArr = new JSONArray(intent.getStringExtra(INTENT_REALTIMEMATCH_JSON));
+			rtm = new RealTimeMatch(jArr, clubs);
+		}catch(JSONException je){
+			je.printStackTrace();
+		}
+		if(rtm != null){			
+			setRealTimeMatch(rtm);
+			showNotification(FOLLOW_NOTIFICATION,
+					R.drawable.ic_notification_soccerball,
+					getString(R.string.realtimematchservice_notification_following), -1, rtm);
+
+			if(serviceHandler == null) this.serviceHandler = new Handler();
+			this.runTask = new RunTask(this);
+			this.serviceHandler.postDelayed(runTask, INTERVAL);		
+		}else{
+			Toast.makeText(this, R.string.realtimematchservice_error, Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	@Override
+	public IBinder onBind(Intent intent){
+		return null;
+	}
+
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		if(serviceHandler != null) serviceHandler.removeCallbacks(runTask);
+	}
+
+	private class RunTask implements Runnable {
+		private Context context;
+
+		public RunTask(Context context) {
+			this.context = context;
+		}
+
+		private void testChangesToBackedUpMatch(){
+			long time = System.currentTimeMillis() - serviceStartedTime;
+			if(time > 2 * 60 * 60 * 1000) stopSelf(); //testar se o service esta rodando a mais de duas horas, se estiver, melhor para-lo
+			else{				
+				RealTimeMatch rtm = getRealTimeMatch();
+
+				RealTimeMatch downloadedRtm = getUpdatedRealTimeMatch(rtm.getHome().getName(), rtm.getAway().getName(), rtm.getDivision());
+				Log.e(HomeActivity.TAG, "****"+downloadedRtm.toJson().toString());
+				if(downloadedRtm != null){
+					if(downloadedRtm.getState() == RealTimeMatch.FINALIZADO) gameHasEnded(downloadedRtm);
+					else{
+						String newResHome = downloadedRtm.getResultHome();
+						String newResAway = downloadedRtm.getResultAway();
+
+						if(rtm.getResultHome().equals("") && rtm.getResultAway().equals("")
+								&& !newResHome.equals(rtm.getResultHome()) && !newResAway.equals(rtm.getResultAway())){
+							showNotification(STARTMATCH_NOTIFICATION,
+									R.drawable.ic_notification_whistle,
+									getString(R.string.realtimematchservice_notification_matchstarted),
+									R.raw.whistle, downloadedRtm);
+							setRealTimeMatch(downloadedRtm);
+							Log.e(HomeActivity.TAG, downloadedRtm.toJson().toString());
+							FileHandler.saveBackup(context, FileHandler.FOLLOWEDREALTIMEMATCH, downloadedRtm.toJson().toString());
+						}else if(!newResHome.equals(rtm.getResultHome())
+								|| !newResAway.equals(rtm.getResultAway())){
+							showNotification(GOAL_NOTIFICATION,
+									R.drawable.ic_notification_soccerball,
+									getString(R.string.realtimematchservice_notification_goal),
+									R.raw.goal, downloadedRtm);
+							setRealTimeMatch(downloadedRtm);
+							FileHandler.saveBackup(context, FileHandler.FOLLOWEDREALTIMEMATCH, downloadedRtm.toJson().toString());
+						}
+					}
+				}
+			}
+		}
+
+		public void run(){
+			testChangesToBackedUpMatch();
+			serviceHandler.postDelayed(this, INTERVAL);
+		}
+	}
+
+	private RealTimeMatch getUpdatedRealTimeMatch(String home, String away, Division division){
+		try {
+			return new GetUpdatedRealTimeMatchTask(home, away, division).execute().get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return null;
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private class GetUpdatedRealTimeMatchTask extends AsyncTask<Void, Void, RealTimeMatch> {
+		private String homeName, awayName;
+		private Division division;
+
+		public GetUpdatedRealTimeMatchTask(String homeName, String awayName, Division division) {
+			this.homeName = homeName;
+			this.awayName = awayName;
+			this.division = division;
+		}
+
+		@Override
+		protected RealTimeMatch doInBackground(Void... params) {
+			try {
+				ArrayList<RealTimeMatch> al = new RealTimeREST(getClubs()).
+						getRealTimeMatches(division, Boolean.valueOf(false));
+
+				if(al != null){					
+					for (RealTimeMatch rtm : al) {
+						if(rtm.getHome().getName().equals(homeName)
+								|| rtm.getAway().getName().equals(awayName)){
+							return rtm;
+						}
+					}
+				}else{
+					return null;
+				}
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			} catch (OutOfMemoryError e){
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
+
+	private void gameHasEnded(RealTimeMatch rtm){
+		showNotification(WHISTLE_NOTIFICATION,
+				R.drawable.ic_notification_whistle,
+				getString(R.string.realtimematchservice_notification_matchended),
+				R.raw.whistle, rtm);
+		stopSelf();
+	}
+
+	private void showNotification(Integer notificationConstant,
+			int resIcon, String tickerText, int resAudio,
+			RealTimeMatch rtm) {
+		NotificationManager notificationManager =
+				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+		Notification realTimeMatchEvent = new Notification();
+		realTimeMatchEvent.icon = resIcon;
+
+		String n1 = rtm.getHome().getName();
+		String res1 = rtm.getResultHome() == null ? "" : rtm.getResultHome();
+		String n2 = rtm.getAway().getName();
+		String res2 = rtm.getResultAway() == null ? "" : rtm.getResultAway();
+		realTimeMatchEvent.tickerText = tickerText + ": " + n1 + " " + res1 + " x " + res2 + " " + n2;
+
+		realTimeMatchEvent.when = System.currentTimeMillis();
+
+		realTimeMatchEvent.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+		if(resAudio != -1 && PreferenceEditor.shouldServicePlaySound(this)){
+			realTimeMatchEvent.sound = Uri.parse("android.resource://"
+					+ getPackageName() + "/" + resAudio);
+		}
+
+		if(PreferenceEditor.shouldServiceVibrate(this)){
+			realTimeMatchEvent.defaults |= Notification.DEFAULT_VIBRATE;
+		}
+
+		Intent notificationIntent = new Intent(this, SplashScreen.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		realTimeMatchEvent.setLatestEventInfo(this,
+				getString(R.string.app_name) + " - " + getString(R.string.realtimematchesactivity_title),
+				realTimeMatchEvent.tickerText, contentIntent);
+		notificationManager.notify(notificationConstant.intValue(), realTimeMatchEvent);
+	}
+
+
+	public RealTimeMatch getRealTimeMatch() {
+		return rtm;
+	}
+
+	public void setRealTimeMatch(RealTimeMatch rtm) {
+		this.rtm = rtm;
+	}
+
+	public TreeMap<String, Club> getClubs() {
+		if(clubs == null) clubs = ClubsDB.getInstance(this).getClubs();
+		return clubs;
+	}
+
+}

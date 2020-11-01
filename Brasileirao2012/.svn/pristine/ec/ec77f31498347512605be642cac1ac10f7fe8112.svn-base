@@ -1,0 +1,173 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import android.content.Context;
+import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.comparator.FansComparator;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+
+public class TorcidometerArrayAdapter extends ArrayAdapter<Club> {
+	private final static int FANS_LAYOUT = R.layout.torcidometerrow;
+
+	private final LayoutInflater mInflater;
+	private ShareHelper shareHelper;
+	private ArrayList<Club> clubsWithFans;
+	private int totalFans;
+
+	private int widthBase = 0;
+	private View predefinedViewBase;
+
+	public TorcidometerArrayAdapter(Context context, View viewBase) {
+		super(context, FANS_LAYOUT);
+		this.mInflater = LayoutInflater.from(context);
+		shareHelper = new ShareHelper(context);
+		this.predefinedViewBase = viewBase;
+
+		this.clubsWithFans = new ArrayList<Club>();
+		this.totalFans = 0;
+		for (Club club : ClubsDB.getInstance(context).getClubs().values()) {
+			int fans = club.getFans().intValue();
+			if (fans > 0) {
+				clubsWithFans.add(club);
+			}
+			totalFans += fans;
+		}
+		Collections.sort(clubsWithFans, new FansComparator());
+	}
+
+	@Override
+	public int getCount() {
+		return clubsWithFans.size();
+	}
+
+	@Override
+	public Club getItem(int position) {
+		return clubsWithFans.get(position);
+	}
+
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+		final FansHolder holder;
+
+		if (row == null) {
+			row = mInflater.inflate(FANS_LAYOUT, parent, false);
+
+			holder = new FansHolder();
+			holder.llContent = (LinearLayout) row
+					.findViewById(R.torcidometerrow.ll_content);
+			holder.imgIcon = (ImageView) row
+					.findViewById(R.torcidometerrow.imageview);
+			holder.txtNumber = (TextView) row
+					.findViewById(R.torcidometerrow.tv_number);
+			holder.bar = row.findViewById(R.torcidometerrow.v_bar);
+			holder.tvHoldMessage = (TextView) row
+					.findViewById(R.torcidometerrow.tv_holdmessage);
+
+			row.setTag(holder);
+		} else {
+			holder = (FansHolder) row.getTag();
+		}
+
+		final Club club = clubsWithFans.get(position);
+
+		holder.imgIcon.setImageResource(club.getBadgeResource(getContext()));
+		holder.txtNumber.setText(String.valueOf(club.getFans()));
+		setHolderBar(holder, club);
+
+		row.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN
+						|| event.getAction() == MotionEvent.ACTION_MOVE) {
+					holder.tvHoldMessage.setVisibility(View.VISIBLE);
+					holder.llContent.setVisibility(View.INVISIBLE);
+				} else {
+					holder.tvHoldMessage.setVisibility(View.INVISIBLE);
+					holder.llContent.setVisibility(View.VISIBLE);
+				}
+				return false;
+			}
+		});
+
+		row.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				shareClubInformation(club, position + 1);
+				return true;
+			}
+		});
+
+		return row;
+	}
+
+	private void setHolderBar(final FansHolder holder, final Club club) {
+		int height = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 24, getContext().getResources()
+						.getDisplayMetrics());
+
+		widthBase = widthBase <= 0 ? predefinedViewBase.getWidth() : widthBase;
+		float parentwidthsize = widthBase;
+
+		totalFans = totalFans <= 0 ? 1 : totalFans;
+		float factor = (float) club.getFans() / totalFans;
+		factor = (float) (factor * 4);
+		float width = factor * parentwidthsize;
+
+		if (width > parentwidthsize) {
+			width = (float) (parentwidthsize * 0.9);
+		} else if (width < 1) {
+			width = 1;
+		}
+
+		holder.bar.setLayoutParams(new LayoutParams((int) width, height));
+		fixBackgroundRepeat(holder.bar);
+	}
+
+	private void shareClubInformation(Club club, int positionInTorcidometer) {
+		String message = getContext().getString(
+				R.string.torcidometeractivity_sharemessage, club.getName(),
+				positionInTorcidometer,
+				getContext().getString(R.string.app_name), club.getFans());
+		shareHelper.share(message);
+	}
+
+	/* workaround para bug do android < 4.0 em que o BG fica extendido */
+	private static void fixBackgroundRepeat(View view) {
+		Drawable bg = view.getBackground();
+		if (bg != null) {
+			if (bg instanceof BitmapDrawable) {
+				BitmapDrawable bmp = (BitmapDrawable) bg;
+				bmp.mutate(); // make sure that we aren't sharing state anymore
+				bmp.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+			}
+		}
+	}
+
+	private static class FansHolder {
+		public LinearLayout llContent;
+		public ImageView imgIcon;
+		public TextView txtNumber;
+		public View bar;
+		public TextView tvHoldMessage;
+	}
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+newsviewflowadapteritem/listview"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@null"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/gray_divider_list"
+        android:dividerHeight="1dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp" />
+
+    <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+        android:id="@+newsviewflowadapteritem/dul_loading"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+</LinearLayout>

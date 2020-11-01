@@ -1,0 +1,269 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.IBinder;
+import android.preference.PreferenceManager;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class RealTimeMatchService extends Service {
+	private static final long INTERVAL = /*5 * 1000L;*/  2 * 60 * 1000L; // 2 minutos
+	private static final int FOLLOW_NOTIFICATION = 1;
+	private static final int GOAL_NOTIFICATION = 2;
+	private static final int WHISTLE_NOTIFICATION = 3;
+	private static final int STARTMATCH_NOTIFICATION = 4;
+	
+	private SharedPreferences prefs;
+	
+	private long serviceStartedTime;
+	private RealTimeMatch rtm;
+	private RunTask runTask;
+	private Handler serviceHandler = null; //To handle the service
+	
+	@Override
+	public void onStart(Intent intent, int startId){
+		super.onStart(intent, startId);
+		serviceStartedTime = System.currentTimeMillis();
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		RealTimeMatch rtm = (RealTimeMatch) FileHandler.openBackup(this, FileHandler.FOLLOWEDREALTIMEMATCH);
+		if(rtm != null){			
+			setRealTimeMatch(rtm);
+			showFollowMatchNotification(rtm.getHome(), rtm.getResultHome(), rtm.getAway(), rtm.getResultAway());
+			
+			if(serviceHandler == null) this.serviceHandler = new Handler();
+			this.runTask = new RunTask(this);
+			this.serviceHandler.postDelayed(runTask, INTERVAL);		
+		}else{
+			Toast.makeText(this, "Ocorreu um problema no acompanhamento da partida, tente novamente", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	@Override
+	public IBinder onBind(Intent intent){
+		return null;
+	}
+
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		if(serviceHandler != null) serviceHandler.removeCallbacks(runTask);
+	}
+
+	private class RunTask implements Runnable {
+		private Context context;
+		
+		public RunTask(Context context) {
+			setContext(context);
+		}
+		
+		private void setContext(Context context) {
+			this.context = context;
+		}
+		
+		public Context getContext() {
+			return context;
+		}
+
+		private void testChangesToBackedUpMatch(){
+			long time = System.currentTimeMillis() - serviceStartedTime;
+			if(time > 2 * 60 * 60 * 1000) stopSelf(); //testar se o service esta rodando a mais de duas horas, se estiver, melhor para-lo
+			else{				
+				RealTimeMatch rtm = getRealTimeMatch();
+				
+				RealTimeMatch downloadedRtm = getUpdatedRealTimeMatch(rtm.getHome(), rtm.getAway(), rtm.getDivision());
+				
+				if(downloadedRtm != null){
+					if(downloadedRtm.getStateConstant() == RealTimeMatch.FINALIZADO) gameHasEnded(downloadedRtm);
+					else{
+						String newResHome = downloadedRtm.getResultHome();
+						String newResAway = downloadedRtm.getResultAway();
+						
+						if(rtm.getResultHome().equals("") && rtm.getResultAway().equals("") && !newResHome.equals(rtm.getResultHome()) && !newResAway.equals(rtm.getResultAway())){
+							showStartMatchNotification(downloadedRtm.getHome(), downloadedRtm.getAway());
+							setRealTimeMatch(downloadedRtm);
+							FileHandler.saveBackup(getContext(), FileHandler.FOLLOWEDREALTIMEMATCH, downloadedRtm);
+						}else if(!newResHome.equals(rtm.getResultHome()) || !newResAway.equals(rtm.getResultAway())){
+							showGoalNotification(downloadedRtm.getHome(), downloadedRtm.getResultHome(), downloadedRtm.getAway(), downloadedRtm.getResultAway());
+							setRealTimeMatch(downloadedRtm);
+							FileHandler.saveBackup(getContext(), FileHandler.FOLLOWEDREALTIMEMATCH, downloadedRtm);
+						}
+					}
+				}
+			}
+		}
+
+		public void run(){
+			testChangesToBackedUpMatch();
+			serviceHandler.postDelayed(this, INTERVAL);
+		}
+	}
+	
+	private RealTimeMatch getUpdatedRealTimeMatch(String home, String away, int division){
+		try {
+			return new GetUpdatedRealTimeMatchTask(home, away, division).execute().get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return null;
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private class GetUpdatedRealTimeMatchTask extends AsyncTask<Void, Void, RealTimeMatch> {
+		private String home, away;
+		private int division;
+		
+		public GetUpdatedRealTimeMatchTask(String home, String away, int division) {
+			setHome(home);
+			setAway(away);
+			setDivision(division);
+		}
+		
+		@Override
+		protected RealTimeMatch doInBackground(Void... params) {
+			try {
+				ArrayList<RealTimeMatch> al = HTMLManager.getRealTimeMatches(getDivision());
+				
+				if(al != null){					
+					for (RealTimeMatch rtm : al) {
+						if(rtm.getClubHome().equals(getHome()) || rtm.getClubAway().equals(getAway())){
+							return rtm;
+						}
+					}
+				}else{
+					return null;
+				}
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			} catch (OutOfMemoryError e){
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		public String getHome() {
+			return home;
+		}
+
+		public void setHome(String home) {
+			this.home = home;
+		}
+
+		public String getAway() {
+			return away;
+		}
+
+		public void setAway(String away) {
+			this.away = away;
+		}
+
+		public int getDivision() {
+			return division;
+		}
+
+		public void setDivision(int division) {
+			this.division = division;
+		}
+		
+	}
+	
+	private void gameHasEnded(RealTimeMatch rtm){
+		showWhistleNotification(rtm.getHome(), rtm.getResultHome(), rtm.getAway(), rtm.getResultAway());
+		stopSelf();
+	}
+
+	private void showFollowMatchNotification(String n1, String res1, String n2, String res2){		
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		Notification realTimeMatchEvent = new Notification();
+		realTimeMatchEvent.icon = R.drawable.ic_notification_soccerball;
+		realTimeMatchEvent.tickerText = "Acompanhando: " + n1 + " " + res1 + " x " + res2 + " " + n2;
+		realTimeMatchEvent.when = System.currentTimeMillis();
+		realTimeMatchEvent.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+		
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(), 0);
+		realTimeMatchEvent.setLatestEventInfo(this, "Brasileirão - Tempo real", realTimeMatchEvent.tickerText, contentIntent);
+		notificationManager.notify(FOLLOW_NOTIFICATION, realTimeMatchEvent);
+	}
+	
+	private void showStartMatchNotification(String n1, String n2){
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		Notification realTimeMatchEvent = new Notification();
+		realTimeMatchEvent.icon = R.drawable.ic_notification_whistle;
+		realTimeMatchEvent.tickerText = "Jogo iniciado: " + n1 + " x " + n2;
+		realTimeMatchEvent.when = System.currentTimeMillis();
+		realTimeMatchEvent.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+		if(prefs.getBoolean("cb_realtimeaudio", true)) realTimeMatchEvent.sound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.whistle);
+		if(prefs.getBoolean("cb_realtimevibrate", true)) realTimeMatchEvent.defaults |= Notification.DEFAULT_VIBRATE;
+		
+		Intent notificationIntent = new Intent(this, SplashScreen.class);
+		
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		realTimeMatchEvent.setLatestEventInfo(this, "Brasileirão - Tempo real", realTimeMatchEvent.tickerText, contentIntent);
+		notificationManager.notify(STARTMATCH_NOTIFICATION, realTimeMatchEvent);
+	}
+	
+	private void showGoalNotification(String n1, String res1, String n2, String res2){
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		Notification realTimeMatchEvent = new Notification();
+		realTimeMatchEvent.icon = R.drawable.ic_notification_soccerball;
+		realTimeMatchEvent.tickerText = "GOOOOLLL: " + n1 + " " + res1 + " x " + res2 + " " + n2;
+		realTimeMatchEvent.when = System.currentTimeMillis();
+		realTimeMatchEvent.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+		if(prefs.getBoolean("cb_realtimeaudio", true)) realTimeMatchEvent.sound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.goal);
+		if(prefs.getBoolean("cb_realtimevibrate", true)) realTimeMatchEvent.defaults |= Notification.DEFAULT_VIBRATE;
+		
+		Intent notificationIntent = new Intent(this, SplashScreen.class);
+		
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		realTimeMatchEvent.setLatestEventInfo(this, "Brasileirão - Tempo real", realTimeMatchEvent.tickerText, contentIntent);
+		notificationManager.notify(GOAL_NOTIFICATION, realTimeMatchEvent);
+	}
+	
+	private void showWhistleNotification(String n1, String res1, String n2, String res2){
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		Notification realTimeMatchEvent = new Notification();
+		realTimeMatchEvent.icon = R.drawable.ic_notification_whistle;
+		realTimeMatchEvent.tickerText = "Fim de jogo: " + n1 + " " + res1 + " x " + res2 + " " + n2;
+		realTimeMatchEvent.when = System.currentTimeMillis();
+		realTimeMatchEvent.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+		if(prefs.getBoolean("cb_realtimeaudio", true)) realTimeMatchEvent.sound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.whistle);
+		if(prefs.getBoolean("cb_realtimevibrate", true)) realTimeMatchEvent.defaults |= Notification.DEFAULT_VIBRATE;
+		
+		Intent notificationIntent = new Intent(this, SplashScreen.class);
+		
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		realTimeMatchEvent.setLatestEventInfo(this, "Brasileirão - Tempo real", realTimeMatchEvent.tickerText, contentIntent);
+		notificationManager.notify(WHISTLE_NOTIFICATION, realTimeMatchEvent);
+	}
+
+	
+	public RealTimeMatch getRealTimeMatch() {
+		return rtm;
+	}
+
+	public void setRealTimeMatch(RealTimeMatch rtm) {
+		this.rtm = rtm;
+	}
+
+}

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/svn/!svn/ver/2/trunk/SiTE
+END
+default.properties
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/3/trunk/SiTE/default.properties
+END
+logo_background.psd
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/13/trunk/SiTE/logo_background.psd
+END
+ic_close.psd
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/19/trunk/SiTE/ic_close.psd
+END
+AndroidManifest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/21/trunk/SiTE/AndroidManifest.xml
+END
+project.properties
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/23/trunk/SiTE/project.properties
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/3/trunk/SiTE/.project
+END
+logo.psd
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/3/trunk/SiTE/logo.psd
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/23/trunk/SiTE/.classpath
+END

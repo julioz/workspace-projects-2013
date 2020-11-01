@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+  
+	<RelativeLayout
+  	android:layout_width="wrap_content" android:layout_height="36dp"
+  	android:background="#FF068ED4" android:gravity="center_vertical">
+  	
+	  	<ImageView android:src="@drawable/ic_unidade" android:layout_width="wrap_content" android:layout_height="wrap_content"
+	  	android:id="@+id/ivUnidadeTitulo" android:layout_alignParentLeft="true" android:layout_marginLeft="5dp" android:layout_centerInParent="true"/>
+  	
+	  	<TextView android:layout_width="fill_parent" android:layout_height="fill_parent" android:text="Nova Unidade" android:textColor="#FFFFFFFF"
+	  	android:layout_toRightOf="@id/ivUnidadeTitulo" android:gravity="center_horizontal|center_vertical" android:textSize="24dp" android:textStyle="bold"/>
+	  
+	</RelativeLayout>
+
+	<ScrollView
+	    android:layout_width="fill_parent" 
+	    android:layout_height="fill_parent" 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:scrollbars="horizontal|vertical">
+	
+	<TableLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:layout_width="fill_parent"
+	  android:layout_height="fill_parent"
+	  android:stretchColumns="0"
+	  android:background="#FFFFFFFF"
+	  android:padding="3px">
+	  
+	  	<TableRow
+	  		android:layout_width="wrap_content"
+			android:layout_height="wrap_content" >
+	  	
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="#FF000000"
+			android:textStyle="bold"
+			android:text="Identificação da unidade:"/>
+	
+		</TableRow><TableRow
+	  		android:layout_width="wrap_content"
+			android:layout_height="wrap_content" >
+	
+			<EditText
+				android:id="@+novo_unidade/etIdUnidade"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:scrollHorizontally="true"
+				android:singleLine="true"/>
+		
+		</TableRow><TableRow
+	  		android:layout_width="wrap_content"
+			android:layout_height="wrap_content" >
+			
+			<TextView
+				android:text="Chefe da unidade:"
+				android:textColor="#FF000000"
+				android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+			
+		</TableRow><TableRow
+	  		android:layout_width="wrap_content"
+			android:layout_height="wrap_content" >
+			
+			<EditText
+				android:id="@+novo_unidade/etChefeUnidade"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:scrollHorizontally="true"
+				android:singleLine="true"/>
+				
+		</TableRow><TableRow
+	  		android:layout_width="wrap_content"
+			android:layout_height="wrap_content" >
+			
+			<Button
+				android:id="@+novo_unidade/btCriaUnid"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:textColor="#FF000000"
+				android:textStyle="bold"
+				android:text="Criar" />
+				
+		</TableRow>
+			
+	
+	
+	</TableLayout>
+	</ScrollView>
+</LinearLayout>

@@ -1,0 +1,94 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.TreeMap;
+
+import org.taptwo.android.widget.TitleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.adapters.NewsViewFlowAdapter;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.WebDatabaseMapper;
+
+public class NewsViewFlowActivity extends Activity {
+
+	public static final String INTENT_CLUB = "INTENT_CLUB";
+	private static final int INTENT_SEE_OTHER_CLUB_NEWS = 42;
+	public static final String INTENT_RETURN_FROM_CLUBSELECTOR = "INTENT_RETURN_FROM_CLUBSELECTOR";
+	
+	private ClubsDB clubsDB;
+	private WebDatabaseMapper webDatabaseMapper;
+	private TreeMap<String, Club> clubs;
+	
+	private Club club;
+	
+	private ViewFlow viewFlow;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.newstabsviewflowlayout);
+		
+		clubsDB = ClubsDB.getInstance(this);
+		webDatabaseMapper = new WebDatabaseMapper(null, null);
+		clubs = clubsDB.getClubs();
+		String clubAcr = getIntent().getStringExtra(INTENT_CLUB);
+		if(clubAcr == null) club = clubsDB.getMyClub();
+		else club = clubsDB.getClubs().get(clubAcr);
+		
+		loadViews();
+	}
+
+	private void loadViews() {
+		viewFlow = (ViewFlow) findViewById(R.newstabsviewflowlayout.viewflow);
+		NewsViewFlowAdapter adapter = new NewsViewFlowAdapter(this, club, webDatabaseMapper.getNewsUrls(club));
+		viewFlow.setAdapter(adapter);
+		
+		TitleFlowIndicator indicator = (TitleFlowIndicator) findViewById(R.newstabsviewflowlayout.viewflowindic);
+		indicator.setTitleProvider(adapter);
+		viewFlow.setFlowIndicator(indicator);
+		
+		TextView tv_actionbar_title = (TextView) findViewById(R.newstabsviewflowlayout.tv_name);
+		tv_actionbar_title.setText(club.getName().toUpperCase());
+		
+		ImageButton ib_actionbar_team = (ImageButton) findViewById(R.newstabsviewflowlayout.launcher_actionbar_ib_team);
+		ib_actionbar_team.setImageDrawable(getResources().getDrawable(club.getBadgeResource(this)));
+		ib_actionbar_team.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), MyClubSelectorActivity.class);
+				it.putExtra(MyClubSelectorActivity.INTENT_TITLE, "NOTÍCIAS");
+				it.putExtra(MyClubSelectorActivity.INTENT_IMAGELOGO, R.drawable.ic_news);
+				startActivityForResult(it, INTENT_SEE_OTHER_CLUB_NEWS);
+			}
+		});
+		
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {     
+		super.onActivityResult(requestCode, resultCode, data);
+		switch(requestCode) {
+			case (INTENT_SEE_OTHER_CLUB_NEWS):
+				if (resultCode == Activity.RESULT_OK) {
+					String clubName = data.getStringExtra(INTENT_RETURN_FROM_CLUBSELECTOR);
+					Club c = clubs.get(clubName);
+					Intent it = new Intent(this, NewsViewFlowActivity.class);
+					it.putExtra(INTENT_CLUB, c.getAcronym());
+					startActivity(it);
+					finish();
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
+}

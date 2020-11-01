@@ -1,0 +1,128 @@
+package br.com.zynger.brasileirao2012;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.pager.HomePagerAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.UpdateAllFromHomeActivityTask;
+import br.com.zynger.brasileirao2012.base.SelectiveActivity;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+
+public class HomeActivity extends SelectiveActivity {
+	private ClubsDB clubsDB;
+	private ViewPager mPager;
+	
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+        setContentView(R.layout.homeactivity);
+        
+        clubsDB = ClubsDB.getInstance(this);
+        loadViews();
+        setUpdateAllOnClickListener();
+    }
+
+    protected void onResume() {
+    	if(wasMyClubSet()){
+    		setSelectorImageResource(clubsDB.getMyClub().getBadgeResource(this));
+    		setPagerAdapter();
+    	}else{
+    		startClubSelectorActivity();
+    	}
+    	super.onResume();
+    }
+    
+    private boolean wasMyClubSet() {
+    	return clubsDB.getMyClub() != null;
+	}
+    
+    private void setPagerAdapter() {
+    	if(mPager.getAdapter() == null){
+    		mPager.setAdapter(new HomePagerAdapter(this));
+    	}
+	}
+
+	private void loadViews() {
+		mPager = (ViewPager) findViewById(R.homeactivity.viewpager);
+		
+		try{			
+			ImageView ivLogoBG = (ImageView) findViewById(R.homeactivity.iv_background_logo);
+			ivLogoBG.setImageDrawable(getResources().getDrawable(R.drawable.home_logo_bg));
+		}catch(OutOfMemoryError memoryError){
+			memoryError.printStackTrace();
+			System.gc();
+		}
+	}
+	
+	private void startClubSelectorActivity() {
+		Intent it = new Intent(this, ClubSelectorActivity.class);
+		it.putExtra(ClubSelectorActivity.INTENT_CHOOSING_MYCLUB, true);
+		startActivity(it);
+	}
+	
+	private void setUpdateAllOnClickListener() {
+		findViewById(R.homeactivity.iv_updateall).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showUpdateAllMenu(v);
+			}
+		});
+	}
+	
+	private void showUpdateAllMenu(final View updateAll){
+		if(!ConnectionHelper.isConnected(this)){
+			Toast.makeText(this, R.string.message_verifyconnection, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		final View updateAllLayout = findViewById(R.homeactivity.updateall_layout);
+		
+		mPager.setVisibility(View.GONE);
+		updateAllLayout.setVisibility(View.VISIBLE);
+		updateAll.setVisibility(View.GONE);
+		
+		findViewById(R.homeactivity.bt_updateall_yes).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new UpdateAllFromHomeActivityTask(v.getContext(),
+						updateAllLayout, mPager,
+						updateAll).execute();
+			}
+		});
+		
+		findViewById(R.homeactivity.bt_updateall_no).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				updateAllLayout.setVisibility(View.GONE);
+				mPager.setVisibility(View.VISIBLE);
+				updateAll.setVisibility(View.VISIBLE);
+			}
+		});
+	}
+	
+	@Override
+	public void selectorPressed(View selector) {
+		startClubSelectorActivity();
+	}
+
+	@Override
+	protected int getSelectorImageResource() {
+		// Will be set on runtime
+		return -1;
+	}
+
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_launcher;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.app_name;
+	}
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:actionbar="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    android:orientation="vertical"
+    android:background="@drawable/backrepeat"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+    <br.com.zynger.brasileirao2012.view.CustomActionBar
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+realtimematchesactivity/actionbar"
+	    actionbar:showTextBox="false"
+	    actionbar:showUpdate="false"
+	    actionbar:titleText="@string/realtimematchesactivity_title"
+	    actionbar:logosrc="@drawable/ic_realtime" />
+	
+    <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+        android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@+realtimematchesactivity/actionbar"
+		android:layout_above="@+realtimematchesactivity/ll_ad"
+		android:id="@+realtimematchesactivity/dul_loading" />
+	
+	<ScrollView 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:visibility="gone"
+		android:layout_below="@+realtimematchesactivity/actionbar"
+		android:layout_above="@+realtimematchesactivity/ll_ad"
+		android:id="@+realtimematchesactivity/sv_matches"
+		android:layout_marginTop="3dp">
+		<LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:id="@+realtimematchesactivity/ll_matches"
+		    android:orientation="vertical">
+		</LinearLayout>
+	</ScrollView>
+	
+	<FrameLayout
+        android:layout_below="@+realtimematchesactivity/actionbar"
+        android:layout_above="@+realtimematchesactivity/ll_ad"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content">
+        <com.darvds.ribbonmenu.RibbonMenuView
+	        android:id="@+realtimematchesactivity/ribbonmenuview"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" />
+    </FrameLayout>
+	
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+realtimematchesactivity/ll_ad"
+		android:gravity="bottom|center_horizontal">
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+	</LinearLayout>
+</RelativeLayout>

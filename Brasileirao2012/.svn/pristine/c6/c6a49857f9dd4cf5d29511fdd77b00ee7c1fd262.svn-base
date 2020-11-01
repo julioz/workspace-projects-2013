@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/backrepeat"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+    <RelativeLayout
+        android:background="@drawable/actionbar_gradient2"
+        android:id="@+realtimematchsquadactivity/rl_actionbar"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content">
+        
+        <ImageView
+	        android:layout_width="45dp"
+	        android:layout_height="45dp"
+	        android:padding="3dp"
+	        android:id="@+realtimematchsquadactivity/iv_badge"
+	        android:src="@drawable/ic_realtime"
+	        android:layout_centerVertical="true" />
+        
+        <br.com.zynger.brasileirao2012.view.TertreTextView
+	        android:text="Tempo Real"
+	        android:layout_marginLeft="3dp"
+	        android:layout_marginBottom="3dp"
+	        android:layout_toRightOf="@+realtimematchsquadactivity/iv_badge"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:textSize="30dp"/>
+    </RelativeLayout>
+    
+    <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+        android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@+realtimematchsquadactivity/rl_actionbar"
+		android:layout_above="@+realtimematchsquadactivity/ll_ad"
+		android:id="@+realtimematchsquadactivity/dul_loading" />
+    
+	<LinearLayout
+	    android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@+realtimematchsquadactivity/rl_actionbar"
+		android:layout_above="@+realtimematchsquadactivity/ll_ad"
+		android:id="@+realtimematchsquadactivity/ll_squads"
+		android:orientation="vertical">
+		
+	    <LinearLayout
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:background="#38000000"
+			android:padding="3dp"
+			android:weightSum="1">
+			<TextView
+			    android:layout_width="0dp"
+			    android:layout_weight="0.48"
+			    android:layout_height="wrap_content"
+			    android:id="@+realtimematchsquadactivity/tv_squadl"
+			    android:textSize="16dp"
+			    android:gravity="center"
+			    android:textColor="#FFFFFFFF"/>
+			
+			<View
+			    android:layout_width="0dp"
+			    android:layout_height="fill_parent"
+			    android:layout_weight="0.04" />
+			
+			<TextView
+			    android:layout_width="0dp"
+			    android:layout_weight="0.48"
+			    android:layout_height="wrap_content"
+			    android:textSize="16dp"
+			    android:id="@+realtimematchsquadactivity/tv_squadr"
+			    android:gravity="center"
+			    android:textColor="#FFFFFFFF"/>
+		    
+		</LinearLayout>
+		
+	    <ScrollView
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:fillViewport="true">
+		    <LinearLayout
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+				android:orientation="horizontal"
+				android:weightSum="1">
+				<LinearLayout
+				    android:layout_weight="0.48"
+			    	android:layout_width="0dp"
+				    android:layout_height="fill_parent"
+				    android:id="@+realtimematchsquadactivity/ll_squadl"
+				    android:orientation="vertical"/>
+				
+				<View
+				    android:layout_width="0dp"
+				    android:layout_height="fill_parent"
+				    android:layout_weight="0.04" />
+				
+				<LinearLayout
+				    android:layout_weight="0.48"
+			    	android:layout_width="0dp"
+				    android:layout_height="fill_parent"
+				    android:id="@+realtimematchsquadactivity/ll_squadr"
+				    android:orientation="vertical"/>
+			    
+			</LinearLayout>
+	    </ScrollView>
+	</LinearLayout>
+	
+	<LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+realtimematchsquadactivity/ll_ad"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>
+</RelativeLayout>

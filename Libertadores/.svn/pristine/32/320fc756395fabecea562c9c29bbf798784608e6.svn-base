@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/gradient_titlebar">
+        
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_videos"
+            android:id="@+videocentralactivity/titlebar_ivlogo"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+        
+        <br.com.zynger.libertadores.view.HelveticaTextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:id="@+videocentralactivity/titlebar_tvtitle"
+	        android:textColor="#FF3B3B3B"
+	        android:layout_centerVertical="true"
+	        android:layout_margin="5dp"
+	        android:layout_toRightOf="@+videocentralactivity/titlebar_ivlogo"
+	        android:gravity="left|center_vertical"
+	        android:layout_marginLeft="10dp"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+	        android:textSize="30dp"/>
+    </RelativeLayout>
+    
+    <br.com.zynger.libertadores.view.DataUpdateLayout
+	    android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+videocentralactivity/dul_update" />
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+videocentralactivity/rl_search"
+        android:layout_margin="2dp">
+        <EditText
+            android:id="@+videocentralactivity/et_searchbox"
+            android:inputType="text"
+            android:ellipsize="start"
+            android:gravity="center"
+            android:singleLine="true"
+            android:hint="@string/videocentralactivity_edittext_hint"
+            android:layout_alignParentLeft="true"
+            android:layout_width="fill_parent"
+            android:layout_toLeftOf="@+videocentralactivity/bt_searchconfirm"
+            android:layout_height="wrap_content"/>
+        
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+videocentralactivity/bt_searchconfirm"
+            android:text="@string/videocentralactivity_search"/>
+        
+    </RelativeLayout>
+    
+    <ListView
+		android:layout_height="0dp"
+		android:layout_width="fill_parent"
+		android:id="@+id/android:list"
+		android:paddingLeft="3dp"
+		android:paddingRight="3dp"
+		android:divider="#FFD4D4D4"
+		android:dividerHeight="2dp"
+		android:cacheColorHint="#00000000"
+		android:background="@null"
+		android:layout_weight="1"/>
+    
+    <include layout="@layout/admob_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:gravity="bottom|center_horizontal"/>
+</LinearLayout>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillViewport="true"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+	<RelativeLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
+	    
+	    <TextView
+	        android:padding="7dp"
+	        android:id="@+guide5/tv_txt"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:textColor="#FFFFFFFF"/>
+	    
+	    <ImageView
+	        android:layout_below="@+guide5/tv_txt"
+	        android:src="@drawable/guide_guide5_changedivision"
+	        android:id="@+guide5/iv1"
+	        android:layout_width="232dp"
+	        android:layout_height="73dp"
+	        android:layout_centerHorizontal="true"/>
+	    
+	    <TextView
+	        android:padding="7dp"
+	        android:layout_below="@+guide5/iv1"
+	        android:id="@+guide5/tv_txt2"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:textColor="#FFFFFFFF"/>
+	</RelativeLayout>
+</ScrollView>

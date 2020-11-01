@@ -1,0 +1,88 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.TorcidometerAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetFansTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+
+public class TorcidometerActivity extends ListActivity implements AsyncTaskListener {
+
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	
+	private RelativeLayout rl_loading;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.torcidometeractivity);
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		
+		loadViews();
+		
+		new GetFansTask(this, this).execute();
+	}
+	
+	private void loadViews() {
+		rl_loading = (RelativeLayout) findViewById(R.torcidometeractivity.rl_loading);
+	}
+	
+	private void setData(TreeMap<String, Integer> tm) {
+		ArrayList<Club> listClubs = new ArrayList<Club>();
+		Integer totalFans = 0;
+		for(TreeMap.Entry<String, Integer> entry : tm.entrySet()) {
+			String key = entry.getKey();
+			Integer value = entry.getValue();
+			
+			Club club = clubs.get(key);
+			
+			if(club != null){
+				club.setFans(value);
+				totalFans += value;
+				listClubs.add(club);
+			}
+		}
+		setListAdapter(new TorcidometerAdapter(this, listClubs, totalFans));
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		TreeMap<String, Integer> fansMap = (TreeMap<String, Integer>) result;
+		
+		setData(fansMap);
+		hideUpdatingLayout();
+	}
+
+	@Override
+	public void onFail(String message) {
+		//TODO load the old definitions
+		hideUpdatingLayout();
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+}

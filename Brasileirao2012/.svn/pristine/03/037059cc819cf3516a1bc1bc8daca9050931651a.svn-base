@@ -1,0 +1,131 @@
+package br.com.zynger.brasileirao2012.util;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
+import br.com.zynger.brasileirao2012.HomeActivity;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Striker;
+
+public class JsonUtil {
+
+	public static String readJsonFeed(String url) {
+		StringBuilder builder = new StringBuilder();
+		HttpClient client = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet(url);
+		try {
+			HttpResponse response = client.execute(httpGet);
+			StatusLine statusLine = response.getStatusLine();
+			int statusCode = statusLine.getStatusCode();
+			if (statusCode == 200) {
+				HttpEntity entity = response.getEntity();
+				InputStream content = entity.getContent();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+			} else {
+				Log.e(HomeActivity.TAG, "Failed to download file");
+			}
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return builder.toString();
+	}
+	
+	public static JSONObject createRankingJson(TreeMap<String, Club> clubs){
+		try {
+			JSONObject object = new JSONObject();
+			for (Iterator<String> it = clubs.keySet().iterator(); it.hasNext();) {
+				String acronym = (String) it.next();
+				object.put(acronym, clubs.get(acronym).toRankingJson());
+			}
+			return object;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static JSONArray createThirdDivisionRankingJson(HashMap<Integer, ArrayList<Club>> map){
+		JSONArray object = new JSONArray();
+		for (ArrayList<Club> group : map.values()) {
+			JSONArray array = new JSONArray();
+			for (Club club : group) {
+				array.put(club.toThirdDivisionJson());
+			}
+			object.put(array);
+		}
+		return object;
+	}
+	
+	public static JSONObject createStrikersJson(TreeMap<Division, ArrayList<Striker>> strikers){
+		try {
+			JSONObject object = new JSONObject();
+			for (Iterator<Division> it = strikers.keySet().iterator(); it.hasNext();) {
+				Division division = (Division) it.next();
+				ArrayList<Striker> al = strikers.get(division);
+				JSONArray jArray = new JSONArray();
+				for (Striker striker : al) {
+					jArray.put(striker.toJson());
+				}
+				object.put(division.toString(), jArray);
+			}
+			return object;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static JSONObject createFansJson(TreeMap<String, Club> clubs){
+		try {
+			JSONObject object = new JSONObject();
+			for (Iterator<String> it = clubs.keySet().iterator(); it.hasNext();) {
+				String acronym = (String) it.next();
+				object.put(acronym, clubs.get(acronym).toFansJson());
+			}
+			return object;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static JSONObject createAprovJson(TreeMap<String, AprovData> aprov){
+		try {
+			JSONObject object = new JSONObject();
+			for (Iterator<String> it = aprov.keySet().iterator(); it.hasNext();) {
+				String acronym = (String) it.next();
+				object.put(acronym, aprov.get(acronym).toJson());
+			}
+			return object;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+}

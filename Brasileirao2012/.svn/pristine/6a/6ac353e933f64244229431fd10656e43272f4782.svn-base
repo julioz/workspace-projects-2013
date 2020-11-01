@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="center_vertical"
+    android:layout_marginRight="6dp"
+    android:background="@drawable/actionbar_shape_roundedborders"
+    android:gravity="center" >
+
+    <ImageButton
+        android:id="@+actionbar/view_roudedimage"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:scaleType="fitCenter" />
+
+    <br.com.zynger.brasileirao2012.view.HelveticaTextView
+        android:id="@+actionbar/textview_roudedview"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@null"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textIsSelectable="false"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+</LinearLayout>

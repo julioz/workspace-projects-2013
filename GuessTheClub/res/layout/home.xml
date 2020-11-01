@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:background="@drawable/pattern_scanline">
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:orientation="vertical"
+        android:gravity="center">
+        
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_hometop"/>
+        
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:background="@color/gray_line_actionbar"/>
+        
+    </LinearLayout>
+    
+    <!-- <br.com.zynger.guesstheclub.view.CoolveticaTextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.35"
+        android:textSize="34dp"
+        android:textColor="@color/orange1_br"
+        android:shadowColor="@color/gray_shadow"
+        android:shadowRadius="0.5"
+        android:shadowDx="0.5"
+        android:shadowDy="0.5"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Guess\nthe\nClub"/> -->
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:gravity="center">
+        
+        <!-- <ImageButton
+	        android:src="@drawable/img_logobadge"
+	        android:background="@null"
+	        android:id="@+home/bt_play"
+	        android:adjustViewBounds="true"
+	        android:scaleType="fitCenter"
+	        android:layout_centerInParent="true"
+	        android:layout_width="128dp"
+	        android:layout_height="128dp"
+	        android:layout_gravity="center"/>
+        
+        <br.com.zynger.guesstheclub.view.CoolveticaTextView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/roundborder_gray"
+            android:padding="2dp"
+            android:textSize="24dp"
+            android:id="@+home/tv_play"
+            android:shadowColor="@color/gray_shadow"
+	        android:shadowRadius="0.5"
+	        android:shadowDx="0.5"
+	        android:shadowDy="0.5"
+            android:textColor="@color/bluelogo_br"
+            android:gravity="center"/>-->
+            
+		<Button
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:id="@+home/bt_play"
+		    android:textSize="20dp"
+		    android:textColor="@color/orange1_br"
+		    android:layout_marginLeft="30dp"
+		    android:layout_marginRight="30dp"/>
+        
+    </RelativeLayout>
+    
+
+</LinearLayout>

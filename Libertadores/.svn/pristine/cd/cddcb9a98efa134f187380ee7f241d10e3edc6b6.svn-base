@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:background="@null"
+	android:orientation="vertical">
+	<RelativeLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="60dp">
+	    
+	    <RelativeLayout
+	        android:layout_height="fill_parent"
+	        android:layout_width="wrap_content"
+	        android:layout_marginLeft="2dp"
+	        android:layout_alignParentLeft="true"
+	        android:id="@+movetomoverow/rl_type"
+	        android:paddingBottom="5dp"
+	        android:gravity="center">
+	        
+	        <LinearLayout
+	            android:layout_width="40dp"
+	            android:layout_height="wrap_content"
+	            android:orientation="vertical"
+	            android:id="@+movetomoverow/ll_type"
+	            android:visibility="gone"
+	            android:layout_centerInParent="true">
+		        <ImageView
+		            android:layout_width="fill_parent"
+		            android:layout_height="fill_parent"
+		            android:id="@+movetomoverow/iv_type"
+		            android:layout_gravity="center"
+		            android:gravity="center"/>
+	        </LinearLayout>
+	        <ImageView
+	            android:layout_width="45dp"
+	            android:layout_height="28dp"
+	            android:visibility="gone"
+	            android:id="@+movetomoverow/iv_videothumb"
+	            android:layout_centerInParent="true"/>
+	    </RelativeLayout>
+	
+	    <TextView
+			android:textColor="@android:color/black"
+			android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_gravity="center"
+	        android:ellipsize="end"
+			android:maxLines="3"
+			android:textSize="15dp"
+			android:id="@+movetomoverow/tv_text"
+			android:layout_marginLeft="2dp"
+			android:layout_toRightOf="@+movetomoverow/rl_type"
+			android:layout_toLeftOf="@+movetomoverow/rl_moment"
+	        android:layout_centerVertical="true" />
+	    
+	    <RelativeLayout
+	        android:layout_height="fill_parent"
+	        android:layout_width="65dp"
+	        android:layout_marginRight="2dp"
+	        android:layout_alignParentRight="true"
+	        android:id="@+movetomoverow/rl_moment"
+	        android:paddingBottom="5dp"
+	        android:gravity="center">
+	        
+	        <LinearLayout
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:orientation="vertical"
+	            android:layout_centerInParent="true">
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:textColor="@android:color/black"
+		            android:textSize="22dp"
+		            android:layout_gravity="center"
+		            android:gravity="center"
+		            android:id="@+movetomoverow/tv_moment"/>
+		        
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:textColor="@android:color/black"
+		            android:id="@+movetomoverow/tv_time"
+		            android:layout_gravity="center"
+		            android:gravity="center"
+		            android:layout_below="@+movetomoverow/tv_moment"/>
+	        </LinearLayout>
+	    </RelativeLayout>
+	</RelativeLayout>
+</LinearLayout>

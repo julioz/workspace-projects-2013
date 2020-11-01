@@ -1,0 +1,260 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.TreeMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.MatchesListAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetAllMatchesTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Match;
+import br.com.zynger.libertadores.util.GroupEnum;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.util.JsonUtil;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.view.LogoProgressBar;
+import br.com.zynger.libertadores.view.UpdateImageView;
+import br.com.zynger.libertadores.web.MatchesParser;
+
+public class MatchesOrderedListActivity extends ListActivity implements AsyncTaskListener {
+
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	private InternalStorageHandler internalStorage;
+	
+	private MatchesParser matchesParser;
+	
+	private ArrayList<Match> matches;
+	
+	private RelativeLayout rl_loading;
+	private UpdateImageView uiv_update;
+	private HelveticaTextView tv_title;
+	private LogoProgressBar lpb_updating;
+	private TextView tv_updating;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.matchesorderedlistactivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		internalStorage = new InternalStorageHandler(this);
+		clubs = clubsDB.getClubs();
+		
+		matchesParser = new MatchesParser(this, clubs);
+		
+		loadViews();
+		
+		uiv_update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				uiv_update.rotateView();
+				new GetAllMatchesTask(matchesParser, MatchesOrderedListActivity.this).execute();
+			}
+		});
+		
+		matches = restoreBackup();
+		if(null != matches) setAdapterFromMatches();
+		else new GetAllMatchesTask(matchesParser, MatchesOrderedListActivity.this).execute();
+	}
+	
+	private void loadViews() {
+		rl_loading = (RelativeLayout) findViewById(R.matchesorderedlistactivity.rl_loading);
+		tv_title = (HelveticaTextView) findViewById(R.matchesorderedlistactivity.titlebar_tvtitle);
+		uiv_update = (UpdateImageView) findViewById(R.matchesorderedlistactivity.titlebar_ivupdate);
+
+		lpb_updating = (LogoProgressBar) rl_loading.findViewById(R.relativelayout_loading.lpb_updating);
+		tv_updating = (TextView) rl_loading.findViewById(R.relativelayout_loading.tv_updating);
+		
+		tv_title.setText(getString(R.string.matchesorderedlistactivity_nextmatches).toUpperCase());
+	}
+
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		lpb_updating.setVisibility(View.VISIBLE);
+		tv_updating.setText(getString(R.string.updating));
+		RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+																		RelativeLayout.LayoutParams.WRAP_CONTENT);
+		p.addRule(RelativeLayout.BELOW, R.relativelayout_loading.lpb_updating);
+		p.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		tv_updating.setLayoutParams(p);		
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+	
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		if(l.getAdapter() instanceof MatchesListAdapter){			
+			Match match = (Match) l.getAdapter().getItem(position);
+			String detailsUrl = match.getDetailsUrl();
+			if(null != detailsUrl){
+				if(match.getHome().getCountry() == Club.COUNTRY_BRAZIL ||
+						match.getAway().getCountry() == Club.COUNTRY_BRAZIL){
+					Intent i = new Intent(this, MoveToMoveActivity.class);
+					i.putExtra(MoveToMoveActivity.INTENT_MATCH, match.toJson().toString());
+					v.getContext().startActivity(i);
+				}else{
+					Intent i = new Intent(this, MatchDetailsActivity.class);
+					i.putExtra(MatchDetailsActivity.INTENT_MATCH, match.toJson().toString());
+					v.getContext().startActivity(i);					
+				}
+			}
+		}
+		super.onListItemClick(l, v, position, id);
+	}
+	
+	private ArrayList<Match> restoreBackup() {
+		ArrayList<Match> arrMatches = new ArrayList<Match>();
+		String prefix = MatchesListActivity.PREFIX_PHASE;
+		if(!addMatches(arrMatches, prefix + MatchesListActivity.PHASE_PRELIB.toString()) ||
+				!addMatches(arrMatches, prefix + MatchesListActivity.PHASE_ROUNDOF16.toString()) ||
+				!addMatches(arrMatches, prefix + MatchesListActivity.PHASE_QUARTERFINAL.toString()) ||
+				!addMatches(arrMatches, prefix + MatchesListActivity.PHASE_SEMIFINAL.toString()) ||
+				!addMatches(arrMatches, prefix + MatchesListActivity.PHASE_FINAL.toString()) ||
+				!addMatches(arrMatches, GroupEnum.GROUP_1.toString()) ||
+				!addMatches(arrMatches, GroupEnum.GROUP_2.toString()) ||
+				!addMatches(arrMatches, GroupEnum.GROUP_3.toString()) ||
+				!addMatches(arrMatches, GroupEnum.GROUP_4.toString()) ||
+				!addMatches(arrMatches, GroupEnum.GROUP_5.toString()) ||
+				!addMatches(arrMatches, GroupEnum.GROUP_6.toString()) ||
+				!addMatches(arrMatches, GroupEnum.GROUP_7.toString()) ||
+				!addMatches(arrMatches, GroupEnum.GROUP_8.toString())){
+			return null;
+		}
+
+		return arrMatches;
+	}
+	
+	private boolean addMatches(ArrayList<Match> matches, String identifier) {
+		String matchesJsonString = (String) internalStorage.openMatchesArray(identifier);
+		if(null != matchesJsonString){
+			try{
+				JSONArray jsonMatches = new JSONArray(matchesJsonString);
+				
+				for (int i = 0; i < jsonMatches.length(); i++) {
+					JSONArray data = jsonMatches.getJSONArray(i);
+					Match match = new Match(data, clubs);
+					addMatchIfPossible(matches, match);
+				}
+				
+				return true;
+			}catch(JSONException e){
+				e.printStackTrace();
+				return false;
+			}
+		} else return false;
+	}
+	
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		HashMap<Integer, ArrayList<Match>> matches = (HashMap<Integer, ArrayList<Match>>) result;
+		ArrayList<Match> arrMatches = new ArrayList<Match>();
+		
+		Integer[] keys = { MatchesListActivity.PHASE_PRELIB, MatchesListActivity.PHASE_ROUNDOF16,
+				MatchesListActivity.PHASE_QUARTERFINAL, MatchesListActivity.PHASE_SEMIFINAL,
+				MatchesListActivity.PHASE_FINAL };
+		
+		for (Integer phase : keys) {
+			saveMatches(phase, matches.get(phase));
+			for (Match match : matches.get(phase)) {				
+				addMatchIfPossible(arrMatches, match);
+			}
+		}
+		
+		saveMatches(GroupEnum.GROUP_1, matches.get(1));
+		saveMatches(GroupEnum.GROUP_2, matches.get(2));
+		saveMatches(GroupEnum.GROUP_3, matches.get(3));
+		saveMatches(GroupEnum.GROUP_4, matches.get(4));
+		saveMatches(GroupEnum.GROUP_5, matches.get(5));
+		saveMatches(GroupEnum.GROUP_6, matches.get(6));
+		saveMatches(GroupEnum.GROUP_7, matches.get(7));
+		saveMatches(GroupEnum.GROUP_8, matches.get(8));
+		
+		for (int i = 1; i <= 8; i++) {
+			for (Match match : matches.get(i)) {
+				addMatchIfPossible(arrMatches, match);
+			}
+		}
+		
+		hideUpdatingLayout();
+		this.matches = arrMatches;
+		setAdapterFromMatches();
+	}
+	
+	private void addMatchIfPossible(ArrayList<Match> matches, Match match) {
+		if(match.getDate() != null){
+			if((match.getScoreHome() == Match.SCORE_NULL
+					&& match.getScoreAway() == Match.SCORE_NULL)
+					||
+					(!match.isOver() && (match.getScoreHome() != Match.SCORE_NULL
+							&& match.getScoreAway() != Match.SCORE_NULL))){
+				matches.add(match);
+			}
+		}
+	}
+	
+	private void setAdapterFromMatches() {
+		Collections.sort(matches, new MatchDateComparator());
+		setListAdapter(new MatchesListAdapter(this, matches, false, true));
+	}
+
+	private void saveMatches(Integer phase, ArrayList<Match> matches) {
+		JSONArray json = JsonUtil.createMatchesJson(matches);
+		internalStorage.saveMatchesArray(MatchesListActivity.PREFIX_PHASE + phase.toString(), json.toString());
+	}
+	
+	private void saveMatches(GroupEnum gEnum, ArrayList<Match> matches){
+		JSONArray json = JsonUtil.createMatchesJson(matches);
+		internalStorage.saveMatchesArray(gEnum.toString(), json.toString());
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		if(null != matches){
+			setAdapterFromMatches();
+			hideUpdatingLayout();
+		}else{
+			lpb_updating.setVisibility(View.GONE);
+			tv_updating.setText(getString(R.string.error_nodatabase));
+			tv_updating.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT));
+			tv_updating.setGravity(Gravity.CENTER);
+		}
+	}
+	
+	class MatchDateComparator implements Comparator<Match> {
+		@Override
+		public int compare(Match lhs, Match rhs) {
+			if(lhs.getDate() == null || rhs.getDate() == null) return -1;
+			return lhs.getDate().compareTo(rhs.getDate());
+		}
+		
+	}
+	
+}

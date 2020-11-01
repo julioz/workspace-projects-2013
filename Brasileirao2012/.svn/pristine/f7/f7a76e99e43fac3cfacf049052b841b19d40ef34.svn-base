@@ -1,0 +1,44 @@
+package br.com.zynger.brasileirao2012;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.xml.preferences);
+		setContentView(R.layout.settings);
+		
+		Calendar lastupdate = (Calendar) FileHandler.openBackup(this, FileHandler.LASTDATE_UPDATEALL);
+		if(lastupdate != null){
+			DateFormat sdf = SimpleDateFormat.getDateTimeInstance();
+			findPreference("pref_lastupdateall").setSummary(sdf.format(lastupdate.getTime()));
+		}
+	}
+	
+	@Override
+	protected void onPause() {
+		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+		super.onPause();
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		// example
+		/*Preference pref = findPreference(key);
+	    if (pref instanceof EditTextPreference) {
+	        EditTextPreference etp = (EditTextPreference) pref;
+	        pref.setSummary(etp.getText());
+	    }*/
+		
+	}
+}

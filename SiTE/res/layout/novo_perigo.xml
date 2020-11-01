@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#FFFFFFFF"
+	android:orientation="vertical"
+	android:stretchColumns="1"
+	android:shrinkColumns="0,2">
+
+	<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
+		<TableLayout
+	  		xmlns:android="http://schemas.android.com/apk/res/android"
+	  		android:layout_width="fill_parent"
+	  		android:layout_height="wrap_content"
+	  		android:shrinkColumns="0,1"
+	  		android:stretchColumns="2"
+	  		android:id="@+novo_perigo/tlTituloBarraPerigo">
+  		
+  			<TableRow
+		  		android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content"
+		  		android:paddingTop="3sp"
+		  		android:paddingBottom="3sp"
+		  		android:background="#FF068ED4">
+  		
+  			<ImageView
+		  		android:src="@drawable/danger_icon"
+		  		android:layout_gravity="left"
+		        android:layout_height="fill_parent"
+		        android:layout_width="fill_parent"
+		        android:layout_marginLeft="5dip"/>
+        
+        	<TextView
+        		android:layout_width="fill_parent"
+        		android:layout_height="fill_parent"
+        		android:id="@+novo_perigo/tvPerTit"
+        		android:gravity="center_vertical|right"
+        		android:paddingRight="20sp"
+        		android:text="Novo Perigo"
+        		android:textColor="#FFFFFFFF"
+        		android:textStyle="bold"
+        		android:textSize="17sp"/>
+  		
+			<ImageButton
+				android:src="@drawable/bt_add"
+				android:id="@+novo_perigo/perigoSalvar"
+				android:background="@null"
+				android:layout_gravity="right"
+				android:paddingRight="10sp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+  		
+  		</TableRow>
+	</TableLayout>
+
+	<ScrollView
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:scrollbars="horizontal|vertical"
+	    android:layout_below="@novo_perigo/tlTituloBarraPerigo"
+	    android:layout_above="@+novo_perigo/tlPerDelete">
+		
+		<TableLayout
+	  		xmlns:android="http://schemas.android.com/apk/res/android"
+	  		android:layout_width="fill_parent"
+	  		android:layout_height="fill_parent"
+	  		android:shrinkColumns="0"
+	  		android:stretchColumns="1"
+	  		android:padding="3px">
+  		
+	  		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent"
+	              android:textColor="#000000"
+	              android:gravity="center_vertical"
+	              android:text="Identificação:" />
+	              
+	            <EditText android:id="@+novo_perigo/etPerigoIdentificacao"
+	              android:layout_height="fill_parent"
+	              android:singleLine="true"
+	              android:scrollHorizontally="true"
+	              android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:text="" />
+			</TableRow>
+		
+			<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent"
+	              android:textColor="#000000"
+	              android:gravity="center_vertical"
+	              android:text="Tipo de perigo:" />
+	              
+	            <Spinner android:id="@+novo_perigo/spPerigoTipo"
+	           	 android:layout_width="0dp"
+	           	 android:layout_weight="1"
+	           	 android:layout_height="fill_parent" />
+			</TableRow>
+		
+			<TableRow
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+novo_perigo/trPerigoTipo"
+				android:visibility="gone">
+				<TextView android:layout_width="0dp"
+		            android:layout_weight="1"
+		            android:layout_height="fill_parent"
+		            android:textColor="#000000"
+		            android:gravity="center_vertical"
+		            android:text="Outro tipo:" />
+	              
+	            <EditText android:id="@+novo_perigo/etPerigoTipoDePerigo"
+	            	android:layout_height="fill_parent"
+	            	android:singleLine="true"
+	            	android:scrollHorizontally="true"
+	            	android:layout_width="0dp"
+	            	android:layout_weight="1"
+	            	android:text="" />
+			</TableRow>
+		
+			<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent"
+	              android:textColor="#000000"
+	              android:gravity="center_vertical"
+	              android:text="Risco Associado:" />
+	              
+	            <Spinner android:id="@+novo_perigo/spPerigoRiscoAssociado"
+	           	 android:layout_width="0dp"
+	           	 android:layout_weight="1"
+	           	 android:layout_height="fill_parent" />
+			</TableRow>
+		
+			<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TextView android:layout_width="0dp"
+	              android:layout_weight="1"
+	              android:layout_height="fill_parent"
+	              android:textColor="#000000"
+	              android:gravity="center_vertical"
+	              android:text="Entrada segura:" />
+	              
+	            <Spinner android:id="@+novo_perigo/spPerigoDevoIr"
+	           	 android:layout_width="0dp"
+	           	 android:layout_weight="1"
+	           	 android:layout_height="fill_parent" />
+			</TableRow>
+			
+			<TableLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+novo_perigo/tlEquipe">
+			
+				<TableRow
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+novo_perigo/trInicialEquipe">
+					<TextView android:layout_width="0dp"
+		              android:layout_weight="1"
+		              android:layout_height="fill_parent"
+		              android:textColor="#000000"
+		              android:gravity="center_vertical"
+		              android:text="Equipe:"/>
+	
+					<LinearLayout android:layout_width="0dp"
+		              android:layout_weight="1"
+		              android:layout_height="fill_parent">
+		            
+			            <Spinner android:id="@+novo_perigo/spPerigoTeam"
+		           	 		android:layout_width="0dp"
+		           	 		android:layout_weight="1"
+		           	 		android:layout_height="fill_parent" />
+			           	 
+			           	<ImageButton android:id="@+novo_perigo/spPerigoTeamMais"
+			           	 android:layout_width="wrap_content"
+			           	 android:src="@drawable/bt_mais"
+			           	 android:background="@null"
+			           	 android:layout_height="fill_parent"/>
+		          	 
+					</LinearLayout>
+				</TableRow>
+			</TableLayout>
+			
+			<TableLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				xmlns:android="http://schemas.android.com/apk/res/android"
+				android:id="@+novo_perigo/tlVitima">
+			
+				<TableRow
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+novo_perigo/trInicialVitima">
+					<TextView android:layout_width="0dp"
+		              android:layout_weight="1"
+		              android:layout_height="fill_parent"
+		              android:textColor="#000000"
+		              android:gravity="center_vertical"
+		              android:text="Vítima:"/>
+	
+					<LinearLayout android:layout_width="0dp"
+		              android:layout_weight="1"
+		              android:layout_height="fill_parent">
+		            
+			            <Spinner android:id="@+novo_perigo/spPerigoVitima"
+		           	 		android:layout_width="0dp"
+		           	 		android:layout_weight="1"
+		           	 		android:layout_height="fill_parent" />
+			           	 
+			           	<ImageButton android:id="@+novo_perigo/spPerigoVitimaMais"
+			           	 android:layout_width="wrap_content"
+			           	 android:src="@drawable/bt_mais"
+			           	 android:background="@null"
+			           	 android:layout_height="fill_parent"/>
+		          	 
+					</LinearLayout>
+				</TableRow>
+			</TableLayout>
+	
+		</TableLayout>
+	</ScrollView>
+		
+	<TableLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:gravity="bottom"
+  		android:id="@+novo_perigo/tlPerDelete"
+  		android:shrinkColumns="0"
+  		android:stretchColumns="1"
+  		android:layout_alignParentBottom="true"
+  		android:orientation="horizontal">
+  		
+  		<TableRow
+	  		android:layout_width="fill_parent" android:layout_height="fill_parent"
+	  		android:paddingTop="3sp" android:paddingBottom="3sp"
+	  		android:background="#FF668E54">
+  		
+	  		<ImageView
+		  		android:src="@drawable/bt_delete"
+		  		android:layout_gravity="left"
+		  		android:id="@+novo_perigo/ivDelPer"
+		        android:layout_height="fill_parent"
+		        android:layout_width="fill_parent"
+		        android:layout_marginLeft="5dip"/>
+	        
+	        <TextView
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:gravity="center_vertical"
+		        android:paddingRight="20sp"
+		        android:id="@+novo_perigo/tvDelPer"
+		        android:text="Excluir Perigo"
+		        android:textColor="#FFFFFFFF"
+		        android:textStyle="bold"
+		        android:textSize="17sp"/>
+  		
+  		</TableRow>
+	</TableLayout>
+</RelativeLayout>
+</TableLayout>

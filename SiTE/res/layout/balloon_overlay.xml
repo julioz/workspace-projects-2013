@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content"
+	android:orientation="horizontal" 
+	android:paddingBottom="35dip"
+	android:paddingLeft="10dip" 
+	android:minWidth="200dip" 
+	android:id="@+balao/balloon_main_layout"
+	android:background="@drawable/balloon_overlay_bg_selector" 
+	android:paddingTop="0dip"
+	android:paddingRight="0dip">
+
+	<LinearLayout 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:orientation="vertical" 
+		android:layout_weight="1"
+		android:paddingTop="10dip"
+		android:id="@+balao/balloon_inner_layout">
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="fill_parent" 
+			android:id="@+balao/balloon_item_title"
+			android:text="balloon_item_title" 
+			android:textSize="16dip"
+			android:textColor="#FF000000"/>
+		<TextView android:layout_height="wrap_content"
+			android:layout_width="fill_parent" 
+			android:textColor="#FF888888"
+			android:id="@+balao/balloon_item_snippet"
+			android:text="balloon_item_snippet" 
+			android:textSize="12dip"/>
+	</LinearLayout>
+	
+	<LinearLayout 
+		android:layout_width="wrap_content" 
+		android:layout_height="fill_parent"
+		android:orientation="vertical">
+	
+		<ImageView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:src="@drawable/balloon_overlay_close"
+			android:id="@+balao/close_img_button" 
+			android:paddingLeft="10dip"
+			android:paddingBottom="4dip" 
+			android:paddingRight="8dip"
+			android:paddingTop="8dip"/>
+			
+		<ImageView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:src="@drawable/balloon_overlay_edit"
+			android:id="@+balao/edit_img_button" 
+			android:paddingLeft="10dip"
+			android:paddingBottom="4dip" 
+			android:paddingRight="8dip"/>
+			
+		<ImageView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:src="@drawable/balloon_overlay_position"
+			android:id="@+balao/position_img_button" 
+			android:paddingLeft="10dip"
+			android:paddingBottom="4dip" 
+			android:paddingRight="8dip"/>
+	
+	</LinearLayout>
+
+</LinearLayout>

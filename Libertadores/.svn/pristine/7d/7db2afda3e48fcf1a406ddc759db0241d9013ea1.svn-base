@@ -1,0 +1,144 @@
+package br.com.zynger.libertadores.util;
+
+import java.util.TreeMap;
+
+
+import android.util.Log;
+import br.com.zynger.libertadores.HomeActivity;
+import br.com.zynger.libertadores.model.Club;
+
+public class WebDatabaseMapper {
+	
+	public final static int SOURCE_STRIKERS = 1;
+	public final static int SOURCE_MATCHES = 2;
+	public final static int SOURCE_MOVETOMOVE = 3;
+	public static final int SOURCE_ROSTERS = 4;
+	
+	private TreeMap<String, Club> clubs;
+	
+	private TreeMap<String, Club> nameMap;
+	private String clubName;
+	
+	private int source;
+	
+	public WebDatabaseMapper(TreeMap<String, Club> clubs, int source) {
+		this.nameMap = new TreeMap<String, Club>();
+		this.source = source;
+		setClubs(clubs);
+	}
+	
+	public Club getClubByName(String clubName){
+		this.clubName = clubName;
+		Club club = nameMap.get(clubName);
+		if(null != club) return club;
+		
+		if(source == SOURCE_STRIKERS) populateDatabaseStrikersAndRosters();
+		else if(source == SOURCE_MATCHES) populateDatabaseMatches();
+		else if(source == SOURCE_ROSTERS) populateDatabaseStrikersAndRosters();
+		
+		club = nameMap.get(clubName);
+		if(null != club) return club;
+		
+		try{			
+			club = clubs.get(clubName.substring(0, 3).toUpperCase());
+			if(null != club){
+				nameMap.put(clubName, club);
+				return club;
+			}
+		}catch(StringIndexOutOfBoundsException e){
+			Log.e(HomeActivity.TAG, clubName + " - " + e.toString());
+		}
+		
+		if(!clubName.equals("")){			
+			for (Club c : clubs.values()) {
+				if(c.getName().contains(clubName)){
+					club = c;
+					nameMap.put(clubName, club);
+					return club;
+				}
+			}
+		}
+		
+		Log.d(HomeActivity.TAG, "Virou dummy: " + clubName);
+		Club dummy = new Club();
+		dummy.setBadge("badge_dummy");
+		dummy.setIcon("ic_dummy");
+		dummy.setAcronym("DMY");
+		dummy.setName(clubName);
+		return dummy;
+	}
+	
+	private void populateDatabaseStrikersAndRosters() {
+		addToMapIfEqual("Anzoátegui", "DAZ");
+		addToMapIfEqual("Atlético Mineiro", "CAM");
+		addToMapIfEqual("Barcelona", "BSC");
+		addToMapIfEqual("Boca", "BJU");
+		addToMapIfEqual("CD Lara", "LAR");
+		addToMapIfEqual("César Vallejo", "UCV");
+		addToMapIfEqual("Cerro Porteño", "CPO");
+		addToMapIfEqual("Defensor Sporting", "DFS");
+		addToMapIfEqual("Deportes Iquique", "IQU");
+		addToMapIfEqual("Grêmio", "GRE");
+		addToMapIfEqual("León", "LEO");
+		addToMapIfEqual("Liga de Quito", "LDU");
+		addToMapIfEqual("Newell`s", "NOB");
+		addToMapIfEqual("Peñarol", "PEN");
+		addToMapIfEqual("Real Garcilaso", "RGA");
+		addToMapIfEqual("San José", "SJO");
+		addToMapIfEqual("Santa Fe", "SFE");
+		addToMapIfEqual("Sao Paulo", "SPO");
+		addToMapIfEqual("Sporting Cristal", "SCR");
+		addToMapIfEqual("The Strongest", "STG");
+		addToMapIfEqual("Tolima", "DTO");
+		addToMapIfEqual("Toluca", "TOL");
+		addToMapIfEqual("U. de Chile", "UCH");
+		addToMapIfEqual("Vélez Sarsfield", "VEL");
+	}
+	
+	private void populateDatabaseMatches() {
+		addToMapIfEqual("Anzoátegui", "DAZ");
+		addToMapIfEqual("Liga DUQ", "LDU");
+		addToMapIfEqual("Tolima", "DTO");
+		addToMapIfEqual("C. Vallejo", "UCV");
+		addToMapIfEqual("A. Mineiro", "CAM");
+		addToMapIfEqual("C. Porteño", "CPO");
+		addToMapIfEqual("Newell`s", "NOB");
+		addToMapIfEqual("S. Cristal", "SCR");
+		addToMapIfEqual("S. Cristsal", "SCR"); //TODO remove when fixed in the website
+		addToMapIfEqual("Defensor S.", "DFS");
+		addToMapIfEqual("Sao Paulo", "SPO");
+		addToMapIfEqual("CD Lara", "LAR");
+		addToMapIfEqual("U. de Chile", "UCH");
+		addToMapIfEqual("León", "LEO");
+		addToMapIfEqual("D. Iquique", "IQU");
+	}
+
+	private void addToMapIfEqual(String expected, String acronym){
+		if(clubName.equals(expected)){
+			Club club = clubs.get(acronym);
+			nameMap.put(clubName, club);
+		}
+	}
+	
+	public String getMoveToMoveName(Club club){
+		if(club.getAcronym().equals("SPO")) return "sao-paulo";
+		if(club.getAcronym().equals("ARS")) return "arsenal-de-sarandi";
+		else if(club.getAcronym().equals("BOL")) return "bolivar";
+		else if(club.getAcronym().equals("GRE")) return "gremio";
+		else if(club.getAcronym().equals("LDU")) return "ldu-quito";
+		else if(club.getAcronym().equals("CAM")) return "atletico-mg";
+		else if(club.getAcronym().equals("PEN")) return "penarol";
+		else if(club.getAcronym().equals("SJO")) return "san-jose-bol";
+		else if(club.getAcronym().equals("SCR")) return "sporting-cristal";
+		else return club.getName().toLowerCase().replaceAll(" ", "-");
+	}
+	
+	public TreeMap<String, Club> getClubs() {
+		return clubs;
+	}
+	
+	public void setClubs(TreeMap<String, Club> clubs) {
+		this.clubs = clubs;
+	}
+
+}

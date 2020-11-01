@@ -1,0 +1,224 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.TreeMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.ImageManager;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class NewsDetailsActivity extends Activity {
+	
+	private SharedPreferences prefs;
+	
+	private String clubname, newsurl, title, imgurl;
+	private int domain;
+	
+	private TextView tv_actionbar, tv_title, articletext;
+	private ImageView iv_actionbar, img;
+	private LinearLayout ll_tv_loading;
+	private ScrollView sv_tv_text;
+	private TreeMap<String, Club> clubs;
+	private Club club;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.newsdetails);
+		
+		clubname = getIntent().getStringExtra("CLUB_NAME");
+		newsurl = getIntent().getStringExtra("ARTICLE_URL");
+		title = getIntent().getStringExtra("ARTICLE_TT");
+		imgurl = getIntent().getStringExtra("ARTICLE_IMGURL");
+		domain = getIntent().getIntExtra("DOMAIN", 0);
+		setActionbar(clubname);
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this); 
+		
+		articletext = (TextView) findViewById(R.newsdetails.tv_articletext);
+		articletext.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				float newSize = (((TextView) v).getTextSize() + 1) % 30;
+				Log.e("bras2012", "newSize="+newSize);
+				((TextView) v).setTextSize(newSize); //TODO adicionar botoes para alterar o textSize deste texto
+			}
+		});
+		
+		img = (ImageView) findViewById(R.newsdetails.iv_image);
+		img.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Dialog d = new Dialog(v.getContext()); 
+				d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				d.setContentView(R.layout.dialog_image);
+				ImageView iv = (ImageView) d.findViewById(R.dialog_image.iv);
+				iv.setImageDrawable(((ImageView) v).getDrawable());
+				d.setCanceledOnTouchOutside(true);
+				d.show();
+			}
+		});
+		
+		ll_tv_loading = (LinearLayout) findViewById(R.newsdetails.ll_tv_loading);
+		sv_tv_text = (ScrollView) findViewById(R.newsdetails.sv_tv_text);
+		
+		tv_title = (TextView) findViewById(R.newsdetails.tv_title);
+		tv_title.setText(title);
+		
+		boolean showImg = prefs.getBoolean("cb_imgsdownload", true);
+		
+		if(domain == Article.UOL || domain == Article.NETFLU) new ReadServerNewsTask(newsurl, domain, showImg).execute();
+		else{			
+			if(showImg) new DownloadImageTask(imgurl).execute();
+			new ReadNewsTask(newsurl, domain).execute();
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		if(img.getVisibility() == View.GONE && prefs.getBoolean("cb_imgsdownload", true)) new DownloadImageTask(imgurl).execute();
+		super.onResume();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void setActionbar(String clubname){
+		tv_actionbar = (TextView) findViewById(R.newsdetails.tv_name);
+		tv_actionbar.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		iv_actionbar = (ImageView) findViewById(R.newsdetails.iv_badge);
+		
+		this.clubs = (TreeMap<String, Club>) FileHandler.openBackup(this, FileHandler.CLUBS);
+		
+		club = clubs.get(clubname);
+		
+		tv_actionbar.setText(club.getName().toUpperCase());
+		iv_actionbar.setImageDrawable(getResources().getDrawable(club.getBadge()));
+	}
+
+	private class ReadNewsTask extends AsyncTask<Void, Void, String> {
+		private String newsurl;
+		private int domain;
+		
+		public ReadNewsTask(String newsurl, int domain){
+			this.newsurl = newsurl;
+			this.domain = domain;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			sv_tv_text.setVisibility(View.GONE);
+			ll_tv_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected String doInBackground(Void... arg0) {
+			return HTMLManager.getNewsContent(newsurl, domain);
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			ll_tv_loading.setVisibility(View.GONE);
+			sv_tv_text.setVisibility(View.VISIBLE);
+			articletext.setText(Html.fromHtml(result));
+			articletext.setMovementMethod(LinkMovementMethod.getInstance());
+			super.onPostExecute(result);
+		}
+	}
+	
+	private class ReadServerNewsTask extends AsyncTask<Void, Void, String> {
+		private String newsurl, imgsrcServer, serverId;
+		private int domain;
+		private boolean showImg;
+		
+		public ReadServerNewsTask(String newsurl, int domain, boolean showImg){
+			this.newsurl = newsurl;
+			this.domain = domain;
+			this.showImg = showImg;
+			
+			if(this.domain == Article.UOL) serverId = "uol";
+			else if(this.domain == Article.NETFLU) serverId = "netflu";
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			sv_tv_text.setVisibility(View.GONE);
+			ll_tv_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected String doInBackground(Void... arg0) {
+			try{					
+				String url = "http://electric-stream-5784.herokuapp.com/news?domain=" + serverId + "&url=" + newsurl;
+				JSONObject json = new JSONObject(HTMLManager.readJsonFeed(url));
+				try{
+					imgsrcServer = json.getString("imgsrc");
+					if(imgsrcServer.equals("null")) imgsrcServer = null;
+				}catch(JSONException e){
+					imgsrcServer = null;
+				}
+				String content = json.getString("content");
+				if(content.equals("")) throw new RuntimeException();
+				return content;
+			}catch(Exception e){
+				return "Não foi possível ler a notícia";
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			ll_tv_loading.setVisibility(View.GONE);
+			sv_tv_text.setVisibility(View.VISIBLE);
+			if(showImg && imgsrcServer != null) new DownloadImageTask(imgsrcServer).execute();
+			articletext.setText(Html.fromHtml(result));
+			articletext.setMovementMethod(LinkMovementMethod.getInstance());
+			super.onPostExecute(result);
+		}
+	}
+	
+	private class DownloadImageTask extends AsyncTask<Void, Void, Bitmap> {
+		
+		private String imgurl;
+		
+		public DownloadImageTask(String imgurl){
+			this.imgurl = imgurl;
+		}
+
+		@Override
+		protected Bitmap doInBackground(Void... arg0) {
+			return ImageManager.loadFromUrl(imgurl);
+		}
+		
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			if(result != null){
+				img.setImageBitmap(result);
+				img.setVisibility(View.VISIBLE);
+			}
+			else img.setVisibility(View.GONE);
+			super.onPostExecute(result);
+		}
+	}
+}

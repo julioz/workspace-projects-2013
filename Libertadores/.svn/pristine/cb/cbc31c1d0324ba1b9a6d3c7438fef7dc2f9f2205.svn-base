@@ -1,0 +1,240 @@
+package br.com.zynger.libertadores;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import br.com.zynger.libertadores.asynctasks.BecomeFanTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.view.ResizableImageView;
+import br.com.zynger.libertadores.web.HeadersREST;
+
+public class HomeActivity extends Activity {
+
+	public final static String TAG = "Libertadores";
+	public final int INTENT_RETURN_CLUBSELECTOR = 42;
+
+	private ResizableImageView iv_header;
+	private ImageView iv_centerbar_badge;
+	private TextView titlebar_tvtitle, tv_centerbar_clubname;
+	private LinearLayout ll_header;
+
+	private Button standings, matches, strikers, teams, map, fans, history, about;
+
+	private InternalStorageHandler internalStorage;
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.homeactivity);
+		clubsDB = ClubsDB.getSingletonObject(this);
+		internalStorage = new InternalStorageHandler(this);
+		clubs = clubsDB.getClubs();
+
+		loadViews();
+		
+		testHeadersUpdate();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void testHeadersUpdate(){
+		TreeMap<String, String> headersMap = (TreeMap<String, String>) internalStorage.openBackup(this, InternalStorageHandler.HEADERS);
+		Calendar lastHeadersUpdate = (Calendar) internalStorage.openBackup(this, InternalStorageHandler.LAST_HEADERS_UPDATE);
+		
+		if(headersMap == null || shouldUpdateHeadersMap(lastHeadersUpdate)) new GetHeadersTask().execute();
+		else setHeadersToClubs(headersMap);
+	}
+	
+	private boolean shouldUpdateHeadersMap(Calendar savedCalendar) {
+		if(savedCalendar == null) return true;
+		else{
+			savedCalendar.add(Calendar.DAY_OF_MONTH, 4);
+			return Calendar.getInstance().after(savedCalendar);
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		String myClubAcronym = (String) internalStorage.openBackup(this, InternalStorageHandler.MYCLUB);
+		if(myClubAcronym != null) setMyClub(myClubAcronym);
+		else openClubSelectorActivity();
+		super.onResume();
+	}
+
+	private Club setMyClub(String acronym){
+		clubsDB.setMyClub(clubs.get(acronym.toUpperCase()));
+
+		Club myClub = clubsDB.getMyClub();
+		tv_centerbar_clubname.setText(myClub.getName().toUpperCase());
+		iv_centerbar_badge.setImageResource(myClub.getBadgeResource(this));
+		
+		new UpdateHeaderTask(myClub).execute();
+		
+		return myClub;
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {     
+		super.onActivityResult(requestCode, resultCode, data);
+		switch(requestCode) {
+		case (INTENT_RETURN_CLUBSELECTOR):
+			if (resultCode == Activity.RESULT_OK) {
+				String clubAcronym = data.getStringExtra(ClubSelectorActivity.INTENT_CLUB_RETURNED);
+				if(clubsDB.getMyClub() == null || !clubsDB.getMyClub().getAcronym().equals(clubAcronym)){
+					internalStorage.saveBackup(this, InternalStorageHandler.MYCLUB, clubAcronym);
+					new BecomeFanTask(this, clubAcronym).execute();
+					setMyClub(clubAcronym);
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void loadViews() {
+		titlebar_tvtitle = (TextView) findViewById(R.home.titlebar_tvtitle);
+		titlebar_tvtitle.setText(titlebar_tvtitle.getText().toString().toUpperCase());
+		iv_header = (ResizableImageView) findViewById(R.home.iv_header);
+		iv_centerbar_badge = (ImageView) findViewById(R.home.iv_centerbar_badge);
+		tv_centerbar_clubname = (TextView) findViewById(R.home.tv_centerbar_clubname);
+		ll_header = (LinearLayout) findViewById(R.home.ll_header);
+
+		standings = (Button) findViewById(R.home.btn_standings);
+		matches = (Button) findViewById(R.home.btn_matches);
+		strikers = (Button) findViewById(R.home.btn_strikers);
+		teams = (Button) findViewById(R.home.btn_teams);
+		map = (Button) findViewById(R.home.btn_map);
+		fans = (Button) findViewById(R.home.btn_fans);
+		history = (Button) findViewById(R.home.btn_history);
+		about = (Button) findViewById(R.home.btn_about);
+
+		setActivityLauncher(standings, StandingsActivity.class);
+		setActivityLauncher(matches, MatchesActivity.class);
+		setActivityLauncher(strikers, StrikersActivity.class);
+		setActivityLauncher(map, HeadquartersActivity.class);
+		setActivityLauncher(fans, TorcidometerActivity.class);
+		setActivityLauncher(history, HistoryActivity.class);
+
+		iv_centerbar_badge.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				openClubSelectorActivity();
+			}
+		});
+	}
+
+	private void openClubSelectorActivity() {
+		Intent it = new Intent(this, ClubSelectorActivity.class);
+		startActivityForResult(it, INTENT_RETURN_CLUBSELECTOR);
+	}
+
+	private void setActivityLauncher(View v, final Class<?> clazz) {
+		v.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), clazz);
+				startActivity(it);
+			}
+		});
+	}
+
+	private void setHeaderImage(Bitmap bitmap){
+		if(bitmap != null) iv_header.setImageBitmap(bitmap);
+		else iv_header.setImageResource(R.drawable.img_headerdefault);
+		
+		ll_header.setVisibility(View.VISIBLE);
+	}
+	
+	private class GetHeadersTask extends AsyncTask<Void, Void, TreeMap<String, String>> {		
+		@Override
+		protected TreeMap<String, String> doInBackground(Void... params) {
+			return HeadersREST.getHeaders();
+		}
+
+		@Override
+		protected void onPostExecute(TreeMap<String, String> tm) {
+			if(tm != null) {
+				internalStorage.saveBackup(getBaseContext(), InternalStorageHandler.HEADERS, tm);
+				internalStorage.saveBackup(getBaseContext(), InternalStorageHandler.LAST_HEADERS_UPDATE, Calendar.getInstance());
+				setHeadersToClubs(tm);
+			}	
+			super.onPostExecute(tm);
+		}
+	}
+	
+	private void setHeadersToClubs(TreeMap<String, String> headers){
+		Set<String> keys = headers.keySet();
+		for (Iterator<String> it = keys.iterator(); it.hasNext();) {
+			String key = (String) it.next();
+			Club club = clubs.get(key);
+			if(club != null) club.setHeaderUrl(headers.get(key));
+		}
+	}
+
+	private class UpdateHeaderTask extends AsyncTask<Void, Void, Bitmap> {
+		private String imgUrl;
+		private String fileName;
+		private boolean wasDownloaded;
+		
+		public UpdateHeaderTask(Club myClub) {
+			this.wasDownloaded = false;
+			this.imgUrl = myClub.getHeaderUrl();
+			this.fileName = myClub.getAcronym().toLowerCase() + "_" + "headerImg.jpg";
+		}
+
+		@Override
+		protected void onPreExecute() {
+			ll_header.setVisibility(View.GONE);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected Bitmap doInBackground(Void... params) {
+			Bitmap bitmap = internalStorage.getBitmapFromInternalStorage(fileName);
+			if(bitmap == null){
+				try {
+					bitmap = BitmapFactory.decodeStream((InputStream) new URL(imgUrl).getContent());
+					wasDownloaded = true;
+					return bitmap;
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+					return null;
+				} catch (IOException e) {
+					e.printStackTrace();
+					return null;
+				}
+			}else return bitmap;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap b) {
+			setHeaderImage(b);
+			if(b != null && wasDownloaded){
+				internalStorage.writeBitmapToInternalStorage(b, fileName);
+			}
+			super.onPostExecute(b);
+		}
+	}
+}

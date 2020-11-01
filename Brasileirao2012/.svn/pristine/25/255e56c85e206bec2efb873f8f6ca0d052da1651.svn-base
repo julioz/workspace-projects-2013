@@ -1,0 +1,103 @@
+package br.com.zynger.brasileirao2012;
+
+import org.taptwo.android.widget.CircleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.adapters.ClubSelectorAdapter;
+import br.com.zynger.brasileirao2012.adapters.ClubSelectorListArrayAdapter;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+
+public class TrophiesSelectorActivity extends Activity {
+	
+	private ClubsDB clubsDB;
+	
+	private ViewFlow viewFlow;
+	private ClubSelectorAdapter viewFlowAdapter;
+	
+	private TextView my_team_tt;
+	private LinearLayout ll_myteam;
+	private ImageButton my_team_bdg;
+	private Club myclub;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.trophiesselectoractivity);
+		
+		clubsDB = ClubsDB.getInstance(this);
+		
+		myclub = clubsDB.getMyClub(this);
+		loadViews();
+		
+		OnItemClickListener oicl = new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> list, View v, int position, long id) {
+				ClubSelectorListArrayAdapter adapter = (ClubSelectorListArrayAdapter) list.getAdapter();
+				Intent it = new Intent(v.getContext(), TrophiesActivity.class);
+				it.putExtra(TrophiesActivity.INTENT_CLUBACRONYM, adapter.getItem(position).getAcronym());
+				startActivity(it);
+			}
+		};
+		
+		for (ListView lv : viewFlowAdapter.getLists()) {
+			lv.setOnItemClickListener(oicl);
+		}
+	}
+
+	private void loadViews() {
+		viewFlow = (ViewFlow) findViewById(R.trophiesselectoractivity.viewflow);
+		viewFlowAdapter = new ClubSelectorAdapter(this,
+				clubsDB.getClubsList(Division.FIRSTDIVISION), clubsDB.getClubsList(Division.SECONDDIVISION));
+		viewFlow.setAdapter(viewFlowAdapter);
+		CircleFlowIndicator indic = (CircleFlowIndicator) findViewById(R.trophiesselectoractivity.viewflowindic);
+		viewFlow.setFlowIndicator(indic);
+		
+		ll_myteam = (LinearLayout) findViewById(R.trophiesselectoractivity.ll_myteam);
+    	
+    	my_team_tt = (TextView) findViewById(R.trophiesselectoractivity.tv_myteam);
+    	my_team_tt.setText(myclub.getName());
+		my_team_bdg = (ImageButton) findViewById(R.trophiesselectoractivity.iv_myteam);
+		my_team_bdg.setImageDrawable(getResources().getDrawable(myclub.getBadgeResource(this)));
+		
+		my_team_bdg.setOnTouchListener(new OnTouchListener() {
+    		@Override
+    		public boolean onTouch(View v, MotionEvent me) {
+    			if (me.getAction() == MotionEvent.ACTION_DOWN) {
+    				((ImageButton) v).setColorFilter(Color.argb(150, 50, 50, 50), PorterDuff.Mode.SRC_ATOP);
+    			} else {
+    				((ImageButton) v).setColorFilter(null);
+    			}
+    			return false;
+    		}
+
+    	});
+		
+		OnClickListener myteam_ocl = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), TrophiesActivity.class);
+				it.putExtra(TrophiesActivity.INTENT_CLUBACRONYM, myclub.getAcronym());
+				startActivity(it);
+			}
+		};
+		my_team_bdg.setOnClickListener(myteam_ocl);
+		ll_myteam.setOnClickListener(myteam_ocl);
+	}
+}

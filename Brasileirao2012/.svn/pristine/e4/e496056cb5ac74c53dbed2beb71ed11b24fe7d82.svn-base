@@ -1,0 +1,109 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import android.app.ListActivity;
+import android.content.Context;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.view.MoveToMoveLayout;
+
+public class MoveToMoveVideoCentralActivity extends ListActivity {
+	
+	public static final String INTENT_MOVES = "MOVES";
+	
+	private TextView actionbar_tt;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.movetomovevideocentral);
+		HashMap<String, Move> moves = (HashMap<String, Move>) getIntent().getSerializableExtra(INTENT_MOVES);
+		
+		loadViews();
+		
+		ArrayList<Move> al_moves = new ArrayList<Move>();
+		
+		for (Iterator<Move> iter = moves.values().iterator(); iter.hasNext();) {
+			Move move = (Move) iter.next();
+			String video = move.getVideo_url();
+			if(video != null){
+				al_moves.add(move);
+			}
+		}
+
+		Collections.sort(al_moves, new Comparator<Move>() {
+			@Override
+			public int compare(Move lhs, Move rhs) {
+				if(lhs.getPeriodo_id() > rhs.getPeriodo_id()) return -1;
+				else if(lhs.getPeriodo_id() == rhs.getPeriodo_id()){
+					try{
+						int lMomento = Integer.parseInt(lhs.getMomento().trim());
+						int rMomento = Integer.parseInt(rhs.getMomento().trim());
+						
+						if(lMomento > rMomento) return -1;
+						else return 1;
+					}catch(NumberFormatException nfe){
+						return 0;
+					}catch(NullPointerException npe){
+						return 0;
+					}
+				}
+				else return 1;
+			}
+		});
+		
+		setListAdapter(new VideoCentralAdapter(this, al_moves));
+	}
+	
+	private void loadViews() {
+		actionbar_tt = (TextView) findViewById(R.movetomovevideocentral.tv_name);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+	}
+	
+	private class VideoCentralAdapter extends BaseAdapter {
+		private Context context;
+		private LayoutInflater layoutInflater;
+		private ArrayList<Move> moves;
+		//private ImageDownloader imgDownloader; //TODO adicionar thumbnails aos videos
+		
+		public VideoCentralAdapter(Context context, ArrayList<Move> moves) {
+			this.context = context;
+			this.moves = moves;
+			layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			//imgDownloader = new ImageDownloader();
+		}
+		
+		@Override
+		public int getCount() {
+			return moves.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return moves.get(position);
+		}
+		
+		@Override
+		public long getItemId(int position) {
+			return 0;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			Move move = (Move) getItem(position);
+			return new MoveToMoveLayout(context, layoutInflater, move);
+		}
+	}
+}

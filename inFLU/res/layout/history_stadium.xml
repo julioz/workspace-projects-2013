@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:background="#FF00372a"
+	android:id="@+laranj/ll_actbg"
+	android:orientation="vertical">
+
+    <LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="40dp"
+		android:orientation="horizontal"
+		android:id="@+laranj/actionbar"
+		android:background="@drawable/actionbar_bg">
+		
+		<ImageView
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			android:src="@drawable/icon"
+			android:layout_gravity="center_vertical"/>
+		
+		<TextView
+			android:text="O Estádio das Laranjeiras"
+			android:textColor="#FFFFFF"
+			android:gravity="center_vertical"
+			android:layout_gravity="center_vertical"
+			android:textSize="18dp"
+			android:textStyle="bold"
+			android:paddingLeft="10dp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+	</LinearLayout>
+    
+    <ScrollView
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent">
+		
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+    
+	        <LinearLayout
+				android:layout_margin="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:padding="3dp"
+				android:id="@+laranj/ll_info"
+				android:background="#FF024234">
+				
+	            <HorizontalScrollView
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content">
+	                
+	                <LinearLayout 
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="wrap_content"
+	                    android:orientation="vertical">
+		                <TextView
+		                    android:id="@+laranj/tv_info"
+			                android:layout_width="fill_parent"
+			                android:textColor="#FFFFFF"
+			                android:layout_height="wrap_content"/>
+	            	</LinearLayout>
+	            </HorizontalScrollView>
+	        
+	    	</LinearLayout>
+	    	
+	        <LinearLayout
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="5dp"
+				android:layout_marginTop="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:background="#FF024234"
+				android:id="@+laranj/ll_tv1"
+				android:weightSum="3">
+	            
+	            <TextView
+	                android:layout_width="0dp"
+	                android:id="@+laranj/tv1"
+	                android:textColor="#FFFFFF"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"/>
+	            
+	            <ImageView
+	                android:src="@drawable/laranj_1"
+	                android:id="@+laranj/iv1"
+	                android:scaleType="fitCenter"
+	                android:padding="4dp"
+	                android:adjustViewBounds="true"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="2"/>
+	        </LinearLayout>
+	        
+	        <LinearLayout
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="5dp"
+				android:layout_marginBottom="5dp"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:background="#FF024234"
+				android:id="@+laranj/ll_tv2">
+	            
+	            <TextView
+	                android:layout_width="wrap_content"
+	                android:id="@+laranj/tv2"
+	                android:layout_gravity="center"
+	                android:layout_height="wrap_content"
+	                android:textColor="#FFFFFF"/>
+	        </LinearLayout>
+	        
+	        <LinearLayout
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="5dp"
+				android:layout_marginTop="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:padding="10dp"
+				android:background="#FF024234"
+				android:id="@+laranj/ll_tv4"
+				android:gravity="center"
+				android:layout_gravity="center">
+	            
+	            <ImageView
+	                android:src="@drawable/laranj_2"
+	                android:scaleType="fitCenter"
+	                android:id="@+laranj/iv2"
+	                android:adjustViewBounds="true"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"/>
+	            
+	            <TextView 
+	                android:text="No dia 11 de maio de 1919 a inauguração e estreia da seleção brasileira no estádio. Brasil 6 x 0 Chile"
+	                android:textColor="#FFFFFF"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"/>
+	        </LinearLayout>
+	        
+	        <LinearLayout
+				android:layout_marginLeft="5dp"
+				android:layout_marginRight="5dp"
+				android:layout_marginTop="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:background="#FF024234"
+				android:id="@+laranj/ll_tv3"
+				android:weightSum="2">
+	            
+	            <ImageView
+	                android:src="@drawable/laranj_3"
+	                android:scaleType="fitCenter"
+	                android:adjustViewBounds="true"
+	                android:padding="4dp"
+	                android:id="@+laranj/iv3"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"/>
+	            
+	            <TextView
+	                android:layout_width="0dp"
+	                android:id="@+laranj/tv3"
+	                android:textColor="#FFFFFF"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"/>
+	        </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

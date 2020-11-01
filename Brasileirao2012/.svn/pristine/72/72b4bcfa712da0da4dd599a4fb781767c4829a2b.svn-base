@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:background="@drawable/backrepeat">
+	<RelativeLayout
+	    android:background="@drawable/actionbar_gradient2"
+	    android:id="@+myclubselectoractivity/actionbar"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content">
+	    
+	    <ImageView
+	        android:layout_width="45dp"
+	        android:layout_height="45dp"
+	        android:padding="3dp"
+	        android:src="@drawable/ic_launcher"
+	        android:id="@+myclubselectoractivity/iv_badge"
+	        android:layout_centerVertical="true" />
+	    
+	    <br.com.zynger.brasileirao2012.view.TertreTextView
+	        android:id="@+myclubselectoractivity/tv_name"
+	        android:text="Time do coração"
+	        android:layout_marginLeft="3dp"
+	        android:layout_marginBottom="3dp"
+	        android:layout_toRightOf="@+myclubselectoractivity/iv_badge"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerVertical="true"
+	        android:textSize="30dp" />        
+	    
+	</RelativeLayout>
+	
+	<FrameLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_below="@+myclubselectoractivity/actionbar"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+	
+		<org.taptwo.android.widget.CircleFlowIndicator
+			android:padding="10dip"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:id="@+myclubselectoractivity/viewflowindic"
+			android:layout_gravity="center_horizontal"/>
+		<!-- app:inactiveType="fill"
+			app:fadeOut="1000"-->
+		<org.taptwo.android.widget.ViewFlow
+			android:id="@+myclubselectoractivity/viewflow"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"/>
+		<!-- app:sidebuffer="3" -->
+	
+	</FrameLayout>
+</RelativeLayout>

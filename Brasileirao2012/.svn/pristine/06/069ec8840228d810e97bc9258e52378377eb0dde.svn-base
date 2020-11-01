@@ -1,0 +1,61 @@
+package br.com.zynger.brasileirao2012.data;
+
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.TreeMap;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.xml.MatchesParser;
+
+public class MatchesDB {
+	private static MatchesDB ref;
+	private TreeMap<Integer, Fixture> matchesA, matchesB;
+	
+	private MatchesDB(Context context, TreeMap<String, Club> clubs){
+		matchesA = genMatches(context, clubs, Division.FIRSTDIVISION);
+		matchesB = genMatches(context, clubs, Division.SECONDDIVISION);
+	}
+	
+	public static MatchesDB getInstance(Context context, TreeMap<String, Club> clubs){
+		if (ref == null) ref = new MatchesDB(context, clubs);
+		return ref;
+	}
+	
+	public TreeMap<Integer, Fixture> getMatches(Division division){
+		if(division == Division.SECONDDIVISION) return getMatchesB();
+		else return getMatchesA();
+	}
+
+	private TreeMap<Integer, Fixture> genMatches(Context context,
+			TreeMap<String, Club> clubs, Division division){
+		return new MatchesParser().getMatches(context, clubs, division);
+	}
+	
+	public TreeMap<Integer, Fixture> getMatchesA() {
+		return matchesA;
+	}
+	
+	public TreeMap<Integer, Fixture> getMatchesB() {
+		return matchesB;
+	}
+    
+    @SuppressLint("UseSparseArrays")
+	public HashMap<Integer, GregorianCalendar> getDates(Division division){
+		HashMap<Integer, GregorianCalendar> tm = new HashMap<Integer, GregorianCalendar>();
+		TreeMap<Integer, Fixture> map = getMatches(division);
+		
+		for (int j = 1; j <= map.size(); j++) {
+			try{				
+				tm.put(j, map.get(j).getMatches().get(0).getDate());
+			}
+			catch(NullPointerException e) {}
+			catch(IndexOutOfBoundsException e) {}
+		}
+		
+		return tm;
+	}
+}

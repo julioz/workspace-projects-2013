@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="preferenceRealTimeIntervalEntries">
+		<item>45 segundos</item>
+		<item>1 minuto</item>
+		<item>2 minutos</item>
+		<item>5 minutos</item>
+	</string-array>
+	<string-array name="preferenceRealTimeIntervalValues">
+		<item>45000</item>
+		<item>60000</item>
+		<item>120000</item>
+		<item>300000</item>
+	</string-array>
+	<string-array name="aboutactivity_thanks">
+		<item>Grupo AndroidBrasil</item>
+		<item>Ricardo Lecheta</item>
+		<item>Victor Campos</item>
+		<item>Galera da C. da Computação - UFRJ</item>
+		<item>Luis Fernandez</item>
+	</string-array>
+</resources>

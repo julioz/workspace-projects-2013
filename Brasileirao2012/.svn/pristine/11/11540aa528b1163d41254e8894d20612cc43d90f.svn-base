@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:id="@+homeactivity/iv_background_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <include
+            android:id="@+homeactivity/updateall_layout"
+            layout="@layout/homeactivity_updateall_layout"
+            android:visibility="gone" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+homeactivity/viewpager"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <com.viewpagerindicator.CirclePageIndicator
+            android:id="@+homeactivity/pagerindicator"
+            style="@style/ViewPagerIndicator"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dip" />
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+homeactivity/iv_updateall"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/img_updateall" />
+
+</RelativeLayout>

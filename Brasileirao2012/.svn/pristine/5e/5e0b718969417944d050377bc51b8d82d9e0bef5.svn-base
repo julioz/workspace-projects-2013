@@ -1,0 +1,53 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.TrophiesArrayAdapter;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+
+public class TrophiesActivity extends ListActivity {
+	public final static String INTENT_CLUBACRONYM = "CLUB_ACRONYM";
+	
+	private ClubsDB clubsDB;
+	
+	private TreeMap<String, Club> clubs;
+	private Club club, myclub;
+	
+	private ImageView iv;
+	private TextView tv;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.trophies);
+		
+		clubsDB = ClubsDB.getInstance(this);
+		
+		tv = (TextView) findViewById(R.trophies.tv_name);
+		iv = (ImageView) findViewById(R.trophies.iv_badge);
+		
+		String clubname = getIntent().getStringExtra(INTENT_CLUBACRONYM);
+		
+		this.clubs = clubsDB.getClubs();
+		
+		if(clubs != null){			
+			club = clubs.get(clubname);
+			myclub = clubsDB.getMyClub();
+			
+			tv.setText(club.getName().toUpperCase());
+			iv.setImageDrawable(getResources().getDrawable(club.getBadgeResource(this)));
+			
+			TrophiesArrayAdapter adapter = new TrophiesArrayAdapter(this, club, myclub);
+			setListAdapter(adapter);
+		}else{
+			Toast.makeText(this, "Um erro ocorreu, faça uma atualização geral antes de prosseguir.", Toast.LENGTH_LONG).show();
+			finish();
+		}
+	}
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="white">#ffffffff</color>
+	<color name="red_primary">#ffff0000</color>
+	<color name="green_primary">#ff00ff00</color>
+	<color name="blue_primary">#ff0000ff</color>
+	<color name="bluedroid_br">#FF2088B5</color>
+	<color name="brown_br">#FF361F04</color>
+	<color name="orange1_br">#FFCE3800</color>
+	<color name="orange2_br">#FFE27D57</color>
+	<color name="green_br">#FF688f2B</color>
+	<color name="greendroid_br">#FF96AA39</color>
+	<color name="yellow_br">#FFFFA700</color>
+	<color name="greenbluish">#FF2A9396</color>
+	<color name="gray1_br">#FFD1D1D1</color>
+	<color name="gray2_str">#FFC0C0C0</color>
+	<color name="gray_shadow">#FF424242</color>
+	<color name="gray">#FF666666</color>
+	<color name="pink_skin">#FFF79371</color>
+	<color name="gray_line_actionbar">#FFC6C6C6</color>
+	<color name="bluelogo_br">#FF011945</color>
+</resources>

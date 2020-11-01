@@ -1,0 +1,29 @@
+package br.com.zynger.brasileirao2012.movetomove;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import android.app.ListActivity;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.R.layout;
+import br.com.zynger.brasileirao2012.adapters.MoveToMoveArrayAdapter;
+import br.com.zynger.brasileirao2012.model.Move;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+
+public class MoveToMoveVideoCentralActivity extends ListActivity {
+	
+	public static final String INTENT_MOVES = "MOVES";
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.movetomovevideocentralactivity);
+		
+		ArrayList<Move> moves = (ArrayList<Move>) getIntent().getSerializableExtra(INTENT_MOVES);		
+		boolean showImgs = PreferenceEditor.shouldDownloadImages(this);
+		setListAdapter(new MoveToMoveArrayAdapter(this, moves, showImgs, new HashMap<String, Bitmap>()));
+	}
+}

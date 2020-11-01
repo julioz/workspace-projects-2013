@@ -1,0 +1,183 @@
+package br.com.zynger.brasileirao2012.fragment;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import br.com.zynger.brasileirao2012.NewsDetailsActivity;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.actionmode.ActionModeCallback;
+import br.com.zynger.brasileirao2012.actionmode.ActionModeCallback.ActionModeListener;
+import br.com.zynger.brasileirao2012.adapters.NewsArrayAdapter;
+import br.com.zynger.brasileirao2012.adapters.pager.BasePagerAdapter.ActionModeDismissable;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.GetNewsTask;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.model.NewsSource;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.Constants;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.ActionMode;
+
+public class NewsFragment extends SherlockFragment implements
+		AsyncTaskListener<ArrayList<Article>>, ActionModeDismissable, ActionModeListener<Article> {
+
+	private static final String PAGER_NEWSSOURCE = "PAGER_NEWSSOURCE";
+
+	private static final int LAYOUT_RESOURCE = R.layout.newsviewflowadapteritem;
+
+	private ActionModeCallback<Article> mActionMode;
+
+	private ShareHelper shareHelper;
+	private NewsSource newsSource;
+	private String clubAcronym;
+	private ListView listView;
+	private DataUpdateLayout dulLoading;
+
+	private GetNewsTask newsTask;
+
+	public static NewsFragment create(NewsSource newsSource, String clubAcronym) {
+		NewsFragment fragment = new NewsFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(PAGER_NEWSSOURCE, newsSource);
+		args.putString(Constants.INTENT_CLUBACRONYM, clubAcronym);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+	public NewsFragment() {
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		newsSource = (NewsSource) getArguments().getSerializable(
+				PAGER_NEWSSOURCE);
+		shareHelper = new ShareHelper(getContext());
+		clubAcronym = getArguments().getString(Constants.INTENT_CLUBACRONYM);
+
+		newsTask = new GetNewsTask(this, newsSource);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(LAYOUT_RESOURCE, null);
+
+		listView = (ListView) view
+				.findViewById(R.newsviewflowadapteritem.listview);
+		dulLoading = (DataUpdateLayout) view
+				.findViewById(R.newsviewflowadapteritem.dul_loading);
+		dulLoading.addViewToToggle(listView);
+		
+		mActionMode = new ActionModeCallback<Article>(this, listView);
+
+		if (ConnectionHelper.isConnected(getSherlockActivity())) {
+			newsTask.execute();
+		} else {
+			String message = getString(R.string.newsviewflowadapter_interneterrorreading);
+			dulLoading.setErrorMessage(message);
+		}
+
+		return view;
+	}
+
+	@Override
+	public void onDestroyView() {
+		if (newsTask != null) {
+			newsTask.cancel(true);
+		}
+		super.onDestroyView();
+	}
+
+	@Override
+	public Context getContext() {
+		return getSherlockActivity();
+	}
+
+	@Override
+	public void preExecution() {
+		dulLoading.setMessage(R.string.newsdetailsactivity_reading);
+		dulLoading.show();
+	}
+
+	@Override
+	public void onComplete(ArrayList<Article> articles) {
+		dulLoading.hide();
+		listView.setAdapter(new NewsArrayAdapter(getContext(), articles));
+	}
+
+	@Override
+	public void onFail(String message) {
+		dulLoading.show();
+		dulLoading.setErrorMessage(getString(R.string.message_errortryagain));
+	}
+	
+	@Override
+	public void dismissActionMode() {
+		mActionMode.dismissActionMode();
+	}
+
+	@Override
+	public void onPrepareActionMode() {
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		listView.requestLayout();
+		super.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public int getMenuResource() {
+		return R.menu.contextual_menu_news;
+	}
+
+	@Override
+	public void changeMenuItems(Article article) {
+		mActionMode.setItemVisibility(R.contextual_menu_news.menu_read, article.isReadable());
+	}
+
+	@Override
+	public boolean onActionModeItemClick(Article article, ActionMode mode,
+			int itemId) {
+		switch (itemId) {
+		case R.contextual_menu_news.menu_read:
+			mode.finish();
+			startNewsDetailsActivity(article);
+			return true;
+		case R.contextual_menu_news.menu_web:
+			mode.finish();
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(article.getUrl().toString())));
+			return true;
+		case R.contextual_menu_news.menu_share:
+			shareHelper.share(article.getUrl().toString());
+			return true;
+		default:
+			mode.finish();
+			return false;
+		}
+	}
+	
+	private void startNewsDetailsActivity(Article article) {
+		Intent it = new Intent(getContext(), NewsDetailsActivity.class);
+		it.putExtra(Constants.INTENT_CLUBACRONYM, clubAcronym);
+		it.putExtra(NewsDetailsActivity.INTENT_ARTICLE, article);
+		startActivity(it);
+	}
+
+	@Override
+	public Article getItemAtPosition(int position) {
+		return (Article) listView.getItemAtPosition(position);
+	}
+}

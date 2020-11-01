@@ -1,0 +1,379 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.List;
+
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.actionmode.ActionModeCallback.ActionModeListener;
+import br.com.zynger.brasileirao2012.actionmode.MatchCallback;
+import br.com.zynger.brasileirao2012.adapters.MyTeamListAdapter;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerItem;
+import br.com.zynger.brasileirao2012.adapters.drawerlayout.DrawerListItem;
+import br.com.zynger.brasileirao2012.asynctasks.GetTableTask;
+import br.com.zynger.brasileirao2012.base.DrawerActivity;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.StrikersDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.util.Constants;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+
+import com.actionbarsherlock.view.ActionMode;
+
+public class MyTeamActivity extends DrawerActivity<JSONObject> implements
+		DrawerActivity.DrawerButtonable, ActionModeListener<Match> {
+	private static final int INTENT_MYCLUBSELECTOR = 1;
+
+	private Club myClub;
+
+	private LinearLayout llHeader;
+	private ListView lvContent;
+	private ImageView ivBadge;
+	private TextView tvFullname, tvPointsPlace;
+
+	private MyTeamListAdapter myTeamListAdapter;
+
+	private MatchCallback mActionMode;
+
+	@Override
+	public void loadViews(View activityView) {
+		llHeader = (LinearLayout) activityView
+				.findViewById(R.myteamactivity.ll_header);
+		lvContent = (ListView) activityView
+				.findViewById(R.myteamactivity.lv_content);
+		ivBadge = (ImageView) llHeader.findViewById(R.myteamactivity.iv_badge);
+		tvFullname = (TextView) llHeader
+				.findViewById(R.myteamactivity.tv_fullname);
+		tvPointsPlace = (TextView) llHeader
+				.findViewById(R.myteamactivity.tv_points_place);
+	}
+
+	@Override
+	public boolean onAsyncSuccess(JSONObject matchesJson) {
+		FileHandler.saveBackup(this, FileHandler.JSON_MATCHES,
+				matchesJson.toString(), getMyClub().getDivision());
+		myTeamListAdapter = new MyTeamListAdapter(this);
+		setListAdapter(myTeamListAdapter);
+		return true;
+	}
+
+	@Override
+	public void onAsyncFail(String message) {
+		setListAdapter(myTeamListAdapter);
+	}
+
+	private void setListAdapter(final MyTeamListAdapter adapter) {
+		lvContent.setAdapter(adapter);
+
+		if (!adapter.isOnlyRivalries()) {
+			lvContent.post(new Runnable() {
+				@Override
+				public void run() {
+					int position = adapter.getFirstFixtureWithNoScore();
+					if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+						lvContent.smoothScrollToPosition(position);
+					} else {
+						lvContent.setSelection(position - 1);
+					}
+				}
+			});
+		}
+	}
+	
+	private MyTeamListAdapter getListAdapter() {
+		if(lvContent.getAdapter() != null) {			
+			return (MyTeamListAdapter) lvContent.getAdapter();
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public boolean shouldCloseDrawerAfterItemSelection() {
+		return false;
+	}
+
+	private void setClubInformationHeader() {
+		Club club = getMyClub();
+
+		ivBadge.setImageResource(club.getBadgeResource(this));
+
+		tvFullname.setText(club.getFullName());
+		int points = club.getPoints();
+		int position = club.getPosition();
+		if (position != 0) {
+			tvPointsPlace
+					.setText(getString(
+							R.string.myteamactivity_pointsandposition, points,
+							position));
+
+			if (position <= 4) {
+				llHeader.setBackgroundResource(R.drawable.backrepeat_blue);
+			} else if (position >= 17) {
+				llHeader.setBackgroundResource(R.drawable.backrepeat_red);
+			} else {
+				llHeader.setBackgroundResource(R.drawable.backrepeat);
+			}
+		} else {
+			tvPointsPlace.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	@Override
+	public List<DrawerItem> getDrawerListViewAdapter(List<DrawerItem> items) {
+		addDrawerHeaderToList(R.string.myteamactivity_matches);
+		addDrawerItemToList(R.drawable.ic_team,
+				R.string.myteamactivity_matches_all);
+		addRivalsItem();
+
+		addStrikersItem(items);
+
+		addDrawerHeaderToList(R.string.myteamactivity_more);
+		addDrawerItemToList(R.drawable.ic_trophies,
+				R.string.myteamactivity_trophies);
+		addDrawerItemToList(R.drawable.ic_more, R.string.myteamactivity_more);
+
+		return items;
+	}
+
+	private void addRivalsItem() {
+		if (ClubsDB.getInstance(this).hasRivalsOnDivision(getMyClub())) {
+			addDrawerItemToList(R.drawable.img_rivals,
+					R.string.myteamactivity_rivalries);
+		}
+	}
+
+	private void addStrikersItem(List<DrawerItem> items) {
+		if (StrikersDB.getInstance().hasStrikersFromClub(getMyClub())) {
+			addDrawerHeaderToList(R.string.myteamactivity_players);
+			addDrawerItemToList(R.drawable.ic_striker,
+					R.string.myteamactivity_strikers);
+		}
+	}
+
+	@Override
+	public void onDrawerListItemClick(AdapterView<?> parent, View view,
+			int position, long id, DrawerListItem item) {
+		switch (item.getIconRes()) {
+		case R.drawable.ic_striker:
+			startStrikersActivity();
+			break;
+		case R.drawable.ic_team:
+			setAdapterContent(false);
+			break;
+		case R.drawable.img_rivals:
+			setAdapterContent(true);
+			break;
+		case R.drawable.ic_trophies:
+			startTrophiesActivity();
+			break;
+		case R.drawable.ic_more:
+			startWikiActivity();
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void setAdapterContent(boolean onlyRivalries) {
+		if (myTeamListAdapter.isOnlyRivalries() != onlyRivalries) {
+			myTeamListAdapter.setMatchesOnAdapter(onlyRivalries);
+			setListAdapter(myTeamListAdapter);
+			setUpdateButtonVisibility(!onlyRivalries);
+		}
+	}
+
+	private void startStrikersActivity() {
+		Intent intent = new Intent(this, StrikersListActivity.class);
+		intent.putExtra(Constants.INTENT_DIVISION, getMyClub().getDivision());
+		intent.putExtra(Constants.INTENT_MYCLUB, true);
+		startActivity(intent);
+	}
+
+	private void startTrophiesActivity() {
+		Intent intent = new Intent(this, TrophiesActivity.class);
+		intent.putExtra(Constants.INTENT_CLUBACRONYM, getMyClub().getAcronym());
+		startActivity(intent);
+	}
+
+	private void startWikiActivity() {
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getMyClub()
+				.getWiki()));
+		startActivity(intent);
+	}
+
+	@Override
+	protected int getActionBarIcon() {
+		return R.drawable.ic_team;
+	}
+
+	@Override
+	protected int getActionBarTitle() {
+		return R.string.myteamactivity_title;
+	}
+
+	@Override
+	public AsyncTask<Void, Void, JSONObject> getAsyncTask() {
+		return new GetTableTask(this);
+	}
+
+	@Override
+	public View[] getDataUpdateViewsToToggle(View activityView) {
+		return new View[] { lvContent };
+	}
+
+	@Override
+	public Integer getDataUpdateLayoutId() {
+		return R.myteamactivity.dul_loading;
+	}
+
+	@Override
+	public int getLayoutResource() {
+		return R.layout.myteamactivity;
+	}
+
+	private Club getMyClub() {
+		if (myClub == null) {
+			myClub = ClubsDB.getInstance(this).getMyClub();
+		}
+		return myClub;
+	}
+
+	@Override
+	public void initializeActivityEnvironment(View activityView) {
+		// Select the item "All matches"
+		setItemSelected(1);
+		setDataBasedOnMyClub();
+		mActionMode = new MatchCallback(this);
+		setListViewListeners();
+	}
+
+	private void setListViewListeners() {
+		lvContent.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+		lvContent.setOnScrollListener(new OnScrollListener() {
+			private int scrollState;
+
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				this.scrollState = scrollState;
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				if (scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+					mActionMode.dismissActionMode();
+				}
+			}
+		});
+
+		lvContent.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> listView, View view,
+					int position, long id) {
+				MyTeamListAdapter adapter = getListAdapter();
+				if(adapter != null ) {
+					mActionMode.setModel(adapter.getItem(position));
+					mActionMode.startActionMode();
+				}
+			}
+		});
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		lvContent.requestLayout();
+		super.onConfigurationChanged(newConfig);
+	}
+
+	private void setDataBasedOnMyClub() {
+		setClubInformationHeader();
+		myTeamListAdapter = new MyTeamListAdapter(this);
+	}
+
+	@Override
+	public void didNotAutoUpdate() {
+		setListAdapter(myTeamListAdapter);
+	}
+
+	@Override
+	public Integer getPullToRefreshViewId() {
+		return R.myteamactivity.lv_content;
+	}
+
+	@Override
+	public String getDrawerButtonText() {
+		return getString(R.string.myteamactivity_changeteam);
+	}
+
+	@Override
+	public void onDrawerButtonClick(Button drawerButton) {
+		Intent it = new Intent(this, ClubSelectorActivity.class);
+		it.putExtra(ClubSelectorActivity.INTENT_CHOOSING_MYCLUB, true);
+		startActivityForResult(it, INTENT_MYCLUBSELECTOR);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case (INTENT_MYCLUBSELECTOR):
+			if (resultCode == Activity.RESULT_OK) {
+				String acronym = data
+						.getStringExtra(ClubSelectorActivity.INTENT_RETURN_ACRONYM);
+				if (!myClub.getAcronym().equals(acronym)) {
+					myClub = ClubsDB.getInstance(this).getMyClub();
+					setDataBasedOnMyClub();
+					setListAdapter(myTeamListAdapter);
+					setUpdateButtonVisibility(true);
+				}
+				closeDrawer();
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void onPrepareActionMode() {
+	}
+
+	@Override
+	public void onDestroyActionMode() {
+		lvContent.clearChoices();
+		lvContent.requestLayout();
+	}
+
+	@Override
+	public int getMenuResource() {
+		return mActionMode.getMenuResource();
+	}
+
+	@Override
+	public void changeMenuItems(Match match) {
+		mActionMode.changeMenuItems(match);
+	}
+
+	@Override
+	public boolean onActionModeItemClick(Match match, ActionMode mode,
+			int itemId) {
+		return mActionMode.onItemClicked(this, match, mode, itemId);
+	}
+}

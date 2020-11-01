@@ -1,0 +1,90 @@
+package br.com.zynger.brasileirao2012.model;
+
+import java.io.Serializable;
+
+public class AprovData implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private Integer homePlayed, homeVictories, homeDrawn;
+	private Float homePerc;
+	private Integer awayPlayed, awayVictories, awayDrawn;
+	private Float awayPerc;
+	
+	public AprovData() {
+		setHomePlayed(0);
+		setHomeVictories(0);
+		setHomeDrawn(0);
+		setHomePerc(0.0f);
+		
+		setAwayPlayed(0);
+		setAwayVictories(0);
+		setAwayDrawn(0);
+		setAwayPerc(0.0f);
+	}
+	
+	public Integer getHomePlayed() {
+		return homePlayed;
+	}
+	
+	public void setHomePlayed(Integer homePlayed) {
+		this.homePlayed = homePlayed;
+	}
+	
+	public Integer getHomeVictories() {
+		return homeVictories;
+	}
+	
+	public void setHomeVictories(Integer homeVictories) {
+		this.homeVictories = homeVictories;
+	}
+	
+	public Integer getHomeDrawn() {
+		return homeDrawn;
+	}
+	
+	public void setHomeDrawn(Integer homeDrawn) {
+		this.homeDrawn = homeDrawn;
+	}
+	
+	public Float getHomePerc() {
+		return homePerc;
+	}
+	
+	public void setHomePerc(Float homePerc) {
+		this.homePerc = homePerc;
+	}
+	
+	public Integer getAwayPlayed() {
+		return awayPlayed;
+	}
+	
+	public void setAwayPlayed(Integer awayPlayed) {
+		this.awayPlayed = awayPlayed;
+	}
+	
+	public Integer getAwayVictories() {
+		return awayVictories;
+	}
+	
+	public void setAwayVictories(Integer awayVictories) {
+		this.awayVictories = awayVictories;
+	}
+	
+	public Integer getAwayDrawn() {
+		return awayDrawn;
+	}
+	
+	public void setAwayDrawn(Integer awayDrawn) {
+		this.awayDrawn = awayDrawn;
+	}
+	
+	public Float getAwayPerc() {
+		return awayPerc;
+	}
+	
+	public void setAwayPerc(Float awayPerc) {
+		this.awayPerc = awayPerc;
+	}
+	
+}

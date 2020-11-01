@@ -1,0 +1,311 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import org.taptwo.android.widget.CircleFlowIndicator;
+import org.taptwo.android.widget.ViewFlow;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.HomeActivityViewFlowAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.CheckAppStoreForUpdateTask;
+import br.com.zynger.brasileirao2012.asynctasks.UpdateAllFromHomeActivityTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.data.StrikersDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Striker;
+import br.com.zynger.brasileirao2012.rest.StrikersREST;
+import br.com.zynger.brasileirao2012.util.AppHelper;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.util.PreferenceEditor;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+
+public class HomeActivity extends Activity {
+	
+	public final static String TAG = "brasileirao";
+	private final String APP_WEBSITE = "https://play.google.com/store/apps/details?id=br.com.zynger.brasileirao2012";
+	private final String FACEBOOK_FANPAGE = "http://www.facebook.com/brasileiraoapp";
+	
+	
+	private ClubsDB clubsDB;
+	private StrikersDB strikersDB;
+	
+	private String appversion;
+	
+	private Club myClub;
+	
+	private ViewFlow viewFlow;
+	
+	private TextView tv_progressbar;
+	private ImageButton ranking, table, strikers, news, team, trophies, aprov, realtime;
+	private ImageButton stadium, torcidometer, myTeam, settings, updateAll;
+	private ImageButton partners, rate, share, guide, fanpage, thirddivision, about;
+	
+	private TreeMap<String, Club> clubs;
+	
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.homeactivity);
+        
+        clubsDB = ClubsDB.getInstance(this);
+        strikersDB = StrikersDB.getInstance();
+        clubs = clubsDB.getClubs();
+        
+        loadViews();
+        setClickListeners();
+        updateClubsDatabaseVersion();
+        runUpdateAppIfNeeded();
+        //showInitializeMessageDialog();
+    }
+
+	/*private void showInitializeMessageDialog() {
+		// Propaganda ao abrir o app
+        new IconedAlertDialog(this, R.drawable.ic_libertadores_logo, "Libertadores",
+        		"Enquanto o Brasileirão 2013 não começa, que tal acompanhar todos os detalhes da Copa Libertadores" +
+        		" na palma da sua mão?\nSeja para torcer pelo seu time, ou secar o rival, o app da Libertadores" +
+        		" é perfeito para você que ama futebol!",
+        		"https://play.google.com/store/apps/details?id=br.com.zynger.libertadores").show();
+	}*/
+
+	private void runUpdateAppIfNeeded() {
+        if(PreferenceEditor.shouldUpdateApp(this)){
+        	new CheckAppStoreForUpdateTask(this, appversion).execute();
+        }
+	}
+
+	private void updateClubsDatabaseVersion() {
+		appversion = AppHelper.getAppVersion(this);
+		String bd_version = FileHandler.openClubsDatabaseVersion(this);
+		if(!appversion.equals(bd_version)) FileHandler.saveClubsDatabaseVersion(this, appversion);
+	}
+    
+    protected void onResume() {
+    	myClub = clubsDB.getMyClub(this);
+		if(myClub == null){
+			Intent it = new Intent(this, ClubSelectorActivity.class);
+			it.putExtra(ClubSelectorActivity.INTENT_CHOOSING_MYCLUB, true);
+    		startActivity(it);
+    	}else myTeam.setImageResource(myClub.getBadgeResource(this));
+    	super.onResume();
+    }
+
+	private void loadViews() {
+		viewFlow = (ViewFlow) findViewById(R.homeactivity.viewflow);
+		viewFlow.setAdapter(new HomeActivityViewFlowAdapter(this));
+		CircleFlowIndicator indic = (CircleFlowIndicator) findViewById(R.homeactivity.viewflowindic);
+		viewFlow.setFlowIndicator(indic);
+		
+		ranking = (ImageButton) findViewById(R.home.ibRanking);
+		table = (ImageButton) findViewById(R.home.ibTable);
+		strikers = (ImageButton) findViewById(R.home.ibStrikers);
+		news = (ImageButton) findViewById(R.home.ibNews);
+		team = (ImageButton) findViewById(R.home.ibTeamGames);
+		trophies = (ImageButton) findViewById(R.home.ibTrophies);
+		aprov = (ImageButton) findViewById(R.home.ibAprov);
+		realtime = (ImageButton) findViewById(R.home.ibRealTime);
+		stadium = (ImageButton) findViewById(R.home.ibStadiums);
+		torcidometer = (ImageButton) findViewById(R.home.ibTorcid);
+		thirddivision = (ImageButton) findViewById(R.home.ibThirdDivision);
+		
+		myTeam = (ImageButton) findViewById(R.homeactivity.launcher_actionbar_ib_myteam);
+		updateAll = (ImageButton) findViewById(R.homeactivity.iv_updateall);
+		
+		partners = (ImageButton) findViewById(R.home.ibPartners);
+		share = (ImageButton) findViewById(R.home.ibShare);
+		rate = (ImageButton) findViewById(R.home.ibRate);
+		guide = (ImageButton) findViewById(R.home.ibGuide);
+		settings = (ImageButton) findViewById(R.home.ibSettings);
+		fanpage = (ImageButton) findViewById(R.home.ibFanpage);
+		about = (ImageButton) findViewById(R.home.ibAbout);
+		
+		tv_progressbar = (TextView) findViewById(R.homeactivity.tv_progressbar);
+	}
+	
+	private void setClickListeners(){
+		ranking.setOnClickListener(getStartActivityListenerPassingMyClubDivision(
+				RankingActivity.class, RankingActivity.INTENT_DIVISION));
+        table.setOnClickListener(getStartActivityListenerPassingMyClubDivision(
+        		TableFlowActivity.class, TableFlowActivity.INTENT_DIVISION));
+        strikers.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(strikersDB.getStrikersA() == null || strikersDB.getStrikersB() == null){					
+					new GetStrikersTask(v.getContext()).execute();
+				}else{
+					Intent it = new Intent(v.getContext(), StrikersListActivity.class);
+					it.putExtra(StrikersListActivity.INTENT_DIVISION, myClub.getDivision());
+					startActivity(it);
+				}
+			}
+		});
+        news.setOnClickListener(getStartActivityListener(NewsViewFlowActivity.class));
+        team.setOnClickListener(getStartActivityListener(MyTeamActivity.class));
+        trophies.setOnClickListener(getStartActivityListener(TrophiesSelectorActivity.class));
+        aprov.setOnClickListener(getStartActivityListenerPassingMyClubDivision(
+        		AprovActivity.class, AprovActivity.INTENT_DIVISION));
+        realtime.setOnClickListener(getStartActivityListenerPassingMyClubDivision(
+        		RealTimeMatchesActivity.class, RealTimeMatchesActivity.INTENT_DIVISION));
+        stadium.setOnClickListener(getStartActivityListener(StadiumsMapActivity.class));
+        torcidometer.setOnClickListener(getStartActivityListener(TorcidometerActivity.class));
+
+        partners.setOnClickListener(getStartActivityListener(PartnersActivity.class));
+        rate.setOnClickListener(getStartActivityToViewWebSite(APP_WEBSITE));
+        share.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String message = getResources().getString(R.string.share_home);
+        		new ShareHelper((Activity) v.getContext(), message).share();
+			}
+		});
+        guide.setOnClickListener(getStartActivityListener(GuideActivity.class));
+        settings.setOnClickListener(getStartActivityListener(SettingsActivity.class));
+        thirddivision.setOnClickListener(getStartActivityListener(ThirdDivisionActivity.class));
+        fanpage.setOnClickListener(getStartActivityToViewWebSite(FACEBOOK_FANPAGE));
+        about.setOnClickListener(getStartActivityListener(AboutActivity.class));       
+        
+        updateAll.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(ConnectionHelper.isConnected(v.getContext())) showUpdateAllMenu();
+				else Toast.makeText(v.getContext(), R.string.message_verifyconnection, Toast.LENGTH_SHORT).show();
+			}
+		});
+        
+        myTeam.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), ClubSelectorActivity.class);
+				it.putExtra(ClubSelectorActivity.INTENT_CHOOSING_MYCLUB, true);
+				startActivity(it);
+			}
+		});
+	}
+	
+	private void showUpdateAllMenu(){
+		findViewById(R.homeactivity.fl_viewflow).setVisibility(View.GONE);
+		findViewById(R.homeactivity.rl_updateall).setVisibility(View.VISIBLE);
+		updateAll.setVisibility(View.GONE);
+		
+		Button yes = (Button) findViewById(R.homeactivity.bt_updateall_yes);
+		Button no = (Button) findViewById(R.homeactivity.bt_updateall_no);
+		
+		yes.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				findViewById(R.homeactivity.rl_updateall).setVisibility(View.GONE);
+				findViewById(R.homeactivity.fl_viewflow).setVisibility(View.VISIBLE);
+				new UpdateAllFromHomeActivityTask(clubs, myClub, HomeActivity.this,
+						findViewById(R.homeactivity.rl_loading),
+						findViewById(R.homeactivity.fl_viewflow),
+						updateAll, tv_progressbar).execute();
+			}
+		});
+		
+		no.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				findViewById(R.homeactivity.rl_updateall).setVisibility(View.GONE);
+				findViewById(R.homeactivity.fl_viewflow).setVisibility(View.VISIBLE);
+				updateAll.setVisibility(View.VISIBLE);
+			}
+		});
+	}
+	
+	private View.OnClickListener getStartActivityListener(final Class<?> clazz){
+    	View.OnClickListener ocl = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent it = new Intent(view.getContext(), clazz);
+				view.getContext().startActivity(it);
+			}
+		};
+		
+		return ocl;
+    }
+
+	private View.OnClickListener getStartActivityListenerPassingMyClubDivision(final Class<?> clazz, final String name){
+		return new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), clazz);
+				it.putExtra(name, myClub.getDivision());
+				startActivity(it);
+			}
+		};
+	}
+	
+	private View.OnClickListener getStartActivityToViewWebSite(final String website){
+		return new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse(website));
+				startActivity(intent);
+			}
+		};
+	}
+	
+	private class GetStrikersTask extends AsyncTask<Void, Void, Boolean> {
+		private Context context;
+		
+		public GetStrikersTask(Context context){
+			this.context = context;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			findViewById(R.homeactivity.rl_loading).setVisibility(View.VISIBLE);
+			findViewById(R.homeactivity.fl_viewflow).setVisibility(View.GONE);
+			updateAll.setVisibility(View.GONE);
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... arg0) {
+			StrikersREST strikersREST = new StrikersREST(clubsDB.getClubs());
+			
+			ArrayList<Striker> al_a = strikersREST.getStrikers(Division.FIRSTDIVISION);
+			ArrayList<Striker> al_b = strikersREST.getStrikers(Division.SECONDDIVISION);
+			
+			strikersDB.setStrikers(Division.FIRSTDIVISION, al_a);
+			strikersDB.setStrikers(Division.SECONDDIVISION, al_b);
+
+			if(al_a != null && al_b != null){
+				TreeMap<Division, ArrayList<Striker>> tmStrikers = new TreeMap<Division, ArrayList<Striker>>();
+				tmStrikers.put(Division.FIRSTDIVISION, al_a);
+				tmStrikers.put(Division.SECONDDIVISION, al_b);
+				FileHandler.saveBackup(context, FileHandler.JSON_STRIKERS, JsonUtil.createStrikersJson(tmStrikers).toString());
+				return true;
+			}else return false;
+		}
+
+		protected void onPostExecute(Boolean success) {
+			findViewById(R.homeactivity.fl_viewflow).setVisibility(View.VISIBLE);
+			updateAll.setVisibility(View.VISIBLE);
+			findViewById(R.homeactivity.rl_loading).setVisibility(View.GONE);
+
+			if(success){
+				Intent it = new Intent(context, StrikersListActivity.class);
+				it.putExtra(StrikersListActivity.INTENT_DIVISION, myClub.getDivision());
+				startActivity(it);
+			}else{
+				Toast.makeText(context, R.string.message_verifyconnection, Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+}

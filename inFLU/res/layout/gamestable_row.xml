@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/news_row_background_selector_verde"
+    android:orientation="vertical" >
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:orientation="horizontal">
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+gamestable_row/tv_stadium"
+            android:textColor="#FFFFFFFF"
+            android:textSize="16dp"
+            android:text="STADIUM"/>
+        
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+gamestable_row/tv_teams"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="24dp"
+            android:text="Fluminense X Internacional"/>
+        
+        
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:weightSum="2">
+        
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+gamestable_row/tv_date"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="14dp"
+            android:text="DD/MM/YYYY"/>
+        
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+gamestable_row/tv_time"
+            android:layout_weight="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="14dp"
+            android:text="HH:mm"/>
+        
+    </LinearLayout>
+</LinearLayout>

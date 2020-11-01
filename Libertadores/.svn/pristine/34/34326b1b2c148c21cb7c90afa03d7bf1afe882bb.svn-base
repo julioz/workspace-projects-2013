@@ -1,0 +1,75 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.List;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.util.ColorFilterGenerator;
+
+public class ClubSelectorAdapter extends ArrayAdapter<Club>{
+
+	private final LayoutInflater mInflater;
+	private static final int LAYOUTRESOURCEID = R.layout.clubselectorrow;
+	private List<Club> objects;
+	private Club myClub;
+	
+	public ClubSelectorAdapter(Context context, List<Club> objects, Club myClub) {
+		super(context, LAYOUTRESOURCEID, objects);
+		this.mInflater = LayoutInflater.from(context);
+		this.objects = objects;
+		this.myClub = myClub;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public Club getItem(int position) {
+		return objects.get(position);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+		ClubSelectorHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+            
+            holder = new ClubSelectorHolder();
+            holder.ivBadge = (ImageView) row.findViewById(R.clubselectorrow.iv_badge);
+            holder.txtName = (TextView) row.findViewById(R.clubselectorrow.tv_name);
+            
+            row.setTag(holder);
+        }else{
+            holder = (ClubSelectorHolder) row.getTag();
+        }
+
+        Club club = getItem(position);
+
+        int badgeRes = club.getBadgeResource(getContext());
+        String clubName = club.getName().toUpperCase();
+        holder.ivBadge.setImageResource(badgeRes);
+        if(myClub!= null && !club.getAcronym().equals(myClub.getAcronym()))
+        	holder.ivBadge.setColorFilter(ColorFilterGenerator.adjustSaturation(0));
+        else holder.ivBadge.setColorFilter(null);
+        holder.txtName.setText(clubName);
+
+        return row;
+	}
+}
+
+class ClubSelectorHolder
+{
+    ImageView ivBadge;
+    TextView txtName;
+}

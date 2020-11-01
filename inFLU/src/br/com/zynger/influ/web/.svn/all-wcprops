@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/24/inFLU/src/br/com/zynger/influ/web
+END
+TwitterUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/30/inFLU/src/br/com/zynger/influ/web/TwitterUtils.java
+END
+TwitterConstants.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/30/inFLU/src/br/com/zynger/influ/web/TwitterConstants.java
+END
+XMLPullParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/40/inFLU/src/br/com/zynger/influ/web/XMLPullParser.java
+END
+BitlyShortener.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/30/inFLU/src/br/com/zynger/influ/web/BitlyShortener.java
+END
+HTMLManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/51/inFLU/src/br/com/zynger/influ/web/HTMLManager.java
+END

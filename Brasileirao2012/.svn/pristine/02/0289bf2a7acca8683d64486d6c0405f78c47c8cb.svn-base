@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:actionbar="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+	android:background="@drawable/backrepeat">
+	<br.com.zynger.brasileirao2012.view.CustomActionBar
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+myclubselectoractivity/actionbar"
+	    actionbar:titleSize="13sp"
+	    actionbar:titleText="Time do coração"
+	    actionbar:logosrc="@drawable/ic_launcher" />
+	
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_below="@+myclubselectoractivity/actionbar"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+	
+		<org.taptwo.android.widget.TitleFlowIndicator
+			android:id="@+myclubselectoractivity/viewflowindic"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			app:footerLineHeight="1dp"
+			app:footerTriangleHeight="7dp"
+			app:textColor="#FFFFFFFF"
+			app:selectedColor="#FFFFC445"
+			app:footerColor="#FFFFFFFF"
+			app:titlePadding="10dp"
+			app:textSize="12sp"
+			app:selectedSize="12dp"
+			android:layout_marginTop="10dip"
+			app:clipPadding="5dp" />
+		<org.taptwo.android.widget.ViewFlow
+			android:id="@+myclubselectoractivity/viewflow"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"/>
+	</LinearLayout>
+</RelativeLayout>

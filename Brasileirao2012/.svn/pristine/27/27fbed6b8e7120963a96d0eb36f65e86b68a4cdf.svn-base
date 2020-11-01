@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+        android:background="@drawable/actionbar_gradient2"
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
+        android:id="@+aprovactivity/rl_actionbar"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:id="@+aprovactivity/iv_actionbar_badge"
+            android:src="@drawable/ic_aprov"
+            android:layout_centerVertical="true" />
+        
+        <br.com.zynger.brasileirao2012.view.TertreTextView
+            android:text="Aproveitamento"
+            android:layout_marginLeft="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_toRightOf="@+aprovactivity/iv_actionbar_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="22dp" />
+        
+        <LinearLayout
+            android:id="@+aprovactivity/actionbar_ll"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_toLeftOf="@+aprovactivity/rl_actionbar_update"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/layout_roundborder"
+            android:gravity="center"
+            android:layout_centerVertical="true">
+            
+            <TextView
+                android:id="@+aprovactivity/tv_actionbar_division"
+                android:background="@null"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="#FFFFFFFF"
+            	android:layout_width="20dp"
+                android:layout_height="20dp"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:id="@+aprovactivity/rl_actionbar_update"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal" >
+            
+            <View
+                android:layout_height="45dp"
+                android:layout_width="1px"
+                android:layout_alignParentLeft="true"
+                android:background="#88FFFFFF" />
+
+            <br.com.zynger.brasileirao2012.view.UpdateImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:id="@+aprovactivity/uiv_update"
+                android:background="@null"
+                android:scaleType="fitCenter"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    
+    <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+aprovactivity/dul_loading"
+        android:layout_below="@+aprovactivity/rl_actionbar"
+        android:layout_above="@+aprovactivity/ll_ad" />
+    
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+aprovactivity/ll_data"
+        android:layout_below="@+aprovactivity/rl_actionbar"
+        android:layout_above="@+aprovactivity/ll_ad">
+        
+        <LinearLayout
+            android:weightSum="9"
+            android:background="#65000000"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView 
+                android:visibility="invisible"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"/>
+            <TextView 
+                android:text="Mandante"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+            <TextView 
+                android:text="Visitante"
+                android:textColor="#FFFFFFFF"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textSize="18dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:weightSum="9"
+            android:background="#26000000"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView 
+                android:visibility="invisible"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"/>
+            <TextView 
+                android:text="J"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+            <TextView 
+                android:text="V"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+            <TextView 
+                android:text="E"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+            <TextView 
+                android:text="%"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+            <TextView 
+                android:text="J"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+            <TextView 
+                android:text="V"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+            <TextView 
+                android:text="E"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+            <TextView 
+                android:text="%"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:gravity="center_horizontal"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"/>
+        </LinearLayout>
+        
+        <ListView
+			android:layout_height="fill_parent"
+			android:layout_width="fill_parent"
+			android:id="@android:id/list"
+			android:divider="#25FFFFFF"
+			android:cacheColorHint="#00000000"
+			android:background="@null"/>
+    </LinearLayout>
+    
+    <LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:id="@+aprovactivity/ll_ad"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+ 
+	</LinearLayout>
+</RelativeLayout>

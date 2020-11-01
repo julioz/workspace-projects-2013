@@ -1,0 +1,89 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.StrikersAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetStrikersTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.model.Striker;
+import br.com.zynger.libertadores.web.StrikersParser;
+
+public class StrikersActivity extends ListActivity implements AsyncTaskListener {
+	
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	
+	private StrikersParser strikersParser;
+	
+	private RelativeLayout rl_loading;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.strikersactivity);
+		
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		
+		strikersParser = new StrikersParser(this, clubs);
+		
+		loadViews();
+		
+		Button bt_execute = (Button) findViewById(R.strikersactivity.bt_execute);
+		bt_execute.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {				
+				new GetStrikersTask(strikersParser, StrikersActivity.this).execute();
+			}
+		});
+		
+		bt_execute.performClick(); //TODO remove
+		
+	}
+
+	private void loadViews() {
+		rl_loading = (RelativeLayout) findViewById(R.strikersactivity.rl_loading);
+	}
+	
+	private void showUpdatingLayout() {
+		getListView().setVisibility(View.GONE);
+		rl_loading.setVisibility(View.VISIBLE);
+	}
+	
+	private void hideUpdatingLayout() {
+		rl_loading.setVisibility(View.GONE);
+		getListView().setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void preExecution() {
+		showUpdatingLayout();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		ArrayList<Striker> strikers = (ArrayList<Striker>) result;
+		
+		setListAdapter(new StrikersAdapter(this, strikers));
+		hideUpdatingLayout();
+	}
+
+	@Override
+	public void onFail(String message) {
+		//TODO load the old definitions
+		hideUpdatingLayout();
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+
+}

@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a Júlio Zynger <julioz92@gmail.com> 1380246064 -0300	branch: Created from HEAD
+791e52c2e3bbb6fb9108dc4a9b1c2e28e85b367a b93051e456c491b09621f7ae7434a42be8779e30 Júlio Zynger <julioz92@gmail.com> 1380252846 -0300	commit: Adds drawer to MainActivity, with some stub entries, including a profile row with picture and name for the current user.

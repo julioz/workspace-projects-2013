@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    xmlns:actionbar="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat"
+    android:orientation="vertical">
+    
+    <br.com.zynger.brasileirao2012.view.CustomActionBar
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:id="@+thirddivisionactivity/actionbar"
+	    actionbar:titleSize="13sp"
+	    actionbar:showUpdate="true"
+	    actionbar:titleText="@string/thirddivisionactivity_title"
+	    actionbar:logosrc="@drawable/ic_thirddivision" />
+    
+    <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+thirddivisionactivity/dul_loading" />
+    
+    <RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:id="@+thirddivisionactivity/rl_data"
+		android:orientation="vertical">
+        
+        <FrameLayout
+		    android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:id="@+thirddivisionactivity/fl_indicator">
+			<org.taptwo.android.widget.TitleFlowIndicator
+				android:id="@+thirddivisionactivity/viewflowindic"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
+				app:footerLineHeight="1dp"
+				app:footerTriangleHeight="7dp"
+				app:textColor="#FFFFFFFF"
+				app:selectedColor="#FFFFC445"
+				app:footerColor="#FFFFFFFF"
+				app:titlePadding="10dp"
+				app:textSize="12sp"
+				app:selectedSize="12dp"
+				android:layout_marginTop="10dip"
+				app:clipPadding="5dp" />
+	    </FrameLayout>
+		
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+thirddivisionactivity/fl_indicator"
+			android:id="@+thirddivisionactivity/ll_headers"
+			android:weightSum="10.6"
+			android:paddingTop="3dp"
+			android:paddingBottom="3dp">
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:textColor="#FFFFFFFF"
+				android:textStyle="bold"
+				android:textSize="18sp"
+				android:layout_weight="2.6" />
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_points"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				style="@style/ShadowedText"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+thirddivisionactivity/tv_points"
+				android:layout_weight="1" />	
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_games"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				style="@style/ShadowedText"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+thirddivisionactivity/tv_played"
+				android:layout_weight="1" />
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_win"
+				android:textColor="#ffffff"
+				style="@style/ShadowedText"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+thirddivisionactivity/tv_win"
+				android:layout_weight="1" />
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_draw"
+				android:textColor="#ffffff"
+				style="@style/ShadowedText"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+thirddivisionactivity/tv_draw"
+				android:layout_weight="1" />
+				
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_lose"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+thirddivisionactivity/tv_lose"
+				android:layout_weight="1" />
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_goalspro"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+thirddivisionactivity/tv_goalspro"
+				android:layout_weight="1" />
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_goalsagainst"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+thirddivisionactivity/tv_goalsagainst"
+				android:layout_weight="1" />
+			
+			<TextView
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="@string/rankingactivity_balance"
+				android:textColor="#ffffff"
+				android:textStyle="bold"
+				android:gravity="center"
+				android:textSize="18sp"
+				android:id="@+thirddivisionactivity/tv_balance"
+				android:layout_weight="1" />
+		</LinearLayout>
+		
+		<LinearLayout
+		    android:layout_height="wrap_content"
+		    android:layout_width="fill_parent"
+		    android:layout_above="@+thirddivisionactivity/ll_footer"
+			android:layout_below="@+thirddivisionactivity/ll_headers"
+			android:orientation="vertical">
+			<org.taptwo.android.widget.ViewFlow
+				android:duplicateParentState="true"
+				android:id="@+thirddivisionactivity/viewflow"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"/>
+		</LinearLayout>
+		
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:id="@+thirddivisionactivity/ll_footer"
+			android:layout_above="@+thirddivisionactivity/ll_ad"
+			android:gravity="center"
+			android:paddingTop="3dp"
+			android:paddingBottom="3dp"
+			android:background="@null">
+			
+			<View
+				android:background="#6495ED"
+				android:id="@+thirddivisionactivity/view_footer_left"
+				android:layout_width="20dp"
+				android:layout_height="9dp"/>
+			
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="6dp"
+				android:id="@+thirddivisionactivity/tv_footer_left"
+				android:layout_gravity="center"
+				android:gravity="center"
+				android:textColor="#ffffff"
+				android:text="@string/thirddivisionactivity_footer_classified" />
+				
+			<View
+				android:background="#FFFF00"
+				android:layout_marginLeft="3dp"
+				android:id="@+thirddivisionactivity/view_footer_center"
+				android:visibility="gone"
+				android:layout_width="9dp"
+				android:layout_height="9dp"/>
+			
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingLeft="3dp"
+				android:visibility="gone"
+				android:id="@+thirddivisionactivity/tv_footer_center"
+				android:textColor="#ffffff" />
+				
+			<View
+				android:background="#FF0000"
+				android:layout_marginLeft="3dp"
+				android:visibility="gone"
+				android:id="@+thirddivisionactivity/view_footer_right"
+				android:layout_width="9dp"
+				android:layout_height="9dp"/>
+			
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:visibility="gone"
+				android:id="@+thirddivisionactivity/tv_footer_right"
+				android:layout_gravity="center"
+				android:gravity="center"
+				android:paddingLeft="3dp"
+				android:textColor="#ffffff"
+				android:text="@string/thirddivisionactivity_footer_punishment" />
+		</LinearLayout>
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:id="@+thirddivisionactivity/ll_ad"
+			android:gravity="bottom|center_horizontal">
+			<com.google.ads.AdView
+			    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		       	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        ads:adUnitId="a14f4bbc3448afb"
+		        ads:adSize="BANNER"
+		        ads:loadAdOnCreate="true"/>
+		</LinearLayout>
+	</RelativeLayout>
+</LinearLayout>

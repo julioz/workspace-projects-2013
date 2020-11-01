@@ -1,0 +1,192 @@
+package br.com.zynger.brasileirao2012.rest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.TreeMap;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.util.Constants;
+import br.com.zynger.brasileirao2012.util.WebDatabaseMapper;
+
+public class RealTimeREST {
+
+	private final String REALTIME_URL = "http://temporeal.lancenet.com.br";
+	
+	private WebDatabaseMapper webDatabaseMapper;
+	
+	private TreeMap<String, Club> clubs;
+	
+	public RealTimeREST(TreeMap<String, Club> clubs) {
+		this.clubs = clubs;
+		this.webDatabaseMapper = new WebDatabaseMapper(clubs, WebDatabaseMapper.SOURCE_REALTIME);
+	}
+	
+	public ArrayList<RealTimeMatch> getRealTimeMatches(Division division,
+			boolean showClubsPositions){
+		try{
+			String str_division = "87";
+			if(division == Division.SECONDDIVISION) str_division = "88";
+			
+			Document doc = Jsoup.connect(REALTIME_URL + "/").timeout(12*1000).get();
+			Element content = doc.getElementById("listaJogos");
+			
+			Elements rows = new Elements();
+			for (Element tr : content.getElementsByAttributeValue("rel", str_division)) {
+				rows.add(tr);
+			}
+			
+			ArrayList<RealTimeMatch> realTimeMatchesArray = new ArrayList<RealTimeMatch>();
+			if(rows.size() > 0){
+				ArrayList<Club> fullRankingArrayList = null;
+				try{
+					if(showClubsPositions){						
+						fullRankingArrayList = new RankingREST(clubs).getFullRanking(division);
+					}
+				}catch(NullPointerException npe) {
+					npe.printStackTrace();
+				}
+
+				for (Element el : rows) {
+					RealTimeMatch m = parseRealTimeMatch(el, division);
+
+					if(fullRankingArrayList != null){						
+						for (Club club : fullRankingArrayList) {
+							if(club.getAcronym().equals(m.getHome().getAcronym())){
+								m.setHomePosDif(club.getPosDif());
+								m.setHomePos(club.getPosition() + -1*club.getPosDif());
+							} else if(club.getAcronym().equals(m.getAway().getAcronym())) {
+								m.setAwayPosDif(club.getPosDif());
+								m.setAwayPos(club.getPosition() + -1*club.getPosDif());
+							}
+						}
+					}
+					
+					realTimeMatchesArray.add(m);
+				}
+			}
+			
+			return realTimeMatchesArray;
+		}catch(IOException e){
+			e.printStackTrace();
+			return null;
+		}catch(NullPointerException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private RealTimeMatch parseRealTimeMatch(Element el, Division division) {
+		Elements a = el.getElementsByTag("a");
+		String urlDetails = null;
+		try{
+			String href = a.get(0).attr("href");
+			if(!href.trim().equals("")) urlDetails = REALTIME_URL + href;
+		}catch(Exception e){
+			urlDetails = null;
+		}
+		
+		Elements td = el.getElementsByTag("td");
+		
+		String team1 = td.get(0).text();
+		String result1 = td.get(1).text();
+		String result2 = td.get(3).text();
+		String team2 = td.get(4).text();
+		String datetime = td.get(5).text();
+		
+		Club home = webDatabaseMapper.getClubByName(team1.trim().toLowerCase(Locale.getDefault()));
+		Club away = webDatabaseMapper.getClubByName(team2.trim().toLowerCase(Locale.getDefault()));
+		
+		int state = RealTimeMatch.A_INICIAR;
+		if(el.className().equals("tr-status-iniciar")) state = RealTimeMatch.A_INICIAR;
+		else if(el.className().equals("tr-status-andamento")) state = RealTimeMatch.EM_ANDAMENTO;
+		else if(el.className().equals("tr-status-encerrado")) state = RealTimeMatch.FINALIZADO;
+		
+		RealTimeMatch rtm = new RealTimeMatch();
+		rtm.setHome(home);
+		rtm.setAway(away);
+		rtm.setResultHome(result1);
+		rtm.setResultAway(result2);
+		rtm.setUrlDetails(urlDetails);
+		rtm.setStateConstant(state);
+		rtm.setDivision(division);
+		rtm.setDate(getGregorianCalendar(datetime));
+		
+		return rtm;
+	}
+	
+	public static GregorianCalendar getGregorianCalendar(String datetime){
+		try{
+			datetime = datetime.substring(datetime.indexOf(", ") + ", ".length());
+			int day = Integer.parseInt(datetime.substring(0, 2));
+			datetime = datetime.substring(datetime.indexOf("/") + "/".length());
+			int month = Integer.parseInt(datetime.substring(0, 2));
+			datetime = datetime.substring(datetime.indexOf(" ") + " ".length());
+			int hour = Integer.parseInt(datetime.substring(0, 2));
+			datetime = datetime.substring(datetime.indexOf(":") + ":".length());
+			int minute = Integer.parseInt(datetime.substring(0, 2));
+			
+			GregorianCalendar gc = new GregorianCalendar(Constants.YEAR, month-1, day, hour, minute);
+			gc.setTimeZone(TimeZone.getTimeZone(Constants.TIMEZONE));
+			
+			return gc;
+		}catch(Exception e) {
+			return null;
+		}
+
+	}
+	
+	
+	/*	
+	private static final String URL_WS = "http://aqueous-oasis-8080.herokuapp.com/services/";
+
+	public ArrayList<RealTimeMatch> getRealTimeMatches(int division) throws Exception {
+		String[] resposta = new WebServiceClient().get(URL_WS + "realtime/Gdivision=" + division + "/");
+		
+		if (resposta[0].equals("200")) {
+			ArrayList<RealTimeMatch> al = new ArrayList<RealTimeMatch>();
+			JSONArray array = new JSONArray(resposta[1]);
+			
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject obj = array.getJSONObject(i);
+				RealTimeMatch r = new RealTimeMatch();
+				
+				r.setUrlDetails(obj.getString("urlDetails"));
+				r.setHomePos(obj.getInt("homePos"));
+				r.setAwayPos(obj.getInt("awayPos"));
+				r.setHomePosDif(obj.getInt("homePosDif"));
+				r.setAwayPosDif(obj.getInt("awayPosDif"));
+				r.setStateConstant(obj.getInt("state"));
+				r.setDivision(obj.getInt("division"));
+				r.setHome(obj.getString("home"));
+				r.setAway(obj.getString("away"));
+				r.setResultHome(String.valueOf(obj.getInt("scoreHome")));
+				r.setResultAway(String.valueOf(obj.getInt("scoreAway")));
+				JSONObject date = obj.getJSONObject("date");
+				GregorianCalendar gc = new GregorianCalendar();
+				gc.set(Calendar.YEAR, date.getInt("year"));
+				gc.set(Calendar.MONTH, date.getInt("month"));
+				gc.set(Calendar.DAY_OF_MONTH, date.getInt("dayOfMonth"));
+				gc.set(Calendar.HOUR_OF_DAY, date.getInt("hourOfDay"));
+				gc.set(Calendar.MINUTE, date.getInt("minute"));
+				r.setDate(gc);
+				
+				al.add(r);
+			}
+
+			return al;
+		} else {
+			throw new Exception(resposta[1]);
+		}
+	}
+*/
+}

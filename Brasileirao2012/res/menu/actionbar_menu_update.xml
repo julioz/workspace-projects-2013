@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+actionbar/menu_update"
+        android:actionViewClass="br.com.zynger.brasileirao2012.view.RefreshActionItem"
+        android:showAsAction="always"
+        android:title="@string/actionbar_update"/>
+
+</menu>

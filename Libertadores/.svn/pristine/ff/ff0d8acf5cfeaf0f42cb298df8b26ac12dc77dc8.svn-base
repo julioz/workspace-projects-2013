@@ -1,0 +1,61 @@
+package br.com.zynger.libertadores.xml;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import android.content.Context;
+import br.com.zynger.libertadores.model.HistoricClub;
+import br.com.zynger.libertadores.util.Raw;
+
+public class HistoryParser {
+	private static final String FILE_WINNERS_RUNNERUPS = "history_winners_runnerups";
+	
+	private static final String PREFIX_BADGE_ICON = "ic_history_badge_";
+
+	public ArrayList<HistoricClub> getWinnersAndRunnerUps(Context context){
+		String xml = Raw.openRaw(context, FILE_WINNERS_RUNNERUPS);
+		ArrayList<HistoricClub> clubs = parseXML(xml);
+		return clubs;
+	}
+	
+	private static ArrayList<HistoricClub> parseXML(String xml){
+		ArrayList<HistoricClub> clubs = new ArrayList<HistoricClub>();
+		Element root = XMLUtils.getRoot(xml, "UTF-8");
+		List<Node> nodeClub = XMLUtils.getChildren(root, "club");
+		for (Node node : nodeClub) {
+			HistoricClub club = new HistoricClub();
+			String name = XMLUtils.getText(node, "name");
+			String badge = XMLUtils.getText(node, "badge");
+			String country = XMLUtils.getText(node, "country");
+			
+			Node winner = XMLUtils.getChild(node, "winner");
+			ArrayList<String> won = new ArrayList<String>();
+			if(null != winner) won = parseTrophies(winner);
+			
+			Node runnerup = XMLUtils.getChild(node, "runnerup");
+			ArrayList<String> runnerUp = new ArrayList<String>();
+			if(null != runnerup) runnerUp = parseTrophies(runnerup);
+			
+			club.setName(name);
+			club.setBadge(PREFIX_BADGE_ICON + badge);
+			club.setCountry(country);
+			club.setWon(won);
+			club.setRunnerUp(runnerUp);
+			clubs.add(club);
+		}
+		return clubs;
+	}
+
+	private static ArrayList<String> parseTrophies(Node root) {
+		ArrayList<String> al = new ArrayList<String>();
+		List<Node> years = XMLUtils.getChildren(root, "year");
+		for (Node node : years) {
+			String year = node.getTextContent();
+			al.add(year);
+		}
+		return al;
+	}
+}

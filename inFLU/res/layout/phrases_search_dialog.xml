@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:orientation="vertical"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+  	android:minWidth="300dp" 
+  	android:minHeight="400dp"
+    android:padding="5dp">
+    
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content"
+	    android:weightSum="3">
+	    <AutoCompleteTextView
+	        android:id="@+phrases_search_dialog/autocomplete_country"
+	        android:layout_width="0dp"
+	        android:layout_weight="2.3"
+	        android:singleLine="true"
+	        android:hint="Digite o nome do autor"
+	        android:layout_height="fill_parent"/>
+	    <ImageButton
+	        android:id="@+phrases_search_dialog/bt_authors"
+	        android:layout_width="0dp"
+	        android:src="@drawable/ic_authors"
+	        android:layout_weight="0.8"
+	        android:layout_height="wrap_content"/>
+	</LinearLayout>
+	
+    <ListView
+		android:layout_height="fill_parent"
+		android:layout_width="wrap_content"
+		android:id="@+phrases_search_dialog/list_search"
+		android:cacheColorHint="#00000000"/>
+    
+    
+</LinearLayout>

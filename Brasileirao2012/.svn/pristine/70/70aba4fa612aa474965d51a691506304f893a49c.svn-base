@@ -1,0 +1,75 @@
+package br.com.zynger.brasileirao2012.actionmode;
+
+import android.content.Context;
+
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+public abstract class ActionModeCallback<T> implements ActionMode.Callback {
+	private Context context;
+	private T model;
+	private Menu menu;
+	private boolean visible;
+	
+	public ActionModeCallback(Context context) {
+		this.context = context;
+	}
+	
+	public boolean isVisible() {
+		return visible;
+	}
+	
+	public void setModel(T model) {
+		this.model = model;
+	}
+	
+	public T getModel() {
+		return model;
+	}
+	
+	public void setMenuItemVisibility(int id, boolean visible) {
+		if(menu != null){			
+			menu.findItem(id).setVisible(visible);
+		}
+	}
+	
+	@Override
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+		mode.getMenuInflater().inflate(getMenuResource(), menu);
+		this.menu = menu;
+		changeMenuItems();
+		return true;
+	}
+
+	public void changeMenuItems() { }
+
+	public abstract int getMenuResource();
+
+	public abstract boolean onItemClicked(Context context, T model, ActionMode mode, MenuItem item);
+	
+	public boolean shouldAlwaysHideMode() {
+		return false;
+	}
+
+	@Override
+	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+		visible = true;
+		return false;
+	}
+
+	@Override
+	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+		if(shouldAlwaysHideMode()){
+			mode.finish();
+		}
+		return onItemClicked(context, model, mode, item);
+	}
+
+
+	@Override
+	public void onDestroyActionMode(ActionMode mode) {
+		visible = false;
+	}
+
+}

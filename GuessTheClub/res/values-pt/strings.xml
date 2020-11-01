@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="bt_answer_confirm">Confirmar</string>
+    <string name="bt_answer_confirmhint">Qual o nome do clube?</string>
+    <string name="app_name">Guess the Club</string>
+    <string name="phase">Fase</string>
+    <string name="badge">Escudo</string>
+    <string name="tv_home_play">Jogar</string>
+    <string name="tv_phaseselector_level">Nível</string>
+    <string name="tv_phaseselector_discovered">Descoberto</string>
+    <string name="tv_phaseselector_availabletips">Dicas disponíveis</string>
+    <string name="tv_phaseselector_discoveredlogos">Escudos descobertos</string>
+    <string name="tv_phaseselector_tipsused">Dicas usadas</string>
+    <string name="toast_phaseselector_phaselocked">Fase bloqueada. Descubra mais logos para desbloquear.</string>
+    <string name="str_tip">Dica</string>
+    <string name="str_tips">Dicas</string>
+    <string name="toast_answer_clubwithnomoretips">Esse clube não possui mais dicas</string>
+    <string name="toast_answer_userwithnomoretips">Você não pode pedir mais dicas</string>
+</resources>

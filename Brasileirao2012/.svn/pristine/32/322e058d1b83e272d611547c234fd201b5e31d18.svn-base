@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@null"
+    android:orientation="horizontal" >
+    
+    <ImageView 
+        android:id="@+fans_row/imageview"
+        android:src="@drawable/escudo_abc"
+        android:layout_width="48dp"
+        android:layout_margin="4dp"
+        android:layout_height="48dp"/>
+    
+    <RelativeLayout
+        android:layout_height="48dp"
+        android:layout_margin="4dp"
+        android:layout_width="fill_parent">
+        
+        <LinearLayout
+            android:layout_toLeftOf="@+fans_row/tv_number"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:id="@+fans_row/ll_bar"
+            android:layout_centerVertical="true">
+            
+            <View
+                android:layout_height="24dp"
+                android:layout_width="fill_parent"
+                android:id="@+fans_row/v_bar"
+                android:background="@drawable/fansbackrepeat" />"
+            
+        </LinearLayout>
+        
+        <TextView
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:id="@+fans_row/tv_number"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical|right"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="112.358"
+            android:layout_margin="4dp"/>
+        
+    </RelativeLayout>
+</LinearLayout>

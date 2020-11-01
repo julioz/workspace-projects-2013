@@ -1,0 +1,171 @@
+package br.com.zynger.brasileirao2012.view;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Club;
+
+public class RankingRow extends TableRow{
+	
+	private static final String CAMP_CBRASIL = "Palmeiras";
+	private static final String CAMP_LIBERTA = "Corinthians";
+	
+	public static final int BLUE = 0xFF6495ED;
+	public static final int YELLOW = 0xFFFFFF00;
+	public static final int RED = 0xFFB3002A;
+	
+	private Context context;
+	private TableRow tablerow;
+	private Club club;
+	private TextView position, points, played, win, draw, lose, goalspro, goalsagainst, balance;
+	private ImageView badge;
+
+	public RankingRow(Context c, Club club) {
+		super(c);
+		this.context = c;
+		this.club = club;
+		
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.tablerow = (TableRow) inflater.inflate(R.layout.ranking_row, null);
+		
+		this.position = (TextView) tablerow.findViewById(R.rankingrow.position);
+		this.badge = (ImageView) tablerow.findViewById(R.rankingrow.badge);
+		this.points = (TextView) tablerow.findViewById(R.rankingrow.points);
+		this.played = (TextView) tablerow.findViewById(R.rankingrow.played);
+		this.win = (TextView) tablerow.findViewById(R.rankingrow.win);
+		this.draw = (TextView) tablerow.findViewById(R.rankingrow.draw);
+		this.lose = (TextView) tablerow.findViewById(R.rankingrow.lose);
+		this.goalspro = (TextView) tablerow.findViewById(R.rankingrow.goalspro);
+		this.goalsagainst = (TextView) tablerow.findViewById(R.rankingrow.goalsagainst);
+		this.balance = (TextView) tablerow.findViewById(R.rankingrow.balance);
+		
+		if(this.club.getPosition()<10) this.position.setText("0" + String.valueOf(this.club.getPosition())); 
+		else this.position.setText(String.valueOf(this.club.getPosition()));
+		
+		if(this.club.getPosition()<5 || this.club.getName().equals(CAMP_CBRASIL) || this.club.getName().equals(CAMP_LIBERTA)){
+			position.setTextColor(BLUE);			
+		}else if(this.club.getPosition()>16){
+			position.setTextColor(RED);
+		}/*else if(this.club.getPosition()>=5 && this.club.getPosition() < 15){
+			if(club.getDivision() == Club.PRIMEIRADIVISAO) position.setTextColor(YELLOW);
+		}*/
+
+		this.badge.setImageDrawable(this.context.getResources().getDrawable(this.club.getBadge()));
+		this.points.setText(String.valueOf(this.club.getPoints()));
+		this.played.setText(String.valueOf(this.club.getPlayed()));
+		this.win.setText(String.valueOf(this.club.getWin()));
+		this.draw.setText(String.valueOf(this.club.getDraw()));
+		this.lose.setText(String.valueOf(this.club.getLose()));
+		this.goalspro.setText(String.valueOf(this.club.getGoalsPro()));
+		this.goalsagainst.setText(String.valueOf(this.club.getGoalsAgainst()));
+		this.balance.setText(String.valueOf(this.club.getBalance()));
+		
+		this.badge.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(), getClub().getName(), Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	public TableRow getTablerow() {
+		return tablerow;
+	}
+
+	public void setTablerow(TableRow tablerow) {
+		this.tablerow = tablerow;
+	}
+
+	public Club getClub() {
+		return club;
+	}
+
+	public void setClub(Club club) {
+		this.club = club;
+	}
+
+	public TextView getPosition() {
+		return position;
+	}
+
+	public void setPosition(TextView position) {
+		this.position = position;
+	}
+
+	public ImageView getBadge() {
+		return badge;
+	}
+
+	public void setBadge(ImageView badge) {
+		this.badge = badge;
+	}
+
+	public TextView getPoints() {
+		return points;
+	}
+
+	public void setPoints(TextView points) {
+		this.points = points;
+	}
+
+	public TextView getPlayed() {
+		return played;
+	}
+
+	public void setPlayed(TextView played) {
+		this.played = played;
+	}
+
+	public TextView getWin() {
+		return win;
+	}
+
+	public void setWin(TextView win) {
+		this.win = win;
+	}
+
+	public TextView getDraw() {
+		return draw;
+	}
+
+	public void setDraw(TextView draw) {
+		this.draw = draw;
+	}
+
+	public TextView getLose() {
+		return lose;
+	}
+
+	public void setLose(TextView lose) {
+		this.lose = lose;
+	}
+	
+	public TextView getGoalsPro(){
+		return goalspro;
+	}
+	
+	public void setGoalsPro(TextView pro){
+		this.goalspro = pro;
+	}
+	
+	public TextView getGoalsAgainst(){
+		return goalsagainst;
+	}
+	
+	public void setGoalsAgainst(TextView ag){
+		this.goalsagainst = ag;
+	}
+	
+	public TextView getBalance(){
+		return balance;
+	}
+	
+	public void setBalance(TextView bal){
+		this.balance = bal;
+	}
+}

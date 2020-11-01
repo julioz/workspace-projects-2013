@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent">
+
+	<TableRow
+		xmlns:android="http://schemas.android.com/apk/res/android"  
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:background="#15AA20"
+		android:id="@+statistics/tr_header"
+		android:weightSum="8.5"
+		android:padding="4dp">
+		
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="Nome"
+			android:layout_weight="4.1"
+			android:textSize="18dp"
+			android:textStyle="bold"
+			android:textColor="#FFFFFF"
+			android:layout_gravity="center_vertical"
+			android:id="@+statistics/name"/>
+				
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="J"
+			android:textSize="18dp"
+			android:layout_weight="1.1"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:textColor="#FFFFFF"
+			android:id="@+statistics/played"/>
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="G"
+			android:textSize="18dp"
+			android:layout_weight="1.1"
+			android:textColor="#FFFFFF"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:id="@+statistics/goals"/>
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="CA"
+			android:layout_weight="1.1"
+			android:textSize="18dp"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:textColor="#FFFFFF"
+			android:id="@+statistics/yellow"/>
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="CV"
+			android:textSize="18dp"
+			android:layout_weight="1.1"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:textColor="#FFFFFF"
+			android:id="@+statistics/red"/>
+	</TableRow>
+	
+	<ScrollView
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:scrollbarFadeDuration="1200"
+		android:id="@+statistics/sv_table"
+		android:layout_above="@+statistics/tr_footer1"
+		android:layout_below="@+statistics/tr_header"
+		android:fadeScrollbars="true"
+		android:background="#0b4300">
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+			<TableLayout
+				xmlns:android="http://schemas.android.com/apk/res/android"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+statistics/tablelayout">
+			</TableLayout>
+		</LinearLayout>
+	</ScrollView>
+	<TableRow
+		xmlns:android="http://schemas.android.com/apk/res/android"  
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:id="@+statistics/tr_footer1"
+		android:layout_above="@+statistics/tr_footer2"
+		android:background="#15AA20"
+		android:padding="2dp"
+		android:weightSum="2">
+				
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="J = Jogos"
+			android:gravity="left"
+			android:layout_gravity="left"
+			android:layout_weight="1"
+			android:textSize="11dp"
+			android:textColor="#FFFFFF"/>
+			
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:gravity="right"
+			android:layout_gravity="right"
+			android:layout_weight="1"
+			android:text="G = Gols"
+			android:textSize="11dp"
+			android:textColor="#FFFFFF"/>
+	</TableRow>
+	<TableRow
+		xmlns:android="http://schemas.android.com/apk/res/android"  
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:id="@+statistics/tr_footer2"
+		android:layout_alignParentBottom="true"
+		android:background="#15AA20"
+		android:padding="2dp"
+		android:weightSum="2">
+			
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="CA = Cartões Amarelos"
+			android:gravity="left"
+			android:layout_weight="1"
+			android:textSize="11dp"
+			android:textColor="#FFFFFF"/>
+			
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="CV = Cartões Vermelhos"
+			android:gravity="right"
+			android:layout_weight="1"
+			android:textSize="11dp"
+			android:textColor="#FFFFFF"/>
+	</TableRow>
+</RelativeLayout>

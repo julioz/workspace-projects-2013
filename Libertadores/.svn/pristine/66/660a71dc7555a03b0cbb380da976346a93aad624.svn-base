@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:id="@+historyactivity/rl_actionbar"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/gradient_titlebar">
+        
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_history"
+            android:id="@+historyactivity/titlebar_ivlogo"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+        
+        <br.com.zynger.libertadores.view.HelveticaTextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:id="@+historyactivity/titlebar_tvtitle"
+	        android:textColor="#FF3B3B3B"
+	        android:layout_centerVertical="true"
+	        android:layout_margin="5dp"
+	        android:layout_toRightOf="@+historyactivity/titlebar_ivlogo"
+	        android:gravity="left|center_vertical"
+	        android:layout_marginLeft="10dp"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+	        android:textSize="30dp"/>
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_below="@+historyactivity/rl_actionbar"
+        android:layout_above="@+historyactivity/ll_ad">
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <RelativeLayout 
+                android:layout_weight="1.8"
+                android:layout_width="0dp"
+                android:id="@+historyactivity/rl_winnersandrunnerups"
+                android:background="@drawable/layout_roundedges"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="3dp"
+                android:layout_gravity="center">
+                <ImageView
+                    android:src="@drawable/img_history_trophy"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitCenter"
+                    android:layout_centerVertical="true"
+                    android:id="@+historyactivity/iv_winnersandrunnerups"
+                    android:adjustViewBounds="true"/>
+                
+                <br.com.zynger.libertadores.view.HelveticaTextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="23dp"
+                    android:lineSpacingExtra="1dp"
+                    android:layout_centerInParent="true"
+                    android:textColor="@android:color/black"
+                    android:id="@+historyactivity/tv_winnersandrunnerups"
+                    android:layout_toRightOf="@+historyactivity/iv_winnersandrunnerups"
+                    android:text="@string/historydata_winnersandrunnerups"/>
+                
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:baselineAligned="false"
+            android:paddingRight="3dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            
+            <View
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.2"/>
+            
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.8"
+                android:orientation="horizontal" >
+                <RelativeLayout 
+	                android:layout_weight="1.8"
+	                android:layout_width="0dp"
+	                android:id="@+historyactivity/rl_finals"
+	                android:background="@drawable/layout_roundedges"
+	                android:layout_height="wrap_content"
+	                android:gravity="center"
+	                android:padding="3dp"
+	                android:layout_gravity="center">
+	                <br.com.zynger.libertadores.view.HelveticaTextView
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="wrap_content"
+	                    android:gravity="center"
+	                    android:textSize="23dp"
+	                    android:lineSpacingExtra="1dp"
+	                    android:layout_centerVertical="true"
+	                    android:textColor="@android:color/black"
+	                    android:id="@+historyactivity/tv_finals"
+	                    android:text="@string/historydata_finals"/>
+	                <ImageView
+	                    android:id="@+historyactivity/iv_finals"
+	                    android:layout_width="48dp"
+	                    android:layout_height="48dp"
+	                    android:layout_alignParentRight="true"
+	                    android:layout_centerVertical="true"
+	                    android:adjustViewBounds="true"
+	                    android:scaleType="fitCenter"
+	                    android:src="@drawable/img_history_whistle" />
+
+	            </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:baselineAligned="false"
+            android:paddingLeft="3dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            
+            <RelativeLayout 
+                android:layout_weight="1.8"
+                android:layout_width="0dp"
+                android:id="@+historyactivity/rl_bycountry"
+                android:background="@drawable/layout_roundedges"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="3dp"
+                android:layout_gravity="center">
+                <ImageView
+                    android:src="@drawable/img_history_country"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:scaleType="fitCenter"
+                    android:layout_centerVertical="true"
+                    android:id="@+historyactivity/iv_bycountry"
+                    android:adjustViewBounds="true"/>
+                
+                <br.com.zynger.libertadores.view.HelveticaTextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="23dp"
+                    android:lineSpacingExtra="1dp"
+                    android:layout_centerInParent="true"
+                    android:textColor="@android:color/black"
+                    android:id="@+historyactivity/tv_bycountry"
+                    android:layout_toRightOf="@+historyactivity/iv_bycountry"
+                    android:text="@string/historydata_bycountry"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+    
+    <include layout="@layout/admob_layout"
+        android:id="@+historyactivity/ll_ad"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:gravity="bottom|center_horizontal"/>
+
+</RelativeLayout>

@@ -1,0 +1,34 @@
+package br.com.zynger.brasileirao2012.util;
+
+import br.com.zynger.brasileirao2012.xml.ClubsParser;
+
+public class ThirdDivisionBadgeMapper {
+
+	public String getBadge(String acronym) {
+		String badgeString = ClubsParser.BADGE_PREFIX;
+		if(acronym.equals("AGM")) return badgeString + "aguiademaraba";
+		else if(acronym.equals("BAR")) return badgeString + "baraunas";
+		else if(acronym.equals("BRS")) return badgeString + "brasiliense";
+		else if(acronym.equals("CRB")) return badgeString + "crb";
+		else if(acronym.equals("CUI")) return badgeString + "cuiaba";
+		else if(acronym.equals("FOR")) return badgeString + "fortaleza";
+		else if(acronym.equals("LUV")) return badgeString + "luverdense";
+		else if(acronym.equals("RBC")) return badgeString + "riobranco";
+		else if(acronym.equals("SAM")) return badgeString + "sampaiocorrea";
+		else if(acronym.equals("STC")) return badgeString + "santacruz";
+		else if(acronym.equals("TRZ")) return badgeString + "treze";
+		
+		else if(acronym.equals("GBA")) return badgeString + "barueri"; //TODO mesmo acronym do baraunas
+		else if(acronym.equals("BET")) return badgeString + "betim";
+		else if(acronym.equals("CAX")) return badgeString + "caxias";
+		else if(acronym.equals("CRA")) return badgeString + "crac";
+		else if(acronym.equals("DUQ")) return badgeString + "duquedecaxias";
+		else if(acronym.equals("GUA")) return badgeString + "guarani";
+		else if(acronym.equals("MAC")) return badgeString + "macae";
+		else if(acronym.equals("MAD")) return badgeString + "madureira";
+		else if(acronym.equals("MOG")) return badgeString + "mogimirim";
+		else if(acronym.equals("VIL")) return badgeString + "vilanova";
+		else return null;
+	}
+
+}

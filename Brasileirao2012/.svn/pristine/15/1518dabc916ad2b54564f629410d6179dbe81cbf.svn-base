@@ -1,0 +1,27 @@
+package br.com.zynger.brasileirao2012.util;
+
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
+import com.github.espiandev.showcaseview.ShowcaseView;
+import com.github.espiandev.showcaseview.ShowcaseView.OnShowcaseEventListener;
+
+public class ShowCaseViewHelper {
+
+	public static void setOnShowCaseEventListener(View viewToShowCase,
+			Activity activity, String title, String detailText){
+		if(!(activity instanceof OnShowcaseEventListener)){
+			throw new RuntimeException("Activity must implement OnShowCaseEventListener");
+		}
+		
+		ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
+		co.hideOnClickOutside = true;
+		ShowcaseView sv = ShowcaseView.insertShowcaseView(viewToShowCase, activity,
+				title,
+				detailText, co);
+		sv.setBackColor(Color.argb(190, 0, 0, 0));
+		sv.setOnShowcaseEventListener((OnShowcaseEventListener) activity);
+	}
+	
+}

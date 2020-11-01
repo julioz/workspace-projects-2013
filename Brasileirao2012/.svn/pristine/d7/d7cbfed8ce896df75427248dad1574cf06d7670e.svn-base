@@ -1,0 +1,144 @@
+package br.com.zynger.brasileirao2012.fragment;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import android.content.Context;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import br.com.zynger.brasileirao2012.actionmode.ActionModeCallback.ActionModeListener;
+import br.com.zynger.brasileirao2012.actionmode.MatchCallback;
+import br.com.zynger.brasileirao2012.adapters.TableArrayAdapter;
+import br.com.zynger.brasileirao2012.adapters.pager.BasePagerAdapter.ActionModeDismissable;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.util.Constants;
+
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.ActionMode;
+
+public class TableFragment extends SherlockFragment implements
+		ActionModeDismissable, ActionModeListener<Match> {
+	private int mPageNumber;
+	private ArrayList<Match> matches;
+	private MatchCallback mActionMode;
+	private ListView listView;
+
+	public static TableFragment create(int pageNumber) {
+		TableFragment fragment = new TableFragment();
+		Bundle args = new Bundle();
+		args.putInt(Constants.PAGER_POSITION, pageNumber);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+	public TableFragment() {
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mPageNumber = getArguments().getInt(Constants.PAGER_POSITION);
+		mActionMode = new MatchCallback(this);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		listView = new ListView(getContext());
+		listView.setAdapter(new TableArrayAdapter(getContext(), matches));
+		setListViewListeners();
+
+		return listView;
+	}
+
+	private void setListViewListeners() {
+		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> listView, View view,
+					int position, long id) {
+				mActionMode.setModel((Match) listView.getItemAtPosition(position));
+				mActionMode.startActionMode();
+			}
+		});
+		
+		listView.setOnScrollListener(new OnScrollListener() {
+			private int scrollState;
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				this.scrollState = scrollState;
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				if(scrollState == OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+					dismissActionMode();
+				}
+			}
+		});
+	}
+
+	public void setMatches(ArrayList<Match> matches) {
+		this.matches = matches;
+		Collections.sort(this.matches);
+	}
+
+	public int getPageNumber() {
+		return mPageNumber;
+	}
+
+	@Override
+	public void dismissActionMode() {
+		if (mActionMode != null) {
+			mActionMode.dismissActionMode();
+		}
+	}
+
+	@Override
+	public Context getContext() {
+		return getSherlockActivity();
+	}
+
+	@Override
+	public void onPrepareActionMode() {
+	}
+
+	@Override
+	public void onDestroyActionMode() {
+		listView.clearChoices();
+		listView.requestLayout();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		listView.requestLayout();
+		super.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public int getMenuResource() {
+		return mActionMode.getMenuResource();
+	}
+
+	@Override
+	public void changeMenuItems(Match match) {
+		mActionMode.changeMenuItems(match);
+	}
+
+	@Override
+	public boolean onActionModeItemClick(Match match, ActionMode mode,
+			int itemId) {
+		return mActionMode.onItemClicked(getContext(), match, mode, itemId);
+	}
+}

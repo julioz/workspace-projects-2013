@@ -1,0 +1,1051 @@
+package br.com.zynger.brasileirao2012.util;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.TreeMap;
+
+import android.annotation.SuppressLint;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Fixture;
+import br.com.zynger.brasileirao2012.model.Match;
+
+public class MatchesDB {	
+
+	public TreeMap<Integer, Fixture> getMatches(int division){
+		if(division == Club.SEGUNDADIVISAO) return getMatchesB();
+		else return getMatchesA();
+	}
+
+	private TreeMap<Integer, Fixture> getMatchesA(){
+		TreeMap<Integer, Fixture> tm = new TreeMap<Integer, Fixture>();
+
+        Fixture fixture = new Fixture(1);
+        fixture.addMatch(genMatch("Palmeiras", "Portuguesa", "Pacaembu", 1, 1, 19, 5, 18, 30, true));
+        fixture.addMatch(genMatch("Sport", "Flamengo", "Ilha do Retiro", 1, 1, 19, 5, 18, 30, true));
+        fixture.addMatch(genMatch("Figueirense", "Náutico", "Orlando Scarpelli", 2, 1, 19, 5, 21, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "São Paulo", "Engenhão", 4, 2, 20, 5, 16, 00, true));
+        fixture.addMatch(genMatch("Corinthians", "Fluminense", "Pacaembu", 0, 1, 20, 5, 16, 00, true));
+        fixture.addMatch(genMatch("Internacional", "Coritiba", "Beira-Rio", 2, 0, 20, 5, 16, 00, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Atlético-MG", "Moisés Lucarelli", 0, 1, 20, 5, 16, 00, true));
+        fixture.addMatch(genMatch("Vasco", "Grêmio", "São Januário", 2, 1, 20, 5, 18, 30, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Atlético-GO", "Parque do Sabiá", 0, 0, 20, 5, 18, 30, true));
+        fixture.addMatch(genMatch("Bahia", "Santos", "Pituaçu", 0, 0, 20, 5, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(2);
+        fixture.addMatch(genMatch("Atlético-GO", "Ponte Preta", "Serra Dourada", 1, 1, 26, 5, 18, 30, true));
+        fixture.addMatch(genMatch("Flamengo", "Internacional", "Engenhão", 3, 3, 26, 5, 18, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Vasco", "Canindé", 0, 1, 26, 5, 18, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Cruzeiro", "Aflitos", 0, 0, 26, 5, 21, 00, true));
+        fixture.addMatch(genMatch("Santos", "Sport", "Vila Belmiro", 0, 0, 27, 5, 16, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Bahia", "Morumbi", 1, 0, 27, 5, 16, 00, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Corinthians", "Arena Independência", 1, 0, 27, 5, 16, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "Botafogo", "Couto Pereira", 2, 3, 27, 5, 16, 00, true));
+        fixture.addMatch(genMatch("Fluminense", "Figueirense", "Engenhão", 2, 2, 27, 5, 18, 30, true));
+        fixture.addMatch(genMatch("Grêmio", "Palmeiras", "Olímpico", 1, 0, 27, 5, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(3);
+        fixture.addMatch(genMatch("Atlético-GO", "Grêmio", "Serra Dourada", 0, 1, 6, 6, 19, 30, true));
+        fixture.addMatch(genMatch("Sport", "Palmeiras", "Ilha do Retiro", 2, 1, 6, 6, 19, 30, true));
+        fixture.addMatch(genMatch("Vasco", "Náutico", "São Januário", 4, 2, 6, 6, 20, 30, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Bahia", "Arena Independência", 1, 1, 6, 6, 20, 30, true));
+        fixture.addMatch(genMatch("Coritiba", "Portuguesa", "Couto Pereira", 2, 0, 6, 6, 20, 30, true));
+        fixture.addMatch(genMatch("Internacional", "São Paulo", "Beira-Rio", 1, 0, 6, 6, 21, 50, true));
+        fixture.addMatch(genMatch("Santos", "Fluminense", "Vila Belmiro", 1, 1, 6, 6, 21, 50, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Flamengo", "Moisés Lucarelli", 2, 2, 6, 6, 21, 50, true));
+        fixture.addMatch(genMatch("Corinthians", "Figueirense", "Pacaembu", 1, 1, 7, 6, 20, 30, true));
+        fixture.addMatch(genMatch("Botafogo", "Cruzeiro", "Engenhão", 2, 3, 7, 6, 20, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(4);
+        fixture.addMatch(genMatch("Flamengo", "Coritiba", "Engenhão", 3, 1, 9, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Palmeiras", "Atlético-MG", "Pacaembu", 0, 1, 9, 6, 21, 00, true));
+        fixture.addMatch(genMatch("Portuguesa", "Atlético-GO", "Canindé", 2, 0, 10, 6, 16, 00, true));
+        fixture.addMatch(genMatch("Bahia", "Vasco", "Pituaçu", 1, 2, 10, 6, 17, 00, true));
+        fixture.addMatch(genMatch("Fluminense", "Internacional", "Engenhão", 0, 0, 10, 6, 17, 00, true));
+        fixture.addMatch(genMatch("Grêmio", "Corinthians", "Olímpico", 2, 0, 10, 6, 17, 00, true));
+        fixture.addMatch(genMatch("Figueirense", "Ponte Preta", "Orlando Scarpelli", 0, 0, 10, 6, 18, 30, true));
+        fixture.addMatch(genMatch("São Paulo", "Santos", "Morumbi", 1, 0, 10, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Sport", "Melão", 1, 0, 10, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Botafogo", "Aflitos", 3, 2, 10, 6, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(5);
+        fixture.addMatch(genMatch("Internacional", "Botafogo", "Beira-Rio", 1, 2, 16, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Figueirense", "Arena Independência", 1, 0, 16, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Fluminense", "Portuguesa", "Engenhão", 4, 1, 16, 6, 21, 00, true));
+        fixture.addMatch(genMatch("Flamengo", "Santos", "Engenhão", 1, 0, 17, 6, 16, 00, true));
+        fixture.addMatch(genMatch("Palmeiras", "Vasco", "Arena Barueri", 1, 1, 17, 6, 16, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Atlético-MG", "Morumbi", 1, 0, 17, 6, 16, 00, true));
+        fixture.addMatch(genMatch("Bahia", "Sport", "Pituaçu", 2, 1, 17, 6, 16, 00, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Corinthians", "Moisés Lucarelli", 1, 0, 17, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Coritiba", "Atlético-GO", "Couto Pereira", 3, 0, 17, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Grêmio", "Aflitos", 1, 0, 17, 6, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(6);
+        fixture.addMatch(genMatch("Vasco", "Cruzeiro", "São Januário", 1, 3, 23, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "São Paulo", "Canindé", 1, 0, 23, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Náutico", "Arena Independência", 5, 1, 23, 6, 21, 00, true));
+        fixture.addMatch(genMatch("Corinthians", "Palmeiras", "Pacaembu", 2, 1, 24, 6, 16, 00, true));
+        fixture.addMatch(genMatch("Grêmio", "Flamengo", "Olímpico", 2, 0, 24, 6, 16, 00, true));
+        fixture.addMatch(genMatch("Figueirense", "Bahia", "Orlando Scarpelli", 1, 1, 24, 6, 16, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "Ponte Preta", "Engenhão", 1, 2, 24, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Santos", "Coritiba", "Vila Belmiro", 2, 2, 24, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Sport", "Internacional", "Ilha do Retiro", 0, 2, 23, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Fluminense", "Serra Dourada", 1, 4, 24, 6, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(7);
+        fixture.addMatch(genMatch("Náutico", "Fluminense", "Aflitos", 0, 2, 30, 6, 16, 20, true));
+        fixture.addMatch(genMatch("Cruzeiro", "São Paulo", "Arena Independência", 2, 3, 30, 6, 16, 20, true));
+        fixture.addMatch(genMatch("Vasco", "Ponte Preta", "São Januário", 3, 2, 30, 6, 18, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Santos", "Canindé", 0, 0, 1, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "Sport", "Couto Pereira", 2, 3, 1, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Bahia", "Internacional", "Pituaçu", 1, 1, 1, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Flamengo", "Atlético-GO", "Engenhão", 3, 2, 1, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Palmeiras", "Figueirense", "Pacaembu", 3, 1, 1, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Grêmio", "Atlético-MG", "Olímpico", 0, 1, 1, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Corinthians", "Botafogo", "Pacaembu", 1, 3, 11, 7, 19, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(8);
+        fixture.addMatch(genMatch("Botafogo", "Bahia", "Engenhão", 3, 0, 7, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Internacional", "Cruzeiro", "Beira-Rio", 2, 1, 7, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Náutico", "Serra Dourada", 0, 1, 7, 7, 21, 00, true));
+        fixture.addMatch(genMatch("Fluminense", "Flamengo", "Engenhão", 1, 0, 8, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Santos", "Grêmio", "Vila Belmiro", 4, 2, 8, 7, 16, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Coritiba", "Morumbi", 3, 1, 8, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Figueirense", "Vasco", "Orlando Scarpelli", 1, 1, 8, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Palmeiras", "Moisés Lucarelli", 1, 0, 8, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Portuguesa", "Arena Independência", 2, 0, 8, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Sport", "Corinthians", "Ilha do Retiro", 1, 1, 8, 7, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(9);
+        fixture.addMatch(genMatch("Corinthians", "Náutico", "Pacaembu", 2, 1, 14, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Figueirense", "Atlético-MG", "Orlando Scarpelli", 3, 4, 14, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Coritiba", "Moisés Lucarelli", 4, 1, 14, 7, 21, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "Fluminense", "Engenhão", 1, 1, 15, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Internacional", "Santos", "Beira-Rio", 0, 0, 15, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Grêmio", "Arena Independência", 1, 3, 15, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Bahia", "Flamengo", "Pituaçu", 1, 2, 15, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Vasco", "Atlético-GO", "São Januário", 1, 0, 15, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Palmeiras", "São Paulo", "Pacaembu", 1, 1, 15, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Sport", "Portuguesa", "Ilha do Retiro", 2, 1, 15, 7, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(10);
+        fixture.addMatch(genMatch("Santos", "Botafogo", "Vila Belmiro", 0, 0, 18, 7, 19, 30, true));
+        fixture.addMatch(genMatch("Grêmio", "Sport", "Olímpico", 3, 1, 18, 7, 19, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Cruzeiro", "Canindé", 0, 2, 18, 7, 20, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Ponte Preta", "Aflitos", 3, 0, 18, 7, 20, 30, true));
+        fixture.addMatch(genMatch("Flamengo", "Corinthians", "Engenhão", 0, 3, 18, 7, 21, 50, true));
+        fixture.addMatch(genMatch("São Paulo", "Vasco", "Morumbi", 0, 1, 18, 7, 21, 50, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Internacional", "Arena Independência", 3, 1, 18, 7, 21, 50, true));
+        fixture.addMatch(genMatch("Fluminense", "Bahia", "Engenhão", 4, 0, 19, 7, 21, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "Palmeiras", "Couto Pereira", 1, 1, 19, 7, 21, 00, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Figueirense", "Serra Dourada", 3, 2, 19, 7, 21, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(11);
+        fixture.addMatch(genMatch("Vasco", "Santos", "São Januário", 2, 0, 21, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Sport", "Atlético-MG", "Ilha do Retiro", 1, 4, 21, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Corinthians", "Portuguesa", "Pacaembu", 1, 1, 21, 7, 21, 00, true));
+        fixture.addMatch(genMatch("Palmeiras", "Náutico", "Pacaembu", 3, 0, 22, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Internacional", "Atlético-GO", "Beira-Rio", 4, 1, 22, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Flamengo", "Arena Independência", 1, 0, 22, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Figueirense", "São Paulo", "Orlando Scarpelli", 0, 2, 22, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "Grêmio", "Engenhão", 0, 1, 22, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Fluminense", "Moisés Lucarelli", 1, 2, 22, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Bahia", "Coritiba", "Pituaçu", 2, 2, 22, 7, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(12);
+        fixture.addMatch(genMatch("Ponte Preta", "Sport", "Moisés Lucarelli", 1, 1, 25, 7, 19, 30, true));
+        fixture.addMatch(genMatch("Figueirense", "Internacional", "Orlando Scarpelli", 0, 1, 25, 7, 19, 30, true));
+        fixture.addMatch(genMatch("Vasco", "Botafogo", "Engenhão", 1, 0, 25, 7, 20, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Coritiba", "Aflitos", 3, 4, 25, 7, 20, 30, true));
+        fixture.addMatch(genMatch("Corinthians", "Cruzeiro", "Pacaembu", 2, 0, 25, 7, 21, 50, true));
+        fixture.addMatch(genMatch("Grêmio", "Fluminense", "Olímpico", 1, 0, 25, 7, 21, 50, true));
+        fixture.addMatch(genMatch("Atlético-GO", "São Paulo", "Serra Dourada", 4, 3, 25, 7, 21, 50, true));
+        fixture.addMatch(genMatch("Flamengo", "Portuguesa", "Engenhão", 0, 0, 26, 7, 21, 00, true));
+        fixture.addMatch(genMatch("Palmeiras", "Bahia", "Arena Barueri", 0, 2, 26, 7, 21, 00, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Santos", "Arena Independência", 2, 0, 26, 7, 21, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(13);
+        fixture.addMatch(genMatch("Internacional", "Vasco", "Beira-Rio", 0, 0, 28, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Coritiba", "Grêmio", "Couto Pereira", 2, 1, 28, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Botafogo", "Figueirense", "Engenhão", 1, 0, 28, 7, 21, 00, true));
+        fixture.addMatch(genMatch("Fluminense", "Atlético-MG", "Engenhão", 0, 0, 29, 7, 16, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Flamengo", "Morumbi", 4, 1, 29, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Sport", "Atlético-GO", "Ilha do Retiro", 0, 0, 29, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Bahia", "Corinthians", "Pituaçu", 0, 0, 29, 7, 16, 00, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Palmeiras", "Arena Independência", 2, 1, 29, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Santos", "Ponte Preta", "Vila Belmiro", 2, 1, 29, 7, 18, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Náutico", "Canindé", 3, 1, 29, 7, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(14);
+        fixture.addMatch(genMatch("Palmeiras", "Internacional", "Pacaembu", 0, 1, 4, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Botafogo", "Serra Dourada", 1, 2, 4, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Figueirense", "Canindé", 2, 0, 4, 8, 21, 00, true));
+        fixture.addMatch(genMatch("Vasco", "Corinthians", "São Januário", 0, 0, 5, 8, 16, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Sport", "Morumbi", 1, 0, 5, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Grêmio", "Bahia", "Olímpico", 3, 1, 5, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "Fluminense", "Couto Pereira", 0, 2, 5, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Ponte Preta", "Arena Independência", 1, 2, 5, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Santos", "Aflitos", 3, 0, 5, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Flamengo", "Atlético-MG", "Engenhão", 2, 1, 26, 9, 22, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(15);
+        fixture.addMatch(genMatch("Internacional", "Náutico", "Beira-Rio", 0, 0, 8, 8, 19, 30, true));
+        fixture.addMatch(genMatch("Sport", "Vasco", "Ilha do Retiro", 0, 2, 8, 8, 19, 30, true));
+        fixture.addMatch(genMatch("Corinthians", "Atlético-GO", "Pacaembu", 1, 1, 8, 8, 20, 30, true));
+        fixture.addMatch(genMatch("Bahia", "Portuguesa", "Pituaçu", 0, 0, 8, 8, 20, 30, true));
+        fixture.addMatch(genMatch("Botafogo", "Palmeiras", "Engenhão", 1, 2, 8, 8, 21, 50, true));
+        fixture.addMatch(genMatch("Santos", "Cruzeiro", "Vila Belmiro", 4, 2, 8, 8, 21, 50, true));
+        fixture.addMatch(genMatch("Figueirense", "Flamengo", "Orlando Scarpelli", 0, 2, 8, 8, 21, 50, true));
+        fixture.addMatch(genMatch("Fluminense", "São Paulo", "São Januário", 2, 1, 9, 8, 21, 00, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Coritiba", "Arena Independência", 1, 0, 9, 8, 21, 00, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Grêmio", "Moisés Lucarelli", 0, 0, 9, 8, 21, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(16);
+        fixture.addMatch(genMatch("Santos", "Atlético-GO", "Pacaembu", 2, 2, 11, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Sport", "Figueirense", "Ilha do Retiro", 0, 1, 11, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Bahia", "Cruzeiro", "Pituaçu", 0, 1, 11, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Flamengo", "Náutico", "Raulino de Oliveira", 2, 0, 11, 8, 21, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Grêmio", "Morumbi", 1, 2, 12, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Internacional", "Ponte Preta", "Beira-Rio", 2, 1, 12, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Vasco", "Arena Independência", 1, 0, 12, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "Corinthians", "Couto Pereira", 1, 2, 12, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Fluminense", "Palmeiras", "Engenhão", 1, 0, 12, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Botafogo", "Canindé", 1, 1, 12, 8, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(17);
+        fixture.addMatch(genMatch("Grêmio", "Portuguesa", "Olímpico", 1, 2, 15, 8, 19, 30, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Fluminense", "Arena Independência", 1, 1, 15, 8, 19, 30, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Bahia", "Moisés Lucarelli", 0, 2, 15, 8, 20, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Atlético-MG", "Serra Dourada", 1, 1, 15, 8, 20, 30, true));
+        fixture.addMatch(genMatch("Botafogo", "Sport", "Engenhão", 2, 0, 15, 8, 21, 50, true));
+        fixture.addMatch(genMatch("Palmeiras", "Flamengo", "Arena Barueri", 1, 0, 15, 8, 21, 50, true));
+        fixture.addMatch(genMatch("Náutico", "São Paulo", "Aflitos", 3, 0, 15, 8, 21, 50, true));
+        fixture.addMatch(genMatch("Vasco", "Coritiba", "São Januário", 2, 2, 16, 8, 21, 00, true));
+        fixture.addMatch(genMatch("Corinthians", "Internacional", "Pacaembu", 1, 0, 16, 8, 21, 00, true));
+        fixture.addMatch(genMatch("Figueirense", "Santos", "Orlando Scarpelli", 1, 3, 16, 8, 21, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(18);
+        fixture.addMatch(genMatch("Fluminense", "Sport", "Raulino de Oliveira", 1, 0, 18, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Bahia", "Aflitos", 1, 0, 18, 8, 18, 30, true));
+        fixture.addMatch(genMatch("São Paulo", "Ponte Preta", "Morumbi", 3, 0, 18, 8, 21, 00, true));
+        fixture.addMatch(genMatch("Santos", "Corinthians", "Vila Belmiro", 3, 2, 19, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Grêmio", "Figueirense", "Olímpico", 4, 0, 19, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Botafogo", "Arena Independência", 3, 2, 19, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "Cruzeiro", "Couto Pereira", 4, 0, 19, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Flamengo", "Vasco", "Engenhão", 1, 0, 19, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Internacional", "Canindé", 1, 1, 19, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Palmeiras", "Serra Dourada", 2, 1, 19, 8, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(19);
+        fixture.addMatch(genMatch("Vasco", "Fluminense", "Engenhão", 1, 2, 25, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Palmeiras", "Santos", "Pacaembu", 1, 2, 25, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Portuguesa", "Moisés Lucarelli", 2, 1, 25, 8, 21, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "Flamengo", "Engenhão", 0, 0, 26, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Corinthians", "São Paulo", "Pacaembu", 1, 2, 26, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Internacional", "Grêmio", "Beira-Rio", 0, 1, 26, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Figueirense", "Coritiba", "Orlando Scarpelli", 3, 1, 26, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Atlético-MG", "Arena Independência", 2, 2, 26, 8, 16, 00, true));
+        fixture.addMatch(genMatch("Sport", "Náutico", "Ilha do Retiro", 0, 0, 26, 8, 18, 30, true));
+        fixture.addMatch(genMatch("Bahia", "Atlético-GO", "Pituaçu", 1, 1, 26, 8, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(20);
+        fixture.addMatch(genMatch("Santos", "Bahia", "Vila Belmiro", 1, 3, 29, 8, 19, 30, true));
+        fixture.addMatch(genMatch("Coritiba", "Internacional", "Couto Pereira", 1, 0, 29, 8, 19, 30, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Ponte Preta", "Arena Independência", 2, 2, 29, 8, 20, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Palmeiras", "Canindé", 3, 0, 29, 8, 20, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Figueirense", "Aflitos", 3, 2, 29, 8, 20, 30, true));
+        fixture.addMatch(genMatch("Fluminense", "Corinthians", "Engenhão", 1, 1, 29, 8, 22, 00, true));
+        fixture.addMatch(genMatch("Grêmio", "Vasco", "Olímpico", 2, 0, 29, 8, 22, 00, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Cruzeiro", "Serra Dourada", 0, 2, 29, 8, 22, 00, true));
+        fixture.addMatch(genMatch("Flamengo", "Sport", "Raulino de Oliveira", 1, 1, 30, 8, 21, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Botafogo", "Morumbi", 4, 0, 30, 8, 21, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(21);
+        fixture.addMatch(genMatch("Palmeiras", "Grêmio", "Pacaembu", 0, 0, 1, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Figueirense", "Fluminense", "Orlando Scarpelli", 2, 2, 1, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Vasco", "Portuguesa", "São Januário", 2, 0, 1, 9, 21, 00, true));
+        fixture.addMatch(genMatch("Corinthians", "Atlético-MG", "Pacaembu", 1, 0, 2, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Internacional", "Flamengo", "Beira-Rio", 4, 1, 2, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Sport", "Santos", "Ilha do Retiro", 2, 1, 2, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Bahia", "São Paulo", "Pituaçu", 1, 0, 2, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "Coritiba", "Engenhão", 2, 0, 2, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Náutico", "Arena Independência", 3, 0, 2, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Atlético-GO", "Moisés Lucarelli", 3, 1, 2, 9, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(22);
+        fixture.addMatch(genMatch("Flamengo", "Ponte Preta", "Raulino de Oliveira", 0, 1, 5, 9, 19, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Coritiba", "Canindé", 3, 0, 5, 9, 19, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Vasco", "Aflitos", 1, 1, 5, 9, 19, 30, true));
+        fixture.addMatch(genMatch("Bahia", "Atlético-MG", "Pituaçu", 0, 0, 5, 9, 19, 30, true));
+        fixture.addMatch(genMatch("Grêmio", "Atlético-GO", "Olímpico", 2, 1, 5, 9, 20, 30, true));
+        fixture.addMatch(genMatch("São Paulo", "Internacional", "Morumbi", 1, 1, 5, 9, 22, 00, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Botafogo", "Arena do Jacaré", 1, 3, 5, 9, 22, 00, true));
+        fixture.addMatch(genMatch("Figueirense", "Corinthians", "Orlando Scarpelli", 1, 0, 5, 9, 22, 00, true));
+        fixture.addMatch(genMatch("Fluminense", "Santos", "Engenhão", 3, 1, 6, 9, 21, 00, true));
+        fixture.addMatch(genMatch("Palmeiras", "Sport", "Pacaembu", 3, 1, 6, 9, 21, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(23);
+        fixture.addMatch(genMatch("Ponte Preta", "Figueirense", "Moisés Lucarelli", 2, 2, 8, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Coritiba", "Flamengo", "Couto Pereira", 3, 0, 8, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Corinthians", "Grêmio", "Pacaembu", 3, 1, 8, 9, 21, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "Náutico", "Engenhão", 3, 1, 9, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Santos", "São Paulo", "Vila Belmiro", 0, 0, 9, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Internacional", "Fluminense", "Beira-Rio", 0, 1, 9, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Vasco", "Bahia", "São Januário", 0, 4, 9, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Palmeiras", "Arena Independência", 3, 0, 9, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Sport", "Cruzeiro", "Ilha do Retiro", 2, 1, 9, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Portuguesa", "Serra Dourada", 1, 1, 9, 9, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(24);
+        fixture.addMatch(genMatch("Corinthians", "Ponte Preta", "Pacaembu", 1, 1, 12, 9, 19, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Fluminense", "Canindé", 0, 2, 12, 9, 19, 30, true));
+        fixture.addMatch(genMatch("Figueirense", "Cruzeiro", "Orlando Scarpelli", 2, 0, 12, 9, 19, 30, true));
+        fixture.addMatch(genMatch("Sport", "Bahia", "Ilha do Retiro", 1, 1, 12, 9, 20, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Coritiba", "Serra Dourada", 1, 2, 12, 9, 20, 30, true));
+        fixture.addMatch(genMatch("Vasco", "Palmeiras", "São Januário", 3, 1, 12, 9, 22, 00, true));
+        fixture.addMatch(genMatch("Santos", "Flamengo", "Vila Belmiro", 2, 0, 12, 9, 22, 00, true));
+        fixture.addMatch(genMatch("Atlético-MG", "São Paulo", "Arena Independência", 1, 0, 12, 9, 22, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "Internacional", "Engenhão", 1, 1, 13, 9, 21, 00, true));
+        fixture.addMatch(genMatch("Grêmio", "Náutico", "Olímpico", 2, 0, 13, 9, 21, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(25);
+        fixture.addMatch(genMatch("Fluminense", "Atlético-GO", "Raulino de Oliveira", 1, 2, 15, 9, 18, 30, true));
+        fixture.addMatch(genMatch("São Paulo", "Portuguesa", "Morumbi", 3, 1, 15, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Palmeiras", "Corinthians", "Pacaembu", 0, 2, 16, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Vasco", "Arena Independência", 1, 1, 16, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "Santos", "Couto Pereira", 1, 2, 16, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Náutico", "Atlético-MG", "Aflitos", 1, 0, 16, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Bahia", "Figueirense", "Pituaçu", 2, 1, 16, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Flamengo", "Grêmio", "Engenhão", 1, 1, 16, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Internacional", "Sport", "Beira-Rio", 2, 2, 16, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Botafogo", "Moisés Lucarelli", 0, 0, 16, 9, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(26);
+        fixture.addMatch(genMatch("Figueirense", "Palmeiras", "Orlando Scarpelli", 1, 3, 22, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Fluminense", "Náutico", "Raulino de Oliveira", 2, 1, 22, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Santos", "Portuguesa", "Pacaembu", 1, 3, 22, 9, 21, 00, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Vasco", "Moisés Lucarelli", 0, 0, 23, 9, 16, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Cruzeiro", "Morumbi", 1, 0, 23, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "Corinthians", "Engenhão", 2, 2, 23, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Flamengo", "Serra Dourada", 1, 2, 23, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Internacional", "Bahia", "Beira-Rio", 3, 1, 23, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Sport", "Coritiba", "Ilha do Retiro", 1, 0, 23, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Grêmio", "Arena Independência", 0, 0, 23, 9, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(27);
+        fixture.addMatch(genMatch("Vasco", "Figueirense", "São Januário", 3, 1, 29, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Internacional", "Arena do Jacaré", 0, 0, 29, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Atlético-MG", "Canindé", 1, 1, 29, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Atlético-GO", "Aflitos", 2, 0, 29, 9, 18, 30, true));
+        fixture.addMatch(genMatch("Palmeiras", "Ponte Preta", "Pacaembu", 3, 0, 29, 9, 21, 00, true));
+        fixture.addMatch(genMatch("Corinthians", "Sport", "Pacaembu", 3, 0, 30, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Bahia", "Botafogo", "Pituaçu", 2, 0, 30, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "São Paulo", "Couto Pereira", 1, 1, 30, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Flamengo", "Fluminense", "Engenhão", 0, 1, 30, 9, 16, 00, true));
+        fixture.addMatch(genMatch("Grêmio", "Santos", "Olímpico", 1, 1, 30, 9, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(28);
+        fixture.addMatch(genMatch("Flamengo", "Bahia", "Engenhão", 0, 0, 4, 10, 21, 00, true));
+        fixture.addMatch(genMatch("Portuguesa", "Sport", "Canindé", 5, 1, 4, 10, 21, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "Ponte Preta", "Couto Pereira", 1, 0, 4, 10, 21, 00, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Vasco", "Serra Dourada", 0, 1, 6, 10, 16, 20, true));
+        fixture.addMatch(genMatch("Santos", "Internacional", "Vila Belmiro", 1, 1, 6, 10, 16, 20, true));
+        fixture.addMatch(genMatch("Náutico", "Corinthians", "Aflitos", 2, 1, 6, 10, 16, 20, true));
+        fixture.addMatch(genMatch("São Paulo", "Palmeiras", "Morumbi", 3, 0, 6, 10, 16, 00, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Figueirense", "Arena Independência", 6, 0, 6, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Fluminense", "Botafogo", "Engenhão", 1, 0, 6, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Grêmio", "Cruzeiro", "Olímpico", 2, 1, 6, 10, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+        
+        fixture = new Fixture(29);
+        fixture.addMatch(genMatch("Cruzeiro", "Portuguesa", "Arena do Jacaré", 2, 0, 10, 10, 19, 30, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Náutico", "Moisés Lucarelli", 2, 1, 10, 10, 19, 30, true));
+        fixture.addMatch(genMatch("Bahia", "Fluminense", "Pituaçu", 0, 2, 10, 10, 19, 30, true));
+        fixture.addMatch(genMatch("Botafogo", "Santos", "Engenhão", 0, 2, 10, 10, 19, 30, true));
+        fixture.addMatch(genMatch("Figueirense", "Atlético-GO", "Orlando Scarpelli", 3, 1, 10, 10, 19, 30, true));
+        fixture.addMatch(genMatch("Vasco", "São Paulo", "São Januário", 0, 2, 10, 10, 22, 00, true));
+        fixture.addMatch(genMatch("Corinthians", "Flamengo", "Pacaembu", 3, 2, 10, 10, 22, 00, true));
+        fixture.addMatch(genMatch("Internacional", "Atlético-MG", "Beira-Rio", 3, 0, 10, 10, 22, 00, true));
+        fixture.addMatch(genMatch("Sport", "Grêmio", "Ilha do Retiro", 1, 3, 11, 10, 21, 00, true));
+        fixture.addMatch(genMatch("Palmeiras", "Coritiba", "Fonte Luminosa", 0, 1, 11, 10, 21, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(30);
+        fixture.addMatch(genMatch("Flamengo", "Cruzeiro", "Engenhão", 1, 1, 13, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Internacional", "Serra Dourada", 3, 1, 13, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Portuguesa", "Corinthians", "Canindé", 1, 1, 13, 10, 21, 00, true));
+        fixture.addMatch(genMatch("Santos", "Vasco", "Vila Belmiro", 2, 0, 14, 10, 16, 00, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Sport", "Arena Independência", 2, 1, 14, 10, 16, 00, true));
+        fixture.addMatch(genMatch("Náutico", "Palmeiras", "Aflitos", 1, 0, 14, 10, 16, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Figueirense", "Morumbi", 2, 0, 14, 10, 16, 00, true));
+        fixture.addMatch(genMatch("Coritiba", "Bahia", "Couto Pereira", 2, 1, 14, 10, 16, 00, true));
+        fixture.addMatch(genMatch("Fluminense", "Ponte Preta", "São Januário", 2, 1, 14, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Grêmio", "Botafogo", "Olímpico", 1, 1, 14, 10, 18, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(31);
+        fixture.addMatch(genMatch("Fluminense", "Grêmio", "Engenhão", 2, 2, 17, 10, 19, 30, true));
+        fixture.addMatch(genMatch("Internacional", "Figueirense", "Beira-Rio", 2, 3, 17, 10, 19, 30, true));
+        fixture.addMatch(genMatch("Coritiba", "Náutico", "Couto Pereira", 2, 1, 17, 10, 19, 30, true));
+        fixture.addMatch(genMatch("Bahia", "Palmeiras", "Pituaçu", 0, 1, 17, 10, 19, 30, true));
+        fixture.addMatch(genMatch("Santos", "Atlético-MG", "Vila Belmiro", 2, 2, 17, 10, 22, 00, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Corinthians", "Dilzon Melo", 2, 0, 17, 10, 22, 00, true));
+        fixture.addMatch(genMatch("Portuguesa", "Flamengo", "Canindé", 0, 0, 17, 10, 22, 00, true));
+        fixture.addMatch(genMatch("Botafogo", "Vasco", "Engenhão", 3, 2, 18, 10, 21, 00, true));
+        fixture.addMatch(genMatch("São Paulo", "Atlético-GO", "Morumbi", 2, 0, 18, 10, 21, 00, true));
+        fixture.addMatch(genMatch("Sport", "Ponte Preta", "Ilha do Retiro", 3, 1, 18, 10, 21, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(32);
+        fixture.addMatch(genMatch("Palmeiras", "Cruzeiro", "Adhemar de Barros", 2, 0, 20, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Corinthians", "Bahia", "Pacaembu", 1, 1, 20, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Grêmio", "Coritiba", "Olímpico", 0, 0, 20, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Flamengo", "São Paulo", "Raulino de Oliveira", 1, 0, 21, 10, 16, 00, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Fluminense", "Arena Independência", 3, 2, 21, 10, 16, 00, true));
+        fixture.addMatch(genMatch("Náutico", "Portuguesa", "Aflitos", 0, 0, 21, 10, 16, 00, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Santos", "Moisés Lucarelli", 1, 0, 21, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Sport", "Elmo Serejo Farias", 0, 1, 21, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Vasco", "Internacional", "São Januário", 1, 2, 24, 10, 20, 30, true));
+        fixture.addMatch(genMatch("Figueirense", "Botafogo", "Orlando Scarpelli", 0, 2, 24, 10, 22, 00, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(33);
+        fixture.addMatch(genMatch("Fluminense", "Coritiba", "Engenhão", 2, 1, 25, 10, 21, 00, true));
+        fixture.addMatch(genMatch("Santos", "Náutico", "Vila Belmiro", 0, 0, 25, 10, 21, 00, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Cruzeiro", "Moisés Lucarelli", 1, 0, 25, 10, 21, 00, true));
+        fixture.addMatch(genMatch("Corinthians", "Vasco", "Pacaembu", 1, 0, 27, 10, 16, 20, true));
+        fixture.addMatch(genMatch("Internacional", "Palmeiras", "Beira-Rio", 2, 1, 27, 10, 16, 20, true));
+        fixture.addMatch(genMatch("Botafogo", "Atlético-GO", "Engenhão", 4, 0, 27, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Figueirense", "Portuguesa", "Orlando Scarpelli", 0, 0, 27, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Sport", "São Paulo", "Ilha do Retiro", 2, 4, 27, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Bahia", "Grêmio", "Pituaçu", 1, 1, 27, 10, 18, 30, true));
+        fixture.addMatch(genMatch("Atlético-MG", "Flamengo", "Arena Independência", 1, 1, 31, 10, 21, 50, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(34);
+        fixture.addMatch(genMatch("Palmeiras", "Botafogo", "Fonte Luminosa", 2, 2, 3, 11, 19, 30, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Santos", "Arena Independência", 0, 4, 3, 11, 19, 30, true));
+        fixture.addMatch(genMatch("Flamengo", "Figueirense", "Engenhão", 1, 0, 3, 11, 21, 00, true));
+        fixture.addMatch(genMatch("Vasco", "Sport", "São Januário", 0, 3, 4, 11, 17, 00, true));
+        fixture.addMatch(genMatch("Grêmio", "Ponte Preta", "Olímpico", 1, 0, 4, 11, 19, 30, true));
+        fixture.addMatch(genMatch("São Paulo", "Fluminense", "Morumbi", 1, 1, 4, 11, 17, 00, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Corinthians", "Serra Dourada", 0, 2, 4, 11, 17, 00, true));
+        fixture.addMatch(genMatch("Portuguesa", "Bahia", "Canindé", 0, 1, 4, 11, 19, 30, true));
+        fixture.addMatch(genMatch("Coritiba", "Atlético-MG", "Couto Pereira", 1, 0, 4, 11, 19, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Internacional", "Aflitos", 3, 0, 4, 11, 19, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(35);
+        fixture.addMatch(genMatch("Botafogo", "Portuguesa", "Engenhão", 3, 0, 10, 11, 19, 30, true));
+        fixture.addMatch(genMatch("Atlético-GO", "Santos", "Serra Dourada", 2, 1, 10, 11, 19, 30, true));
+        fixture.addMatch(genMatch("Corinthians", "Coritiba", "Pacaembu", 5, 1, 10, 11, 21, 00, true));
+        fixture.addMatch(genMatch("Vasco", "Atlético-MG", "São Januário", 1, 1, 11, 11, 17, 00, true));
+        fixture.addMatch(genMatch("Palmeiras", "Fluminense", "Prudentão", 2, 3, 11, 11, 17, 00, true));
+        fixture.addMatch(genMatch("Grêmio", "São Paulo", "Olímpico", 2, 1, 11, 11, 17, 00, true));
+        fixture.addMatch(genMatch("Cruzeiro", "Bahia", "Arena Independência", 3, 1, 11, 11, 19, 30, true));
+        fixture.addMatch(genMatch("Ponte Preta", "Internacional", "Moisés Lucarelli", 1, 0, 11, 11, 19, 30, true));
+        fixture.addMatch(genMatch("Figueirense", "Sport", "Orlando Scarpelli", 1, 1, 11, 11, 19, 30, true));
+        fixture.addMatch(genMatch("Náutico", "Flamengo", "Aflitos", 0, 1, 11, 11, 19, 30, true));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(36);
+        fixture.addMatch(genMatch("Santos", "Figueirense", "Vila Belmiro", -1, -1, 17, 11, 19, 30));
+        fixture.addMatch(genMatch("Coritiba", "Vasco", "Couto Pereira", -1, -1, 17, 11, 19, 30));
+        fixture.addMatch(genMatch("Flamengo", "Palmeiras", "Engenhão", -1, -1, 18, 11, 17, 00));
+        fixture.addMatch(genMatch("Fluminense", "Cruzeiro", "Engenhão", -1, -1, 18, 11, 17, 00));
+        fixture.addMatch(genMatch("São Paulo", "Náutico", "Morumbi", -1, -1, 18, 11, 17, 00));
+        fixture.addMatch(genMatch("Atlético-MG", "Atlético-GO", "Arena Independência", -1, -1, 18, 11, 17, 00));
+        fixture.addMatch(genMatch("Bahia", "Ponte Preta", "Pituaçu", -1, -1, 18, 11, 17, 00));
+        fixture.addMatch(genMatch("Internacional", "Corinthians", "Beira-Rio", -1, -1, 18, 11, 19, 30));
+        fixture.addMatch(genMatch("Portuguesa", "Grêmio", "Canindé", -1, -1, 18, 11, 19, 30));
+        fixture.addMatch(genMatch("Sport", "Botafogo", "Ilha do Retiro", -1, -1, 18, 11, 19, 30));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(37);
+        fixture.addMatch(genMatch("Vasco", "Flamengo", "Engenhão", -1, -1, 24, 11, 19, 30));
+        fixture.addMatch(genMatch("Corinthians", "Santos", "Pacaembu", -1, -1, 24, 11, 19, 30));
+        fixture.addMatch(genMatch("Botafogo", "Atlético-MG", "Engenhão", -1, -1, 25, 11, 17, 00));
+        fixture.addMatch(genMatch("Palmeiras", "Atlético-GO", "Pacaembu", -1, -1, 25, 11, 17, 00));
+        fixture.addMatch(genMatch("Internacional", "Portuguesa", "Beira-Rio", -1, -1, 25, 11, 17, 00));
+        fixture.addMatch(genMatch("Cruzeiro", "Coritiba", "Arena Independência", -1, -1, 25, 11, 17, 00));
+        fixture.addMatch(genMatch("Ponte Preta", "São Paulo", "Moisés Lucarelli", -1, -1, 25, 11, 17, 00));
+        fixture.addMatch(genMatch("Figueirense", "Grêmio", "Orlando Scarpelli", -1, -1, 25, 11, 17, 00));
+        fixture.addMatch(genMatch("Sport", "Fluminense", "Ilha do Retiro", -1, -1, 25, 11, 17, 00));
+        fixture.addMatch(genMatch("Bahia", "Náutico", "Pituaçu", -1, -1, 25, 11, 17, 00));
+        tm.put(fixture.getNumber(), fixture);
+
+        fixture = new Fixture(38);
+        fixture.addMatch(genMatch("Flamengo", "Botafogo", "Engenhão", -1, -1, 2, 12, 17, 00)); //TODO estadio
+        fixture.addMatch(genMatch("Fluminense", "Vasco", "Engenhão", -1, -1, 2, 12, 17, 00)); //TODO estadio
+        fixture.addMatch(genMatch("Santos", "Palmeiras", "Vila Belmiro", -1, -1, 2, 12, 17, 00));
+        fixture.addMatch(genMatch("São Paulo", "Corinthians", "Morumbi", -1, -1, 2, 12, 17, 00));
+        fixture.addMatch(genMatch("Grêmio", "Internacional", "Olímpico", -1, -1, 2, 12, 17, 00));
+        fixture.addMatch(genMatch("Atlético-MG", "Cruzeiro", "Arena Independência", -1, -1, 2, 12, 17, 00));
+        fixture.addMatch(genMatch("Portuguesa", "Ponte Preta", "Canindé", -1, -1, 2, 12, 17, 00));
+        fixture.addMatch(genMatch("Coritiba", "Figueirense", "Couto Pereira", -1, -1, 2, 12, 17, 00));
+        fixture.addMatch(genMatch("Náutico", "Sport", "Aflitos", -1, -1, 2, 12, 17, 00));
+        fixture.addMatch(genMatch("Atlético-GO", "Bahia", "Serra Dourada", -1, -1, 2, 12, 17, 00));
+        tm.put(fixture.getNumber(), fixture);
+
+        return tm;
+	}
+
+	private TreeMap<Integer, Fixture> getMatchesB(){
+		TreeMap<Integer, Fixture> tm = new TreeMap<Integer, Fixture>();
+
+		Fixture fixture = new Fixture(1);
+		fixture.addMatch(genMatch("Ipatinga", "ABC", "Ipatingão", 1, 1, 18, 5, 21, 00, true));
+		fixture.addMatch(genMatch("Ceará", "América-MG", "Presidente Vargas", 1, 2, 18, 5, 21, 00, true));
+		fixture.addMatch(genMatch("CRB", "Bragantino", "Rei Pelé", 0, 2, 18, 5, 21, 00, true));
+		fixture.addMatch(genMatch("Joinville", "Atlético-PR", "Arena Joinville", 1, 4, 19, 5, 16, 20, true));
+		fixture.addMatch(genMatch("Criciúma", "Guaratinguetá", "Heriberto Hulse", 4, 1, 19, 5, 16, 20, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Vitória", "Arena Barueri", 0, 1, 19, 5, 16, 20, true));
+		fixture.addMatch(genMatch("Paraná", "Guarani", "Durival de Britto", 1, 1, 19, 5, 16, 20, true));
+		fixture.addMatch(genMatch("América-RN", "Goiás", "Nazarenão", 5, 2, 19, 5, 16, 20, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Avaí", "Melão", 2, 2, 19, 5, 16, 20, true));
+		fixture.addMatch(genMatch("São Caetano", "Asa", "Anacleto Campanella", 0, 1, 19, 5, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(2);
+		fixture.addMatch(genMatch("Avaí", "São Caetano", "Ressacada", 1, 0, 22, 5, 21, 00, true));
+		fixture.addMatch(genMatch("Guarani", "Boa Esporte", "Brinco de Ouro", 0, 0, 25, 5, 21, 00, true));
+		fixture.addMatch(genMatch("ABC", "Joinville", "Frasqueirão", 0, 0, 25, 5, 21, 00, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Ceará", "Dario Rodrigues Leite", 2, 1, 26, 5, 16, 20, true));
+		fixture.addMatch(genMatch("América-MG", "CRB", "Arena do Jacaré", 4, 0, 26, 5, 16, 20, true));
+		fixture.addMatch(genMatch("Bragantino", "Criciúma", "Nabi Abi Chedid", 3, 4, 26, 5, 16, 20, true));
+		fixture.addMatch(genMatch("Asa", "Grêmio Barueri", "Municipal Arapiraca", 1, 1, 26, 5, 21, 00, true));
+		fixture.addMatch(genMatch("Goiás", "Paraná", "Serra Dourada", 2, 0, 5, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Vitória", "América-RN", "Barradão", 2, 2, 5, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Ipatinga", "Gigante do Itiberê", 1, 0, 10, 7, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(3);
+		fixture.addMatch(genMatch("Joinville", "Guarani", "Arena Joinville", 2, 0, 29, 5, 19, 30, true));
+		fixture.addMatch(genMatch("São Caetano", "Bragantino", "Anacleto Campanella", 2, 0, 29, 5, 19, 30, true));
+		fixture.addMatch(genMatch("Ceará", "Goiás", "Presidente Vargas", 2, 2, 29, 5, 19, 30, true));
+		fixture.addMatch(genMatch("América-RN", "Avaí", "Nazarenão", 1, 0, 29, 5, 19, 30, true));
+		fixture.addMatch(genMatch("CRB", "Guaratinguetá", "Rei Pelé", 3, 1, 29, 5, 19, 30, true));
+		fixture.addMatch(genMatch("Criciúma", "Vitória", "Heriberto Hulse", 2, 1, 29, 5, 21, 50, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "ABC", "Arena Barueri", 0, 3, 29, 5, 21, 50, true));
+		fixture.addMatch(genMatch("Ipatinga", "Asa", "Lamegão", 1, 0, 29, 5, 21, 50, true));
+		fixture.addMatch(genMatch("Paraná", "América-MG", "Durival de Britto", 0, 1, 29, 5, 21, 50, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Atlético-PR", "Melão", 2, 1, 29, 5, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(4);
+		fixture.addMatch(genMatch("Goiás", "CRB", "Serra Dourada", 1, 0, 1, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "América-RN", "Dario Rodrigues Leite", 0, 2, 1, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Grêmio Barueri", "Durival de Britto", 3, 0, 1, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Avaí", "Joinville", "Ressacada", 1, 2, 2, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Vitória", "Ipatinga", "Barradão", 4, 0, 2, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Guarani", "Ceará", "Brinco de Ouro", 4, 1, 2, 6, 16, 20, true));
+		fixture.addMatch(genMatch("América-MG", "Criciúma", "Arena do Jacaré", 3, 0, 2, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Bragantino", "Paraná", "Nabi Abi Chedid", 3, 3, 2, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Asa", "Boa Esporte", "Municipal Arapiraca", 3, 2, 2, 6, 16, 20, true));
+		fixture.addMatch(genMatch("ABC", "São Caetano", "Frasqueirão", 0, 1, 2, 6, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(5);
+		fixture.addMatch(genMatch("Joinville", "Asa", "Arena Joinville", 1, 0, 5, 6, 21, 00, true));
+		fixture.addMatch(genMatch("São Caetano", "América-MG", "Anacleto Campanella", 1, 1, 5, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "Avaí", "Lamegão", 1, 2, 8, 6, 21, 00, true));
+		fixture.addMatch(genMatch("América-RN", "Bragantino", "Nazarenão", 2, 1, 8, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Vitória", "Melão", 1, 2, 8, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Criciúma", "Goiás", "Heriberto Hulse", 3, 0, 9, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Guarani", "Arena Barueri", 2, 2, 9, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Paraná", "Guaratinguetá", "Durival de Britto", 3, 2, 9, 6, 16, 20, true));
+		fixture.addMatch(genMatch("CRB", "Atlético-PR", "Rei Pelé", 2, 0, 9, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Ceará", "ABC", "Presidente Vargas", 4, 2, 9, 6, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(6);
+		fixture.addMatch(genMatch("Grêmio Barueri", "Paraná", "Arena Barueri", 1, 2, 12, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "Boa Esporte", "Lamegão", 1, 2, 12, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Vitória", "Guarani", "Barradão", 1, 0, 12, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Avaí", "América-MG", "Ressacada", 2, 0, 15, 6, 21, 00, true));
+		fixture.addMatch(genMatch("São Caetano", "América-RN", "Anacleto Campanella", 3, 2, 15, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Joinville", "Ceará", "Arena Joinville", 1, 1, 16, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Goiás", "Gigante do Itiberê", 0, 0, 16, 6, 16, 20, true));
+		fixture.addMatch(genMatch("ABC", "CRB", "Frasqueirão", 4, 2, 16, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Bragantino", "Guaratinguetá", "Nabi Abi Chedid", 1, 0, 16, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Asa", "Criciúma", "Municipal Arapiraca", 1, 2, 16, 6, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(7);
+		fixture.addMatch(genMatch("América-RN", "Asa", "Nazarenão", 2, 0, 19, 6, 21, 00, true));
+		fixture.addMatch(genMatch("América-MG", "Bragantino", "Arena do Jacaré", 3, 2, 19, 6, 21, 00, true));
+		fixture.addMatch(genMatch("CRB", "São Caetano", "Rei Pelé", 2, 2, 19, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Avaí", "Dario Rodrigues Leite", 1, 1, 22, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Paraná", "Joinville", "Durival de Britto", 2, 0, 22, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Goiás", "Vitória", "Serra Dourada", 4, 3, 23, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Criciúma", "Ipatinga", "Heriberto Hulse", 3, 2, 23, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Guarani", "ABC", "Brinco de Ouro", 1, 1, 23, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Ceará", "Atlético-PR", "Presidente Vargas", 1, 0, 23, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Grêmio Barueri", "Melão", 3, 1, 23, 6, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(8);
+		fixture.addMatch(genMatch("Goiás", "Guaratinguetá", "Serra Dourada", 1, 1, 26, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "América-MG", "Arena Barueri", 0, 1, 26, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "Ceará", "Lamegão", 1, 2, 26, 6, 21, 00, true));
+		fixture.addMatch(genMatch("América-RN", "Guarani", "Nazarenão", 1, 0, 29, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Asa", "ABC", "Municipal Arapiraca", 3, 1, 29, 6, 21, 00, true));
+		fixture.addMatch(genMatch("Criciúma", "CRB", "Heriberto Hulse", 2, 0, 30, 6, 16, 20, true));
+		fixture.addMatch(genMatch("São Caetano", "Paraná", "Anacleto Campanella", 1, 1, 30, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Vitória", "Avaí", "Barradão", 2, 0, 30, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Bragantino", "Gigante do Itibirê", 0, 0, 30, 6, 16, 20, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Joinville", "Melão", 0, 0, 30, 6, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(9);
+		fixture.addMatch(genMatch("Guarani", "Ipatinga", "Brinco de Ouro", 1, 0, 3, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "São Caetano", "Dario Rodrigues Leite", 0, 1, 3, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Joinville", "Grêmio Barueri", "Arena Joinville", 4, 0, 6, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Avaí", "Asa", "Ressacada", 2, 1, 6, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Ceará", "Criciúma", "Presidente Vargas", 2, 2, 6, 7, 21, 00, true));
+		fixture.addMatch(genMatch("América-MG", "Atlético-PR", "Arena do Jacaré", 3, 2, 7, 7, 16, 20, true));
+		fixture.addMatch(genMatch("ABC", "Vitória", "Frasqueirão", 0, 1, 7, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Bragantino", "Goiás", "Nabi Abi Chedid", 3, 3, 7, 7, 16, 20, true));
+		fixture.addMatch(genMatch("CRB", "América-RN", "Rei Pelé", 4, 2, 7, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Paraná", "Boa Esporte", "Durival de Britto", 2, 0, 7, 7, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(10);
+		fixture.addMatch(genMatch("Criciúma", "Boa Esporte", "Heriberto Hulse", 4, 3, 10, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Asa", "Dario Rodrigues Leite", 2, 1, 10, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Vitória", "Paraná", "Barradão", 4, 3, 10, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Goiás", "América-MG", "Serra Dourada", 2, 0, 13, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "Grêmio Barueri", "Lamegão", 0, 3, 13, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Atlético-PR", "ABC", "Durival de Britto", 2, 1, 13, 7, 21, 00, true));
+		fixture.addMatch(genMatch("São Caetano", "Joinville", "Anacleto Campanella", 1, 0, 14, 7, 16, 20, true));
+		fixture.addMatch(genMatch("América-RN", "Ceará", "Nazarenão", 1, 1, 14, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Bragantino", "Guarani", "Nabi Abi Chedid", 0, 0, 14, 7, 16, 20, true));
+		fixture.addMatch(genMatch("CRB", "Avaí", "Rei Pelé", 2, 0, 14, 7, 16, 20, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(11);
+		fixture.addMatch(genMatch("Joinville", "Ipatinga", "Arena Joinville", 6, 0, 17, 7, 19, 30, true));
+		fixture.addMatch(genMatch("Guarani", "Goiás", "Brinco de Ouro", 1, 2, 17, 7, 19, 30, true));
+		fixture.addMatch(genMatch("Ceará", "São Caetano", "Presidente Vargas", 2, 2, 17, 7, 19, 30, true));
+		fixture.addMatch(genMatch("Boa Esporte", "CRB", "Melão", 0, 0, 17, 7, 19, 30, true));
+		fixture.addMatch(genMatch("Asa", "Vitória", "Municipal Arapiraca", 2, 3, 17, 7, 19, 30, true));
+		fixture.addMatch(genMatch("Avaí", "Atlético-PR", "Serra Dourada", 1, 2, 17, 7, 21, 50, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Bragantino", "Arena Barueri", 0, 0, 17, 7, 21, 50, true));
+		fixture.addMatch(genMatch("América-MG", "Guaratinguetá", "Arena do Jacaré", 2, 1, 17, 7, 21, 50, true));
+		fixture.addMatch(genMatch("Paraná", "América-RN", "Durival Britto", 1, 0, 17, 7, 21, 50, true));
+		fixture.addMatch(genMatch("ABC", "Criciúma", "Frasqueirão", 2, 2, 17, 7, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(12);
+		fixture.addMatch(genMatch("São Caetano", "Grêmio Barueri", "Anacleto Campanella", 3, 0, 20, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Boa Esporte", "Dario Rodrigues Leite", 0, 0, 20, 7, 21, 00, true));
+		fixture.addMatch(genMatch("América-MG", "Guarani", "Arena do Jacaré", 1, 1, 20, 7, 21, 00, true));
+		fixture.addMatch(genMatch("América-RN", "Ipatinga", "Nazarenão", 2, 1, 20, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Criciúma", "Paraná", "Heriberto Hulse", 2, 1, 21, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Goiás", "Avaí", "Serra Dourada", 2, 0, 21, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Ceará", "Asa", "Presidente Vargas", 3, 2, 21, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Vitória", "Durival de Britto", 0, 1, 21, 7, 16, 20, true));
+		fixture.addMatch(genMatch("CRB", "Joinville", "Rei Pelé", 4, 3, 21, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Bragantino", "ABC", "Nabi Abi Chedid", 1, 2, 21, 7, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(13);
+		fixture.addMatch(genMatch("Boa Esporte", "América-MG", "Melão", 2, 1, 24, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Asa", "Goiás", "Municipal Arapiraca", 0, 1, 24, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Joinville", "América-RN", "Arena Joinville", 1, 0, 24, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Criciúma", "Arena Barueri", 1, 4, 27, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Avaí", "Bragantino", "Ressacada", 1, 0, 27, 7, 21, 00, true));
+		fixture.addMatch(genMatch("Guarani", "Atlético-PR", "Brinco de Ouro", 2, 1, 28, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Vitória", "CRB", "Barradão", 1, 0, 28, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Paraná", "Ceará", "Durival de Britto", 1, 0, 28, 7, 16, 20, true));
+		fixture.addMatch(genMatch("ABC", "Guaratinguetá", "Frasqueirão", 3, 0, 28, 7, 16, 20, true));
+		fixture.addMatch(genMatch("Ipatinga", "São Caetano", "Lamegão", 1, 2, 28, 7, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(14);
+		fixture.addMatch(genMatch("América-MG", "Joinville", "Arena do Jacaré", 0, 2, 31, 7, 19, 30, true));
+		fixture.addMatch(genMatch("Goiás", "ABC", "Serra Dourada", 1, 1, 31, 7, 19, 30, true));
+		fixture.addMatch(genMatch("Criciúma", "Guarani", "Heriberto Hulse", 2, 1, 31, 7, 19, 30, true));
+		fixture.addMatch(genMatch("Paraná", "Avaí", "Durival de Britto", 1, 1, 31, 7, 19, 30, true));
+		fixture.addMatch(genMatch("Ceará", "Boa Esporte", "Presidente Vargas", 1, 1, 31, 7, 19, 30, true));
+		fixture.addMatch(genMatch("São Caetano", "Vitória", "Anacleto Campanella", 0, 0, 31, 7, 21, 50, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Atlético-PR", "Dario Rodrigues Leite", 0, 1, 31, 7, 21, 50, true));
+		fixture.addMatch(genMatch("América-RN", "Grêmio Barueri", "Nazarenão", 2, 1, 31, 7, 21, 50, true));
+		fixture.addMatch(genMatch("Bragantino", "Asa", "Nabi Abi Chedid", 2, 2, 31, 7, 21, 50, true));
+		fixture.addMatch(genMatch("CRB", "Ipatinga", "Rei Pelé", 2, 0, 31, 7, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(15);
+		fixture.addMatch(genMatch("Grêmio Barueri", "CRB", "Arena Barueri", 0, 0, 3, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "Goiás", "Lamegão", 0, 6, 3, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Vitória", "Bragantino", "Barradão", 0, 1, 3, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Boa Esporte", "América-RN", "Melão", 1, 1, 3, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Joinville", "Criciúma", "Arena Joinville", 3, 1, 4, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Avaí", "Ceará", "Ressacada", 2, 1, 4, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Guarani", "Guaratinguetá", "Brinco de Ouro", 2, 1, 4, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Atlético-PR", "São Caetano", "Durival de Britto", 0, 1, 4, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Asa", "América-MG", "Municipal Arapiraca", 3, 2, 4, 8, 16, 20, true));
+		fixture.addMatch(genMatch("ABC", "Paraná", "Frasqueirão", 2, 0, 4, 8, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(16);
+		fixture.addMatch(genMatch("Avaí", "ABC", "Ressacada", 3, 1, 7, 8, 21, 00, true));
+		fixture.addMatch(genMatch("América-RN", "Atlético-PR", "Nazarenão", 0, 2, 7, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Bragantino", "Ipatinga", "Nabi Abi Chedid", 0, 2, 7, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Ceará", "Grêmio Barueri", "Presidente Vargas", 2, 0, 10, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Asa", "Guarani", "Municipal Arapiraca", 1, 0, 10, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Goiás", "Boa Esporte", "Serra Dourada", 2, 0, 11, 8, 16, 20, true));
+		fixture.addMatch(genMatch("São Caetano", "Criciúma", "Anacleto Campanella", 1, 1, 11, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Joinville", "Dario Rodrigues Leite", 0, 3, 11, 8, 16, 20, true));
+		fixture.addMatch(genMatch("América-MG", "Vitória", "Arena do Jacaré", 1, 2, 11, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Paraná", "CRB", "Durival de Britto", 4, 0, 11, 8, 16, 20, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(17);
+		fixture.addMatch(genMatch("Joinville", "Bragantino", "Arena Joinville", 1, 0, 14, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Criciúma", "América-RN", "Heriberto Hulse", 4, 3, 14, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Ipatinga", "Paraná", "Lamegão", 2, 0, 14, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Vitória", "Guaratinguetá", "Barradão", 2, 0, 14, 8, 19, 30, true));
+		fixture.addMatch(genMatch("CRB", "Ceará", "Rei Pelé", 0, 2, 14, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Guarani", "Avaí", "Brinco de Ouro", 0, 2, 14, 8, 21, 50, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Goiás", "Arena Barueri", 2, 0, 14, 8, 21, 50, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Asa", "Durival de Britto", 1, 0, 14, 8, 21, 50, true));
+		fixture.addMatch(genMatch("ABC", "América-MG", "Frasqueirão", 0, 2, 14, 8, 21, 50, true));
+		fixture.addMatch(genMatch("Boa Esporte", "São Caetano", "Melão", 1, 3, 14, 8, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(18);
+		fixture.addMatch(genMatch("Vitória", "Joinville", "Barradão", 2, 1, 17, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Avaí", "Grêmio Barueri", "Ressacada", 2, 1, 17, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Guarani", "CRB", "Brinco de Ouro", 4, 0, 17, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Ipatinga", "Dario Rodrigues Leite", 3, 1, 17, 8, 21, 00, true));
+		fixture.addMatch(genMatch("América-MG", "América-RN", "Arena do Jacaré", 1, 1, 17, 8, 21, 50, true));
+		fixture.addMatch(genMatch("Goiás", "São Caetano", "Serra Dourada", 0, 0, 18, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Criciúma", "Durival de Britto", 1, 0, 18, 8, 16, 20, true));
+		fixture.addMatch(genMatch("ABC", "Boa Esporte", "Frasqueirão", 1, 2, 18, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Bragantino", "Ceará", "Nabi Abi Chedid", 1, 3, 18, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Asa", "Paraná", "Municipal Arapiraca", 1, 1, 18, 8, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(19);
+		fixture.addMatch(genMatch("Criciúma", "Avaí", "Heriberto Hulse", 2, 0, 21, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Guaratinguetá", "Arena Barueri", 2, 3, 21, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "América-MG", "Lamegão", 1, 0, 21, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Ceará", "Vitória", "Presidente Vargas", 1, 3, 24, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Joinville", "Goiás", "Arena Joinville", 1, 0, 25, 8, 16, 00, true));
+		fixture.addMatch(genMatch("São Caetano", "Guarani", "Anacleto Campanella", 1, 2, 25, 8, 16, 00, true));
+		fixture.addMatch(genMatch("Paraná", "Atlético-PR", "Durival de Britto", 1, 2, 25, 8, 16, 00, true));
+		fixture.addMatch(genMatch("América-RN", "ABC", "Nazarenão", 1, 0, 25, 8, 16, 20, true));
+		fixture.addMatch(genMatch("CRB", "Asa", "Rei Pelé", 0, 1, 25, 8, 16, 20, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Bragantino", "Melão", 3, 0, 25, 8, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(20);
+		fixture.addMatch(genMatch("Avaí", "Boa Esporte", "Ressacada", 2, 1, 28, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Guarani", "Paraná", "Brinco de Ouro", 0, 0, 28, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Vitória", "Grêmio Barueri", "Barradão", 1, 0, 28, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Bragantino", "CRB", "Nabi Abi Chedid", 0, 2, 28, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Joinville", "Durival de Britto", 1, 1, 28, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Goiás", "América-RN", "Serra Dourada", 1, 0, 28, 8, 21, 50, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Criciúma", "Martins Pereira", 2, 1, 28, 8, 21, 50, true));
+		fixture.addMatch(genMatch("América-MG", "Ceará", "Arena Independência", 1, 3, 28, 8, 21, 50, true));
+		fixture.addMatch(genMatch("ABC", "Ipatinga", "Frasqueirão", 2, 2, 28, 8, 21, 50, true));
+		fixture.addMatch(genMatch("Asa", "São Caetano", "Municipal Arapiraca", 4, 1, 28, 8, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(21);
+		fixture.addMatch(genMatch("Boa Esporte", "Guarani", "Melão", 1, 2, 31, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Criciúma", "Bragantino", "Heriberto Hulse", 3, 2, 31, 8, 19, 30, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Asa", "Arena Barueri", 1, 0, 31, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Ceará", "Guaratinguetá", "Presidente Vargas", 1, 1, 31, 8, 21, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "Atlético-PR", "Lamegão", 1, 1, 31, 8, 21, 50, true));
+		fixture.addMatch(genMatch("Joinville", "ABC", "Arena Joinville", 0, 0, 1, 9, 16, 00, true));
+		fixture.addMatch(genMatch("São Caetano", "Avaí", "Anacleto Campanella", 1, 0, 1, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Paraná", "Goiás", "Durival de Britto", 1, 3, 1, 9, 16, 00, true));
+		fixture.addMatch(genMatch("América-RN", "Vitória", "Nazarenão", 2, 2, 1, 9, 16, 00, true));
+		fixture.addMatch(genMatch("CRB", "América-MG", "Rei Pelé", 0, 1, 1, 9, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(22);
+		fixture.addMatch(genMatch("Atlético-PR", "Boa Esporte", "J. Malucelli", 2, 1, 4, 9, 15, 00, true));
+		fixture.addMatch(genMatch("Avaí", "América-RN", "Ressacada", 2, 2, 4, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Guarani", "Joinville", "Brinco de Ouro", 2, 1, 4, 9, 19, 30, true));
+		fixture.addMatch(genMatch("América-MG", "Paraná", "Arena do Jacaré", 0, 0, 4, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Vitória", "Criciúma", "Barradão", 2, 2, 4, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Goiás", "Ceará", "Serra Dourada", 0, 0, 4, 9, 21, 50, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "CRB", "Martins Pereira", 1, 2, 4, 9, 21, 50, true));
+		fixture.addMatch(genMatch("ABC", "Grêmio Barueri", "Frasqueirão", 2, 1, 4, 9, 21, 50, true));
+		fixture.addMatch(genMatch("Bragantino", "São Caetano", "Nabi Abi Chedid", 2, 3, 4, 9, 21, 50, true));
+		fixture.addMatch(genMatch("Asa", "Ipatinga", "Municipal Arapiraca", 3, 0, 4, 9, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(23);
+		fixture.addMatch(genMatch("Ceará", "Guarani", "Presidente Vargas", 1, 0, 7, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Paraná", "Bragantino", "Durival de Britto", 2, 0, 7, 9, 19, 30, true));
+		fixture.addMatch(genMatch("América-RN", "Guaratinguetá", "Nazarenão", 4, 1, 7, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Asa", "Melão", 3, 2, 7, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Atlético-PR", "Arena Barueri", 0, 6, 7, 9, 21, 50, true));
+		fixture.addMatch(genMatch("Joinville", "Avaí", "Arena Joinville", 1, 0, 8, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Criciúma", "América-MG", "Heriberto Hulse", 0, 4, 8, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "Vitória", "Lamegão", 1, 1, 8, 9, 16, 00, true));
+		fixture.addMatch(genMatch("CRB", "Goiás", "Rei Pelé", 0, 2, 8, 9, 16, 00, true));
+		fixture.addMatch(genMatch("São Caetano", "ABC", "Anacleto Campanella", 0, 1, 8, 9, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(24);
+		fixture.addMatch(genMatch("Atlético-PR", "CRB", "J. Malucelli", 4, 1, 11, 9, 15, 00, true));
+		fixture.addMatch(genMatch("Avaí", "Ipatinga", "Ressacada", 2, 1, 11, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Paraná", "Martins Pereira", 2, 0, 11, 9, 19, 30, true));
+		fixture.addMatch(genMatch("América-MG", "São Caetano", "Arena Independência", 2, 5, 11, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Vitória", "Boa Esporte", "Barradão", 3, 2, 11, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Asa", "Joinville", "Municipal Arapiraca", 1, 0, 11, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Goiás", "Criciúma", "Serra Dourada", 1, 0, 11, 9, 21, 50, true));
+		fixture.addMatch(genMatch("Guarani", "Grêmio Barueri", "Brinco de Ouro", 1, 0, 11, 9, 21, 50, true));
+		fixture.addMatch(genMatch("ABC", "Ceará", "Frasqueirão", 0, 1, 11, 9, 21, 50, true));
+		fixture.addMatch(genMatch("Bragantino", "América-RN", "Nabi Abi Chedid", 1, 0, 11, 9, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(25);
+		fixture.addMatch(genMatch("Criciúma", "Asa", "Heriberto Hulse", 2, 1, 14, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Paraná", "Grêmio Barueri", "Durival de Britto", 1, 1, 14, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Bragantino", "Martins Pereira", 2, 0, 14, 9, 21, 00, true));
+		fixture.addMatch(genMatch("América-RN", "São Caetano", "Nazarenão", 0, 2, 14, 9, 21, 00, true));
+		fixture.addMatch(genMatch("América-MG", "Avaí", "Arena Independência", 1, 0, 14, 9, 21, 50, true));
+		fixture.addMatch(genMatch("Goiás", "Atlético-PR", "Serra Dourada", 3, 2, 15, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Guarani", "Vitória", "Brinco de Ouro", 0, 0, 15, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Ceará", "Joinville", "Presidente Vargas", 4, 3, 15, 9, 16, 00, true));
+		fixture.addMatch(genMatch("CRB", "ABC", "Rei Pelé", 3, 3, 15, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Ipatinga", "Melão", 2, 1, 15, 9, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(26);
+		fixture.addMatch(genMatch("Bragantino", "América-MG", "Nabi Abi Chedid", 2, 0, 18, 9, 21, 00, true));
+		fixture.addMatch(genMatch("Avaí", "Guaratinguetá", "Ressacada", 2, 0, 21, 9, 19, 300, true));
+		fixture.addMatch(genMatch("Joinville", "Paraná", "Arena Joinville", 3, 1, 21, 9, 21, 00, true));
+		fixture.addMatch(genMatch("ABC", "Guarani", "Frasqueirão", 3, 1, 21, 9, 21, 00, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Ceará", "Janguito Malucelli", 2, 1, 22, 9, 15, 00, true));
+		fixture.addMatch(genMatch("São Caetano", "CRB", "Anacleto Campanella", 3, 2, 22, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Boa Esporte", "Arena Barueri", 1, 2, 22, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "Criciúma", "Lamegão", 2, 3, 22, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Vitória", "Goiás", "Barradão", 3, 1, 22, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Asa", "América-RN", "Municipal Arapiraca", 0, 2, 22, 9, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(27);
+		fixture.addMatch(genMatch("ABC", "Asa", "Frasqueirão", 1, 1, 25, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Joinville", "Boa Esporte", "Arena Joinville", 3, 0, 25, 9, 21, 00, true));
+		fixture.addMatch(genMatch("América-MG", "Grêmio Barueri", "Arena Independência", 1, 2, 25, 9, 21, 00, true));
+		fixture.addMatch(genMatch("Paraná", "São Caetano", "Durival de Britto", 2, 1, 28, 9, 19, 30, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Goiás", "Martins Pereira", 0, 3, 28, 9, 21, 00, true));
+		fixture.addMatch(genMatch("CRB", "Criciúma", "Rei Pelé", 0, 2, 28, 9, 21, 00, true));
+		fixture.addMatch(genMatch("Avaí", "Vitória", "Ressacada", 2, 0, 29, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Guarani", "América-RN", "Brinco de Ouro", 0, 0, 29, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Bragantino", "Atlético-PR", "Nabi Abi Chedid", 2, 1, 29, 9, 16, 00, true));
+		fixture.addMatch(genMatch("Ceará", "Ipatinga", "Presidente Vargas", 1, 1, 29, 9, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(28);
+		fixture.addMatch(genMatch("Asa", "Avaí", "Municipal Arapiraca", 1, 0, 2, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Goiás", "Bragantino", "Serra Dourada", 1, 0, 2, 10, 21, 00, true));
+		fixture.addMatch(genMatch("São Caetano", "Guaratinguetá", "Anacleto Campanella", 1, 0, 2, 10, 21, 00, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Joinville", "Arena Barueri", 1, 1, 5, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Ipatinga", "Guarani", "Lamegão", 0, 0, 5, 10, 19, 30, true));
+		fixture.addMatch(genMatch("América-RN", "CRB", "Nazarenão", 3, 3, 5, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Criciúma", "Ceará", "Heriberto Hulse", 2, 1, 5, 10, 21, 00, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Paraná", "Melão", 2, 1, 5, 10, 21, 50, true));
+		fixture.addMatch(genMatch("Atlético-PR", "América-MG", "J. Malucelli", 5, 4, 6, 10, 14, 00, true));
+		fixture.addMatch(genMatch("Vitória", "ABC", "Barradão", 1, 0, 6, 10, 16, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(29);
+		fixture.addMatch(genMatch("Joinville", "São Caetano", "Arena Joinville", 0, 0, 9, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Ipatinga", "Arena Barueri", 2, 0, 9, 10, 21, 00, true));
+		fixture.addMatch(genMatch("Asa", "Guaratinguetá", "Municipal Arapiraca", 3, 1, 9, 10, 21, 00, true));
+		fixture.addMatch(genMatch("ABC", "Atlético-PR", "Frasqueirão", 0, 1, 12, 10, 21, 00, true));
+		fixture.addMatch(genMatch("Guarani", "Bragantino", "Brinco de Ouro", 1, 2, 12, 10, 21, 00, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Criciúma", "Melão", 0, 4, 13, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Paraná", "Vitória", "Durival de Britto", 3, 1, 13, 10, 16, 00, true));
+		fixture.addMatch(genMatch("América-MG", "Goiás", "Arena do Jacaré", 1, 2, 13, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Ceará", "América-RN", "Presidente Vargas", 4, 0, 13, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Avaí", "CRB", "Ressacada", 1, 0, 13, 10, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(30);
+		fixture.addMatch(genMatch("Atlético-PR", "Avaí", "J. Malucelli", 3, 1, 16, 10, 15, 00, true));
+		fixture.addMatch(genMatch("Goiás", "Guarani", "Serra Dourada", 5, 0, 16, 10, 19, 30, true));
+		fixture.addMatch(genMatch("São Caetano", "Ceará", "Anacleto Campanella", 2, 0, 16, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Vitória", "Asa", "Barradão", 2, 0, 16, 10, 19, 30, true));
+		fixture.addMatch(genMatch("América-RN", "Paraná", "Nazarenão", 2, 1, 16, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Bragantino", "Grêmio Barueri", "Nabi Abi Chedid", 2, 2, 16, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Criciúma", "ABC", "Heriberto Hulse", 2, 0, 16, 10, 21, 50, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "América-MG", "Dario Rodrigues Leite", 1, 2, 16, 10, 21, 50, true));
+		fixture.addMatch(genMatch("CRB", "Boa Esporte", "Rei Pelé", 0, 0, 16, 10, 21, 50, true));
+		fixture.addMatch(genMatch("Ipatinga", "Joinville", "Lamegão", 1, 0, 16, 10, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(31);
+		fixture.addMatch(genMatch("Grêmio Barueri", "São Caetano", "Arena Barueri", 2, 2, 19, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Ipatinga", "América-RN", "Lamegão", 4, 0, 19, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Asa", "Ceará", "Municipal Arapiraca", 3, 0, 19, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Avaí", "Goiás", "Ressacada", 1, 4, 19, 10, 21, 50, true));
+		fixture.addMatch(genMatch("Joinville", "CRB", "Arena Joinville", 3, 1, 20, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Guarani", "América-MG", "Brinco de Ouro", 0, 3, 20, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Vitória", "Atlético-PR", "Barradão", 0, 2, 20, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Paraná", "Criciúma", "Couto Pereira", 1, 1, 20, 10, 16, 00, true));
+		fixture.addMatch(genMatch("ABC", "Bragantino", "Frasqueirão", 1, 0, 20, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Guaratinguetá", "Melão", 0, 1, 20, 10, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(32);
+		fixture.addMatch(genMatch("Atlético-PR", "Guarani", "Janguito Malucelli", 1, 1, 23, 10, 15, 00, true));
+		fixture.addMatch(genMatch("Goiás", "Asa", "Serra Dourada", 4, 0, 23, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Criciúma", "Grêmio Barueri", "Heriberto Hulse", 3, 4, 23, 10, 19, 30, true));
+		fixture.addMatch(genMatch("São Caetano", "Ipatinga", "Anacleto Campanella", 1, 1, 23, 10, 19, 30, true));
+		fixture.addMatch(genMatch("América-RN", "Joinville", "Nazarenão", 3, 1, 23, 10, 19, 30, true));
+		fixture.addMatch(genMatch("CRB", "Vitória", "Rei Pelé", 0, 1, 23, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "ABC", "Dario Leite", 2, 1, 23, 10, 21, 50, true));
+		fixture.addMatch(genMatch("América-MG", "Boa Esporte", "Arena Independência", 3, 2, 23, 10, 21, 50, true));
+		fixture.addMatch(genMatch("Ceará", "Paraná", "Presidente Vargas", 0, 1, 23, 10, 21, 50, true));
+		fixture.addMatch(genMatch("Bragantino", "Avaí", "Nabi Abi Chedid", 1, 0, 23, 10, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(33);
+		fixture.addMatch(genMatch("Vitória", "São Caetano", "Barradão", 0, 1, 26, 10, 19, 30, true));
+		fixture.addMatch(genMatch("ABC", "Goiás", "Frasqueirão", 3, 2, 26, 10, 19, 30, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "América-RN", "Arena Barueri", 2, 3, 26, 10, 21, 00, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Ceará", "Melão", 1, 0, 26, 10, 21, 00, true));
+		fixture.addMatch(genMatch("Avaí", "Paraná", "Ressacada", 3, 1, 26, 10, 21, 50, true));
+		fixture.addMatch(genMatch("Atlético-PR", "Guaratinguetá", "Janguito Malucelli", 3, 0, 27, 10, 14, 00, true));
+		fixture.addMatch(genMatch("Joinville", "América-MG", "Arena Joinville", 2, 2, 27, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Ipatinga", "CRB", "Lamegão", 3, 2, 27, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Asa", "Bragantino", "Municipal Arapiraca", 1, 1, 27, 10, 16, 00, true));
+		fixture.addMatch(genMatch("Guarani", "Criciúma", "Brinco de Ouro", 1, 2, 27, 10, 16, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(34);
+		fixture.addMatch(genMatch("Goiás", "Ipatinga", "Serra Dourada", 4, 0, 30, 10, 21, 00, true));
+		fixture.addMatch(genMatch("América-MG", "Asa", "Arena Independência", 0, 1, 30, 10, 21, 00, true));
+		fixture.addMatch(genMatch("Paraná", "ABC", "Durival de Britto", 1, 2, 30, 10, 21, 00, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Guarani", "Dario Leite", 2, 1, 2, 11, 21, 00, true));
+		fixture.addMatch(genMatch("Ceará", "Avaí", "Presidente Vargas", 0, 1, 2, 11, 21, 00, true));
+		fixture.addMatch(genMatch("CRB", "Grêmio Barueri", "Rei Pelé", 2, 1, 2, 11, 21, 00, true));
+		fixture.addMatch(genMatch("Criciúma", "Joinville", "Heriberto Hulse", 2, 3, 3, 11, 16, 20, true));
+		fixture.addMatch(genMatch("São Caetano", "Atlético-PR", "Anacleto Campanella", 1, 3, 3, 11, 16, 20, true));
+		fixture.addMatch(genMatch("Bragantino", "Vitória", "Nabi Abi Chedid", 3, 0, 3, 11, 16, 20, true));
+		fixture.addMatch(genMatch("América-RN", "Boa Esporte", "Nazarenão", 4, 4, 3, 11, 21, 00, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(35);
+		fixture.addMatch(genMatch("Atlético-PR", "América-RN", "Durival de Britto", 1, 1, 6, 11, 16, 00, true));
+		fixture.addMatch(genMatch("Joinville", "Guaratinguetá", "Arena Joinville", 2, 1, 6, 11, 19, 30, true));
+		fixture.addMatch(genMatch("Criciúma", "São Caetano", "Heriberto Hulse", 0, 2, 6, 11, 19, 30, true));
+		fixture.addMatch(genMatch("Guarani", "Asa", "Brinco de Ouro", 2, 1, 6, 11, 19, 30, true));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Ceará", "Arena Barueri", 0, 0, 6, 11, 19, 30, true));
+		fixture.addMatch(genMatch("Ipatinga", "Bragantino", "Lamegão", 2, 1, 6, 11, 21, 50, true));
+		fixture.addMatch(genMatch("Vitória", "América-MG", "Barradão", 5, 3, 6, 11, 21, 50, true));
+		fixture.addMatch(genMatch("ABC", "Avaí", "Frasqueirão", 1, 2, 6, 11, 21, 50, true));
+		fixture.addMatch(genMatch("Boa Esporte", "Goiás", "Melão", 2, 2, 6, 11, 21, 50, true));
+		fixture.addMatch(genMatch("CRB", "Paraná", "Rei Pelé", 0, 2, 6, 11, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(36);
+		fixture.addMatch(genMatch("Goiás", "Grêmio Barueri", "Serra Dourada", 3, 0, 10, 11, 16, 20, true));
+		fixture.addMatch(genMatch("Guaratinguetá", "Vitória", "Dario Rodrigues Leite", 1, 0, 10, 11, 16, 20, true));
+		fixture.addMatch(genMatch("América-RN", "Criciúma", "Nazarenão", 1, 4, 10, 11, 16, 20, true));
+		fixture.addMatch(genMatch("América-MG", "ABC", "Arena do Jacaré", 3, 3, 10, 11, 17, 00, true));
+		fixture.addMatch(genMatch("Paraná", "Ipatinga", "Durival de Britto", 2, 0, 10, 11, 17, 00, true));
+		fixture.addMatch(genMatch("São Caetano", "Boa Esporte", "Anacleto Campanella", 4, 2, 10, 11, 19, 30, true));
+		fixture.addMatch(genMatch("Bragantino", "Joinville", "Nabi Abi Chedid", 1, 0, 10, 11, 19, 30, true));
+		fixture.addMatch(genMatch("Ceará", "CRB", "Presidente Vargas", 1, 2, 10, 11, 21, 00, true));
+		fixture.addMatch(genMatch("Avaí", "Guarani", "Ressacada", 1, 0, 10, 11, 21, 50, true));
+		fixture.addMatch(genMatch("Asa", "Atlético-PR", "Municipal Arapiraca", 2, 3, 10, 11, 21, 50, true));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(37);
+		fixture.addMatch(genMatch("Joinville", "Vitória", "Arena Joinville", -1, -1, 17, 11));
+		fixture.addMatch(genMatch("Criciúma", "Atlético-PR", "Heriberto Hulse", -1, -1, 17, 11));
+		fixture.addMatch(genMatch("São Caetano", "Goiás", "Anacleto Campanella", -1, -1, 17, 11));
+		fixture.addMatch(genMatch("Grêmio Barueri", "Avaí", "Arena Barueri", -1, -1, 17, 11));
+		fixture.addMatch(genMatch("Ipatinga", "Guaratinguetá", "Lamegão", -1, -1, 17, 11));
+		fixture.addMatch(genMatch("Ceará", "Bragantino", "Presidente Vargas", -1, -1, 17, 11));
+		fixture.addMatch(genMatch("Paraná", "Asa", "Durival de Britto", -1, -1, 17, 11));
+		fixture.addMatch(genMatch("América-RN", "América-MG", "Nazarenão", -1, -1, 17, 11));
+		fixture.addMatch(genMatch("Boa Esporte", "ABC", "Melão", -1, -1, 17, 11));
+		fixture.addMatch(genMatch("CRB", "Guarani", "Rei Pelé", -1, -1, 17, 11));
+		tm.put(fixture.getNumber(), fixture);
+
+		fixture = new Fixture(38);
+		fixture.addMatch(genMatch("Goiás", "Joinville", "Serra Dourada", -1, -1, 24, 11));
+		fixture.addMatch(genMatch("Avaí", "Criciúma", "Ressacada", -1, -1, 24, 11));
+		fixture.addMatch(genMatch("Guarani", "São Caetano", "Brinco de Ouro", -1, -1, 24, 11));
+		fixture.addMatch(genMatch("Guaratinguetá", "Grêmio Barueri", "Dario Rodrigues Leite", -1, -1, 24, 11));
+		fixture.addMatch(genMatch("América-MG", "Ipatinga", "Arena do Jacaré", -1, -1, 24, 11));
+		fixture.addMatch(genMatch("Vitória", "Ceará", "Barradão", -1, -1, 24, 11));
+		fixture.addMatch(genMatch("Atlético-PR", "Paraná", "Durival de Britto", -1, -1, 24, 11));
+		fixture.addMatch(genMatch("ABC", "América-RN", "Frasqueirão", -1, -1, 24, 11));
+		fixture.addMatch(genMatch("Bragantino", "Boa Esporte", "Nabi Abi Chedid", -1, -1, 24, 11));
+		fixture.addMatch(genMatch("Asa", "CRB", "Municipal Arapiraca", -1, -1, 24, 11));
+		tm.put(fixture.getNumber(), fixture);
+
+		return tm;
+	}
+	
+	private static Match genMatch(String name1, String name2, String stadium, int scr_h, int scr_a, int day, int month){
+        return new Match(name1, name2, stadium, scr_h, scr_a, -1, new GregorianCalendar(2012, month-1, day));
+    }
+
+	private static Match genMatch(String name1, String name2, String stadium, int scr_h, int scr_a, int day, int month, int hour, int minute){
+        Match match = genMatch(name1, name2, stadium, scr_h, scr_a, day, month);
+        match.getDate().set(Calendar.HOUR_OF_DAY, hour);
+        match.getDate().set(Calendar.MINUTE, minute);
+        return match;
+    }
+
+    private static Match genMatch(String name1, String name2, String stadium, int scr_h, int scr_a, int day, int month, int hour, int minute, Boolean done){
+       Match match = genMatch(name1, name2, stadium, scr_h, scr_a, day, month, hour, minute);
+       match.setDone(done);
+       return match;
+    }
+    
+    @SuppressLint("UseSparseArrays")
+	public HashMap<Integer, GregorianCalendar> getDates(TreeMap<Integer, Fixture> map){
+		HashMap<Integer, GregorianCalendar> tm = new HashMap<Integer, GregorianCalendar>();
+		
+		for (int j = 1; j <= map.size(); j++) {
+			try{				
+				tm.put(j, map.get(j).getMatches().get(0).getDate());
+			}
+			catch(NullPointerException e) {}
+			catch(IndexOutOfBoundsException e) {}
+		}
+		
+		return tm;
+	}
+}

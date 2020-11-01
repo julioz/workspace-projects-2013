@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/backrepeat" >
+
+    <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+        android:id="@+newstabsviewflowlayout/dul_loading"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+newstabsviewflowlayout/ll_ad"
+        android:layout_below="@+newstabsviewflowlayout/viewflowindic"
+        android:visibility="gone" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+newstabsviewflowlayout/viewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+newstabsviewflowlayout/ll_ad"
+        android:duplicateParentState="true" />
+
+    <LinearLayout
+        android:id="@+newstabsviewflowlayout/ll_ad"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom|center_horizontal" >
+
+        <com.google.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="a14f4bbc3448afb"
+            ads:loadAdOnCreate="true" />
+    </LinearLayout>
+
+</RelativeLayout>

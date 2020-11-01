@@ -1,0 +1,148 @@
+package br.com.zynger.libertadores;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.ListActivity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
+import br.com.zynger.libertadores.adapters.TorcidometerAdapter;
+import br.com.zynger.libertadores.asynctasks.AsyncTaskListener;
+import br.com.zynger.libertadores.asynctasks.GetFansTask;
+import br.com.zynger.libertadores.data.ClubsDB;
+import br.com.zynger.libertadores.model.Club;
+import br.com.zynger.libertadores.util.InternalStorageHandler;
+import br.com.zynger.libertadores.util.JsonUtil;
+import br.com.zynger.libertadores.view.DataUpdateLayout;
+import br.com.zynger.libertadores.view.HelveticaTextView;
+import br.com.zynger.libertadores.view.UpdateImageView;
+
+public class TorcidometerActivity extends ListActivity implements AsyncTaskListener {
+
+	private ClubsDB clubsDB;
+	private TreeMap<String, Club> clubs;
+	private InternalStorageHandler internalStorage;
+	
+	private TreeMap<String, Integer> fansMap;
+	
+	private SharedPreferences sharedPrefs;
+	
+	private DataUpdateLayout dul_update;
+	private UpdateImageView uiv_update;
+	private HelveticaTextView tv_title;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.torcidometeractivity);
+		clubsDB = ClubsDB.getSingletonObject(this);
+		clubs = clubsDB.getClubs();
+		internalStorage = new InternalStorageHandler(this);
+		
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		loadViews();
+		
+		uiv_update.setOnClickListener(new OnClickListener() {		
+			@Override
+			public void onClick(View v) {
+				uiv_update.rotateView();
+				new GetFansTask(TorcidometerActivity.this, TorcidometerActivity.this).execute();
+			}
+		});
+		
+		fansMap = restoreBackup();
+		if(sharedPrefs.getBoolean("cb_actsupdates", false)) uiv_update.performClick();
+		else{			
+			if(null != fansMap) setData(fansMap);
+			else new GetFansTask(this, this).execute();
+		}
+	}
+
+	private void loadViews() {
+		dul_update = (DataUpdateLayout) findViewById(R.torcidometeractivity.dul_update);
+		dul_update.addViewToToggle(getListView());
+		uiv_update = (UpdateImageView) findViewById(R.torcidometeractivity.titlebar_ivupdate);
+		
+		tv_title = (HelveticaTextView) findViewById(R.torcidometeractivity.titlebar_tvtitle);
+		
+		tv_title.setText(getString(R.string.homedashboard_fans).toUpperCase());
+	}
+	
+	@SuppressWarnings("unchecked")
+	private TreeMap<String, Integer> restoreBackup() {
+		String fansJsonString = (String) internalStorage.openBackup(InternalStorageHandler.FANS_JSON);
+		if(null != fansJsonString){
+			try{
+				TreeMap<String, Integer> fansMap = new TreeMap<String, Integer>();
+				JSONObject jsonFans = new JSONObject(fansJsonString);
+				
+				Iterator<String> iterator = jsonFans.keys();
+			    while(iterator.hasNext()){
+			        String key = iterator.next();
+			        int value = jsonFans.getInt(key);
+			        fansMap.put(key, Integer.valueOf(value));
+			    }
+			    return fansMap;
+			}catch(JSONException e){
+				e.printStackTrace();
+				return null;
+			}
+		} else return null;
+	}
+	
+	private void setData(TreeMap<String, Integer> tm) {
+		fansMap = tm;
+		ArrayList<Club> listClubs = new ArrayList<Club>();
+		Integer totalFans = 0;
+		for(TreeMap.Entry<String, Integer> entry : tm.entrySet()) {
+			String key = entry.getKey();
+			Integer value = entry.getValue();
+			
+			Club club = clubs.get(key);
+			
+			if(club != null){
+				club.setFans(value);
+				totalFans += value;
+				listClubs.add(club);
+			}
+		}
+		setListAdapter(new TorcidometerAdapter(this, listClubs, totalFans));
+	}
+
+	@Override
+	public void preExecution() {
+		dul_update.showFullLayout();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		TreeMap<String, Integer> fansMap = (TreeMap<String, Integer>) result;
+		
+		JSONObject json = JsonUtil.createFansJson(fansMap);
+		internalStorage.saveBackup(this, InternalStorageHandler.FANS_JSON, json.toString());
+		
+		setData(fansMap);
+		dul_update.hide();
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		if(null != fansMap){
+			setData(fansMap);
+			dul_update.hide();
+		}else{
+			dul_update.setOnlyText(getString(R.string.error_nodatabase));
+		}
+	}
+}

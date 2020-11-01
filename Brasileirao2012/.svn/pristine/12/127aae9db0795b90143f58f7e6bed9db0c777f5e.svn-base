@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_below="@+home/llLogo"
+	android:id="@+home/tl_buttons"
+	android:weightSum="3">
+	
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:weightSum="3"
+		android:layout_weight="1">
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_ranking_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibRanking"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="@string/rankingactivity_title"/>
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_table_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibTable"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="@string/tableflowactivity_title" />
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_striker_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibStrikers"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="@string/strikerslistactivity_title"/>
+
+		</LinearLayout>
+	</TableRow>
+	
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:weightSum="3"
+		android:layout_weight="1">
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_news_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibNews"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:text="@string/newsviewflowactivity_title"
+				android:gravity="center_horizontal" />
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_myteam_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibTeamGames"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="@string/myteamactivity_title" />
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_realtime_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibRealTime"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:gravity="center_horizontal"
+				android:text="@string/realtimematchesactivity_title" />
+
+		</LinearLayout>
+	</TableRow>
+	
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:weightSum="3"
+		android:layout_weight="1">
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_aprov_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibAprov"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:text="@string/aprovactivity_title"
+				android:gravity="center_horizontal" />
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_trophies_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibTrophies"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:text="@string/trophiesselectoractivity_title"
+				android:gravity="center_horizontal" />
+
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_weight="1">
+			
+			<ImageButton android:src="@drawable/ic_torcidometer_selector"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:id="@+home/ibTorcid"
+				android:background="@null"/>
+				
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:textStyle="bold"
+				android:textColor="@color/text_home_color"
+				android:text="@string/torcidometeractivity_title"
+				android:gravity="center_horizontal" />
+
+		</LinearLayout>
+	</TableRow>
+	
+</TableLayout>

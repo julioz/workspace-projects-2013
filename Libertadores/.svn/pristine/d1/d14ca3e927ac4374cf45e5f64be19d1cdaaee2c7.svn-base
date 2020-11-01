@@ -1,0 +1,159 @@
+package br.com.zynger.libertadores.adapters;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import br.com.zynger.libertadores.R;
+import br.com.zynger.libertadores.model.HistoricClub;
+import br.com.zynger.libertadores.view.ExpandAnimation;
+
+public class HistoryWinnersAndRunnerUpsAdapter extends ArrayAdapter<HistoricClub> implements OnClickListener {
+
+	private final LayoutInflater mInflater;
+	private static final int LAYOUTRESOURCEID = R.layout.history_winnersandrunnerupsrow;
+	private ArrayList<HistoricClub> objects;
+	
+	private String TEXT_PREFIX_WON;
+	private String TEXT_PREFIX_RUNNER_UP;
+	
+	public HistoryWinnersAndRunnerUpsAdapter(Context context, ArrayList<HistoricClub> objects) {
+		super(context, LAYOUTRESOURCEID);
+		this.mInflater = LayoutInflater.from(context);
+		this.objects = objects;
+		
+		this.TEXT_PREFIX_WON = getContext().getString(R.string.historyactivity_won);
+		this.TEXT_PREFIX_RUNNER_UP = getContext().getString(R.string.historyactivity_runnerup);
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public HistoricClub getItem(int position) {
+		return objects.get(position);
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+        HistoryRowHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUTRESOURCEID, parent, false);
+            
+            holder = new HistoryRowHolder();
+            holder.tvName = (TextView) row.findViewById(R.historyrow.tv_name);
+            holder.ivClubBadge = (ImageView) row.findViewById(R.historyrow.iv_badge);
+            holder.tvWonYears = (TextView) row.findViewById(R.historyrow.tv_won_years);
+            holder.tvRunnerUpYears = (TextView) row.findViewById(R.historyrow.tv_runnerup_years);
+            holder.llTrophies = (LinearLayout) row.findViewById(R.historyrow.ll_trophies);
+            
+            holder.toolbar = (LinearLayout) row.findViewById(R.historyrow.toolbar);
+            
+            row.setTag(holder);
+        }else{
+            holder = (HistoryRowHolder) row.getTag();
+            holder.llTrophies.removeAllViews();
+        }
+        
+        row.setClickable(true);
+        row.setFocusable(true);
+        row.setOnClickListener(this);
+        
+        if(View.VISIBLE == holder.toolbar.getVisibility()) showDetailsToolbar(row);
+
+        HistoricClub club = getItem(position);
+
+        String clubName = club.getName().toUpperCase();
+        int wonTimes = club.getWon().size();
+        int runnerUpTimes = club.getRunnerUp().size();
+        String wonYears = getFormattedStringFromArray(club.getWon());
+        String runnerUpYears = getFormattedStringFromArray(club.getRunnerUp());
+        
+        holder.tvName.setText(clubName);
+        holder.ivClubBadge.setImageResource(club.getBadgeResource(getContext()));
+        
+        addTrophyToLayout(holder.llTrophies, wonTimes, true);
+        addTrophyToLayout(holder.llTrophies, runnerUpTimes, false);
+        
+        if(null != wonYears) holder.tvWonYears.setText(TEXT_PREFIX_WON + ": " + wonYears);
+        else holder.tvWonYears.setVisibility(View.GONE);
+        
+        if(null != runnerUpYears) holder.tvRunnerUpYears.setText(TEXT_PREFIX_RUNNER_UP + ": " + runnerUpYears);
+        else holder.tvRunnerUpYears.setVisibility(View.GONE);
+
+        return row;
+	}
+	
+	private void addTrophyToLayout(LinearLayout ll, int times, boolean isGold) {
+		for (int i = 0; i < times; i++) {
+			View trophy = buildTrophyView(ll, isGold);
+			ll.addView(trophy);
+		}
+	}
+	
+	private View buildTrophyView(LinearLayout parent, boolean isGold) {
+		View view = mInflater.inflate(R.layout.historyrow_trophy_imageview, parent, false);
+		
+		int resource = (isGold ? R.drawable.img_trophy_gold : R.drawable.img_trophy_silver);
+		
+		((ImageView) view.findViewById(R.historyrow_trophy_imageview.imageview)).setImageResource(resource);
+		return view;
+	}
+	
+	private String getFormattedStringFromArray(ArrayList<String> al) {
+		String s = new String();
+		if(0 == al.size()) return null;
+		for (int i = 0; i < al.size(); i++) {
+			s = s.concat(al.get(i));
+			if(i != al.size()-1) s = s.concat(", ");
+		}
+		return s;
+	}
+	
+	private void showDetailsToolbar(View parent) {
+		View toolbar = parent.findViewById(R.historyrow.toolbar);
+
+        // Criando a animacao de expansao para o item
+        ExpandAnimation expandAni = new ExpandAnimation(toolbar, 0);
+        
+        // Iniciar a animacao
+        toolbar.startAnimation(expandAni);
+	}
+	
+	private void showDetailsToolbar(View parent, int duration) {
+		View toolbar = parent.findViewById(R.historyrow.toolbar);
+
+        // Criando a animacao de expansao para o item
+        ExpandAnimation expandAni = new ExpandAnimation(toolbar, duration);
+        
+        // Iniciar a animacao
+        toolbar.startAnimation(expandAni);
+	}
+
+	@Override
+	public void onClick(View v) {
+		showDetailsToolbar(v, 350);
+	}
+}
+
+class HistoryRowHolder
+{
+	TextView tvName;
+    ImageView ivClubBadge;
+    TextView tvWonYears;
+    TextView tvRunnerUpYears;
+    LinearLayout llTrophies;
+    
+    View toolbar;
+}

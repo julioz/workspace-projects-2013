@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/gradient_titlebar">
+        
+        <ImageView
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_matches"
+            android:id="@+matchdetailsactivity/titlebar_ivlogo"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+        
+        <br.com.zynger.libertadores.view.HelveticaTextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:id="@+matchdetailsactivity/titlebar_tvtitle"
+	        android:textColor="#FF3B3B3B"
+	        android:layout_centerVertical="true"
+	        android:layout_margin="5dp"
+	        android:layout_toRightOf="@+matchdetailsactivity/titlebar_ivlogo"
+	        android:gravity="left|center_vertical"
+	        android:layout_marginLeft="10dp"
+	        android:shadowColor="#FFFFFFFF"
+            android:shadowRadius="0.5"
+            android:shadowDx="1.5"
+            android:shadowDy="1.5"
+	        android:textSize="30dp"/>
+        
+        <ImageView
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_clipboard"
+            android:id="@+matchdetailsactivity/titlebar_ivclipboard"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    
+    <br.com.zynger.libertadores.view.DataUpdateLayout
+	    android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+matchdetailsactivity/dul_update" />
+    
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_width="fill_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:id="@+matchdetailsactivity/ll_stadium_referee"
+            android:orientation="horizontal"
+            android:layout_marginTop="3dp">
+            <TextView
+                android:gravity="left|center_vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:textColor="@android:color/black"
+                android:id="@+matchdetailsactivity/tv_stadium"/>
+            
+            <TextView
+                android:gravity="right|center_vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:textColor="@android:color/black"
+                android:id="@+matchdetailsactivity/tv_referee"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_below="@+matchdetailsactivity/ll_stadium_referee"
+            android:id="@+matchdetailsactivity/ll_scores"
+            android:layout_height="56dp">
+            
+            <View
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"/>
+            
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:padding="3dp"
+                android:layout_height="48dp"
+                android:id="@+matchdetailsactivity/iv_badge_home"/>
+            
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:id="@+matchdetailsactivity/tv_score_home"
+                android:textSize="26dp"/>
+            
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:textSize="26dp"
+                android:text="X"/>
+            
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/black"
+                android:gravity="center"
+                android:id="@+matchdetailsactivity/tv_score_away"
+                android:textSize="26dp"/>
+            
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:padding="3dp"
+                android:layout_height="48dp"
+                android:id="@+matchdetailsactivity/iv_badge_away"/>
+            
+            <View
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:id="@+matchdetailsactivity/view_header_divider"
+            android:layout_below="@+matchdetailsactivity/ll_scores"
+            android:background="#ddd"/>
+        
+        <ListView
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:layout_below="@+matchdetailsactivity/view_header_divider"
+			android:layout_above="@+matchdetailsactivity/ll_coaches"
+			android:id="@+id/android:list"
+			android:paddingLeft="3dp"
+			android:paddingRight="3dp"
+			android:divider="#ddd"
+			android:dividerHeight="1dp"
+			android:cacheColorHint="#00000000"
+			android:background="@null"/>
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+matchdetailsactivity/ll_coaches"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:layout_marginTop="3dp">
+            <TextView
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:textSize="16dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:textColor="@android:color/black"
+                android:id="@+matchdetailsactivity/tv_coach_home"/>
+            
+            <TextView
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:textSize="16dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:id="@+matchdetailsactivity/tv_coach_away"/>
+        </LinearLayout>
+    </RelativeLayout>
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+matchdetailsactivity/tv_source"
+        android:textColor="@android:color/black"
+        android:textSize="10dp"
+        android:paddingRight="2dp"
+        android:gravity="right"/>
+    
+    <include layout="@layout/admob_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:gravity="bottom|center_horizontal"/>
+
+</LinearLayout>

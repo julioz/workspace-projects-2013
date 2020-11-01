@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:visibility="gone"
+        android:id="@+matchview/ll_line_rodada"
+        android:gravity="center"
+        android:weightSum="3">
+        
+        <View
+	        android:layout_width="0dp"
+	        android:layout_height="1px"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:background="#40FFFFFF"/>
+        
+		<TextView
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:layout_gravity="center"
+	        android:gravity="center"
+	        android:textColor="#FFFFFFFF"
+	        android:id="@+matchview/tv_rod"/>
+        
+        <View
+	        android:layout_width="0dp"
+	        android:layout_height="1px"
+	        android:layout_gravity="center"
+	        android:layout_weight="1"
+	        android:background="#40FFFFFF"/>
+    </LinearLayout>
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:id="@+matchview/view_line_notrodada"
+        android:background="#40FFFFFF"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#FFFFFFFF"
+        android:id="@+matchview/tv_date"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+matchview/tv_stadium"
+        android:textColor="#FFFFFFFF"/>
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="horizontal">
+        
+        <TextView
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="#FFFFFFFF"
+            android:id="@+matchview/tv_position_home"/>
+        
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:id="@+matchview/iv_home"/>
+        
+        <TextView
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
+	        android:textSize="36dp"
+	        android:id="@+matchview/tv_scr_h"
+	        android:gravity="center"
+	        android:textColor="#FFFFFFFF"/>
+        
+        <LinearLayout
+            android:layout_width="52dp"
+	        android:layout_height="52dp"
+	        android:gravity="center"
+	        android:orientation="vertical">
+            <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="32dp"
+		        android:gravity="center"
+		        android:textColor="#FFFFFFFF"
+		        android:text="X"/>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8dp"
+                android:visibility="gone"
+                android:id="@+matchview/tv_classico"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                android:text="★ Clássico ★"/>
+        </LinearLayout>
+        
+        <TextView
+	        android:layout_width="48dp"
+	        android:layout_height="48dp"
+	        android:id="@+matchview/tv_scr_a"
+	        android:textSize="36dp"
+	        android:gravity="center"
+	        android:textColor="#FFFFFFFF"/>
+        
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+matchview/iv_away"
+            android:layout_gravity="center"/>
+        
+        <TextView
+            android:layout_width="56dp"
+            android:layout_height="48dp"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:textColor="#FFFFFFFF"
+            android:visibility="gone"
+            android:id="@+matchview/tv_position_away"/>
+        
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 0ebfbdc569115dfd8a3c32d48931ef66f086dd32 Júlio Zynger <julioz92@gmail.com> 1381366018 -0300	branch: Created from HEAD
+0ebfbdc569115dfd8a3c32d48931ef66f086dd32 04e4854e3b7ebef1e56bd898e940180829e4e445 Júlio Zynger <julioz92@gmail.com> 1381367850 -0300	commit: Adds LocationViewerActivity that takes a LatLng and a String to show a single location in an interactive map.

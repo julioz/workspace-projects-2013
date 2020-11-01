@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/backrepeat"
+	android:orientation="vertical">
+	
+	<ImageView
+		android:layout_height="56dp"
+		android:layout_width="56dp"
+		android:layout_gravity="center_horizontal"
+		android:src="@drawable/escudo_fluminense"
+		android:paddingTop="5dp"/>
+		
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="vertical"
+		android:weightSum="3">
+		
+		<ScrollView
+		    android:layout_width="fill_parent" 
+		    android:layout_height="0dp" 
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:scrollbars="vertical"
+		    android:background="#23000000"
+		    android:layout_margin="8dp"
+		    android:layout_weight="2">
+		
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:padding="5dp"
+				android:orientation="vertical">
+				
+				<TextView
+					android:textColor="#FFFFFF"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="20dp"
+					android:text="inFLU" 
+					android:layout_gravity="center"/>
+				
+				<TextView
+					android:textColor="#FFFFFF"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+influ/tv_description"
+					android:textSize="16dp" />
+				
+			</LinearLayout>
+			
+		</ScrollView>
+		
+		<RelativeLayout
+			android:layout_width="fill_parent"
+			android:layout_height="0dp"
+			android:orientation="vertical"
+			android:gravity="center|bottom"
+			android:paddingBottom="7dp"
+			android:layout_weight="1">
+			
+		    <ImageView
+		        android:src="@drawable/img_market_influ"
+		        android:scaleType="fitCenter"
+		        android:adjustViewBounds="true"
+		        android:id="@+influ/iv_market"
+		        android:layout_centerVertical="true"
+		        android:layout_width="72dp"
+		        android:layout_height="72dp"/>
+		    
+		    <TextView
+		        android:textColor="#FFFFFFFF"
+		        android:text="Baixe já!"
+		        android:id="@+influ/tv_market"
+		        android:layout_toRightOf="@+influ/iv_market"
+		        android:layout_centerVertical="true"
+		        android:textSize="24dp"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"/>
+			
+			
+		</RelativeLayout>
+	</LinearLayout>
+		
+</LinearLayout>

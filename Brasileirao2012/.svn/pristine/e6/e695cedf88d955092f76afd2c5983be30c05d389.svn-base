@@ -1,0 +1,38 @@
+package br.com.zynger.brasileirao2012;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.Html;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class InfluActivity extends Activity {
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.influ);
+		
+		ImageView iv = (ImageView) findViewById(R.influ.iv_market);
+		TextView tv = (TextView) findViewById(R.influ.tv_market);
+		TextView tv_desc = (TextView) findViewById(R.influ.tv_description);
+		
+		tv_desc.setText(Html.fromHtml("Você, que faz parte da melhor e mais bonita torcida do mundo, inFLU é o seu aplicativo!<br /><br />Com inFLU, você tem todas as informações sobre o Fluminense Football Club ao alcance de um toque:<br /><br />* Dados sobre os próximos jogos da temporada<br />* Notícias dos principais portais de notícias atualizadas em tempo real<br />* Classificação sempre atualizada dos torneios em que o Flu compete<br />* Informações sobre venda de ingressos<br />* Dados estatísticos sobre o clube, sua história, ídolos e elenco<br />* e muito mais!"));
+		
+		OnClickListener ocl = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("market://details?id=br.com.zynger.influ"));
+				startActivity(intent);
+			}
+		};
+		
+		iv.setOnClickListener(ocl);
+		tv.setOnClickListener(ocl);
+	}
+}

@@ -1,0 +1,128 @@
+package br.com.zynger.brasileirao2012;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+import br.com.zynger.brasileirao2012.model.RealTimePlayer;
+import br.com.zynger.brasileirao2012.view.RealTimePlayerLinearLayout;
+import br.com.zynger.brasileirao2012.web.HTMLManager;
+
+public class RealTimeMatchSquadActivity extends Activity {
+	
+	public final static String INTENT_REALTIMEMATCH = "realtimematch";
+	
+	private RealTimeMatch rtm;
+	
+	private TextView actionbar_tt, tv_progressbar, tv_squadl, tv_squadr;
+	private LinearLayout ll_squads, ll_rtml, ll_rtmr;
+	private RelativeLayout rl_loading;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.realtimematchsquad);
+		this.rtm = (RealTimeMatch) getIntent().getSerializableExtra(INTENT_REALTIMEMATCH);
+		
+		loadViews();
+		
+		new ShowTableTask(this).execute();
+	}
+	
+	private void loadViews() {
+		actionbar_tt = (TextView) findViewById(R.realtimematchsquad.tv_name);
+		actionbar_tt.setTypeface(Typeface.createFromAsset(getAssets(), "tertre-xbol.otf"));
+		
+		tv_squadl = (TextView) findViewById(R.realtimematchsquad.tv_squadl);
+		tv_squadr = (TextView) findViewById(R.realtimematchsquad.tv_squadr);
+		
+		ll_rtml = (LinearLayout) findViewById(R.realtimematchsquad.ll_squadl);
+		ll_rtmr = (LinearLayout) findViewById(R.realtimematchsquad.ll_squadr);
+		ll_squads = (LinearLayout) findViewById(R.realtimematchsquad.ll_squads);
+		rl_loading = (RelativeLayout) findViewById(R.realtimematchsquad.rl_loading);
+		tv_progressbar = (TextView) findViewById(R.realtimematchsquad.tv_progressbar);
+	}
+
+	public void populateLayout(LinkedHashMap<String, ArrayList<RealTimePlayer>> map) {
+		ll_rtml.removeAllViews();
+		ll_rtmr.removeAllViews();
+		int i = 0;
+		for (Iterator<String> it = map.keySet().iterator(); it.hasNext();) {
+			String key = (String) it.next();
+			if(i == 0) tv_squadl.setText(key);
+			else tv_squadr.setText(key);
+			
+			for (RealTimePlayer rtp : map.get(key)) {
+				if(i == 0) ll_rtml.addView(new RealTimePlayerLinearLayout(this, rtp));
+				else ll_rtmr.addView(new RealTimePlayerLinearLayout(this, rtp));
+			}
+			
+			i++;
+		}
+	}
+	
+	protected class ShowTableTask extends AsyncTask<Void, Void, LinkedHashMap<String, ArrayList<RealTimePlayer>>> {
+		private Context c;
+		
+		public ShowTableTask(Context c){
+			this.setContext(c);
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			ll_squads.setVisibility(View.GONE);
+			findViewById(R.realtimematchsquad.pb_progressbar).setVisibility(View.VISIBLE);
+			tv_progressbar.setText("Atualizando...");
+			rl_loading.setVisibility(View.VISIBLE);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected LinkedHashMap<String, ArrayList<RealTimePlayer>> doInBackground(Void... params) {
+			try{
+				return HTMLManager.getRealTimeSquad(getContext(), rtm);
+			}catch(OutOfMemoryError e){
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(LinkedHashMap<String, ArrayList<RealTimePlayer>> result) {
+			if(result != null){
+				populateLayout(result);
+				ll_squads.setVisibility(View.VISIBLE);
+				rl_loading.setVisibility(View.GONE);
+			}else{
+				findViewById(R.realtimematchsquad.pb_progressbar).setVisibility(View.GONE);
+				tv_progressbar.setText("Não foi possível obter a escalação deste jogo.");
+			}
+			super.onPostExecute(result);
+		}
+
+		public Context getContext() {
+			return c;
+		}
+
+		public void setContext(Context c) {
+			this.c = c;
+		}
+	}
+}

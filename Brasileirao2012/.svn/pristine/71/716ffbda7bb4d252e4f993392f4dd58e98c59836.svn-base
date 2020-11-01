@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="text_home_color">#ffffffff</color>
+	<color name="text_actionbar">#ffe5e5e5</color>
+	
+	<color name="green_apptitle">#F6B900</color>
+	<color name="yellow_apptitle">#1D7A3E</color>
+	
+	<color name="actionbar_color1">#ff4b94cc</color>
+	<color name="actionbar_color2">#ff085fa1</color>
+	<color name="actionbar_color3">#ff456286</color>
+	<color name="actionbar_color4">#ff002859</color>
+	<color name="rankingrow_blue">#FF6495ED</color>
+	<color name="rankingrow_yellow">#FFFFFF00</color>
+	<color name="rankingrow_red">#FFB3002A</color>
+	
+	<color name="drawer_header_gradient_top">#FF312D2C</color>
+	<color name="drawer_header_gradient_center">#FF2A2625</color>
+	<color name="drawer_header_gradient_bottom">#FF231F1E</color>
+	<color name="drawer_item_normal">#FF1A1615</color>
+	<color name="drawer_item_selected">#FF151211</color>
+	<color name="drawer_header_text">#FFC6C1BE</color>
+	<color name="drawer_item_text">#FFCAC8AF</color>
+	<color name="drawer_item_divider">#FF272322</color>
+	
+	<color name="lightgray">#35000000</color>
+    
+</resources>

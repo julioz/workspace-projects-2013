@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal" android:layout_width="fill_parent"
+		android:layout_height="50dip" android:background="#ff66BB55">
+		
+		<TextView android:layout_width="wrap_content" android:layout_centerVertical="true"
+			android:textColor="#FFFFFFFF" android:textSize="16dip"
+			android:textStyle="bold" android:layout_height="wrap_content"
+			android:text="Aulas Particulares" android:padding="8dp" />
+	
+		<ImageView android:layout_width="1px" android:layout_height="wrap_content" android:src="#ffffffff"
+			android:layout_toLeftOf="@+id/adiciona" android:id="@+id/bordertwo"
+			android:layout_marginRight="12dip" android:layout_alignParentBottom="true"
+			android:layout_alignParentTop="true" />
+	
+		<ImageButton android:layout_width="25dip" android:src="@drawable/adiciona"
+			android:layout_height="25dip" android:background="@null"
+			android:layout_marginRight="12dip" android:layout_centerVertical="true"
+			android:id="@+id/adiciona" android:layout_toLeftOf="@+id/borderone"
+			android:scaleType="fitXY" />
+	
+		<ImageView android:layout_width="wrap_content" android:src="#ffffffff" android:layout_height="wrap_content"
+			android:id="@+id/borderone" android:layout_alignParentTop="true"
+			android:layout_marginRight="12dip" android:layout_alignParentBottom="true"
+			android:layout_alignBottom="@+id/remove"
+			android:layout_toLeftOf="@id/remove" />
+	
+		<ImageButton android:src="@drawable/remove" android:background="@null"
+			android:layout_width="25dip" android:layout_alignParentRight="true"
+			android:layout_centerVertical="true" android:id="@id/remove"
+			android:layout_marginRight="12dip" android:layout_height="25dip"
+			android:scaleType="fitXY" />
+	</RelativeLayout>
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:background="#FFFFFFFF"
+	    >
+		<ScrollView
+		    android:layout_width="fill_parent" 
+		    android:layout_height="fill_parent" 
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:scrollbars="vertical">
+			<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			    android:id="@+id/myTableLayout"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:stretchColumns="0,1,2"
+			    android:padding="5px"
+			    >
+			</TableLayout>
+		</ScrollView>
+	</LinearLayout>
+</LinearLayout>

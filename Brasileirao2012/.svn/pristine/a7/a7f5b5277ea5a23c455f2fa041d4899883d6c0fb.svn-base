@@ -1,0 +1,301 @@
+package br.com.zynger.brasileirao2012.view;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import android.content.Context;
+import android.content.Intent;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.MoveToMoveActivity;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.StadiumsMapActivity;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.model.Match;
+import br.com.zynger.brasileirao2012.model.RealTimeMatch;
+
+public class MatchViewLayout extends LinearLayout{
+
+	private Context context;
+	
+	private QuickAction quickaction;
+	private ActionItem actionItem_addEvent, actionItem_viewStadium, actionItem_moveToMove;
+	
+	private RealTimeMatch rtm;
+	private Match m;
+	private TextView date, stadium, scrH, scrA, rodada;
+	private LinearLayout ll_rodada;
+	private View line_notrodada;
+	private ImageView home, away;
+	private TextView tv_position_home, tv_position_away;
+	
+	public MatchViewLayout(Context context, Match m, boolean showRodada) {
+		super(context);
+		setCtext(context);
+		LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		layoutInflater.inflate(R.layout.matchview, this);
+		
+		loadViews();
+		
+		setMatch(m);
+		
+		if(showRodada){
+			line_notrodada.setVisibility(View.GONE);
+			ll_rodada.setVisibility(View.VISIBLE);
+			rodada.setText(m.getRodada()+"ª rodada");
+		}else{
+			line_notrodada.setVisibility(View.VISIBLE);
+			ll_rodada.setVisibility(View.GONE);
+		}
+	}
+	
+	public MatchViewLayout(Context context, Club club1, Club club2, RealTimeMatch rtm, boolean showRanking){
+		super(context);
+		setCtext(context);
+		LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		layoutInflater.inflate(R.layout.matchview, this);
+		
+		loadViewsRealTimeMatch();
+		setRealTimeMatch(rtm);
+
+		String res_home = rtm.getResultHome();
+		String res_away = rtm.getResultAway();
+		int resHome = -1;
+		int resAway = -1;
+		if(!res_home.equals("")) resHome = Integer.parseInt(res_home);
+		if(!res_away.equals("")) resAway = Integer.parseInt(res_away);
+		
+		setDate(rtm.getDate());
+		setHome(club1.getBadge());
+		setAway(club2.getBadge());
+		setScoreHome(resHome);
+		setScoreAway(resAway);
+		if(showRanking){			
+			setPositionHome(rtm.getHomePos(), rtm.getHomePosDif());
+			setPositionAway(rtm.getAwayPos(), rtm.getAwayPosDif());
+		}
+		
+		this.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), MoveToMoveActivity.class);
+				it.putExtra(MoveToMoveActivity.INTENT_REALTIME, true);
+				it.putExtra(MoveToMoveActivity.INTENT_MATCH, getRealTimeMatch());
+				v.getContext().startActivity(it);
+			}
+		});
+		
+		line_notrodada.setVisibility(View.GONE);
+		ll_rodada.setVisibility(View.VISIBLE);
+		rodada.setText(rtm.getState());
+	}
+	
+	private void loadViewsRealTimeMatch() {
+		date = (TextView) findViewById(R.matchview.tv_date);
+		findViewById(R.matchview.tv_stadium).setVisibility(View.GONE);
+		scrH = (TextView) findViewById(R.matchview.tv_scr_h);
+		scrA = (TextView) findViewById(R.matchview.tv_scr_a);
+		home = (ImageView) findViewById(R.matchview.iv_home);
+		away = (ImageView) findViewById(R.matchview.iv_away);
+		ll_rodada = (LinearLayout) findViewById(R.matchview.ll_line_rodada);
+		rodada = (TextView) findViewById(R.matchview.tv_rod);
+		line_notrodada = findViewById(R.matchview.view_line_notrodada);
+		tv_position_home = (TextView) findViewById(R.matchview.tv_position_home);
+		tv_position_away = (TextView) findViewById(R.matchview.tv_position_away);
+	}
+	
+	public void setRealTimeMatch(RealTimeMatch rtm) {
+		this.rtm = rtm;
+	}
+	
+	public RealTimeMatch getRealTimeMatch() {
+		return rtm;
+	}
+
+	private void setTableQuickAction() {
+		quickaction = new QuickAction(this);
+		quickaction.setAnimStyle(QuickAction.ANIM_REFLECT);
+
+		actionItem_addEvent = new ActionItem();
+		actionItem_addEvent.setIcon(getResources().getDrawable(R.drawable.ic_calendar_quickaction));
+		actionItem_addEvent.setTitle("Adicionar");		
+		
+		actionItem_addEvent.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {				
+				GregorianCalendar gc = (GregorianCalendar) getMatch().getCalendar().clone();
+				gc.set(Calendar.MONTH, gc.get(Calendar.MONTH)-1);
+				try{
+					addCalendarEvent(gc);
+				}catch(Exception e){
+					Toast.makeText(v.getContext(), "Um erro ocorreu!\nNão foi possível adicionar a partida ao seu calendário", Toast.LENGTH_SHORT).show();
+				}
+				quickaction.dismiss();
+			}
+		});
+		
+		actionItem_viewStadium = new ActionItem();
+		actionItem_viewStadium.setIcon(getResources().getDrawable(R.drawable.ic_stadium_quickaction));
+		actionItem_viewStadium.setTitle("Estádio");		
+		
+		actionItem_viewStadium.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {				
+				Intent it = new Intent(v.getContext(), StadiumsMapActivity.class);
+				it.putExtra(StadiumsMapActivity.LIMITATION, getMatch().getStadium());
+				quickaction.dismiss();
+				v.getContext().startActivity(it);
+			}
+		});
+		
+		actionItem_moveToMove = new ActionItem();
+		actionItem_moveToMove.setIcon(getResources().getDrawable(R.drawable.ic_chronometer_quickaction));
+		actionItem_moveToMove.setTitle("Lance a Lance");
+		
+		actionItem_moveToMove.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent it = new Intent(v.getContext(), MoveToMoveActivity.class);
+				it.putExtra(MoveToMoveActivity.INTENT_MATCH, getMatch());
+				it.putExtra(MoveToMoveActivity.INTENT_REALTIME, false);
+				quickaction.dismiss();
+				v.getContext().startActivity(it);
+			}
+		});
+
+		quickaction.addActionItem(actionItem_addEvent);
+		quickaction.addActionItem(actionItem_viewStadium);
+		quickaction.addActionItem(actionItem_moveToMove);
+	}
+
+	private void setDate(String s) {
+		if(s == null) date.setText("Horário indisponível");
+		else date.setText(s);
+	}
+
+	private void setStadium(String s) {
+		if(s == null) stadium.setText("Local indisponível");
+		else stadium.setText(s);
+	}
+
+	private void setHome(int res) {
+		home.setImageResource(res);
+	}
+	
+	private void setAway(int res) {
+		away.setImageResource(res);
+	}
+	
+	private void setScoreHome(int scr){
+		if(scr < 0) scrH.setText("");
+		else scrH.setText(String.valueOf(scr));
+	}
+	
+	private void setScoreAway(int scr){
+		if(scr < 0) scrA.setText("");
+		else scrA.setText(String.valueOf(scr));
+	}
+	
+	private void setPositionHome(int position, int posDif){
+		if(position > 0){			
+			tv_position_home.setText(Html.fromHtml(getPosDifModified(posDif) + "<br />" + position + "º"));
+			tv_position_home.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	private void setPositionAway(int position, int posDif){
+		if(position > 0){			
+			tv_position_away.setText(Html.fromHtml(getPosDifModified(posDif) + "<br />" + position + "º"));
+			tv_position_away.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	private String getPosDifModified(int posDif){
+		if(posDif > 0) return "<font color='green'>" + "+" + posDif + "</font>";
+		else if(posDif < 0) return "<font color='red'>" + posDif + "</font>";
+		else return "" + posDif;
+	}
+
+	private void loadViews() {
+		date = (TextView) findViewById(R.matchview.tv_date);
+		stadium = (TextView) findViewById(R.matchview.tv_stadium);
+		scrH = (TextView) findViewById(R.matchview.tv_scr_h);
+		scrA = (TextView) findViewById(R.matchview.tv_scr_a);
+		home = (ImageView) findViewById(R.matchview.iv_home);
+		away = (ImageView) findViewById(R.matchview.iv_away);
+		rodada = (TextView) findViewById(R.matchview.tv_rod);
+		ll_rodada = (LinearLayout) findViewById(R.matchview.ll_line_rodada);
+		line_notrodada = findViewById(R.matchview.view_line_notrodada);
+	}
+	
+	public Context getCtext() {
+		return context;
+	}
+	
+	public void setCtext(Context context) {
+		this.context = context;
+	}
+
+	public Match getMatch() {
+		return m;
+	}
+
+	public void setMatch(Match m) {
+		this.m = m;
+
+		setDate(m.getDate());
+		setStadium(m.getStadium());
+		setHome(m.getClubHome().getBadge());
+		setAway(m.getClubAway().getBadge());
+		setScoreHome(m.getScore_home());
+		setScoreAway(m.getScore_away());
+		
+		home.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showClubDescriptionOnToast(v.getContext(), getMatch().getClubHome());
+			}
+		});
+		
+		away.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showClubDescriptionOnToast(v.getContext(), getMatch().getClubAway());
+			}
+		});
+		
+		this.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setTableQuickAction();
+				quickaction.show();
+			}
+		});
+	}
+	
+	private void showClubDescriptionOnToast(Context context, Club c){
+		//TODO os clubes vem com todos os atributos zerados
+		//Toast.makeText(context, c.getName() + "\n" + c.getPosition() + "° lugar: " + c.getPoints() + " pontos", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, c.getName(), Toast.LENGTH_SHORT).show();
+	}
+
+	public void addCalendarEvent(Calendar begintime){
+		Match m = getMatch();
+		
+		Intent intent = new Intent(Intent.ACTION_EDIT);
+	    intent.setType("vnd.android.cursor.item/event");
+	    intent.putExtra("beginTime", begintime.getTimeInMillis());
+	    intent.putExtra("allDay", false);
+	    intent.putExtra("transparency", 0);
+	    intent.putExtra("eventLocation", "Estádio " + m.getStadium()); 
+	    intent.putExtra("endTime", begintime.getTimeInMillis()+105*60*1000);
+	    intent.putExtra("title", m.getClubHome().getName() + " x " + m.getClubAway().getName());
+	    getCtext().startActivity(intent);
+	}
+	
+}

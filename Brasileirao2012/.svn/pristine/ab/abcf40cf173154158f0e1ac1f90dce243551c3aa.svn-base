@@ -1,0 +1,104 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import org.taptwo.android.widget.TitleProvider;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.R;
+
+public class GuideLayoutAdapter extends BaseAdapter implements TitleProvider {
+
+	private LayoutInflater mInflater;
+	private Context context;
+
+	private final int[] titles = { R.string.guidelayoutadapter_title_welcome,
+			R.string.guidelayoutadapter_title_gettingstarted, R.string.guidelayoutadapter_title_myteam,
+			R.string.guidelayoutadapter_title_updating, R.string.guidelayoutadapter_title_divisions,
+			R.string.guidelayoutadapter_title_table, R.string.guidelayoutadapter_title_newsandrealtime,
+			R.string.guidelayoutadapter_title_trophiesandstadiums, R.string.guidelayoutadapter_title_torcidometer,
+			R.string.guidelayoutadapter_title_enjoy };
+	
+	private final int[] layouts = { R.layout.guide_1, R.layout.guide_2, R.layout.guide_3,
+			R.layout.guide_4, R.layout.guide_5, R.layout.guide_6,
+			R.layout.guide_7, R.layout.guide_8, R.layout.guide_9, R.layout.guide_10 };
+
+	public GuideLayoutAdapter(Context context) {
+		this.context = context;
+		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+
+	@Override
+	public int getCount() {
+		return titles.length;
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return position;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position; 
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		convertView = mInflater.inflate(layouts[position], null);
+		
+		switch (position) {
+		case 0:
+			((TextView) convertView.findViewById(R.guide1.tv_txt)).setText(R.string.guidelayoutadapter_text_guide1_txt1);
+			break;
+		case 1:
+			((TextView) convertView.findViewById(R.guide2.tv_txt)).setText(R.string.guidelayoutadapter_text_guide2_txt1);
+			((TextView) convertView.findViewById(R.guide2.tv_txt2)).setText(R.string.guidelayoutadapter_text_guide2_txt2);
+			break;
+		case 2:
+			((TextView) convertView.findViewById(R.guide3.tv_txt)).setText(R.string.guidelayoutadapter_text_guide3_txt1);
+			((TextView) convertView.findViewById(R.guide3.tv_txt2)).setText(R.string.guidelayoutadapter_text_guide3_txt2);
+			break;
+		case 3:
+			((TextView) convertView.findViewById(R.guide4.tv_txt)).setText(R.string.guidelayoutadapter_text_guide4_txt1);
+			((TextView) convertView.findViewById(R.guide4.tv_txt2)).setText(R.string.guidelayoutadapter_text_guide4_txt2);
+			break;
+		case 4:
+			((TextView) convertView.findViewById(R.guide5.tv_txt)).setText(R.string.guidelayoutadapter_text_guide5_txt1);
+			((TextView) convertView.findViewById(R.guide5.tv_txt2)).setText(R.string.guidelayoutadapter_text_guide5_txt2);
+			break;
+		case 5:
+			((TextView) convertView.findViewById(R.guide6.tv_txt)).setText(R.string.guidelayoutadapter_text_guide6_txt1);
+			((TextView) convertView.findViewById(R.guide6.tv_txt2)).setText(R.string.guidelayoutadapter_text_guide6_txt2);
+			break;
+		case 6:
+			((TextView) convertView.findViewById(R.guide7.tv_txt)).setText(R.string.guidelayoutadapter_text_guide7_txt1);
+			((TextView) convertView.findViewById(R.guide7.tv_txt2)).setText(R.string.guidelayoutadapter_text_guide7_txt2);
+			break;
+		case 7:
+			((TextView) convertView.findViewById(R.guide8.tv_txt)).setText(R.string.guidelayoutadapter_text_guide8_txt1);
+			((TextView) convertView.findViewById(R.guide8.tv_txt2)).setText(R.string.guidelayoutadapter_text_guide8_txt2);
+			((TextView) convertView.findViewById(R.guide8.tv_txt3)).setText(R.string.guidelayoutadapter_text_guide8_txt3);
+			((TextView) convertView.findViewById(R.guide8.tv_txt4)).setText(R.string.guidelayoutadapter_text_guide8_txt4);
+			break;
+		case 8:
+			((TextView) convertView.findViewById(R.guide9.tv_txt)).setText(R.string.guidelayoutadapter_text_guide9_txt1);
+			break;
+		case 9:
+			((TextView) convertView.findViewById(R.guide10.tv_txt)).setText(R.string.guidelayoutadapter_text_guide10_txt1);
+			break;
+		default:
+			break;
+		}
+		return convertView;
+	}
+
+	@Override
+	public String getTitle(int position) {
+		return context.getString(titles[position]);
+	}
+
+}

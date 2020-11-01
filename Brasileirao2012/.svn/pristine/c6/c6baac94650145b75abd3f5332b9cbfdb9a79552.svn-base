@@ -1,0 +1,135 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.TreeMap;
+
+import android.app.ListActivity;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.AprovAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.UpdateAprovTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.enums.Division;
+import br.com.zynger.brasileirao2012.model.AprovData;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.ConnectionHelper;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+import br.com.zynger.brasileirao2012.view.UpdateImageView;
+
+public class AprovActivity extends ListActivity implements AsyncTaskListener {
+	
+	public static final String INTENT_DIVISION = "aprovact_division";
+	
+	private TreeMap<String, Club> clubs;
+	
+	private Division division;
+
+	private TextView tv_division;
+	private LinearLayout ll_division;
+	private DataUpdateLayout dul_loading;
+	private LinearLayout ll_data;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.aprovactivity);
+		
+		clubs = ClubsDB.getInstance(this).getClubs();
+		division = (Division) getIntent().getSerializableExtra(INTENT_DIVISION);
+		
+		loadViews();
+		
+		tv_division.setText(division.getStringNotation());
+		
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("cb_actsupdates", false)) {
+			new UpdateAprovTask(this, clubs, this).execute();
+		}else setTable();
+	}
+
+	private void loadViews() {		
+		ll_division = (LinearLayout) findViewById(R.aprovactivity.actionbar_ll);
+		tv_division = (TextView) findViewById(R.aprovactivity.tv_actionbar_division);
+		
+		ll_data = (LinearLayout) findViewById(R.aprovactivity.ll_data);
+		dul_loading = (DataUpdateLayout) findViewById(R.aprovactivity.dul_loading);
+		dul_loading.addViewToToggle(ll_data);
+		dul_loading.addViewToToggle(getListView());
+		
+		ll_division.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Division opposite = division.getOppositeDivision();
+				tv_division.setText(opposite.getStringNotation());
+				division = opposite;
+				setTable();
+			}
+		});
+		
+		UpdateImageView update = (UpdateImageView) findViewById(R.aprovactivity.uiv_update);
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(ConnectionHelper.isConnected(v.getContext())){
+					new UpdateAprovTask(v.getContext(), clubs, AprovActivity.this).execute();
+				}else Toast.makeText(v.getContext(), "Verifique a conexão à internet.", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	
+	private void setTable() {
+		ArrayList<Club> list = new ArrayList<Club>();
+		for (Club c : clubs.values()) {
+			if(c.getDivision() == division) list.add(c);
+		}
+		Collections.sort(list, new ByFullNameComparator());
+		setListAdapter(new AprovAdapter(this, list));
+	}
+
+	@Override
+	public void preExecution() {
+		dul_loading.show();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		TreeMap<String, AprovData> map = (TreeMap<String, AprovData>) result;
+		
+		FileHandler.saveBackup(this, FileHandler.JSON_APROV, JsonUtil.createAprovJson(map).toString());
+		for (Iterator<String> it = map.keySet().iterator(); it.hasNext();) {
+			String clubAcronym = (String) it.next();
+			clubs.get(clubAcronym).setAprov(map.get(clubAcronym));
+		}
+		Toast.makeText(this, "Dados atualizados", Toast.LENGTH_SHORT).show(); //TODO mover para strings.xml
+		
+		setTable();
+		dul_loading.hide();
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		
+		setTable();
+		dul_loading.hide();
+	}
+	
+	class ByFullNameComparator implements Comparator<Club> {
+		@Override
+		public int compare(Club c1, Club c2) {
+			return c1.getName().compareTo(c2.getName());
+		}
+		
+	}
+}

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:weightSum="3"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:background="@drawable/backrepeat">
+    
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+        android:background="@drawable/actionbar_gradient2"
+        android:layout_alignParentTop="true"
+        android:id="@+tableflowactivity/rl_actionbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:id="@+tableflowactivity/actionbar_iv"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_table" />
+        
+        <br.com.zynger.brasileirao2012.view.TertreTextView
+            android:text="Tabela"
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@+tableflowactivity/actionbar_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="30dp"/>
+        
+        <LinearLayout
+            android:id="@+tableflowactivity/actionbar_ll_rod"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_toLeftOf="@+tableflowactivity/actionbar_divisor_sqrs"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/layout_roundborder"
+            android:gravity="center"
+            android:layout_centerVertical="true">
+            
+            <TextView
+                android:inputType="numberDecimal"
+                android:id="@+tableflowactivity/tv_actionbar_number"
+                android:background="@null"
+                android:gravity="center"
+                android:textColor="#FFFFFFFF"
+            	android:layout_width="20dp"
+                android:layout_height="20dp"/>
+        </LinearLayout>
+        
+        <View
+            android:id="@+tableflowactivity/actionbar_divisor_sqrs"
+            android:layout_toLeftOf="@+tableflowactivity/actionbar_ll_div"
+			android:layout_height="45dp"
+			android:layout_width="1px"
+			android:layout_marginLeft="2dp"
+			android:layout_marginRight="2dp"
+			android:background="#88FFFFFF" />
+        
+        <LinearLayout
+            android:id="@+tableflowactivity/actionbar_ll_div"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_toLeftOf="@+tableflowactivity/rl_actionbar_update"
+            android:layout_marginRight="3dp"
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/layout_roundborder"
+            android:gravity="center"
+            android:layout_centerVertical="true">
+            
+            <TextView
+                android:id="@+tableflowactivity/tv_actionbar_div"
+                android:background="@null"
+                android:gravity="center"
+                android:textColor="#FFFFFFFF"
+            	android:layout_width="20dp"
+                android:layout_height="20dp"/>
+        </LinearLayout>
+        
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:id="@+tableflowactivity/rl_actionbar_update"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal" >
+            
+            <View
+                android:layout_height="45dp"
+                android:layout_width="1px"
+                android:layout_marginLeft="2dp"
+                android:layout_alignParentLeft="true"
+                android:background="#88FFFFFF" />
+
+            <br.com.zynger.brasileirao2012.view.UpdateImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="8dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:id="@+tableflowactivity/uiv_update"
+                android:background="@null"
+                android:scaleType="fitCenter" />
+        </RelativeLayout>
+    </RelativeLayout>
+    
+    <LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res/br.com.zynger.brasileirao2012"
+        android:layout_width="fill_parent"
+		android:layout_height="0dp"
+		android:layout_below="@+tableflowactivity/rl_actionbar"
+		android:layout_above="@+tableflowactivity/ll_ad"
+		android:layout_weight="3">
+        
+        <br.com.zynger.brasileirao2012.view.DataUpdateLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+tableflowactivity/dul_loading"/>
+        
+		<org.taptwo.android.widget.ViewFlow
+			android:id="@+tableflowactivity/viewflow"
+			app:sidebuffer="37"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"/>
+			
+		<include
+		    layout="@layout/tablesupportviewrow"
+		    android:id="@+tableflowactivity/sv_linearlayout_table_lowperformance"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"/>
+    </LinearLayout>
+    
+    <LinearLayout
+		xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+		android:layout_width="fill_parent"
+		android:id="@+tableflowactivity/ll_ad"
+		android:layout_alignParentBottom="true"
+		android:layout_height="wrap_content"
+		android:gravity="bottom|center_horizontal">
+ 
+		<com.google.ads.AdView
+		    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	       	android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        ads:adUnitId="a14f4bbc3448afb"
+	        ads:adSize="BANNER"
+	        ads:loadAdOnCreate="true"/>
+	</LinearLayout>
+</RelativeLayout>

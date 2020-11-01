@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<br.com.zynger.libertadores.view.DashboardLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f8f9fe" >
+    
+    <!--  Standings Button -->
+    <Button
+        android:id="@+home/btn_standings"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_standings"
+        android:text="@string/homedashboard_standings" />
+ 
+    <!--  Matches Button -->
+    <Button
+        android:id="@+home/btn_matches"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_matches"
+        android:text="@string/homedashboard_matches" />
+ 
+    <!--  Strikers Button -->
+    <Button
+        android:id="@+home/btn_strikers"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_strikers"
+        android:text="@string/homedashboard_strikers" />
+ 
+    <!--  Teams Button -->
+    <Button
+        android:id="@+home/btn_teams"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_teams"
+        android:text="@string/homedashboard_teams" />
+ 
+    <!--  Map Button -->
+    <Button
+        android:id="@+home/btn_map"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_map"
+        android:text="@string/homedashboard_map" />
+ 
+    <!--  Fans Button -->
+    <Button
+        android:id="@+home/btn_fans"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_fans"
+        android:text="@string/homedashboard_fans" />
+
+    <!--  History Button -->
+    <Button
+        android:id="@+home/btn_history"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_history"
+        android:text="@string/homedashboard_history" />
+
+    <!--  About Button -->
+    <Button
+        android:id="@+home/btn_about"
+        style="@style/DashboardButton"
+        android:drawableTop="@drawable/btn_about"
+        android:text="@string/homedashboard_about" />
+ 
+</br.com.zynger.libertadores.view.DashboardLayout>

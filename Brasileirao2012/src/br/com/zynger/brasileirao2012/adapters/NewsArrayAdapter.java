@@ -1,0 +1,81 @@
+package br.com.zynger.brasileirao2012.adapters;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import br.com.zynger.brasileirao2012.R;
+import br.com.zynger.brasileirao2012.model.Article;
+import br.com.zynger.brasileirao2012.view.EllipsizingTextView;
+
+public class NewsArrayAdapter extends ArrayAdapter<Article> {
+
+	private final String DATEPATTERN_DEFAULT = "EEE, dd/MM/yyyy HH:mm";
+	private final String DATEPATTERN_NOHOUR = "EEE, dd/MM/yyyy";
+	private final static int LAYOUT_RESOURCE = R.layout.newsrow;
+	
+	private final LayoutInflater mInflater;
+	private List<Article> objects;
+	private SimpleDateFormat sdf = new SimpleDateFormat(DATEPATTERN_DEFAULT, Locale.getDefault());
+	
+	public NewsArrayAdapter(Context context, List<Article> objects) {
+		super(context, 0, objects);
+		this.mInflater = LayoutInflater.from(context);
+		this.objects = objects;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		View row = convertView;
+        ArticleHolder holder = null;
+        
+        if(row == null){
+            row = mInflater.inflate(LAYOUT_RESOURCE, parent, false);
+            
+            holder = new ArticleHolder();
+            holder.txtTitle = (EllipsizingTextView) row.findViewById(R.news_row.tv_title);
+            holder.txtPubdate = (TextView) row.findViewById(R.news_row.tv_pubdate);
+            
+            row.setTag(holder);
+        }else{
+            holder = (ArticleHolder) row.getTag();
+            holder.txtPubdate.setVisibility(View.VISIBLE);
+        }
+        
+        Article art = objects.get(position);
+        
+        holder.txtTitle.setText(art.getTitle());
+        holder.txtTitle.setMaxLines(2);
+        GregorianCalendar pubDate = art.getPubDate();
+        if(pubDate != null){
+        	if(pubDate.get(Calendar.HOUR_OF_DAY) == 0) sdf.applyPattern(DATEPATTERN_NOHOUR);
+        	else sdf.applyPattern(DATEPATTERN_DEFAULT);
+        	holder.txtPubdate.setText(sdf.format(art.getPubDate().getTime()));
+        } else holder.txtPubdate.setVisibility(View.INVISIBLE);
+
+        return row;
+	}
+	
+	public ArrayList<Article> getArticles() {
+		return (ArrayList<Article>) objects;
+	}
+}
+
+class ArticleHolder {
+    EllipsizingTextView txtTitle;
+    TextView txtPubdate;
+}

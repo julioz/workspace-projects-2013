@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/backrepeat">
+		
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:id="@+home/llLogo">
+  		
+  		<ImageButton
+  			android:layout_gravity="center"
+  			android:background="@null"
+  			android:layout_height="wrap_content"
+  			android:layout_width="wrap_content"
+  			android:layout_centerHorizontal="true"
+  			android:src="@drawable/img_logo_bg"
+  			android:id="@+home/ibLogoBG"/>
+  			
+  		<ImageView
+  			android:layout_gravity="center"
+  			android:layout_height="wrap_content"
+  			android:layout_width="wrap_content"
+  			android:layout_centerHorizontal="true"
+  			android:layout_centerInParent="true"
+  			android:src="@drawable/img_logo_txt"/>
+	</RelativeLayout>
+	
+	<br.com.zynger.influ.view.ViewFlinger
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+home/flinger"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@+home/llLogo">
+
+		<include
+		    android:id="@+home/dashboard_1"
+			layout="@layout/home_dashboard" />
+		
+		<include
+			android:id="@+home/dashboard_2"
+			layout="@layout/home_dashboard_2" />
+	
+	</br.com.zynger.influ.view.ViewFlinger>
+  	
+	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:orientation="vertical"
+  		android:layout_alignParentBottom="true"
+  		android:id="@+home/infoBar"
+  		android:visibility="gone"
+  		android:background="#A0000000">
+  		
+	    <TableRow android:layout_width="fill_parent"
+  			android:layout_height="wrap_content"
+  			android:gravity="right"
+  			android:weightSum="2">
+  			
+	        <LinearLayout android:layout_width="wrap_content"
+  				android:layout_height="wrap_content"
+  				android:orientation="vertical"
+  				android:layout_weight="1"
+  				android:gravity="left">
+  				
+  				<ImageButton android:src="@drawable/ic_update"
+  					android:layout_width="wrap_content"
+  					android:layout_height="wrap_content"
+  					android:paddingLeft="2dp"
+  					android:id="@+home/ibUpdateInfoBar"
+  					android:background="@null"/>
+
+  			</LinearLayout>
+  			
+  			<LinearLayout android:layout_width="wrap_content"
+  				android:layout_height="wrap_content"
+  				android:orientation="vertical"
+  				android:layout_weight="1"
+  				android:gravity="right">
+  				
+  				<ImageButton android:src="@drawable/ic_close"
+  					android:layout_width="wrap_content"
+  					android:layout_height="wrap_content"
+  					android:paddingRight="2dp"
+  					android:id="@+home/ibCloseInfoBar"
+  					android:background="@null"/>
+
+  			</LinearLayout>
+  		</TableRow>
+  		
+	    <TableRow android:layout_width="fill_parent"
+  			android:layout_height="wrap_content"
+  			android:weightSum="3">
+  			<LinearLayout 
+  			    android:layout_weight="1"
+  			    android:orientation="horizontal"
+  			    android:gravity="center_horizontal"
+  			    android:layout_height="fill_parent"
+  			    android:layout_width="fill_parent">
+  				<ImageView 
+  				    android:layout_width="wrap_content"
+  				    android:layout_height="wrap_content"
+  				    android:id="@+home/infoBar_iv_nextgame_team1badge"
+  				    android:src="@drawable/bdg1_ex"/>
+  				
+  				<TextView android:text="X"
+  				    android:textSize="16dp"
+  				    android:paddingLeft="2dp"
+  				    android:paddingRight="2dp"
+  				    android:layout_gravity="center_vertical"
+  				    android:layout_height="wrap_content"
+  				    android:layout_width="wrap_content"
+  				    android:textColor="#FFFFFFFF"/>
+  				
+  				<ImageView 
+  				    android:layout_width="wrap_content"
+  				    android:layout_height="wrap_content"
+  				    android:id="@+home/infoBar_iv_nextgame_team2badge"
+  				    android:src="@drawable/bdg2_ex"/>
+  			    
+  			</LinearLayout>
+  			<LinearLayout 
+  			    android:layout_weight="2"
+  			    android:orientation="vertical"
+  			    android:layout_height="fill_parent"
+  			    android:layout_width="fill_parent">
+  				<TextView android:text="Fluminense x Adversario"
+  				    android:id="@+home/infoBar_tv_teamNames"
+  				    android:layout_height="wrap_content"
+  				    android:layout_width="wrap_content"
+  				    android:textColor="#FFFFFFFF"/>
+  				<TextView android:text="Você não deveria estar vendo isso -- contate-me para me avisar do erro ;)"
+  				    android:id="@+home/infoBar_tv_championship"
+  				    android:layout_height="wrap_content"
+  				    android:layout_width="wrap_content"
+  				    android:textColor="#FFFFFFFF"/>
+  				<TextView android:text="Você não deveria estar vendo isso -- contate-me para me avisar do erro ;)"
+  				    android:id="@+home/infoBar_tv_date"
+  				    android:layout_height="wrap_content"
+  				    android:layout_width="wrap_content"
+  				    android:textColor="#FFFFFFFF"/>
+  			    
+  			</LinearLayout>	        
+	        
+	    </TableRow>
+	    
+        <View android:background="#BBFFFFFF"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+        	android:layout_width="fill_parent"
+        	android:layout_height="1px"/> 
+  		
+	    <TableRow android:layout_width="fill_parent"
+  			android:layout_height="wrap_content"
+  			android:paddingBottom="1dp">
+  			
+  			<LinearLayout 
+  			    android:layout_weight="1"
+  			    android:orientation="horizontal"
+  			    android:gravity="right"
+  			    android:layout_height="fill_parent"
+  			    android:layout_width="fill_parent">
+  				<ImageView 
+  				    android:layout_width="42dp"
+  				    android:layout_height="42dp"
+  				    android:id="@+home/infoBar_iv_lastgame_team1badge"
+  				    android:src="@drawable/bdg1_ex"/>
+  				
+  				<TextView android:text="0"
+  				    android:textSize="16dp"
+  				    android:id="@+home/infoBar_tv_lastgame_team1score"
+  				    android:paddingLeft="2dp"
+  				    android:paddingRight="2dp"
+  				    android:layout_gravity="center_vertical"
+  				    android:layout_height="wrap_content"
+  				    android:layout_width="wrap_content"
+  				    android:textColor="#FFFFFFFF"/>
+  				
+  				<TextView android:text="X"
+  				    android:textSize="16dp"
+  				    android:paddingLeft="2dp"
+  				    android:paddingRight="2dp"
+  				    android:layout_gravity="center_vertical"
+  				    android:layout_height="wrap_content"
+  				    android:layout_width="wrap_content"
+  				    android:textColor="#FFFFFFFF"/>
+  				
+  				<TextView android:text="0"
+  				    android:textSize="16dp"
+  				    android:id="@+home/infoBar_tv_lastgame_team2score"
+  				    android:paddingLeft="2dp"
+  				    android:paddingRight="2dp"
+  				    android:layout_gravity="center_vertical"
+  				    android:layout_height="wrap_content"
+  				    android:layout_width="wrap_content"
+  				    android:textColor="#FFFFFFFF"/>
+  				
+  				<ImageView 
+  				    android:layout_width="42dp"
+  				    android:layout_height="42dp"
+  				    android:id="@+home/infoBar_iv_lastgame_team2badge"
+  				    android:src="@drawable/bdg2_ex"/>
+  			    
+  			</LinearLayout>
+  		</TableRow>
+	    
+	    
+	</TableLayout>
+		
+</RelativeLayout>

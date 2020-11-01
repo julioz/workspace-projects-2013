@@ -1,0 +1,155 @@
+package br.com.zynger.brasileirao2012;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.TreeMap;
+
+import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ListView;
+import android.widget.Toast;
+import br.com.zynger.brasileirao2012.adapters.TorcidometerArrayAdapter;
+import br.com.zynger.brasileirao2012.asynctasks.AsyncTaskListener;
+import br.com.zynger.brasileirao2012.asynctasks.UpdateFansTask;
+import br.com.zynger.brasileirao2012.data.ClubsDB;
+import br.com.zynger.brasileirao2012.model.Club;
+import br.com.zynger.brasileirao2012.util.FileHandler;
+import br.com.zynger.brasileirao2012.util.JsonUtil;
+import br.com.zynger.brasileirao2012.util.ShareHelper;
+import br.com.zynger.brasileirao2012.view.ActionItem;
+import br.com.zynger.brasileirao2012.view.DataUpdateLayout;
+import br.com.zynger.brasileirao2012.view.QuickAction;
+import br.com.zynger.brasileirao2012.view.UpdateImageView;
+
+public class TorcidometerActivity extends ListActivity implements AsyncTaskListener {
+	
+	private ClubsDB clubsDB;
+	
+	private TreeMap<String, Club> clubs;
+	private String myClub;
+
+	private QuickAction quickaction;
+	private ActionItem actionItem_share;
+
+	private DataUpdateLayout dul_loading;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);		
+		setContentView(R.layout.torcidometeractivity);
+		
+		clubsDB = ClubsDB.getInstance(this);
+		clubs = clubsDB.getClubs();
+		
+		loadViews();
+		setData(this, clubs);
+	}
+	
+	private void loadViews() {		
+		dul_loading = (DataUpdateLayout) findViewById(R.torcidometeractivity.dul_loading);
+		dul_loading.addViewToToggle(getListView());
+		
+		UpdateImageView update = (UpdateImageView) findViewById(R.torcidometeractivity.uiv_update);
+		update.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new UpdateFansTask(v.getContext(),
+						clubs, myClub, TorcidometerActivity.this).execute();
+			}
+		});
+		
+		actionItem_share = new ActionItem();
+		actionItem_share.setIcon(getResources().getDrawable(R.drawable.ic_share_quickaction));
+		actionItem_share.setTitle("Compartilhar");
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int pos, long id) {
+		super.onListItemClick(l, v, pos, id);
+		
+		final int position = pos;
+		
+		quickaction = new QuickAction(v);
+		quickaction.setAnimStyle(QuickAction.ANIM_REFLECT);
+
+		actionItem_share.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				quickaction.dismiss();
+				
+				Club club = (Club) getListAdapter().getItem(position);
+				String message = "O " + club.getName() + " está em "
+					+ Integer.valueOf(position+1) + "° lugar no torcidômetro do "
+					+ getString(R.string.app_name) + " com " + club.getFans()
+					+ " torcedores!\n\n"
+					+ "Baixe já o aplicativo para android no Google Play e vamos aumentar a contagem!"
+					+ " http://bit.ly/IpBPUV";
+				new ShareHelper((Activity) v.getContext(), message).share();
+			}
+		});
+
+		quickaction.addActionItem(actionItem_share);
+		quickaction.show();
+	}
+	
+	private void setData(Context c, TreeMap<String, Club> clubs){
+		this.clubs = clubs;
+		Club my_club = clubsDB.getMyClub(c);
+		myClub = my_club.getAcronym();
+		
+		ArrayList<Club> al = new ArrayList<Club>();
+		int totalFans = 0;
+		for (Club club : clubs.values()) {
+			if(club.getFans() > 0){				
+				al.add(club);
+				totalFans += club.getFans();
+			}
+		}
+		
+		if(al.size() > 0){			
+			Collections.sort(al, new ClubByFansComparable());
+			
+			View viewBase = findViewById(R.torcidometeractivity.dummy_ll_bar);
+			TorcidometerArrayAdapter taa =
+					new TorcidometerArrayAdapter(c, al, totalFans, viewBase);
+			setListAdapter(taa);
+		}
+	}
+
+	@Override
+	public void preExecution() {
+		dul_loading.show();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onComplete(Object result) {
+		TreeMap<String, Club> map = (TreeMap<String, Club>) result;
+		
+		FileHandler.saveBackup(this, FileHandler.JSON_FANS,
+				JsonUtil.createFansJson(map).toString());
+		setData(this, map);
+		
+		dul_loading.hide();
+		
+		Toast.makeText(this, "Dados atualizados", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onFail(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+		dul_loading.hide();
+	}
+	
+	public class ClubByFansComparable implements Comparator<Club> {
+		@Override
+		public int compare(Club c1, Club c2) {
+			return c2.getFans() - c1.getFans();
+		}
+	}
+}
